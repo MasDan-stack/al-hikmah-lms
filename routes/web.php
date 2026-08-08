@@ -1,17 +1,32 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
+// Halaman Home
 Route::get('/', function () {
-    return Inertia::render('welcome');
+    return view('home');
 })->name('home');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-});
+// ==========================================
+// 📌 ROUTE ADMIN (HARUS ADA)
+// ==========================================
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
+        
+        // Nanti tambahkan CRUD routes:
+        // Route::resource('students', StudentController::class);
+        // Route::resource('mentors', MentorController::class);
+        // Route::resource('sessions', SessionController::class);
+    });
 
-require __DIR__.'/settings.php';
+// Redirect setelah login
+Route::get('/dashboard', function () {
+    return redirect()->route('admin.dashboard');
+})->middleware(['auth'])->name('dashboard');
+
 require __DIR__.'/auth.php';
