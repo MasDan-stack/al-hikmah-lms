@@ -127,37 +127,36 @@
             // Active Nav Link on Scroll - Throttled
             // ============================================
             const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
             let activeTicking = false;
 
             function updateActiveNav() {
-    let current = '';
-    const scrollPos = window.scrollY + 100;
+                let current = '';
+                const scrollPos = window.scrollY + 100;
 
-    sections.forEach(function (section) {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (scrollPos >= sectionTop && scrollPos <= sectionTop + sectionHeight) {
-            current = section.getAttribute('id');
-        }
-    });
+                sections.forEach(function (section) {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (scrollPos >= sectionTop && scrollPos <= sectionTop + sectionHeight) {
+                        current = section.getAttribute('id');
+                    }
+                });
 
-    // Hapus dulu semua active
-    document.querySelectorAll('.nav-link').forEach(function (link) {
-        link.classList.remove('active');
-    });
+                navLinks.forEach(function (link) {
+                    link.classList.remove('active');
+                });
 
-    // Kasih active hanya ke yang sesuai, skip dropdown toggles
-    if (current) {
-        document.querySelectorAll('.nav-link').forEach(function (link) {
-            const href = link.getAttribute('href');
-            if (href === '#' + current && !link.classList.contains('dropdown-toggle')) {
-                link.classList.add('active');
+                if (current) {
+                    navLinks.forEach(function (link) {
+                        const href = link.getAttribute('href');
+                        if (href === '#' + current && !link.classList.contains('dropdown-toggle')) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+
+                activeTicking = false;
             }
-        });
-    }
-
-    activeTicking = false;
-}
 
             window.addEventListener('scroll', function () {
                 if (!activeTicking) {
@@ -272,14 +271,17 @@
             });
 
             // ============================================
-            // Form Submission - Basic Validation
+            // ============================================
+            // Form Submission - Validation & WhatsApp Format Fix
             // ============================================
             const registrationForm = document.getElementById('registrationForm');
             if (registrationForm) {
                 registrationForm.addEventListener('submit', function (e) {
                     e.preventDefault();
 
-                    // Simple validation
+                    // Clean previous feedback messages
+                    this.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+
                     const inputs = this.querySelectorAll('input[required], select[required]');
                     let isValid = true;
 
@@ -287,13 +289,18 @@
                         if (!input.value.trim()) {
                             isValid = false;
                             input.classList.add('is-invalid');
+
+                            // Add contextual error text
+                            const feedback = document.createElement('div');
+                            feedback.className = 'invalid-feedback';
+                            feedback.textContent = 'Wajib diisi';
+                            input.parentNode.appendChild(feedback);
                         } else {
                             input.classList.remove('is-invalid');
                         }
                     });
 
                     if (isValid) {
-                        // Build WhatsApp message dengan format rapi
                         const nama = this.querySelector('[name="nama"]')?.value || '-';
                         const whatsapp = this.querySelector('[name="whatsapp"]')?.value || '-';
                         const usia = this.querySelector('[name="usia"]')?.value || '-';
@@ -301,30 +308,31 @@
                         const program = this.querySelector('[name="program"]')?.value || '-';
                         const metode = this.querySelector('[name="metode"]')?.value || '-';
                         
-                        let message = 'Assalamualaikum warahmatullahi wabarakatuh,%0A%0A';
-                        message += 'Saya ingin mendaftar program belajar di AL-HIKMAH:%0A%0A';
-                        message += '📛 Nama: ' + nama + '%0A';
-                        message += '📱 WhatsApp: ' + whatsapp + '%0A';
-                        message += '🎂 Usia: ' + usia + '%0A';
-                        message += '📍 Lokasi: ' + lokasi + '%0A';
-                        message += '📚 Program: ' + program + '%0A';
-                        message += '💻 Metode: ' + metode + '%0A';
-                        message += '%0A%0AMohon info lebih lanjut. Jazakallahu khairan.';
+                        // Gunakan karakter \n asli agar encodeURIComponent menghasilkan %0A yang valid
+                        let message = 'Assalamualaikum warahmatullahi wabarakatuh,\n\n';
+                        message += 'Saya ingin mendaftar program belajar di AL-HIKMAH:\n\n';
+                        message += '📛 Nama: ' + nama + '\n';
+                        message += '📱 WhatsApp: ' + whatsapp + '\n';
+                        message += '🎂 Usia: ' + usia + '\n';
+                        message += '📍 Lokasi: ' + lokasi + '\n';
+                        message += '📚 Program: ' + program + '\n';
+                        message += '💻 Metode: ' + metode + '\n\n';
+                        message += 'Mohon info lebih lanjut. Jazakallahu khairan.';
                         
                         const waNumber = '6285786689008';
                         window.open('https://wa.me/' + waNumber + '?text=' + encodeURIComponent(message), '_blank');
                         
                         // Close modal
                         const modalElement = document.getElementById('daftarModal');
-                        if (modalElement) {
+                        if (modalElement && typeof bootstrap !== 'undefined') {
                             const modal = bootstrap.Modal.getInstance(modalElement);
                             if (modal) modal.hide();
                         }
                         
-                        // Reset form
+                        // Reset form state
                         this.reset();
-                        document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-                        document.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+                        this.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                        this.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
                     }
                 });
             }
