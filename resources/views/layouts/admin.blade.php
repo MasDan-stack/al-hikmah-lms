@@ -5,6 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script>
+        (function() {
+            try {
+                const saved = localStorage.getItem('alhikmah-theme');
+                if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', 'light');
+                }
+            } catch (e) {}
+        })();
+    </script>
     <title>@yield('title', 'Admin Dashboard') | AL-HIKMAH LMS</title>
 
     <!-- Bootstrap 5 & Icons -->
@@ -188,6 +200,10 @@
                     <i class="bi bi-journal-bookmark"></i> Program Belajar
                 </a>
 
+                <a href="{{ route('home') }}" class="admin-nav-item" target="_blank">
+                    <i class="bi bi-globe"></i> Halaman Depan
+                </a>
+
                 <hr class="my-3" style="border-color: var(--border-color);">
 
                 <form method="POST" action="{{ route('logout') }}">
@@ -213,7 +229,12 @@
                     </div>
                 </div>
 
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-2">
+                    <!-- Home Route Link Button -->
+                    <a href="{{ route('home') }}" class="btn btn-outline-success btn-sm rounded-pill d-none d-sm-inline-flex align-items-center me-2">
+                        <i class="bi bi-house-door me-1"></i> Halaman Depan
+                    </a>
+
                     <!-- Theme Toggle Button -->
                     <button class="theme-toggle-btn" id="themeToggle" aria-label="Ganti Tema">
                         <i class="bi bi-moon-fill" id="themeIcon"></i>

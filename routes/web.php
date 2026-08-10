@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 // Halaman Home
@@ -37,20 +38,73 @@ Route::middleware(['auth', 'role:admin'])
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
-        
-        // Nanti tambahkan CRUD routes:
-        // Route::resource('students', StudentController::class);
-        // Route::resource('mentors', MentorController::class);
-        // Route::resource('sessions', SessionController::class);
     });
 
-// Dashboard Route (Role Based)
+// ==========================================
+// 📌 ROUTE MENTOR / GURU
+// ==========================================
+Route::middleware(['auth', 'role:mentor'])
+    ->prefix('mentor')
+    ->name('mentor.')
+    ->group(function () {
+        Route::get('/dashboard', function () {
+            return view('dashboard');
+        })->name('dashboard');
+    });
+
+// ==========================================
+// 📌 ROUTE PARENT / ORANG TUA
+// ==========================================
+Route::middleware(['auth', 'role:parent'])
+    ->prefix('parent')
+    ->name('parent.')
+    ->group(function () {
+        Route::get('/dashboard', function () {
+            return view('dashboard');
+        })->name('dashboard');
+    });
+
+// ==========================================
+// 📌 ROUTE STUDENT / SANTRI
+// ==========================================
+Route::middleware(['auth', 'role:student'])
+    ->prefix('student')
+    ->name('student.')
+    ->group(function () {
+        Route::get('/dashboard', function () {
+            return view('dashboard');
+        })->name('dashboard');
+    });
+
+// Dashboard Route (Role Based Redirect)
 Route::get('/dashboard', function () {
     $user = auth()->user();
-    if ($user && $user->role?->name === 'admin') {
+
+    if (! $user) {
+        return redirect()->route('login');
+    }
+
+    if ($user->isAdmin()) {
         return redirect()->route('admin.dashboard');
     }
+
+    if ($user->isMentor()) {
+        return redirect()->route('mentor.dashboard');
+    }
+
+    if ($user->isParent()) {
+        return redirect()->route('parent.dashboard');
+    }
+
+    if ($user->isStudent()) {
+        return redirect()->route('student.dashboard');
+    }
+
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/report/download/{student?}', [ReportController::class, 'downloadProgress'])
+    ->middleware(['auth'])
+    ->name('report.download');
 
 require __DIR__.'/auth.php';

@@ -7,6 +7,18 @@
     <meta name="description"
         content="AL-HIKMAH — Menemani perjalanan anak usia 10–15 tahun untuk mengenal, mencintai, dan menghidupkan nilai-nilai Al-Qur'an dalam kehidupan.">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script>
+        (function() {
+            try {
+                const saved = localStorage.getItem('alhikmah-theme');
+                if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', 'light');
+                }
+            } catch (e) {}
+        })();
+    </script>
     <title>@yield('title', 'AL-HIKMAH | Menemani Perjalanan Belajar Al-Qur\'an')</title>
 
     <!-- Bootstrap 5 & Fonts -->

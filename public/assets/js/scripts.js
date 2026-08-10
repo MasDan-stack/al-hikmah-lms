@@ -20,10 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ============================================
-    // Dark Mode Toggle - with Transition
+    // Dark Mode Toggle - Event Delegation & Sync All Elements
     // ============================================
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
     const html = document.documentElement;
 
     function setTheme(isDark) {
@@ -33,9 +31,10 @@ document.addEventListener('DOMContentLoaded', function () {
         html.style.transition = 'background-color 0.3s ease, color 0.3s ease';
         html.setAttribute('data-bs-theme', isDark ? 'dark' : 'light');
 
-        if (themeIcon) {
-            themeIcon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
-        }
+        const themeIcons = document.querySelectorAll('.theme-toggle-btn i, #themeIcon');
+        themeIcons.forEach(function (icon) {
+            icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+        });
 
         try {
             localStorage.setItem('alhikmah-theme', isDark ? 'dark' : 'light');
@@ -49,23 +48,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 300);
     }
 
-    // Check saved theme
+    // Check saved theme or system preference
     try {
         const savedTheme = localStorage.getItem('alhikmah-theme');
-        if (savedTheme === 'dark') setTheme(true);
+        if (savedTheme === 'dark') {
+            setTheme(true);
+        } else if (savedTheme === 'light') {
+            setTheme(false);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            setTheme(true);
+        }
     } catch (e) {
         // localStorage not available
     }
 
-    if (themeToggle) {
-        themeToggle.addEventListener('click', function () {
+    // Event Delegation: Global click listener for theme toggle buttons
+    document.addEventListener('click', function (e) {
+        const toggleBtn = e.target.closest('.theme-toggle-btn, #themeToggle');
+        if (toggleBtn) {
+            e.preventDefault();
             const isDark = html.getAttribute('data-bs-theme') === 'dark';
             setTheme(!isDark);
-        });
-
-        // Accessibility: Add aria-label
-        themeToggle.setAttribute('aria-label', 'Ganti tema gelap/terang');
-    }
+        }
+    });
 
     // ============================================
     // Navbar Scroll Effect - Throttled

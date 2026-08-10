@@ -1,4 +1,4 @@
-@extends('layout.auth-layout')
+@extends('layouts.auth-layout')
 
 @section('title', 'Forbidden')
 @section('code', '403')

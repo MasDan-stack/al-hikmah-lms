@@ -1,4 +1,4 @@
-@extends('layout.auth-layout')
+@extends('layouts.auth-layout')
 
 @section('title', 'AL-HIKMAH | Dashboard Santri')
 @section('subtitle', 'Selamat datang di Panel Belajar AL-HIKMAH')

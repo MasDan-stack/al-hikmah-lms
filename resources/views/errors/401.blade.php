@@ -1,5 +1,5 @@
 <!-- resources/views/errors/401.blade.php -->
-@extends('layout.auth-layout')
+@extends('layouts.auth-layout')
 
 @section('title', 'Unauthorized')
 @section('code', '401')

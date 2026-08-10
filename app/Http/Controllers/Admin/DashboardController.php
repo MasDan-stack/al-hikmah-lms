@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mentor;
-use App\Models\Student;
-use App\Models\Session; // Model sudah di-update
-use Illuminate\Http\Request;
+use App\Models\Session;
+use App\Models\Student; // Model sudah di-update
 
 class DashboardController extends Controller
 {
@@ -17,8 +16,8 @@ class DashboardController extends Controller
         $todaySessions = Session::whereDate('date', today())->count();
 
         return view('admin.dashboard', compact(
-            'totalStudents', 
-            'totalMentors', 
+            'totalStudents',
+            'totalMentors',
             'todaySessions'
         ));
     }

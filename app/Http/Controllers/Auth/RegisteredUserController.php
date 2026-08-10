@@ -13,15 +13,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
     /**
      * Show the registration page.
      */
-    public function create(): \Illuminate\View\View
+    public function create(): View
     {
         return view('auth.register');
     }
@@ -55,6 +54,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return to_route('dashboard');
+        return redirect()->route('student.dashboard');
     }
 }

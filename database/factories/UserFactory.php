@@ -65,4 +65,11 @@ class UserFactory extends Factory
             'role_id' => Role::firstOrCreate(['name' => 'parent'], ['label' => 'Orang Tua / Wali'])->id,
         ]);
     }
+
+    public function student(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role_id' => Role::firstOrCreate(['name' => 'student'], ['label' => 'Murid / Santri'])->id,
+        ]);
+    }
 }

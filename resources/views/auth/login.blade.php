@@ -1,4 +1,4 @@
-@extends('layout.auth-layout')
+@extends('layouts.auth-layout')
 
 @section('title', 'AL-HIKMAH | Login')
 @section('subtitle', 'Masuk ke Akun AL-HIKMAH Anda')

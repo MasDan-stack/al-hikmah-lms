@@ -94,11 +94,9 @@
 
             <!-- Actions (Theme Toggle + Login/Dashboard) -->
             <div class="navbar-actions">
-                <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle dark mode"><i
-                        class="bi bi-moon-fill" id="themeIcon"></i></button>
 
                 @auth
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-daftar">
+                    <a href="{{ route('dashboard') }}" class="btn btn-daftar">
                         <i class="bi bi-speedometer2 me-1"></i> Dashboard
                     </a>
                     <a href="#" class="btn btn-daftar" data-bs-toggle="modal" data-bs-target="#daftarModal"><i

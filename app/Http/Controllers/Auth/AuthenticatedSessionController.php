@@ -7,16 +7,14 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
      * Show the login page.
      */
-    public function create(Request $request): \Illuminate\View\View
+    public function create(Request $request): View
     {
         return view('auth.login');
     }
@@ -30,15 +28,17 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // ✨ TAMBAHKAN: Redirect berdasarkan role
+        // ✨ Redirect berdasarkan role
         $user = Auth::user();
-        
+
         if ($user->isAdmin()) {
             return redirect()->intended(route('admin.dashboard'));
         } elseif ($user->isMentor()) {
             return redirect()->intended(route('mentor.dashboard'));
         } elseif ($user->isParent()) {
             return redirect()->intended(route('parent.dashboard'));
+        } elseif ($user->isStudent()) {
+            return redirect()->intended(route('student.dashboard'));
         }
 
         // Default fallback
