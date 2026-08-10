@@ -1,179 +1,249 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-bs-theme="light">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'AL-HIKMAH LMS')</title>
-    
-    <!-- Bootstrap 5 -->
+    <title>@yield('title', 'Admin Dashboard') | AL-HIKMAH LMS</title>
+
+    <!-- Bootstrap 5 & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.1.1/index.min.css" rel="stylesheet">
+
+    <!-- Custom CSS AL-HIKMAH -->
+    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-        }
-        .sidebar {
-            background-color: #0d7a3e;
+        .admin-wrapper {
+            display: flex;
             min-height: 100vh;
-            width: 280px;
+        }
+
+        .admin-sidebar {
+            width: 260px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
             position: fixed;
-            left: 0;
             top: 0;
             bottom: 0;
-            z-index: 1000;
-            transition: transform 0.3s ease;
+            left: 0;
+            z-index: 1020;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
         }
-        .sidebar-brand {
-            padding: 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+
+        .admin-sidebar-brand {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-color);
         }
-        .sidebar-brand h4 {
-            color: white;
-            font-weight: 700;
+
+        .admin-sidebar-brand img {
+            height: 40px;
+            width: auto;
         }
-        .sidebar-brand small {
-            color: rgba(255,255,255,0.6);
+
+        .admin-sidebar-brand-text {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--text-primary);
         }
-        .sidebar-nav {
-            padding: 1rem;
+
+        .admin-sidebar-nav {
+            padding: 1.25rem 1rem;
+            flex-grow: 1;
+            overflow-y: auto;
         }
-        .sidebar-nav a {
-            display: block;
-            padding: 0.75rem 1rem;
-            color: rgba(255,255,255,0.7);
+
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-radius: var(--radius-md);
             text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.2s;
+            transition: var(--transition);
             margin-bottom: 4px;
         }
-        .sidebar-nav a:hover {
-            background-color: rgba(255,255,255,0.1);
-            color: white;
+
+        .admin-nav-item i {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            transition: var(--transition);
         }
-        .sidebar-nav a.active {
-            background-color: rgba(255,255,255,0.2);
-            color: white;
+
+        .admin-nav-item:hover,
+        .admin-nav-item.active {
+            background: var(--primary-lighter);
+            color: var(--primary);
         }
-        .sidebar-nav a i {
-            margin-right: 10px;
-            width: 20px;
+
+        .admin-nav-item:hover i,
+        .admin-nav-item.active i {
+            color: var(--primary);
         }
-        .main-content {
-            margin-left: 280px;
+
+        .admin-main {
+            margin-left: 260px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
+            background: var(--bg-secondary);
+            transition: var(--transition);
         }
-        .top-header {
-            background-color: white;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid #e5e7eb;
+
+        .admin-header {
+            height: 70px;
+            background: var(--glass-bg-strong);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             position: sticky;
             top: 0;
-            z-index: 999;
+            z-index: 1010;
         }
-        .page-content {
+
+        .admin-content {
             padding: 2rem;
+            flex-grow: 1;
         }
-        .badge-role {
-            background-color: rgba(13, 122, 62, 0.1);
-            color: #0d7a3e;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
+
+        .admin-user-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary-lighter);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
             font-weight: 600;
+            border: 1px solid var(--border-color);
         }
-        @media (max-width: 768px) {
-            .sidebar {
+
+        @media (max-width: 991.98px) {
+            .admin-sidebar {
                 transform: translateX(-100%);
-                width: 280px;
             }
-            .sidebar.show {
+
+            .admin-sidebar.show {
                 transform: translateX(0);
             }
-            .main-content {
+
+            .admin-main {
                 margin-left: 0;
             }
-            .sidebar-toggle {
-                display: block !important;
-            }
-        }
-        .sidebar-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #0d7a3e;
         }
     </style>
+
+    @stack('styles')
 </head>
+
 <body>
-
-<!-- Mobile Sidebar Toggle -->
-<button class="sidebar-toggle" id="sidebarToggle">
-    <i class="bi bi-list"></i>
-</button>
-
-<!-- Sidebar -->
-<div class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-        <h4>AL-HIKMAH</h4>
-        <small>Learning Management System</small>
-    </div>
-    
-    <nav class="sidebar-nav">
-        <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-            <i class="bi bi-speedometer2"></i> Dashboard
-        </a>
-        <a href="#" class="{{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
-            <i class="bi bi-people"></i> Murid
-        </a>
-        <a href="#" class="{{ request()->routeIs('admin.mentors.*') ? 'active' : '' }}">
-            <i class="bi bi-person-badge"></i> Pendamping
-        </a>
-        <a href="#" class="{{ request()->routeIs('admin.sessions.*') ? 'active' : '' }}">
-            <i class="bi bi-calendar-event"></i> Jadwal Sesi
-        </a>
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 1rem 0;">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="btn btn-link text-white text-decoration-none" style="padding: 0.75rem 1rem; display: flex; align-items: center; gap: 10px; width: 100%; border: none; background: none; color: rgba(255,255,255,0.7);">
-                <i class="bi bi-box-arrow-right"></i> Logout
-            </button>
-        </form>
-    </nav>
-</div>
-
-<!-- Main Content -->
-<div class="main-content">
-    <!-- Header -->
-    <header class="top-header d-flex justify-content-between align-items-center">
-        <div>
-            <h5 class="fw-bold mb-0">@yield('header', 'Dashboard')</h5>
-            <small class="text-muted">@yield('subheader', 'Selamat datang!')</small>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader-container">
+            <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH" height="80" style="margin-bottom: 20px;">
+            <div class="loader-text">AL-HIKMAH</div>
+            <div class="loader-subtext">Memuat Dashboard...</div>
         </div>
-        <div class="d-flex align-items-center gap-3">
-            <span class="text-sm fw-semibold">{{ auth()->user()->name }}</span>
-            <span class="badge-role">{{ auth()->user()->role->display_name ?? 'Admin' }}</span>
-        </div>
-    </header>
-
-    <!-- Page Content -->
-    <div class="page-content">
-        @yield('content')
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Mobile sidebar toggle
-    document.getElementById('sidebarToggle')?.addEventListener('click', function() {
-        document.getElementById('sidebar').classList.toggle('show');
-    });
-</script>
+    <div class="admin-wrapper">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-sidebar-brand">
+                <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH Logo">
+                <div class="admin-sidebar-brand-text">
+                    AL<span style="color: var(--primary)">-HIKMAH</span>
+                </div>
+            </div>
 
+            <nav class="admin-sidebar-nav">
+                <a href="{{ route('admin.dashboard') }}" class="admin-nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="#" class="admin-nav-item {{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
+                    <i class="bi bi-people"></i> Data Santri
+                </a>
+                <a href="#" class="admin-nav-item {{ request()->routeIs('admin.mentors.*') ? 'active' : '' }}">
+                    <i class="bi bi-person-badge"></i> Pendamping
+                </a>
+                <a href="#" class="admin-nav-item {{ request()->routeIs('admin.sessions.*') ? 'active' : '' }}">
+                    <i class="bi bi-calendar-event"></i> Jadwal Sesi
+                </a>
+                <a href="#" class="admin-nav-item {{ request()->routeIs('admin.programs.*') ? 'active' : '' }}">
+                    <i class="bi bi-journal-bookmark"></i> Program Belajar
+                </a>
+
+                <hr class="my-3" style="border-color: var(--border-color);">
+
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="admin-nav-item text-danger border-0 bg-transparent w-100 text-start">
+                        <i class="bi bi-box-arrow-right text-danger"></i> Keluar
+                    </button>
+                </form>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="admin-main">
+            <!-- Top Header Navbar -->
+            <header class="admin-header">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-light d-lg-none" id="sidebarToggleBtn" aria-label="Toggle Sidebar">
+                        <i class="bi bi-list fs-5"></i>
+                    </button>
+                    <div>
+                        <h5 class="fw-bold mb-0 text-primary">@yield('header', 'Dashboard Utama')</h5>
+                        <small class="text-muted">@yield('subheader', 'Selamat datang di Panel Admin AL-HIKMAH')</small>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Theme Toggle Button -->
+                    <button class="theme-toggle-btn" id="themeToggle" aria-label="Ganti Tema">
+                        <i class="bi bi-moon-fill" id="themeIcon"></i>
+                    </button>
+
+                    <!-- User Role Badge -->
+                    <div class="admin-user-badge">
+                        <i class="bi bi-person-circle"></i>
+                        <span>{{ auth()->user()->name ?? 'Admin AL-HIKMAH' }}</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Page Content -->
+            <main class="admin-content">
+                @yield('content')
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 & Custom JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('assets/js/scripts.js') }}"></script>
+    <script>
+        document.getElementById('sidebarToggleBtn')?.addEventListener('click', function() {
+            document.getElementById('adminSidebar')?.classList.toggle('show');
+        });
+    </script>
+
+    @stack('scripts')
 </body>
+
 </html>

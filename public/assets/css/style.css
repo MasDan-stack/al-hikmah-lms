@@ -44,13 +44,13 @@
     --primary-lighter: #1a3a2a;
     --text-primary: #e8e8f0;
     --text-secondary: #b0b0c8;
-    --text-muted: #7a7a9e;
+    --text-muted: #9a9abf;
     --bg-primary: #0f0f1a;
     --bg-secondary: #161625;
     --bg-tertiary: #1e1e30;
     --card-bg: #1a1a2e;
-    --border-color: rgba(18, 168, 82, 0.15);
-    --border-color-strong: rgba(18, 168, 82, 0.25);
+    --border-color: rgba(18, 168, 82, 0.2);
+    --border-color-strong: rgba(18, 168, 82, 0.3);
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
@@ -208,14 +208,14 @@ a {
     pointer-events: none;
     z-index: 0;
     overflow: hidden;
-    background-image: url('https://image.qwenlm.ai/public_source/b8d9ae1c-4602-4b18-9acf-68853ac39e9b/11972c1c1-94fb-4076-9347-71838c47307a.png');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.025;
+    background: radial-gradient(circle at 50% 50%, rgba(13, 122, 62, 0.04) 0%, transparent 75%),
+                radial-gradient(circle at 10% 20%, rgba(18, 168, 82, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(9, 92, 46, 0.03) 0%, transparent 50%);
+    opacity: 0.9;
 }
 
 [data-bs-theme="dark"] .bg-islamic-animation {
-    opacity: 0.04;
+    opacity: 0.95;
 }
 
 .floating-shape {

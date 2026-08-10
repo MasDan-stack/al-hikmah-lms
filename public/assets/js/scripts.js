@@ -27,13 +27,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const html = document.documentElement;
 
     function setTheme(isDark) {
-        if (!html || !themeIcon) return;
+        if (!html) return;
 
         // Add transition class
         html.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-
         html.setAttribute('data-bs-theme', isDark ? 'dark' : 'light');
-        themeIcon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+
+        if (themeIcon) {
+            themeIcon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+        }
 
         try {
             localStorage.setItem('alhikmah-theme', isDark ? 'dark' : 'light');
@@ -115,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Close mobile menu
                 const navCollapse = document.getElementById('navbarNav');
-                if (navCollapse && navCollapse.classList.contains('show')) {
+                if (navCollapse && navCollapse.classList.contains('show') && typeof bootstrap !== 'undefined') {
                     const bsCollapse = bootstrap.Collapse.getInstance(navCollapse) || new bootstrap.Collapse(navCollapse, { toggle: true });
                     bsCollapse.hide();
                 }
@@ -127,6 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Active Nav Link on Scroll - Throttled
     // ============================================
     const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
     let activeTicking = false;
 
     function updateActiveNav() {
@@ -141,14 +144,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Hapus dulu semua active
-        document.querySelectorAll('.nav-link').forEach(function (link) {
+        navLinks.forEach(function (link) {
             link.classList.remove('active');
         });
 
-        // Kasih active hanya ke yang sesuai, skip dropdown toggles
         if (current) {
-            document.querySelectorAll('.nav-link').forEach(function (link) {
+            navLinks.forEach(function (link) {
                 const href = link.getAttribute('href');
                 if (href === '#' + current && !link.classList.contains('dropdown-toggle')) {
                     link.classList.add('active');
@@ -272,14 +273,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ============================================
-    // Form Submission - Basic Validation
+    // Form Submission - Validation & WhatsApp Format Fix
     // ============================================
     const registrationForm = document.getElementById('registrationForm');
     if (registrationForm) {
         registrationForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
-            // Simple validation
+            // Clean previous feedback messages
+            this.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+
             const inputs = this.querySelectorAll('input[required], select[required]');
             let isValid = true;
 
@@ -287,44 +290,50 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!input.value.trim()) {
                     isValid = false;
                     input.classList.add('is-invalid');
+
+                    // Add contextual error text
+                    const feedback = document.createElement('div');
+                    feedback.className = 'invalid-feedback';
+                    feedback.textContent = 'Wajib diisi';
+                    input.parentNode.appendChild(feedback);
                 } else {
                     input.classList.remove('is-invalid');
                 }
             });
 
             if (isValid) {
-                // Build WhatsApp message dengan format rapi
                 const nama = this.querySelector('[name="nama"]')?.value || '-';
                 const whatsapp = this.querySelector('[name="whatsapp"]')?.value || '-';
                 const usia = this.querySelector('[name="usia"]')?.value || '-';
                 const lokasi = this.querySelector('[name="lokasi"]')?.value || '-';
                 const program = this.querySelector('[name="program"]')?.value || '-';
                 const metode = this.querySelector('[name="metode"]')?.value || '-';
-
-                let message = 'Assalamualaikum warahmatullahi wabarakatuh,%0A%0A';
-                message += 'Saya ingin mendaftar program belajar di AL-HIKMAH:%0A%0A';
-                message += '📛 Nama: ' + nama + '%0A';
-                message += '📱 WhatsApp: ' + whatsapp + '%0A';
-                message += '🎂 Usia: ' + usia + '%0A';
-                message += '📍 Lokasi: ' + lokasi + '%0A';
-                message += '📚 Program: ' + program + '%0A';
-                message += '💻 Metode: ' + metode + '%0A';
-                message += '%0A%0AMohon info lebih lanjut. Jazakallahu khairan.';
-
+                
+                // Gunakan karakter \n asli agar encodeURIComponent menghasilkan %0A yang valid
+                let message = 'Assalamualaikum warahmatullahi wabarakatuh,\n\n';
+                message += 'Saya ingin mendaftar program belajar di AL-HIKMAH:\n\n';
+                message += '📛 Nama: ' + nama + '\n';
+                message += '📱 WhatsApp: ' + whatsapp + '\n';
+                message += '🎂 Usia: ' + usia + '\n';
+                message += '📍 Lokasi: ' + lokasi + '\n';
+                message += '📚 Program: ' + program + '\n';
+                message += '💻 Metode: ' + metode + '\n\n';
+                message += 'Mohon info lebih lanjut. Jazakallahu khairan.';
+                
                 const waNumber = '6285786689008';
                 window.open('https://wa.me/' + waNumber + '?text=' + encodeURIComponent(message), '_blank');
-
+                
                 // Close modal
                 const modalElement = document.getElementById('daftarModal');
-                if (modalElement) {
+                if (modalElement && typeof bootstrap !== 'undefined') {
                     const modal = bootstrap.Modal.getInstance(modalElement);
                     if (modal) modal.hide();
                 }
-
-                // Reset form
+                
+                // Reset form state
                 this.reset();
-                document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-                document.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+                this.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                this.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
             }
         });
     }
@@ -340,12 +349,3 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-
-// Add Skip to Main Content link dynamically for accessibility
-(function () {
-    const skipLink = document.createElement('a');
-    skipLink.href = '#beranda';
-    skipLink.className = 'skip-to-main';
-    skipLink.textContent = 'Langsung ke konten utama';
-    document.body.insertBefore(skipLink, document.body.firstChild);
-})();

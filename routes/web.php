@@ -44,9 +44,13 @@ Route::middleware(['auth', 'role:admin'])
         // Route::resource('sessions', SessionController::class);
     });
 
-// Redirect setelah login
+// Dashboard Route (Role Based)
 Route::get('/dashboard', function () {
-    return redirect()->route('admin.dashboard');
+    $user = auth()->user();
+    if ($user && $user->role?->name === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
+    return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
