@@ -30,18 +30,18 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item" href="{{ route('home') }}#tentang">
+                            <a class="dropdown-item" href="{{ route('tentang-kami') }}">
                                 <i class="bi bi-building"></i> Profil AL-HIKMAH
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{{ route('home') }}#filosofi">
+                            <a class="dropdown-item" href="{{ route('tentang-kami') }}#filosofi">
                                 <i class="bi bi-lightbulb"></i> Filosofi & Nilai
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{{ route('home') }}#harapan">
-                                <i class="bi bi-flag"></i> Harapan Kami
+                            <a class="dropdown-item" href="{{ route('tentang-kami') }}#nilai">
+                                <i class="bi bi-heart"></i> Nilai-Nilai Kami
                             </a>
                         </li>
                     </ul>
@@ -55,31 +55,59 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item" href="{{ route('home') }}#program">
-                                <i class="bi bi-book-half"></i> Iqra & Al-Qur'an
+                            <a class="dropdown-item" href="{{ route('program') }}">
+                                <i class="bi bi-book-half"></i> Program Belajar
                             </a>
                         </li>
-                        <li><a class="dropdown-item" href="{{ route('metode') }}"><i class="bi bi-display"></i> Metode
-                                Belajar</a></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('metode') }}">
+                                <i class="bi bi-display"></i> Metode Belajar
+                            </a>
+                        </li>
 
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="{{ route('tahfidz') }}"><i class="bi bi-mic"></i> Program
-                                Tahfidz</a></li>
-                        <li><a class="dropdown-item" href="{{ route('biaya') }}"><i class="bi bi-info-circle"></i>
-                                Informasi
-                                Pendampingan</a></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('tahfidz') }}">
+                                <i class="bi bi-mic"></i> Program Tahfidz
+                            </a>
+                        </li>
 
+                        {{-- Hanya Tampil untuk Orang Tua (Parent) dan Admin yang Sudah Login --}}
+                        @if (auth()->check() && (auth()->user()->isParent() || auth()->user()->isAdmin()))
+                            <li>
+                                <a class="dropdown-item" href="{{ route('biaya') }}">
+                                    <i class="bi bi-info-circle"></i> Informasi Pendampingan
+                                </a>
+                            </li>
+                        @endif
+
+                        {{-- Hanya Tampil untuk Guest (Belum Login / Publik) --}}
+                        @guest
+                            <li>
+                                <a class="dropdown-item" href="{{ route('bergabung') }}">
+                                    <i class="bi bi-person-plus"></i> Menjadi Pendamping
+                                </a>
+                            </li>
+                        @endguest
                     </ul>
                 </li>
 
+                <!-- Galeri & FAQ Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false"><i class="bi bi-images"></i> Galeri & FAQ</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="galeri.html"><i class="bi bi-images"></i> Galeri</a></li>
-                        <li><a class="dropdown-item" href="faq.html"><i class="bi bi-question-circle"></i> FAQ</a>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('home') }}#galeri">
+                                <i class="bi bi-images"></i> Galeri
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('home') }}#faq">
+                                <i class="bi bi-question-circle"></i> FAQ
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -92,19 +120,53 @@
                 </li>
             </ul>
 
-            <!-- Actions (Theme Toggle + Login/Dashboard) -->
-            <div class="navbar-actions">
-
+            <!-- Actions (Theme Toggle + Login/Dashboard/Profile) -->
+            <div class="navbar-actions d-flex align-items-center gap-2">
                 @auth
-                    <a href="{{ route('dashboard') }}" class="btn btn-daftar">
+                    <!-- Direct Dashboard Button (1-Click Navigation) -->
+                    <a href="{{ route('dashboard') }}" class="btn btn-daftar rounded-pill px-3 py-2 me-1">
                         <i class="bi bi-speedometer2 me-1"></i> Dashboard
                     </a>
-                    <a href="#" class="btn btn-daftar" data-bs-toggle="modal" data-bs-target="#daftarModal"><i
-                            class="bi bi-pencil-square me-1"></i> Mulai Perjalanan</a>
+
+                    <!-- User Authenticated Profile Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-custom dropdown-toggle d-flex align-items-center gap-2 py-2 px-3 rounded-pill" 
+                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-5 text-success"></i>
+                            <span class="fw-semibold text-dark small me-1">{{ auth()->user()->name }}</span>
+                            <span class="badge bg-success-subtle text-success rounded-pill px-2 py-1 small">
+                                {{ auth()->user()->role?->label ?? 'User' }}
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm rounded-3 border-0 mt-2">
+                            <li class="px-3 py-2 border-bottom">
+                                <div class="fw-bold text-dark">{{ auth()->user()->name }}</div>
+                                <div class="small text-muted">{{ auth()->user()->email }}</div>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2" href="{{ route('dashboard') }}">
+                                    <i class="bi bi-speedometer2 me-2 text-success"></i> Ke Dashboard
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider my-1"></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item py-2 text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Keluar (Logout)
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 @else
-                    <a href="{{ route('login') }}" class="btn btn-daftar">
+                    <!-- Guest Actions -->
+                    <a href="{{ route('login') }}" class="btn btn-outline-custom rounded-pill px-3 py-2">
                         <i class="bi bi-box-arrow-in-right me-1"></i> Masuk
                     </a>
+                    <button type="button" class="btn btn-daftar rounded-pill px-3 py-2" data-bs-toggle="modal" data-bs-target="#daftarModal">
+                        <i class="bi bi-pencil-square me-1"></i> Mulai Perjalanan
+                    </button>
                 @endauth
             </div>
         </div>

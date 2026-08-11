@@ -24,11 +24,12 @@
                         <div class="kelas-icon"><i class="bi bi-laptop"></i></div>
                         <h3>Online</h3>
                         <p>Belajar dari Mana Saja</p>
-                        <ul class="kelas-list">
+                        <ul class="kelas-list mb-3">
                             <li><i class="bi bi-check-circle-fill"></i> Pendampingan belajar secara online</li>
                             <li><i class="bi bi-check-circle-fill"></i> Bagi keluarga di luar jangkauan tatap muka</li>
                             <li><i class="bi bi-check-circle-fill"></i> Jadwal fleksibel</li>
                         </ul>
+                        <a href="https://wa.me/6285786689008?text={{ urlencode('Assalamualaikum, saya ingin menanyakan bimbingan metode Online') }}" class="btn btn-outline-custom w-100 rounded-pill mt-2" target="_blank"><i class="bi bi-whatsapp me-1"></i> Pilih Online</a>
                         <div class="kelas-badge">Online</div>
                     </div>
                 </div>
@@ -37,11 +38,12 @@
                         <div class="kelas-icon"><i class="bi bi-house-door"></i></div>
                         <h3>Offline</h3>
                         <p>Pendamping Datang ke Rumah</p>
-                        <ul class="kelas-list">
+                        <ul class="kelas-list mb-3">
                             <li><i class="bi bi-check-circle-fill"></i> Suasana belajar yang personal dan nyaman</li>
                             <li><i class="bi bi-check-circle-fill"></i> Pendamping hadir langsung di rumah</li>
                             <li><i class="bi bi-check-circle-fill"></i> Interaksi lebih dekat</li>
                         </ul>
+                        <a href="https://wa.me/6285786689008?text={{ urlencode('Assalamualaikum, saya ingin menanyakan bimbingan metode Offline (Home Visit)') }}" class="btn btn-primary-custom w-100 rounded-pill mt-2" target="_blank"><i class="bi bi-whatsapp me-1"></i> Pilih Home Visit</a>
                         <div class="kelas-badge">Home Visit</div>
                     </div>
                 </div>
@@ -50,11 +52,12 @@
                         <div class="kelas-icon"><i class="bi bi-arrow-repeat"></i></div>
                         <h3>Hybrid</h3>
                         <p>Belajar dengan Fleksibilitas</p>
-                        <ul class="kelas-list">
+                        <ul class="kelas-list mb-3">
                             <li><i class="bi bi-check-circle-fill"></i> Perpaduan online dan offline</li>
                             <li><i class="bi bi-check-circle-fill"></i> Sesuai kondisi dan kebutuhan</li>
                             <li><i class="bi bi-check-circle-fill"></i> Pendampingan personal</li>
                         </ul>
+                        <a href="https://wa.me/6285786689008?text={{ urlencode('Assalamualaikum, saya ingin menanyakan bimbingan metode Hybrid') }}" class="btn btn-outline-custom w-100 rounded-pill mt-2" target="_blank"><i class="bi bi-whatsapp me-1"></i> Pilih Hybrid</a>
                         <div class="kelas-badge">Fleksibel</div>
                     </div>
                 </div>

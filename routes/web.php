@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Auth\RegisterMentorController;
 use App\Http\Controllers\ReportController;
+use App\Models\Mentor;
+use App\Models\Program;
+use App\Models\Student;
 use Illuminate\Support\Facades\Route;
 
 // Halaman Home
@@ -9,13 +13,20 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-// Halaman Tentang Kami
+// Halaman Tentang Kami (dengan statistik real-time)
 Route::get('/tentang-kami', function () {
-    return view('tentang-kami');
+    $totalStudents = Student::count();
+    $totalMentors = Mentor::where('is_active', true)->count();
+    $totalPrograms = Program::count();
+
+    return view('tentang-kami', compact('totalStudents', 'totalMentors', 'totalPrograms'));
 })->name('tentang-kami');
 
+// Halaman Program Belajar (dengan data program dari DB)
 Route::get('/program', function () {
-    return view('program');
+    $programs = Program::all();
+
+    return view('program', compact('programs'));
 })->name('program');
 
 Route::get('/metode', function () {
@@ -26,9 +37,17 @@ Route::get('/tahfidz', function () {
     return view('tahfidz');
 })->name('tahfidz');
 
+// Halaman Biaya (dengan data paket dari DB)
 Route::get('/biaya', function () {
-    return view('biaya');
+    $programs = Program::orderBy('price', 'asc')->get();
+
+    return view('biaya', compact('programs'));
 })->name('biaya');
+
+// Halaman Bergabung (Pendaftaran Pendamping / Guru Al-Qur'an)
+Route::get('/bergabung', [RegisterMentorController::class, 'create'])->name('bergabung');
+Route::post('/bergabung', [RegisterMentorController::class, 'store'])->middleware('guest');
+
 // ==========================================
 // 📌 ROUTE ADMIN (HARUS ADA)
 // ==========================================
@@ -38,6 +57,18 @@ Route::middleware(['auth', 'role:admin'])
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
+
+        Route::get('/programs', function () {
+            return view('admin.programs.index');
+        })->name('programs.index');
+
+        Route::get('/mentors', function () {
+            return view('admin.mentors.index');
+        })->name('mentors.index');
+
+        Route::get('/students', function () {
+            return view('admin.students.index');
+        })->name('students.index');
     });
 
 // ==========================================

@@ -22,14 +22,14 @@
                 <h5 class="fw-bold mb-3" style="color: var(--text-primary);">Aksi Cepat Admin</h5>
 
                 <div class="d-grid gap-2">
-                    <button class="btn btn-daftar text-white justify-content-start py-2.5 px-3 mb-2" data-bs-toggle="modal" data-bs-target="#daftarModal">
-                        <i class="bi bi-person-plus-fill me-2 fs-5"></i> Tambah Santri Baru
-                    </button>
-                    <a href="#" class="btn btn-outline-success text-start py-2.5 px-3 rounded-pill mb-2">
-                        <i class="bi bi-calendar-plus me-2 fs-5"></i> Buat Jadwal Sesi Belajar
+                    <a href="{{ route('admin.students.index') }}" class="btn btn-daftar text-white text-start py-2.5 px-3 mb-2 rounded-pill">
+                        <i class="bi bi-person-plus-fill me-2 fs-5"></i> Kelola & Tambah Santri
                     </a>
-                    <a href="#" class="btn btn-outline-secondary text-start py-2.5 px-3 rounded-pill">
-                        <i class="bi bi-file-earmark-pdf me-2 fs-5"></i> Cetak Laporan Bulanan
+                    <a href="{{ route('admin.students.index') }}" class="btn btn-outline-success text-start py-2.5 px-3 rounded-pill mb-2">
+                        <i class="bi bi-calendar-plus me-2 fs-5"></i> Jadwal Sesi Belajar
+                    </a>
+                    <a href="{{ route('report.download') }}" target="_blank" class="btn btn-outline-secondary text-start py-2.5 px-3 rounded-pill">
+                        <i class="bi bi-file-earmark-pdf me-2 fs-5"></i> Cetak Laporan Bulanan (PDF)
                     </a>
                 </div>
 

@@ -125,7 +125,7 @@
                 <div class="col-6 col-md-2" data-reveal data-reveal-delay="500"><span
                         class="badge-nilai">Keteladanan</span></div>
             </div>
-            <a href="tentang-kami.html" class="btn btn-outline-custom mt-4">Pelajari Nilai-Nilai Kami <i
+            <a href="{{ route('tentang-kami') }}" class="btn btn-outline-custom mt-4">Pelajari Nilai-Nilai Kami <i
                     class="bi bi-arrow-right ms-2"></i></a>
         </div>
     </section>
@@ -203,7 +203,7 @@
                     </div>
                 </div>
             </div>
-            <a href="metode.html" class="btn btn-outline-custom mt-4">Detail Metode & Jadwal <i
+            <a href="{{ route('metode') }}" class="btn btn-outline-custom mt-4">Detail Metode & Jadwal <i
                     class="bi bi-arrow-right ms-2"></i></a>
         </div>
     </section>
@@ -218,7 +218,7 @@
                         Tetapi Menjaga</h2>
                     <p>Perjalanan menghafal Al-Qur'an membutuhkan kesabaran dan istiqamah. Kami mendampingi dengan
                         setoran rutin, murajaah, dan target yang disesuaikan.</p>
-                    <a href="tahfidz.html" class="btn btn-primary-custom mt-3">Pelajari Program Tahfidz <i
+                    <a href="{{ route('tahfidz') }}" class="btn btn-primary-custom mt-3">Pelajari Program Tahfidz <i
                             class="bi bi-arrow-right ms-2"></i></a>
                 </div>
                 <div class="col-lg-6 order-lg-1 mb-4 mb-lg-0" data-reveal data-reveal-delay="200">

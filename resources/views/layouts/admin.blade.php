@@ -187,16 +187,16 @@
                 <a href="{{ route('admin.dashboard') }}" class="admin-nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
-                <a href="#" class="admin-nav-item {{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.students.index') }}" class="admin-nav-item {{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
                     <i class="bi bi-people"></i> Data Santri
                 </a>
-                <a href="#" class="admin-nav-item {{ request()->routeIs('admin.mentors.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.mentors.index') }}" class="admin-nav-item {{ request()->routeIs('admin.mentors.*') ? 'active' : '' }}">
                     <i class="bi bi-person-badge"></i> Pendamping
                 </a>
-                <a href="#" class="admin-nav-item {{ request()->routeIs('admin.sessions.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.students.index') }}" class="admin-nav-item {{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar-event"></i> Jadwal Sesi
                 </a>
-                <a href="#" class="admin-nav-item {{ request()->routeIs('admin.programs.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.programs.index') }}" class="admin-nav-item {{ request()->routeIs('admin.programs.*') ? 'active' : '' }}">
                     <i class="bi bi-journal-bookmark"></i> Program Belajar
                 </a>
 

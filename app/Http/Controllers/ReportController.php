@@ -8,9 +8,10 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function downloadProgress(Request $request, $studentId)
+    public function downloadProgress(Request $request, mixed $student = null)
     {
-        $studentUser = User::find($studentId) ?? auth()->user();
+        $studentUser = is_numeric($student) ? User::find($student) : null;
+        $studentUser = $studentUser ?? auth()->user();
 
         $progressList = Progress::with(['student.user', 'mentor.user'])
             ->latest()

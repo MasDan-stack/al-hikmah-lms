@@ -61,6 +61,32 @@
         </div>
     </section>
 
+    <!-- Real-time Statistics Banner (Synced with Master Data Dashboard) -->
+    <section class="section-padding py-5" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark, #09592d) 100%); color: white;">
+        <div class="container text-center">
+            <div class="row g-4 justify-content-center">
+                <div class="col-6 col-md-4" data-reveal>
+                    <div class="p-3">
+                        <div class="display-4 fw-extrabold text-warning mb-1">{{ isset($totalStudents) && $totalStudents > 0 ? $totalStudents : '100+' }}</div>
+                        <div class="fw-semibold text-white-50 text-uppercase small tracking-wider"><i class="bi bi-people-fill me-1"></i> Santri Terdaftar</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4" data-reveal data-reveal-delay="100">
+                    <div class="p-3">
+                        <div class="display-4 fw-extrabold text-warning mb-1">{{ isset($totalMentors) && $totalMentors > 0 ? $totalMentors : '15+' }}</div>
+                        <div class="fw-semibold text-white-50 text-uppercase small tracking-wider"><i class="bi bi-person-badge-fill me-1"></i> Pendamping Aktif</div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4" data-reveal data-reveal-delay="200">
+                    <div class="p-3">
+                        <div class="display-4 fw-extrabold text-warning mb-1">{{ isset($totalPrograms) && $totalPrograms > 0 ? $totalPrograms : '6' }}</div>
+                        <div class="fw-semibold text-white-50 text-uppercase small tracking-wider"><i class="bi bi-journal-bookmark-fill me-1"></i> Program Belajar</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Filosofi -->
     <section id="filosofi" class="section-padding section-alt" aria-label="Filosofi">
         <div class="container">

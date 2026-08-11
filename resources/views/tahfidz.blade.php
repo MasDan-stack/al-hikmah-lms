@@ -20,8 +20,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-5 mb-lg-0" data-reveal>
-                    <img src="{{ asset('assets/img/62.jpg') }}" alt="Program Tahfidz" class="tahfidz-image" loading="lazy"
-                        onerror="this.src='https://placehold.co/600x500/0d7a3e/white?text=Tahfidz'">
+                    <img src="{{ asset('assets/img/62.jpg') }}" alt="Program Tahfidz Al-Qur'an AL-HIKMAH" class="tahfidz-image" loading="lazy">
                 </div>
                 <div class="col-lg-6" data-reveal data-reveal-delay="200">
                     <h2 class="section-title">Menghafal Bukan Sekadar <span class="text-gradient">Mengingat</span>, Tetapi
@@ -44,8 +43,10 @@
                     <p style="font-style:italic;color:var(--text-muted);margin-top:20px">Semoga ayat yang dihafal menjadi
                         cahaya dalam kehidupan.</p>
                     <div class="mt-4">
-                        <a href="#" class="btn btn-primary-custom" data-bs-toggle="modal"
-                            data-bs-target="#daftarModal">Daftar Program Tahfidz <i class="bi bi-arrow-right ms-2"></i></a>
+                        <a href="https://wa.me/6285786689008?text={{ urlencode('Assalamualaikum, saya ingin mendaftar Program Tahfidz Al-Qur\'an AL-HIKMAH') }}"
+                           class="btn btn-primary-custom" target="_blank">
+                           Daftar Program Tahfidz <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
                         <a href="{{ route('biaya') }}" class="btn btn-outline-custom ms-2">Informasi Pendampingan</a>
                     </div>
                 </div>
@@ -60,7 +61,7 @@
             <div class="cta-content" data-reveal>
                 <h2 class="cta-title">Mulai Perjalanan <span class="text-gradient-light">Menghafal Al-Qur'an</span></h2>
                 <p class="cta-subtitle">Dari satu ayat, satu halaman, satu juz — setiap langkah adalah kebaikan.</p>
-                <a href="https://wa.me/6285786689008" class="btn btn-outline-light-custom btn-lg" target="_blank"><i
+                <a href="https://wa.me/6285786689008?text={{ urlencode('Assalamualaikum, saya ingin berkonsultasi mengenai Program Tahfidz Al-Qur\'an AL-HIKMAH') }}" class="btn btn-outline-light-custom btn-lg" target="_blank"><i
                         class="bi bi-whatsapp me-2"></i>Konsultasi Program Tahfidz</a>
             </div>
         </div>

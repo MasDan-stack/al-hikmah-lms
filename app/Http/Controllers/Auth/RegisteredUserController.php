@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Enums\Role as RoleEnum;
 use App\Http\Controllers\Controller;
+use App\Models\ParentProfile;
 use App\Models\Role;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -33,25 +35,49 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
+            'role' => 'nullable|string|in:parent,student',
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'phone' => 'nullable|string|max:30',
         ]);
 
-        $defaultRole = Role::firstOrCreate(
-            ['name' => RoleEnum::STUDENT->value],
-            ['label' => RoleEnum::STUDENT->label()]
+        $selectedRole = $request->input('role', 'parent');
+        $selectedRoleKey = $selectedRole === 'student' ? RoleEnum::STUDENT : RoleEnum::PARENT;
+
+        $targetRole = Role::firstOrCreate(
+            ['name' => $selectedRoleKey->value],
+            ['label' => $selectedRoleKey->label()]
         );
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => $defaultRole->id,
+            'role_id' => $targetRole->id,
+            'phone' => $request->phone,
+        ]);
+
+        if ($selectedRole === 'parent') {
+            ParentProfile::create([
+                'user_id' => $user->id,
+                'emergency_phone' => $request->phone,
+            ]);
+
+            event(new Registered($user));
+            Auth::login($user);
+
+            return redirect()->route('parent.dashboard');
+        }
+
+        Student::create([
+            'user_id' => $user->id,
+            'full_name' => $user->name,
+            'age' => 10,
+            'gender' => 'L',
         ]);
 
         event(new Registered($user));
-
         Auth::login($user);
 
         return redirect()->route('student.dashboard');

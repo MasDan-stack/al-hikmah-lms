@@ -86,7 +86,7 @@
         <i class="bi bi-chevron-up"></i>
     </button>
 
-    <!-- Modal Pendaftaran -->
+    <!-- Modal Pendaftaran / Konsultasi (Selalu Siap di DOM) -->
     @include('partials.modal-daftar')
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
