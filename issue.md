@@ -132,4 +132,27 @@ Berikut adalah analisis teknis mendalam dan panduan perbaikan yang jelas dan ama
      - `$item->date` ➔ Ganti ke `$item->created_at ? $item->created_at->format('d M Y') : date('d M Y')`
 
 ---
-*Dokumen issue.md ini diperbarui secara otomatis oleh Antigravity IDE untuk membantu proses review dan perbaikan proyek AL-HIKMAH LMS.*
+
+## 7. DOKUMENTASI ISSUE TERBARU & STATUS REVISI (BATCH 5 - SELESAI ✅)
+
+> **Status Issue #2 (https://github.com/MasDan-stack/al-hikmah-lms/issues/2):** **SELESAI (CLOSED) ✅**  
+> **Status Automated Tests:** **30 PASSED (0 FAILED)**
+
+### 📌 Ringkasan Implementasi Batch 5:
+
+1. ✅ **Issue 1: Refactoring UI Halaman Program (`program.blade.php`) & Biaya (`biaya.blade.php`)**
+   - Halaman **Program** telah diselaraskan 100% dengan `template/program.html` (3 Section: *Program Anak*, *Program Tambahan*, *Program Bahasa Arab* dengan `.arabic-featured`).
+   - Halaman **Biaya** telah diselaraskan 100% dengan `template/biaya.html` (*Biaya Pendaftaran Rp 150.000* & 3 Kartu Paket Bulanan dengan ribbon **`⭐ Banyak Dipilih`**).
+   - Mendukung *Dual-Rendering*: tetap menampilkan layout template HTML sekaligus merender data dinamis dari database bila tersedia di LMS.
+
+2. ✅ **Issue 2: Dinamisasi Fitur Link WhatsApp & Kontak Website**
+   - Membuat helper `wa_url($message)` di `app/Helpers/settings.php` dan mendaftarkannya pada `config/settings.php`, `.env`, serta `AppServiceProvider`.
+   - Seluruh link WhatsApp di `tahfidz.blade.php` (L46-48 & L64), `landing.blade.php` (floating WA), `footer.blade.php`, `home.blade.php`, `program.blade.php`, `biaya.blade.php`, dan `metode.blade.php` telah diubah secara dinamis.
+   - Mengintegrasikan `window.ALHIKMAH_CONFIG` pada `public/assets/js/scripts.js` agar pengiriman formulir pendaftaran via modal JS juga menggunakan nomor WA dari `.env`.
+
+3. ✅ **Issue 3: Perencanaan CMS Setting Admin & Update Database Seeders (`issue-modul.md`)**
+   - Menyiapkan dokumen perencanaan lengkap berformat GitHub Issue di `issue-modul.md` untuk Modul Pengaturan Website (`/admin/settings`) dan pembaharuan 10 modul seeder (`database/seeders/*`).
+   - Menyiapkan dokumen Pull Request resmi di `PR.md` ([PR.md](file:///c:/xampp/htdocs/al-hikmah-lms/PR.md)).
+
+---
+*Dokumen issue.md ini diperbarui secara otomatis oleh Antigravity IDE untuk membantu proses tracking dan perbaikan proyek AL-HIKMAH LMS.*

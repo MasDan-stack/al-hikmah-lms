@@ -123,11 +123,6 @@
             <!-- Actions (Theme Toggle + Login/Dashboard/Profile) -->
             <div class="navbar-actions d-flex align-items-center gap-2">
                 @auth
-                    <!-- Direct Dashboard Button (1-Click Navigation) -->
-                    <a href="{{ route('dashboard') }}" class="btn btn-daftar rounded-pill px-3 py-2 me-1">
-                        <i class="bi bi-speedometer2 me-1"></i> Dashboard
-                    </a>
-
                     <!-- User Authenticated Profile Dropdown -->
                     <div class="dropdown">
                         <button class="btn btn-outline-custom dropdown-toggle d-flex align-items-center gap-2 py-2 px-3 rounded-pill" 

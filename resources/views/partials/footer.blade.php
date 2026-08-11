@@ -11,8 +11,8 @@
                     <p class="footer-description">Menemani perjalanan keluarga untuk mengenal, mencintai, dan
                         menghidupkan nilai-nilai Al-Qur'an dalam kehidupan.</p>
                     <div class="footer-socials">
-                        <a href="https://www.instagram.com/houseofalhikmah/" target="_blank" rel="noopener"><i class="bi bi-instagram"></i></a>
-                        <a href="https://wa.me/6285786689008" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i></a>
+                        <a href="https://www.instagram.com/{{ config('settings.instagram_handle', 'houseofalhikmah') }}/" target="_blank" rel="noopener"><i class="bi bi-instagram"></i></a>
+                        <a href="{{ wa_url() }}" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i></a>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
             <div class="col-lg-3 col-md-6">
                 <h6 class="footer-title">Kontak</h6>
                 <ul class="footer-contact">
-                    <li><i class="bi bi-whatsapp"></i><a href="https://wa.me/6285786689008" target="_blank" rel="noopener">+62 857-8668-9008</a></li>
+                    <li><i class="bi bi-whatsapp"></i><a href="{{ wa_url() }}" target="_blank" rel="noopener">+{{ config('settings.whatsapp_number', '6285786689008') }}</a></li>
                     <li><i class="bi bi-instagram"></i><a href="https://www.instagram.com/houseofalhikmah/" target="_blank" rel="noopener">@houseofalhikmah</a></li>
                     <li><i class="bi bi-envelope"></i><span>belajarquranalhikmah@gmail.com</span></li>
                 </ul>

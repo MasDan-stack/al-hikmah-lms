@@ -43,7 +43,7 @@
                     <p style="font-style:italic;color:var(--text-muted);margin-top:20px">Semoga ayat yang dihafal menjadi
                         cahaya dalam kehidupan.</p>
                     <div class="mt-4">
-                        <a href="https://wa.me/6285786689008?text={{ urlencode('Assalamualaikum, saya ingin mendaftar Program Tahfidz Al-Qur\'an AL-HIKMAH') }}"
+                        <a href="{{ wa_url('Assalamualaikum, saya ingin mendaftar Program Tahfidz Al-Qur\'an AL-HIKMAH') }}"
                            class="btn btn-primary-custom" target="_blank">
                            Daftar Program Tahfidz <i class="bi bi-arrow-right ms-2"></i>
                         </a>
@@ -61,7 +61,7 @@
             <div class="cta-content" data-reveal>
                 <h2 class="cta-title">Mulai Perjalanan <span class="text-gradient-light">Menghafal Al-Qur'an</span></h2>
                 <p class="cta-subtitle">Dari satu ayat, satu halaman, satu juz — setiap langkah adalah kebaikan.</p>
-                <a href="https://wa.me/6285786689008?text={{ urlencode('Assalamualaikum, saya ingin berkonsultasi mengenai Program Tahfidz Al-Qur\'an AL-HIKMAH') }}" class="btn btn-outline-light-custom btn-lg" target="_blank"><i
+                <a href="{{ wa_url('Assalamualaikum, saya ingin berkonsultasi mengenai Program Tahfidz Al-Qur\'an AL-HIKMAH') }}" class="btn btn-outline-light-custom btn-lg" target="_blank"><i
                         class="bi bi-whatsapp me-2"></i>Konsultasi Program Tahfidz</a>
             </div>
         </div>

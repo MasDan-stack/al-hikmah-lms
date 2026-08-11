@@ -299,7 +299,7 @@
                 <div class="cta-buttons">
                     <a href="#" class="btn btn-primary-custom btn-lg" data-bs-toggle="modal"
                         data-bs-target="#daftarModal"><i class="bi bi-pencil-square me-2"></i>Mulai Perjalanan</a>
-                    <a href="https://wa.me/6285786689008" class="btn btn-outline-light-custom btn-lg" target="_blank"><i
+                    <a href="{{ wa_url('Assalamualaikum, saya ingin berbincang mengenai bimbingan AL-HIKMAH') }}" class="btn btn-outline-light-custom btn-lg" target="_blank"><i
                             class="bi bi-whatsapp me-2"></i>Berbincang dengan Kami</a>
                 </div>
             </div>

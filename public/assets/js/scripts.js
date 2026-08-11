@@ -325,7 +325,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 message += '💻 Metode: ' + metode + '\n\n';
                 message += 'Mohon info lebih lanjut. Jazakallahu khairan.';
                 
-                const waNumber = '6285786689008';
+                const waNumber = (window.ALHIKMAH_CONFIG && window.ALHIKMAH_CONFIG.whatsappNumber) 
+                    ? window.ALHIKMAH_CONFIG.whatsappNumber.replace(/[^0-9]/g, '') 
+                    : '6285786689008';
                 window.open('https://wa.me/' + waNumber + '?text=' + encodeURIComponent(message), '_blank');
                 
                 // Close modal

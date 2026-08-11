@@ -18,6 +18,9 @@
                 }
             } catch (e) {}
         })();
+        window.ALHIKMAH_CONFIG = {
+            whatsappNumber: "{{ config('settings.whatsapp_number', '6285786689008') }}"
+        };
     </script>
     <title>@yield('title', 'AL-HIKMAH | Menemani Perjalanan Belajar Al-Qur\'an')</title>
 
@@ -77,7 +80,7 @@
     @include('partials.footer')
 
     <!-- Floating WA + Back to Top -->
-    <a href="https://wa.me/6285786689008?text=Assalamualaikum,%20saya%20ingin%20bertanya%20tentang%20program%20belajar%20AL-HIKMAH"
+    <a href="{{ wa_url('Assalamualaikum, saya ingin bertanya tentang program belajar AL-HIKMAH') }}"
         class="floating-whatsapp" target="_blank" rel="noopener" aria-label="Hubungi via WhatsApp">
         <i class="bi bi-whatsapp"></i>
         <span class="wa-tooltip">Berbincang dengan Kami</span>

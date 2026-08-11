@@ -29,7 +29,7 @@
                             <li><i class="bi bi-check-circle-fill"></i> Bagi keluarga di luar jangkauan tatap muka</li>
                             <li><i class="bi bi-check-circle-fill"></i> Jadwal fleksibel</li>
                         </ul>
-                        <a href="https://wa.me/6285786689008?text={{ urlencode('Assalamualaikum, saya ingin menanyakan bimbingan metode Online') }}" class="btn btn-outline-custom w-100 rounded-pill mt-2" target="_blank"><i class="bi bi-whatsapp me-1"></i> Pilih Online</a>
+                        <a href="{{ wa_url('Assalamualaikum, saya ingin menanyakan bimbingan metode Online') }}" class="btn btn-outline-custom w-100 rounded-pill mt-2" target="_blank"><i class="bi bi-whatsapp me-1"></i> Pilih Online</a>
                         <div class="kelas-badge">Online</div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                             <li><i class="bi bi-check-circle-fill"></i> Pendamping hadir langsung di rumah</li>
                             <li><i class="bi bi-check-circle-fill"></i> Interaksi lebih dekat</li>
                         </ul>
-                        <a href="https://wa.me/6285786689008?text={{ urlencode('Assalamualaikum, saya ingin menanyakan bimbingan metode Offline (Home Visit)') }}" class="btn btn-primary-custom w-100 rounded-pill mt-2" target="_blank"><i class="bi bi-whatsapp me-1"></i> Pilih Home Visit</a>
+                        <a href="{{ wa_url('Assalamualaikum, saya ingin menanyakan bimbingan metode Offline (Home Visit)') }}" class="btn btn-primary-custom w-100 rounded-pill mt-2" target="_blank"><i class="bi bi-whatsapp me-1"></i> Pilih Home Visit</a>
                         <div class="kelas-badge">Home Visit</div>
                     </div>
                 </div>
@@ -57,14 +57,14 @@
                             <li><i class="bi bi-check-circle-fill"></i> Sesuai kondisi dan kebutuhan</li>
                             <li><i class="bi bi-check-circle-fill"></i> Pendampingan personal</li>
                         </ul>
-                        <a href="https://wa.me/6285786689008?text={{ urlencode('Assalamualaikum, saya ingin menanyakan bimbingan metode Hybrid') }}" class="btn btn-outline-custom w-100 rounded-pill mt-2" target="_blank"><i class="bi bi-whatsapp me-1"></i> Pilih Hybrid</a>
+                        <a href="{{ wa_url('Assalamualaikum, saya ingin menanyakan bimbingan metode Hybrid') }}" class="btn btn-outline-custom w-100 rounded-pill mt-2" target="_blank"><i class="bi bi-whatsapp me-1"></i> Pilih Hybrid</a>
                         <div class="kelas-badge">Fleksibel</div>
                     </div>
                 </div>
             </div>
             <div class="text-center mt-4" data-reveal>
-                <p style="font-style:italic;color:var(--text-muted)">Metode dapat disesuaikan. Nilai yang kami jaga tetap
-                    sama.</p>
+                <a href="{{ route('program') }}" class="btn btn-outline-custom me-2"><i class="bi bi-journal-bookmark me-1"></i> Lihat Program</a>
+                <a href="{{ route('biaya') }}" class="btn btn-primary-custom"><i class="bi bi-info-circle me-1"></i> Informasi Pendampingan</a>
             </div>
         </div>
     </section>
@@ -125,7 +125,7 @@
                     <h4>📍 Melayani Area <strong>Jabodetabek</strong> & Sekitarnya</h4>
                     <p>Pendamping datang ke rumah Anda. Tersedia juga kelas online untuk seluruh Indonesia.</p>
                 </div>
-                <a href="https://wa.me/6285786689008?text=Assalamualaikum,%20apakah%20area%20saya%20tercakup%20AL-HIKMAH?"
+                <a href="{{ wa_url('Assalamualaikum, apakah area saya tercakup AL-HIKMAH?') }}"
                     class="btn btn-sm btn-primary-custom" target="_blank"><i class="bi bi-whatsapp me-1"></i> Cek Area</a>
             </div>
         </div>
