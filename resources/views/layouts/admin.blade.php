@@ -199,6 +199,9 @@
                 <a href="{{ route('admin.programs.index') }}" class="admin-nav-item {{ request()->routeIs('admin.programs.*') ? 'active' : '' }}">
                     <i class="bi bi-journal-bookmark"></i> Program Belajar
                 </a>
+                <a href="{{ route('admin.settings.index') }}" class="admin-nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                    <i class="bi bi-gear"></i> Pengaturan Website
+                </a>
 
                 <a href="{{ route('home') }}" class="admin-nav-item" target="_blank">
                     <i class="bi bi-globe"></i> Halaman Depan

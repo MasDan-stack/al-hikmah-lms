@@ -11,44 +11,79 @@ class ProgramSeeder extends Seeder
     {
         $programs = [
             [
-                'name' => 'Tahsin & Makhraj Al-Qur\'an',
-                'description' => 'Program perbaikan pengucapan huruf (makhraj) dan hukum tajwid dasar secara tartil.',
-                'duration_weeks' => 12,
-                'price' => 350000,
-                'level' => 'Pemula',
-            ],
-            [
-                'name' => 'Tahfidz Juz 30 & Juz Amma',
-                'description' => 'Program bimbingan hafalan Juz 30 lengkap dengan setoran rutin dan tes kelancaran.',
-                'duration_weeks' => 16,
-                'price' => 450000,
-                'level' => 'Menengah',
-            ],
-            [
-                'name' => 'Bimbingan Iqra Anak (Jilid 1-6)',
-                'description' => 'Program dasar membaca Al-Qur\'an bagi anak usia 10-15 tahun dari tingkat paling dasar.',
+                'name' => 'Iqra & Dasar Al-Qur\'an',
+                'description' => 'Memulai perjalanan mengenal huruf hijaiyah dan membaca Al-Qur\'an secara bertahap.',
                 'duration_weeks' => 8,
-                'price' => 250000,
-                'level' => 'Dasar',
+                'price' => 400000,
+                'level' => 'Anak (10-15 th)',
             ],
             [
-                'name' => 'Muroja\'ah & Adab Al-Qur\'an',
-                'description' => 'Pendampingan menjaga hafalan yang sudah dimiliki serta penanaman adab penuntut ilmu Al-Qur\'an.',
+                'name' => 'Tahsin Dasar',
+                'description' => 'Membantu memperbaiki bacaan agar lebih baik dan sesuai dengan kaidah tajwid.',
+                'duration_weeks' => 12,
+                'price' => 450000,
+                'level' => 'Anak (10-15 th)',
+            ],
+            [
+                'name' => 'Adab & Doa Harian',
+                'description' => 'Mengenalkan nilai-nilai adab Islami dan doa yang dapat diamalkan dalam kehidupan sehari-hari.',
+                'duration_weeks' => 8,
+                'price' => 350000,
+                'level' => 'Anak (10-15 th)',
+            ],
+            [
+                'name' => 'Tahfidz Al-Qur\'an',
+                'description' => 'Mendampingi anak dalam menghafal Al-Qur\'an secara bertahap dengan murajaah dan pembiasaan.',
+                'duration_weeks' => 16,
+                'price' => 500000,
+                'level' => 'Anak (10-15 th)',
+            ],
+            [
+                'name' => 'Belajar dari Nol (Dewasa)',
+                'description' => 'Tidak pernah terlambat untuk memulai. Program untuk siapa saja yang ingin belajar dari dasar.',
                 'duration_weeks' => 12,
                 'price' => 400000,
-                'level' => 'Lanjutan',
+                'level' => 'Dewasa',
             ],
             [
-                'name' => 'Tahfidz Tematik & Tajwid Lengkap',
-                'description' => 'Bimbingan hafalan ayat-ayat pilihan dan pendalaman hukum tajwid mutaqaddimin.',
-                'duration_weeks' => 20,
+                'name' => 'Tahsin Dewasa',
+                'description' => 'Pendampingan untuk memperbaiki makhraj, tajwid, dan kualitas bacaan.',
+                'duration_weeks' => 12,
+                'price' => 450000,
+                'level' => 'Dewasa',
+            ],
+            [
+                'name' => 'Kelas Muslimah',
+                'description' => 'Ruang belajar yang nyaman bagi muslimah bersama pendamping wanita.',
+                'duration_weeks' => 12,
+                'price' => 450000,
+                'level' => 'Muslimah',
+            ],
+            [
+                'name' => 'Tahfidz Dewasa',
+                'description' => 'Mendampingi perjalanan menghafal dengan target yang disesuaikan kemampuan.',
+                'duration_weeks' => 16,
+                'price' => 550000,
+                'level' => 'Dewasa',
+            ],
+            [
+                'name' => 'Bahasa Arab Dasar',
+                'description' => 'Mengenal kosakata dan percakapan dasar untuk membangun fondasi bahasa Arab.',
+                'duration_weeks' => 12,
+                'price' => 500000,
+                'level' => 'Bahasa Arab',
+            ],
+            [
+                'name' => 'Nahwu & Sharaf',
+                'description' => 'Mempelajari dasar-dasar tata bahasa Arab sebagai bekal memahami teks keislaman.',
+                'duration_weeks' => 16,
                 'price' => 600000,
-                'level' => 'Lanjutan',
+                'level' => 'Bahasa Arab',
             ],
         ];
 
         foreach ($programs as $program) {
-            Program::firstOrCreate(
+            Program::updateOrCreate(
                 ['name' => $program['name']],
                 $program
             );

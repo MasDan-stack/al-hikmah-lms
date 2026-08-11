@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Auth\RegisterMentorController;
 use App\Http\Controllers\ReportController;
 use App\Models\Mentor;
@@ -69,6 +70,9 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/students', function () {
             return view('admin.students.index');
         })->name('students.index');
+
+        Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
     });
 
 // ==========================================
