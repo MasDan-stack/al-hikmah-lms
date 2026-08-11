@@ -164,7 +164,7 @@ class UserSeeder extends Seeder
                     ]
                 );
 
-                Student::firstOrCreate(
+                $studentModel = Student::firstOrCreate(
                     ['user_id' => $studentUser->id],
                     [
                         'parent_id' => $parentProfile->id,
@@ -175,6 +175,12 @@ class UserSeeder extends Seeder
                         'notes' => $studentInfo['notes'],
                     ]
                 );
+
+                // Attach to mentors
+                $allMentors = Mentor::all();
+                if ($allMentors->isNotEmpty()) {
+                    $studentModel->mentors()->syncWithoutDetaching([$allMentors->random()->id]);
+                }
             }
         }
     }

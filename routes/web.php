@@ -3,6 +3,10 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Auth\RegisterMentorController;
+use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
+use App\Http\Controllers\Mentor\ProgressController as MentorProgressController;
+use App\Http\Controllers\Mentor\SessionController as MentorSessionController;
+use App\Http\Controllers\Mentor\StudentController as MentorStudentController;
 use App\Http\Controllers\ReportController;
 use App\Models\Mentor;
 use App\Models\Program;
@@ -82,9 +86,14 @@ Route::middleware(['auth', 'role:mentor'])
     ->prefix('mentor')
     ->name('mentor.')
     ->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard');
-        })->name('dashboard');
+        Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/sessions', [MentorSessionController::class, 'index'])->name('sessions.index');
+        Route::post('/sessions/{id}/status', [MentorSessionController::class, 'updateStatus'])->name('sessions.update-status');
+        Route::get('/students', [MentorStudentController::class, 'index'])->name('students.index');
+        Route::get('/students/{id}', [MentorStudentController::class, 'show'])->name('students.show');
+        Route::get('/progress/create', [MentorProgressController::class, 'create'])->name('progress.create');
+        Route::post('/progress', [MentorProgressController::class, 'store'])->name('progress.store');
+        Route::get('/profile', [MentorDashboardController::class, 'profile'])->name('profile');
     });
 
 // ==========================================
