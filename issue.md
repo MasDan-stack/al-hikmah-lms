@@ -155,4 +155,31 @@ Berikut adalah analisis teknis mendalam dan panduan perbaikan yang jelas dan ama
    - Menyiapkan dokumen Pull Request resmi di `PR.md` ([PR.md](file:///c:/xampp/htdocs/al-hikmah-lms/PR.md)).
 
 ---
+
+## 8. DOKUMENTASI ISSUE TERBARU & STATUS REVISI (BATCH 6 - SELESAI ✅)
+
+> **Status Issue #3 (https://github.com/MasDan-stack/al-hikmah-lms/issues/3):** **SELESAI (CLOSED) ✅**  
+> **Status Automated Tests:** **33 PASSED (0 FAILED)**
+
+### 📌 Ringkasan Implementasi Batch 6:
+
+1. ✅ **Implementasi Modul Pengaturan Website (CMS Setting)**
+   - Migration `2026_08_10_005005_create_settings_table.php` & Model `Setting` dengan helper static `Setting::get()` & `Setting::set()`.
+   - Controller `Admin\SettingController` & Route `/admin/settings` (GET & POST) yang dilindungi role Admin.
+   - View Form Pengaturan Admin (`resources/views/admin/settings/index.blade.php`) untuk mengubah Nomor WhatsApp, Instagram, Email, Alamat, dan Biaya Pendaftaran secara instan.
+   - Integrasi helper `site_setting()` dan `wa_url()` yang membaca langsung dari database dengan fallback `.env`/config.
+   - Penambahan menu **Pengaturan Website** di sidebar Admin (`resources/views/layouts/admin.blade.php`).
+
+2. ✅ **Pembaharuan Seluruh Data Seeders Terkini (`database/seeders/*`)**
+   - `SettingSeeder.php`: Mengisi nilai awal untuk semua kunci pengaturan.
+   - `ProgramSeeder.php`: Memperbarui 10 modul program AL-HIKMAH (*Iqra*, *Tahsin*, *Adab*, *Tahfidz*, *Dewasa*, *Muslimah*, *Bahasa Arab*, *Nahwu Sharaf*).
+   - `DatabaseSeeder.php`: Menyemaikan seluruh data awal tanpa error constraint foreign key.
+
+3. ✅ **Penambahan Feature Test & Verifikasi Quality Assurance**
+   - File test baru `tests/Feature/AdminSettingTest.php` memverifikasi otorisasi admin & alur update setting.
+   - Menjalankan `php artisan migrate:fresh --seed` (100% sukses).
+   - Menjalankan `php artisan test --compact` -> **33 PASSED (0 FAILED)**.
+
+---
 *Dokumen issue.md ini diperbarui secara otomatis oleh Antigravity IDE untuk membantu proses tracking dan perbaikan proyek AL-HIKMAH LMS.*
+
