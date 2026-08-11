@@ -236,24 +236,24 @@ Ganti semua link WA di file berikut menggunakan helper `wa_url()`:
 
 Sebelum melaporkan pekerjaan selesai, Junior Developer wajib melakukan verifikasi berikut:
 
-- [ ] **Cache Clearing**:
+- [x] **Cache Clearing**:
   Jalankan perintah berikut di terminal:
   ```bash
   php artisan config:clear
   php artisan view:clear
   ```
 
-- [ ] **Uji Tampilan Halaman Program (`/program`)**:
+- [x] **Uji Tampilan Halaman Program (`/program`)**:
   - Buka browser ke halaman `/program`.
   - Pastikan 3 section (Program Anak, Program Tambahan, Program Bahasa Arab) tampil rapi sesuai `template/program.html`.
   - Check kartu Bahasa Arab memiliki aksen khusus `.arabic-featured`.
 
-- [ ] **Uji Tampilan Halaman Biaya (`/biaya`)**:
+- [x] **Uji Tampilan Halaman Biaya (`/biaya`)**:
   - Buka browser ke halaman `/biaya`.
   - Pastikan kartu **Biaya Pendaftaran** (Rp 150.000) dan 3 kartu paket (Basic, Standard, Premium) tampil presisi sesuai `template/biaya.html`.
   - Pastikan ribbon **`⭐ Banyak Dipilih`** di paket Standard terpasang dengan benar.
 
-- [ ] **Uji Dinamisasi WhatsApp (`/tahfidz` & Halaman Lain)**:
+- [x] **Uji Dinamisasi WhatsApp (`/tahfidz` & Halaman Lain)**:
   - Coba ubah nilai `WHATSAPP_NUMBER` di file `.env` (misal menjadi `6281234567890`).
   - Refresh browser dan hover / klik tombol *Daftar Program Tahfidz*, *Konsultasi*, serta *Floating WA*.
   - Pastikan URL tujuan WhatsApp otomatis mengarahkan ke nomor baru yang diatur di `.env`.

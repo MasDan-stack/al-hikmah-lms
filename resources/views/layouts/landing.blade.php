@@ -19,7 +19,7 @@
             } catch (e) {}
         })();
         window.ALHIKMAH_CONFIG = {
-            whatsappNumber: "{{ config('settings.whatsapp_number', '6285786689008') }}"
+            whatsappNumber: "{{ site_setting('whatsapp_number', '6285786689008') }}"
         };
     </script>
     <title>@yield('title', 'AL-HIKMAH | Menemani Perjalanan Belajar Al-Qur\'an')</title>

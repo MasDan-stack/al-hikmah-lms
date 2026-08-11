@@ -24,14 +24,14 @@ Dokumen perencanaan ini dibuat sebagai panduan teknis (*issue task guide*) untuk
 
 ## 📋 Summary Checklist Fitur
 
-- [ ] **Task 1**: Skema Database & Model `Setting`
-- [ ] **Task 2**: `SettingSeeder` untuk Data Awal Pengaturan
-- [ ] **Task 3**: Update Helper `site_setting()` & `wa_url()`
-- [ ] **Task 4**: Controller `Admin\SettingController` & Route `/admin/settings`
-- [ ] **Task 5**: Blade View Pengaturan Admin (`resources/views/admin/settings/index.blade.php`)
-- [ ] **Task 6**: Tambahkan Menu "Pengaturan Website" pada Sidebar / Navigasi Admin Layout
-- [ ] **Task 7**: Pembaharuan Seluruh File Seeder (`ProgramSeeder`, `UserSeeder`, `GallerySeeder`, `PaymentSeeder`, `DatabaseSeeder`, dll.)
-- [ ] **Task 8**: Testing & Validation Checklist
+- [x] **Task 1**: Skema Database & Model `Setting`
+- [x] **Task 2**: `SettingSeeder` untuk Data Awal Pengaturan
+- [x] **Task 3**: Update Helper `site_setting()` & `wa_url()`
+- [x] **Task 4**: Controller `Admin\SettingController` & Route `/admin/settings`
+- [x] **Task 5**: Blade View Pengaturan Admin (`resources/views/admin/settings/index.blade.php`)
+- [x] **Task 6**: Tambahkan Menu "Pengaturan Website" pada Sidebar / Navigasi Admin Layout
+- [x] **Task 7**: Pembaharuan Seluruh File Seeder (`ProgramSeeder`, `UserSeeder`, `GallerySeeder`, `PaymentSeeder`, `DatabaseSeeder`, dll.)
+- [x] **Task 8**: Testing & Validation Checklist
 
 ---
 
@@ -557,15 +557,15 @@ Pastikan `UserSeeder`, `GallerySeeder`, `LearningSessionSeeder`, `ProgressSeeder
 
 ## 🧪 Acceptance Criteria & Verifikasi
 
-- [ ] Jalankan perintah:
+- [x] Jalankan perintah:
   ```bash
   php artisan migrate:fresh --seed
   ```
   Harus berjalan **sukses tanpa error** 100%.
-- [ ] Buka browser dan login sebagai Admin (`admin@alhikmah.id`).
-- [ ] Akses halaman `/admin/settings`. Form pengaturan harus tampil dengan rapi.
-- [ ] Coba ubah nomor WhatsApp menjadi `6281299998888` dan simpan form.
-- [ ] Buka halaman utama (Home / Tahfidz / Program), periksa link WhatsApp di floating button, navbar, dan footer. Nomor WA baru harus otomatis ter-update di seluruh website.
-- [ ] Jalankan `vendor/bin/pint --dirty --format agent` dan `php artisan test --compact` untuk memastikan seluruh tes hijau.
+- [x] Buka browser dan login sebagai Admin (`admin@alhikmah.id`).
+- [x] Akses halaman `/admin/settings`. Form pengaturan harus tampil dengan rapi.
+- [x] Coba ubah nomor WhatsApp menjadi `6281299998888` dan simpan form.
+- [x] Buka halaman utama (Home / Tahfidz / Program), periksa link WhatsApp di floating button, navbar, dan footer. Nomor WA baru harus otomatis ter-update di seluruh website.
+- [x] Jalankan `vendor/bin/pint --dirty --format agent` dan `php artisan test --compact` untuk memastikan seluruh tes hijau.
 
 ---
