@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Mentor;
 
 use App\Http\Controllers\Controller;
+use App\Models\MentorActivityLog;
 use App\Models\Session;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,12 +31,18 @@ class SessionController extends Controller
     public function updateStatus(Request $request, int $id): RedirectResponse
     {
         $request->validate([
-            'status' => 'required|in:pending,scheduled,completed,cancelled',
+            'status' => 'required|in:pending,scheduled,in_progress,completed,cancelled',
         ]);
 
         $mentor = auth()->user()->mentor;
         $session = Session::where('mentor_id', $mentor?->id)->findOrFail($id);
         $session->update(['status' => $request->status]);
+
+        MentorActivityLog::log(
+            $mentor?->id,
+            'update_status_sesi',
+            "Mengubah status sesi ID #{$session->id} menjadi ".ucfirst(str_replace('_', ' ', $request->status))
+        );
 
         return redirect()->back()->with('success', 'Status sesi belajar berhasil diperbarui!');
     }

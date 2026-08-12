@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Mentor;
 
 use App\Http\Controllers\Controller;
+use App\Models\MentorActivityLog;
 use App\Models\Progress;
 use App\Models\Session;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ProgressController extends Controller
@@ -17,11 +19,13 @@ class ProgressController extends Controller
         $students = $mentor ? $mentor->students()->with('user')->get() : collect();
 
         $selectedStudentId = $request->query('student_id');
+        $selectedSessionId = $request->query('session_id');
+
         $sessions = $mentor
             ? Session::where('mentor_id', $mentor->id)->orderBy('date', 'desc')->get()
             : collect();
 
-        return view('mentor.progress.create', compact('students', 'sessions', 'selectedStudentId'));
+        return view('mentor.progress.create', compact('students', 'sessions', 'selectedStudentId', 'selectedSessionId'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -45,14 +49,75 @@ class ProgressController extends Controller
         $mentor = auth()->user()->mentor;
         $validated['mentor_id'] = $mentor?->id;
 
-        Progress::create($validated);
+        $progress = Progress::create($validated);
 
         if (! empty($validated['session_id'])) {
             Session::where('id', $validated['session_id'])->update(['status' => 'completed']);
         }
 
+        MentorActivityLog::log(
+            $mentor?->id,
+            'catat_progres',
+            'Mencatat progres santri ID #'.$validated['student_id'].' ('.$validated['kategori'].')'
+        );
+
         return redirect()
             ->route('mentor.dashboard')
             ->with('success', 'Catatan progres hafalan/bacaan santri berhasil disimpan!');
+    }
+
+    public function createBulk(): View
+    {
+        $mentor = auth()->user()->mentor;
+        $students = $mentor ? $mentor->students()->with('user')->get() : collect();
+        $sessions = $mentor ? Session::where('mentor_id', $mentor->id)->orderBy('date', 'desc')->get() : collect();
+
+        return view('mentor.progress.bulk', compact('students', 'sessions'));
+    }
+
+    public function storeBulk(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'entries' => 'required|array|min:1',
+            'entries.*.student_id' => 'required|exists:students,id',
+            'entries.*.session_id' => 'nullable|exists:learning_sessions,id',
+            'entries.*.kategori' => 'required|string|max:50',
+            'entries.*.surah_start' => 'nullable|string|max:100',
+            'entries.*.surah_end' => 'nullable|string|max:100',
+            'entries.*.ayat_start' => 'nullable|string|max:50',
+            'entries.*.ayat_end' => 'nullable|string|max:50',
+            'entries.*.juz' => 'nullable|integer|min:1|max:30',
+            'entries.*.nilai_fluent' => 'nullable|integer|min:0|max:100',
+            'entries.*.nilai_tajwid' => 'nullable|integer|min:0|max:100',
+            'entries.*.nilai_adab' => 'nullable|string|max:50',
+            'entries.*.catatan_evaluasi' => 'nullable|string|max:1000',
+            'entries.*.homework' => 'nullable|string|max:500',
+        ]);
+
+        $mentor = auth()->user()->mentor;
+        $mentorId = $mentor?->id;
+        $count = 0;
+
+        DB::transaction(function () use ($request, $mentorId, &$count) {
+            foreach ($request->entries as $entry) {
+                $entry['mentor_id'] = $mentorId;
+                Progress::create($entry);
+                $count++;
+
+                if (! empty($entry['session_id'])) {
+                    Session::where('id', $entry['session_id'])->update(['status' => 'completed']);
+                }
+            }
+
+            MentorActivityLog::log(
+                $mentorId,
+                'bulk_progres',
+                "Mencatat progres massal untuk {$count} santri"
+            );
+        });
+
+        return redirect()
+            ->route('mentor.dashboard')
+            ->with('success', "Berhasil menyimpan {$count} catatan progres massal!");
     }
 }

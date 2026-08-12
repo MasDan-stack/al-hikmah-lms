@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Auth\RegisterMentorController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\ProgressController as MentorProgressController;
+use App\Http\Controllers\Mentor\ReportController as MentorReportController;
 use App\Http\Controllers\Mentor\SessionController as MentorSessionController;
 use App\Http\Controllers\Mentor\StudentController as MentorStudentController;
 use App\Http\Controllers\ReportController;
@@ -93,6 +94,9 @@ Route::middleware(['auth', 'role:mentor'])
         Route::get('/students/{id}', [MentorStudentController::class, 'show'])->name('students.show');
         Route::get('/progress/create', [MentorProgressController::class, 'create'])->name('progress.create');
         Route::post('/progress', [MentorProgressController::class, 'store'])->name('progress.store');
+        Route::get('/progress/bulk', [MentorProgressController::class, 'createBulk'])->name('progress.bulk-create');
+        Route::post('/progress/bulk', [MentorProgressController::class, 'storeBulk'])->name('progress.bulk-store');
+        Route::get('/reports/export', [MentorReportController::class, 'export'])->name('reports.export');
         Route::get('/profile', [MentorDashboardController::class, 'profile'])->name('profile');
     });
 

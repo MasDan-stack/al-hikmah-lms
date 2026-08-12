@@ -73,8 +73,14 @@
                 <a href="{{ route('mentor.students.index') }}" class="admin-nav-item {{ request()->routeIs('mentor.students.*') ? 'active' : '' }}">
                     <i class="bi bi-people"></i> Santri Binaan
                 </a>
-                <a href="{{ route('mentor.progress.create') }}" class="admin-nav-item {{ request()->routeIs('mentor.progress.*') ? 'active' : '' }}">
+                <a href="{{ route('mentor.progress.create') }}" class="admin-nav-item {{ request()->routeIs('mentor.progress.create') ? 'active' : '' }}">
                     <i class="bi bi-pencil-square"></i> Catat Progres
+                </a>
+                <a href="{{ route('mentor.progress.bulk-create') }}" class="admin-nav-item {{ request()->routeIs('mentor.progress.bulk*') ? 'active' : '' }}">
+                    <i class="bi bi-layers-fill"></i> Catat Massal
+                </a>
+                <a href="{{ route('mentor.reports.export') }}" class="admin-nav-item {{ request()->routeIs('mentor.reports.*') ? 'active' : '' }}">
+                    <i class="bi bi-file-earmark-pdf"></i> Laporan Mentor
                 </a>
                 <a href="{{ route('mentor.profile') }}" class="admin-nav-item {{ request()->routeIs('mentor.profile') ? 'active' : '' }}">
                     <i class="bi bi-person-circle"></i> Profil Saya

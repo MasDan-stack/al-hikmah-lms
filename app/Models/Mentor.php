@@ -37,4 +37,9 @@ class Mentor extends Model
     {
         return $this->belongsToMany(Student::class, 'mentor_student')->withTimestamps();
     }
+
+    public function activityLogs()
+    {
+        return $this->hasMany(MentorActivityLog::class);
+    }
 }
