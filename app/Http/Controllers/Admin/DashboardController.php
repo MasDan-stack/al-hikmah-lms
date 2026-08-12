@@ -4,21 +4,47 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mentor;
+use App\Models\Message;
+use App\Models\ParentProfile;
+use App\Models\Payment;
 use App\Models\Session;
-use App\Models\Student; // Model sudah di-update
+use App\Models\SessionConfirmation;
+use App\Models\Student;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $totalStudents = Student::count();
         $totalMentors = Mentor::count();
         $todaySessions = Session::whereDate('date', today())->count();
+        $totalParents = ParentProfile::count();
+
+        // 📌 Widget Monitor Aktivitas Orang Tua (Parent Monitoring Activity)
+        $recentConfirmations = SessionConfirmation::with(['session.student.user', 'parent.user'])
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $recentPayments = Payment::with(['student.user', 'program'])
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $recentParentMessages = Message::with(['sender', 'student.user'])
+            ->latest()
+            ->take(5)
+            ->get();
 
         return view('admin.dashboard', compact(
             'totalStudents',
             'totalMentors',
-            'todaySessions'
+            'todaySessions',
+            'totalParents',
+            'recentConfirmations',
+            'recentPayments',
+            'recentParentMessages'
         ));
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Auth\RegisterMentorController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
@@ -8,6 +9,12 @@ use App\Http\Controllers\Mentor\ProgressController as MentorProgressController;
 use App\Http\Controllers\Mentor\ReportController as MentorReportController;
 use App\Http\Controllers\Mentor\SessionController as MentorSessionController;
 use App\Http\Controllers\Mentor\StudentController as MentorStudentController;
+use App\Http\Controllers\Parent\ParentChildController;
+use App\Http\Controllers\Parent\ParentDashboardController;
+use App\Http\Controllers\Parent\ParentMessageController;
+use App\Http\Controllers\Parent\ParentPaymentController;
+use App\Http\Controllers\Parent\ParentProfileController;
+use App\Http\Controllers\Parent\ParentScheduleController;
 use App\Http\Controllers\ReportController;
 use App\Models\Mentor;
 use App\Models\Program;
@@ -78,6 +85,12 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
         Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+
+        Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
+        Route::post('/payments', [AdminPaymentController::class, 'store'])->name('payments.store');
+        Route::put('/payments/{id}', [AdminPaymentController::class, 'update'])->name('payments.update');
+        Route::delete('/payments/{id}', [AdminPaymentController::class, 'destroy'])->name('payments.destroy');
+        Route::post('/payments/send-reminder', [AdminPaymentController::class, 'sendReminder'])->name('payments.send-reminder');
     });
 
 // ==========================================
@@ -101,15 +114,47 @@ Route::middleware(['auth', 'role:mentor'])
     });
 
 // ==========================================
-// 📌 ROUTE PARENT / ORANG TUA
+// 📌 ROUTE PARENT / ORANG TUA (MODUL A - F)
 // ==========================================
 Route::middleware(['auth', 'role:parent'])
     ->prefix('parent')
     ->name('parent.')
     ->group(function () {
-        Route::get('/dashboard', function () {
-            return view('parent.dashboard');
-        })->name('dashboard');
+        // A. Dashboard Utama
+        Route::get('/dashboard', [ParentDashboardController::class, 'index'])->name('dashboard');
+
+        // B. Modul Anak & Progress
+        Route::get('/children', [ParentChildController::class, 'index'])->name('children.index');
+        Route::get('/children/{id}', [ParentChildController::class, 'show'])->name('children.show');
+        Route::get('/children/{id}/report', [ParentChildController::class, 'exportReport'])->name('children.report');
+
+        // C. Modul Jadwal Belajar
+        Route::get('/schedules', [ParentScheduleController::class, 'index'])->name('schedules.index');
+        Route::get('/schedules/list', [ParentScheduleController::class, 'list'])->name('schedules.list');
+        Route::get('/schedules/{id}', [ParentScheduleController::class, 'show'])->name('schedules.show');
+        Route::post('/schedules/{id}/confirm', [ParentScheduleController::class, 'confirm'])->name('schedules.confirm');
+
+        // D. Modul Pembayaran
+        Route::get('/payments', [ParentPaymentController::class, 'index'])->name('payments.index');
+        Route::get('/payments/history', [ParentPaymentController::class, 'history'])->name('payments.history');
+        Route::get('/payments/{id}', [ParentPaymentController::class, 'show'])->name('payments.show');
+        Route::post('/payments/{id}/pay', [ParentPaymentController::class, 'payOnline'])->name('payments.pay');
+        Route::get('/payments/{id}/download', [ParentPaymentController::class, 'downloadInvoice'])->name('payments.download');
+
+        // E. Modul Komunikasi
+        Route::get('/messages', [ParentMessageController::class, 'index'])->name('messages.index');
+        Route::get('/messages/create', [ParentMessageController::class, 'create'])->name('messages.create');
+        Route::get('/messages/{mentor_id}', [ParentMessageController::class, 'chat'])->name('messages.chat');
+        Route::post('/messages', [ParentMessageController::class, 'store'])->name('messages.store');
+
+        // F. Modul Profil & Pengaturan
+        Route::get('/profile', [ParentProfileController::class, 'edit'])->name('profile.edit');
+        Route::post('/profile', [ParentProfileController::class, 'update'])->name('profile.update');
+        Route::get('/profile/notifications', [ParentProfileController::class, 'notifications'])->name('profile.notifications');
+        Route::post('/profile/notifications', [ParentProfileController::class, 'updateNotifications'])->name('profile.update-notifications');
+        Route::post('/profile/password', [ParentProfileController::class, 'updatePassword'])->name('profile.password');
+        Route::get('/profile/children', [ParentProfileController::class, 'children'])->name('profile.children');
+        Route::post('/profile/children', [ParentProfileController::class, 'storeChild'])->name('profile.store-child');
     });
 
 // ==========================================

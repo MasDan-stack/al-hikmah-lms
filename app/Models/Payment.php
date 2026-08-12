@@ -19,6 +19,7 @@ class Payment extends Model
         'invoice_number',
         'status',
         'payment_date',
+        'due_date',
         'payment_method',
         'gateway_response',
     ];
@@ -27,6 +28,7 @@ class Payment extends Model
     {
         return [
             'payment_date' => 'datetime',
+            'due_date' => 'date',
             'gateway_response' => 'array',
         ];
     }

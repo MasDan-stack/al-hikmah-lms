@@ -18,12 +18,14 @@ class Notification extends Model
         'message',
         'type',
         'is_read',
+        'read_at',
     ];
 
     protected function casts(): array
     {
         return [
             'is_read' => 'boolean',
+            'read_at' => 'datetime',
         ];
     }
 

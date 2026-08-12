@@ -73,7 +73,7 @@ Sistem ini memiliki **4 Peran Pengguna (Multi-Role Access Control)** yang disesu
 - **Tombol Floating WhatsApp CS**: Tombol pesan langsung ke WhatsApp Pengelola yang pesan teksnya terisi otomatis.
 
 ### B. Fitur Portal Admin (Pengelola Pusat)
-- **Dashboard Statistik Admin**: Ringkasan total santri aktif, total guru/mentor, jumlah program, dan status pembayaran.
+- **Dashboard & Widget Monitor Parent**: Ringkasan total santri aktif, total guru/mentor, jumlah program, status pembayaran, serta **Widget Monitor Aktivitas Orang Tua** (pantau konfirmasi kehadiran anak `Hadir/Izin/Sakit`, riwayat pembayaran SPP, dan pesan masuk dari Wali Santri).
 - **Manajemen Santri**: Menambah santri baru, mengubah data diri, mengalokasikan guru pendamping, dan menonaktifkan santri lulus.
 - **Manajemen Mentor/Guru**: Mengelola data pengajar, biografi, spesialisasi mengajar, dan status keaktifan.
 - **Manajemen Program**: Menyesuaikan durasi kelas, tingkat kesulitan, dan tarif biaya program.
@@ -91,16 +91,20 @@ Sistem ini memiliki **4 Peran Pengguna (Multi-Role Access Control)** yang disesu
 - **Log Aktivitas Guru (Activity Feed)**: Catatan otomatis rekam jejak aktivitas guru (kapan mencatat nilai, memulai sesi, dll).
 - **Kalender Sesi Belajar**: Mengubah status sesi (`Terjadwal`, `Sedang Berlangsung`, `Selesai`, `Dibatalkan`).
 
-### E. Fitur Portal Orang Tua & Santri (Dedicated Dashboards)
-- **Parent Dashboard (`http://127.0.0.1:8000/parent/dashboard`)**: Portal khusus Orang Tua yang menampilkan kartu statistik perkembangan anak (`dashboard-stats`), pelacak progres hafalan real-time (`progress-tracker`), serta tombol aksi unduh **Laporan Capaian PDF**.
-- **Student Dashboard (`http://127.0.0.1:8000/student/dashboard`)**: Portal khusus Santri yang menampilkan statistik target pribadi, pelacak hafalan, serta kalender sesi bimbingan mendatang (`session-calendar`).
-- **Download Laporan Perkembangan (PDF)**: Mengunduh lembar laporan hasil belajar anak resmi format PDF via rute `/report/download/{student}`.
+### E. Fitur Portal Orang Tua & Wali (Parent Portal Modul A - F)
+- **Modul A: Dashboard Utama (`/parent/dashboard`)**: Menampilkan 4 Kartu Statistik (Jumlah Anak Binaan, Sesi Bulan Ini, Rata-rata Nilai Tajwid, Tagihan Pending), daftar anak & progres hafalan terbaru dengan badge nilai tajwid, widget jadwal sesi 7 hari mendatang, notifikasi, serta tombol aksi cepat (*Quick Actions*).
+- **Modul B: Modul Anak & Progress (`/parent/children/*`)**: Menampilkan daftar anak binaan, detail profil & riwayat hafalan anak, grafik interaktif tren bimbingan (Chart.js), catatan evaluasi mentor, serta tombol unduh **Laporan Perkembangan PDF**.
+- **Modul C: Modul Jadwal Belajar (`/parent/schedules/*`)**: Tampilan kalender sesi bimbingan anak, tabel sesi berfilter status (`Terjadwal`, `Sedang Berlangsung`, `Selesai`, `Dibatalkan`), detail sesi, dan **Form Konfirmasi Kehadiran Anak** (Hadir/Izin/Sakit).
+- **Modul D: Modul Pembayaran & SPP (`/parent/payments/*`)**: Menampilkan daftar tagihan aktif, riwayat pembayaran lunas, detail invoice, **Integrasi Pembayaran Online (Midtrans Gateway QRIS & VA)**, serta unduh **Invoice PDF**.
+- **Modul E: Modul Komunikasi & Chat (`/parent/messages/*`)**: Kotak pesan inbox, form kirim pesan konsultasi ke mentor pembimbing, notifikasi real-time pesan masuk, serta tampilan ruang diskusi (*Chat UI*).
+- **Modul F: Modul Profil & Pengaturan (`/parent/profile/*`)**: Pengelolaan informasi diri & kontak darurat wali santri, pengaturan preferensi notifikasi (WhatsApp/Email/In-App), ubah password akun, serta **Pendaftaran Data Anak Baru**.
+- **Student Dashboard (`/student/dashboard`)**: Portal khusus Santri yang menampilkan statistik target pribadi, pelacak hafalan, serta kalender sesi bimbingan mendatang (`session-calendar`).
 
 ---
 
 ## 🗄️ 4. PENJELASAN SELURUH DATABASE (PENYIMPANAN DATA)
 
-Aplikasi ini menggunakan **13 Tabel Utama** di dalam database MySQL untuk menyimpan seluruh informasi lembaga secara rapi:
+Aplikasi ini menggunakan **15 Tabel Utama** di dalam database MySQL untuk menyimpan seluruh informasi lembaga secara rapi:
 
 | Nama Tabel Database | Fungsi Sederhana | Data yang Disimpan |
 |---|---|---|
@@ -108,13 +112,15 @@ Aplikasi ini menggunakan **13 Tabel Utama** di dalam database MySQL untuk menyim
 | 🔑 **`roles`** | Menyimpan daftar tingkatan hak akses. | Admin, Mentor, Parent (Orang Tua), dan Student (Santri). |
 | 👨‍🏫 **`mentors`** | Menyimpan profil khusus Guru/Mentor. | Spesialisasi mengajar, biografi singkat, rating bimbingan, status aktif. |
 | 👦 **`students`** | Menyimpan data pribadi Santri. | Nama lengkap, tanggal lahir, tingkat pendidikan, alamat, ID orang tua. |
-| 👨‍👩‍👦 **`parent_profiles`** | Menyimpan data Orang Tua/Wali. | Nomor WhatsApp orang tua, alamat rumah, pekerjaan. |
+| 👨‍👩‍👦 **`parents`** | Menyimpan data Orang Tua/Wali (`ParentProfile`). | Nomor WhatsApp orang tua, alamat rumah, telepon darurat. |
 | 🤝 **`mentor_student`** | Tabel penghubung antara Guru dan Santri Binaan. | Hubungan bimbingan *Many-to-Many* (1 guru bisa membimbing banyak santri). |
 | 📚 **`programs`** | Menyimpan daftar kelas/program belajar. | Nama program (Tahsin/Tahfidz), durasi (minggu), tingkat, dan biaya. |
 | 📝 **`student_program`** | Menyimpan riwayat kelas yang diambil santri. | Tanggal mendaftar program dan status pendaftaran. |
 | 📅 **`learning_sessions`** | Menyimpan jadwal bimbingan belajar. | Tanggal, jam, metode (Online/Offline/Hybrid), status, dan catatan sesi. |
 | 📈 **`progress`** | Menyimpan catatan nilai & hafalan santri. | Surah, ayat, juz, nilai kelancaran (0-100), nilai tajwid (0-100), adab, evaluasi, PR. |
-| 💳 **`payments`** | Menyimpan riwayat transaksi & pembayaran. | Nominal tagihan, jenis pembayaran (SPP/Pendaftaran), bukti transfer, status. |
+| 💳 **`payments`** | Menyimpan riwayat transaksi & pembayaran. | Nominal tagihan, nomor invoice, jenis pembayaran (SPP/Pendaftaran), bukti transfer, status. |
+| 💬 **`messages`** | Menyimpan komunikasi & pesan internal orang tua - mentor. | Sender ID, receiver ID, student ID, isi pesan, status dibaca/belum. |
+| 📝 **`session_confirmations`** | Menyimpan konfirmasi kehadiran anak dari orang tua. | Session ID, Parent ID, status kehadiran (Hadir/Izin/Sakit), catatan. |
 | ⚙️ **`settings`** | Menyimpan konfigurasi dinamis website. | Nomor WhatsApp CS, Instagram, email resmi, alamat, harga standar. |
 | 🖼️ **`galleries`** | Menyimpan foto kegiatan lembaga. | Judul foto, file gambar, deskripsi kegiatan. |
 | 🔔 **`notifications`** | Menyimpan notifikasi pesan internal. | Judul notifikasi, isi pesan, status dibaca/belum. |
@@ -131,26 +137,36 @@ Di dalam dunia pemrograman Laravel, **Model** bertugas mengambil data dari datab
 2. **`Role.php`**: Mengatur jenis hak akses sistem.
 3. **`Mentor.php`**: Mengatur profil guru dan relasinya ke santri binaan & log aktivitas.
 4. **`Student.php`**: Mengatur data santri dan relasinya ke orang tua, kelas program, serta catatan progres.
-5. **`ParentProfile.php`**: Mengatur data wali santri dan anak-anak binaannya.
+5. **`ParentProfile.php`**: Mengatur data wali santri dan anak-anak binaannya (`parents`).
 6. **`Program.php`**: Mengatur rincian kelas belajar Al-Qur'an.
 7. **`Session.php`**: Mengatur logika jadwal sesi mengajar (`learning_sessions`).
 8. **`Progress.php`**: Mengatur pencatatan nilai tajwid, hafalan surah, dan evaluasi adab.
 9. **`Payment.php`**: Mengatur transaksi pembayaran pendaftaran & SPP.
-10. **`Setting.php`**: Mengatur penyimpanan variabel dinamis website.
-11. **`Gallery.php`**: Mengatur galeri foto dokumentasi.
-12. **`Notification.php`**: Mengatur pesan notifikasi sistem.
-13. **`MentorActivityLog.php`**: Mengatur pencatatan rekam jejak aktivitas harian guru.
+10. **`Message.php`**: Mengatur pesan & ruang diskusi dua arah antara Orang Tua dan Mentor (`messages`).
+11. **`SessionConfirmation.php`**: Mengatur data konfirmasi kehadiran sesi oleh Orang Tua (`session_confirmations`).
+12. **`Setting.php`**: Mengatur penyimpanan variabel dinamis website.
+13. **`Gallery.php`**: Mengatur galeri foto dokumentasi.
+14. **`Notification.php`**: Mengatur pesan notifikasi sistem.
+15. **`MentorActivityLog.php`**: Mengatur pencatatan rekam jejak aktivitas harian guru.
 
-### B. Daftar Controller (Pemroses Logika Aplikasi)
+### B. Daftar Controller & Komponen Livewire (Pemroses Logika Aplikasi)
 1. **`Admin\DashboardController.php`**: Menghitung dan menampilkan ringkasan data statistik di halaman utama Admin.
-2. **`Admin\SettingController.php`**: Memproses pengubahan nomor CS WhatsApp, Instagram, dan informasi kontak dari halaman Web Admin.
-3. **`Mentor\DashboardController.php`**: Menghitung statistik guru, mengolah data grafik tren (Chart.js), memfilter santri progres terendah, dan menampilkan feed aktivitas.
-4. **`Mentor\ProgressController.php`**: Memproses penyimpanan nilai progres santri (baik penginputan *single* maupun penginputan *massal/bulk*).
-5. **`Mentor\SessionController.php`**: Mengatur pengubahan status sesi mengajar (`Sedang Berlangsung`, `Selesai`, `Batal`).
-6. **`Mentor\StudentController.php`**: Menampilkan daftar santri binaan guru dan detail riwayat belajarnya.
-7. **`Mentor\ReportController.php`**: Membuat halaman laporan kinerja guru & santri yang siap dicetak / diunduh sebagai dokumen PDF.
-8. **`ReportController.php`**: Mengolah pencetakan ringkasan laporan perkembangan santri untuk Orang Tua.
-9. **`Auth\RegisterMentorController.php`**: Memproses pendaftaran mandiri akun guru/mentor baru.
+2. **`Admin\PaymentController.php`**: Memproses penerbitan tagihan SPP baru (`store`), penyesuaian nominal & tanggal jatuh tempo (`update`), pembatalan tagihan (`destroy`), laporan tagihan pending/paid, dan pengiriman pengingat massal (`sendReminder`).
+3. **`Admin\SettingController.php`**: Memproses pengubahan nomor CS WhatsApp, Instagram, dan informasi kontak dari halaman Web Admin.
+4. **`Livewire\Parent\ParentNotifications.php`**: Komponen Livewire real-time header lonceng notifikasi untuk orang tua (`unreadCount`, `markAsRead`).
+5. **`Mentor\DashboardController.php`**: Menghitung statistik guru, mengolah data grafik tren (Chart.js), memfilter santri progres terendah, dan menampilkan feed aktivitas.
+6. **`Mentor\ProgressController.php`**: Memproses penyimpanan nilai progres santri (baik penginputan *single* maupun penginputan *massal/bulk*).
+7. **`Mentor\SessionController.php`**: Mengatur pengubahan status sesi mengajar (`Sedang Berlangsung`, `Selesai`, `Batal`).
+8. **`Mentor\StudentController.php`**: Menampilkan daftar santri binaan guru dan detail riwayat belajarnya.
+9. **`Mentor\ReportController.php`**: Membuat halaman laporan kinerja guru & santri yang siap dicetak / diunduh sebagai dokumen PDF.
+10. **`Parent\ParentDashboardController.php`**: Mengolah data statistik utama portal orang tua, 4 kartu ringkasan, progres terbaru, dan jadwal 7 hari.
+9. **`Parent\ParentChildController.php`**: Mengolah daftar anak, detail progres hafalan, grafik Chart.js perkembangan 6 bulan, dan laporan cetak PDF.
+10. **`Parent\ParentScheduleController.php`**: Mengolah kalender sesi bimbingan anak, filter status sesi, dan konfirmasi kehadiran anak.
+11. **`Parent\ParentPaymentController.php`**: Mengolah daftar tagihan aktif, riwayat lunas, detail invoice, bayar online Midtrans, dan cetak invoice PDF.
+12. **`Parent\ParentMessageController.php`**: Mengolah inbox pesan, form tulis pesan baru ke mentor, dan ruang chat interaktif.
+13. **`Parent\ParentProfileController.php`**: Mengolah pembaharuan data diri wali santri, preferensi notifikasi, ubah password, dan pendaftaran anak baru.
+14. **`ReportController.php`**: Mengolah pencetakan ringkasan laporan perkembangan santri untuk Orang Tua.
+15. **`Auth\RegisterMentorController.php`**: Memproses pendaftaran mandiri akun guru/mentor baru.
 
 ---
 

@@ -35,4 +35,19 @@ class Student extends Model
     {
         return $this->belongsToMany(Mentor::class, 'mentor_student')->withTimestamps();
     }
+
+    public function progress()
+    {
+        return $this->hasMany(Progress::class);
+    }
+
+    public function sessions()
+    {
+        return $this->hasMany(Session::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

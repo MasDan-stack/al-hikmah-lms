@@ -1,12 +1,176 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard')
+@section('title', 'Dashboard Admin')
 @section('header', 'Dashboard AL-HIKMAH')
 @section('subheader', 'Selamat datang kembali, ' . (auth()->user()->name ?? 'Admin') . '!')
 
 @section('content')
 <!-- Row Statistik Cards (Livewire) -->
 @livewire('dashboard-stats')
+
+<!-- Section Widget Monitor Aktivitas Orang Tua (Parent Monitoring Widget) -->
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm rounded-4 bg-white">
+            <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <h5 class="fw-bold text-dark mb-1">
+                        <i class="bi bi-people-fill text-primary me-2"></i>Monitor Aktivitas Orang Tua (Parent Monitoring)
+                    </h5>
+                    <small class="text-muted">Pantau respon konfirmasi kehadiran anak, pembayaran SPP, dan pesan dari Wali Santri</small>
+                </div>
+                <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 fw-bold">
+                    <i class="bi bi-person-hearts me-1"></i> Total {{ $totalParents }} Wali Santri Terdaftar
+                </span>
+            </div>
+
+            <div class="card-body p-4">
+                <ul class="nav nav-pills nav-fill bg-light p-1 rounded-pill mb-4" id="parentActivityTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active rounded-pill fw-bold" id="tab-confirmations" data-bs-toggle="pill" data-bs-target="#confirmations-pane" type="button" role="tab">
+                            <i class="bi bi-check2-circle me-1 text-success"></i> Konfirmasi Kehadiran Anak ({{ $recentConfirmations->count() }})
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="tab-payments" data-bs-toggle="pill" data-bs-target="#payments-pane" type="button" role="tab">
+                            <i class="bi bi-wallet2 me-1 text-warning"></i> Pembayaran SPP Orang Tua ({{ $recentPayments->count() }})
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="tab-messages" data-bs-toggle="pill" data-bs-target="#messages-pane" type="button" role="tab">
+                            <i class="bi bi-chat-text me-1 text-info"></i> Pesan & Konsultasi ({{ $recentParentMessages->count() }})
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="parentActivityContent">
+                    <!-- Tab 1: Konfirmasi Kehadiran Sesi Anak -->
+                    <div class="tab-pane fade show active" id="confirmations-pane" role="tabpanel">
+                        @if($recentConfirmations->isEmpty())
+                            <div class="text-center py-4 text-muted small">
+                                Belum ada riwayat konfirmasi kehadiran anak dari Orang Tua.
+                            </div>
+                        @else
+                            <div class="table-responsive">
+                                <table class="table align-middle table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Wali Santri</th>
+                                            <th>Santri Binaan</th>
+                                            <th>Status Konfirmasi</th>
+                                            <th>Catatan Orang Tua</th>
+                                            <th>Waktu Respon</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($recentConfirmations as $conf)
+                                            <tr>
+                                                <td class="fw-bold text-dark">{{ $conf->parent?->user?->name ?? 'Wali Santri' }}</td>
+                                                <td class="text-primary fw-semibold">{{ $conf->session?->student?->user?->name ?? $conf->session?->student?->full_name }}</td>
+                                                <td>
+                                                    @if($conf->status === 'hadir')
+                                                        <span class="badge bg-success-subtle text-success rounded-pill px-3">HADIR</span>
+                                                    @elseif($conf->status === 'izin')
+                                                        <span class="badge bg-warning-subtle text-warning rounded-pill px-3">IZIN</span>
+                                                    @else
+                                                        <span class="badge bg-danger-subtle text-danger rounded-pill px-3">SAKIT</span>
+                                                    @endif
+                                                </td>
+                                                <td class="small text-secondary">{{ $conf->notes ?? '-' }}</td>
+                                                <td class="small text-muted">{{ $conf->created_at->diffForHumans() }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Tab 2: Pembayaran SPP Orang Tua -->
+                    <div class="tab-pane fade" id="payments-pane" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="small text-muted fw-bold">Daftar Tagihan & Transaksi SPP Terbaru</span>
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('admin.payments.index') }}" class="btn btn-sm btn-outline-primary rounded-pill">
+                                    <i class="bi bi-wallet2 me-1"></i> Kelola Pembayaran Full
+                                </a>
+                                <form action="{{ route('admin.payments.send-reminder') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-danger rounded-pill fw-bold">
+                                        <i class="bi bi-send me-1"></i> Kirim Pengingat Tagihan ke Semua
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        @if($recentPayments->isEmpty())
+                            <div class="text-center py-4 text-muted small">
+                                Belum ada riwayat transaksi pembayaran dari Orang Tua.
+                            </div>
+                        @else
+                            <div class="table-responsive">
+                                <table class="table align-middle table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>No. Invoice</th>
+                                            <th>Santri</th>
+                                            <th>Nominal Tagihan</th>
+                                            <th>Status Pembayaran</th>
+                                            <th>Metode</th>
+                                            <th>Waktu Transaksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($recentPayments as $pay)
+                                            <tr>
+                                                <td class="fw-bold text-primary">#{{ $pay->invoice_number ?? ('INV-' . $pay->id) }}</td>
+                                                <td>{{ $pay->student?->user?->name ?? $pay->student?->full_name }}</td>
+                                                <td class="fw-bold text-dark">Rp {{ number_format($pay->amount, 0, ',', '.') }}</td>
+                                                <td>
+                                                    @if($pay->status === 'paid')
+                                                        <span class="badge bg-success rounded-pill px-3">LUNAS</span>
+                                                    @else
+                                                        <span class="badge bg-warning text-dark rounded-pill px-3">PENDING</span>
+                                                    @endif
+                                                </td>
+                                                <td class="small text-secondary">{{ $pay->payment_method ?? 'Midtrans' }}</td>
+                                                <td class="small text-muted">{{ $pay->updated_at->diffForHumans() }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Tab 3: Pesan & Konsultasi Orang Tua -->
+                    <div class="tab-pane fade" id="messages-pane" role="tabpanel">
+                        @if($recentParentMessages->isEmpty())
+                            <div class="text-center py-4 text-muted small">
+                                Belum ada pesan atau konsultasi masuk dari Orang Tua.
+                            </div>
+                        @else
+                            <div class="list-group list-group-flush">
+                                @foreach($recentParentMessages as $msg)
+                                    <div class="list-group-item px-0 py-3 border-bottom">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <div class="fw-bold text-dark">{{ $msg->sender?->name ?? 'Wali Santri' }}</div>
+                                            <small class="text-muted">{{ $msg->created_at->diffForHumans() }}</small>
+                                        </div>
+                                        <p class="small text-secondary mb-1">"{{ $msg->message }}"</p>
+                                        @if($msg->student)
+                                            <small class="text-muted"><i class="bi bi-person me-1"></i>Santri Terkait: {{ $msg->student?->user?->name ?? $msg->student?->full_name }}</small>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Section Activity & Quick Actions -->
 <div class="row g-4">
@@ -38,10 +202,10 @@
                 <div class="p-3 rounded-3" style="background: var(--primary-lighter); border: 1px solid var(--border-color);">
                     <div class="d-flex items-center gap-2 mb-1">
                         <i class="bi bi-info-circle-fill text-success"></i>
-                        <span class="fw-bold text-success small">Laravel Boost Info</span>
+                        <span class="fw-bold text-success small">Monitoring Portal Orang Tua</span>
                     </div>
                     <p class="small text-secondary mb-0">
-                        Sistem LMS ini menggunakan skema terstandarisasi Laravel 12 & Livewire 4.3.
+                        Admin dapat langsung memantau konfirmasi kehadiran, pembayaran SPP, dan pesan komunikasi wali santri dari widget ini.
                     </p>
                 </div>
             </div>
