@@ -108,7 +108,7 @@ Route::middleware(['auth', 'role:parent'])
     ->name('parent.')
     ->group(function () {
         Route::get('/dashboard', function () {
-            return view('dashboard');
+            return view('parent.dashboard');
         })->name('dashboard');
     });
 
@@ -120,7 +120,7 @@ Route::middleware(['auth', 'role:student'])
     ->name('student.')
     ->group(function () {
         Route::get('/dashboard', function () {
-            return view('dashboard');
+            return view('student.dashboard');
         })->name('dashboard');
     });
 

@@ -56,7 +56,7 @@ test('mentor can access and submit bulk progress entry', function () {
                 'juz' => 1,
                 'nilai_fluent' => 90,
                 'nilai_tajwid' => 88,
-                'nilai_adab' => 'Sangat Baik',
+                'nilai_adab' => 90,
             ],
             [
                 'student_id' => $students[1]->id,
@@ -65,7 +65,7 @@ test('mentor can access and submit bulk progress entry', function () {
                 'juz' => 30,
                 'nilai_fluent' => 85,
                 'nilai_tajwid' => 82,
-                'nilai_adab' => 'Baik',
+                'nilai_adab' => 80,
             ],
         ],
     ];

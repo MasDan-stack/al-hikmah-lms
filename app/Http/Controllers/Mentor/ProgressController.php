@@ -41,7 +41,7 @@ class ProgressController extends Controller
             'juz' => 'nullable|integer|min:1|max:30',
             'nilai_fluent' => 'nullable|integer|min:0|max:100',
             'nilai_tajwid' => 'nullable|integer|min:0|max:100',
-            'nilai_adab' => 'nullable|string|max:50',
+            'nilai_adab' => 'nullable|integer|min:0|max:100',
             'catatan_evaluasi' => 'nullable|string|max:1000',
             'homework' => 'nullable|string|max:500',
         ]);
@@ -89,7 +89,7 @@ class ProgressController extends Controller
             'entries.*.juz' => 'nullable|integer|min:1|max:30',
             'entries.*.nilai_fluent' => 'nullable|integer|min:0|max:100',
             'entries.*.nilai_tajwid' => 'nullable|integer|min:0|max:100',
-            'entries.*.nilai_adab' => 'nullable|string|max:50',
+            'entries.*.nilai_adab' => 'nullable|integer|min:0|max:100',
             'entries.*.catatan_evaluasi' => 'nullable|string|max:1000',
             'entries.*.homework' => 'nullable|string|max:500',
         ]);

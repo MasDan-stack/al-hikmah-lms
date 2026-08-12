@@ -96,10 +96,10 @@
                                 </td>
                                 <td>
                                     <select name="entries[0][nilai_adab]" class="form-select form-select-sm">
-                                        <option value="Sangat Baik">Sangat Baik</option>
-                                        <option value="Baik" selected>Baik</option>
-                                        <option value="Cukup">Cukup</option>
-                                        <option value="Perlu Bimbingan">Perlu Bimbingan</option>
+                                        <option value="90">Sangat Baik (90)</option>
+                                        <option value="80" selected>Baik (80)</option>
+                                        <option value="70">Cukup (70)</option>
+                                        <option value="60">Perlu Bimbingan (60)</option>
                                     </select>
                                 </td>
                                 <td>
