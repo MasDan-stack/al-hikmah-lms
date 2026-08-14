@@ -205,6 +205,9 @@
                 <a href="{{ route('admin.programs.index') }}" class="admin-nav-item {{ request()->routeIs('admin.programs.*') ? 'active' : '' }}">
                     <i class="bi bi-journal-bookmark"></i> Program Belajar
                 </a>
+                <a href="{{ route('admin.enrollments.index') }}" class="admin-nav-item {{ request()->routeIs('admin.enrollments.*') ? 'active' : '' }}">
+                    <i class="bi bi-journal-check"></i> Permohonan Pendaftaran
+                </a>
                 <a href="{{ route('admin.settings.index') }}" class="admin-nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
                     <i class="bi bi-gear"></i> Pengaturan Website
                 </a>

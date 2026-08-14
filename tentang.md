@@ -3,8 +3,8 @@
 > **Dokumen Resmi untuk Manajemen / Pimpinan Lembaga (Non-Technical Executive Guide)**  
 > **Nama Sistem:** AL-HIKMAH Learning Management System (LMS)  
 > **Status Aplikasi:** ✅ **100% Selesai, Teruji, & Siap Digunakan (Production Ready)**  
-> **Versi:** 3.0 (Granular Role-Based Visibility & User-Role Management Edition)  
-> **Tanggal:** 14 Agustus 2026  
+> **Versi:** 3.1 (Flexible Enrollment & Schedule Negotiation Pipeline Edition)  
+> **Tanggal:** 15 Agustus 2026  
 
 ---
 
@@ -34,6 +34,7 @@
 7. **Transparansi & Kemudahan Orang Tua (Parent Portal)**: Orang tua santri dapat memantau perkembangan nilai tajwid, capaian surah/juz anaknya secara real-time, mengonfirmasi kehadiran anak, memantau akun email LMS anak, menerima notifikasi tagihan SPP, hingga mengunduh **Laporan Perkembangan Format PDF Resmi**.
 8. **Efisiensi Kerja Pengajar / Mentor**: Fitur *Catat Progres Massal* memungkinkan pengajar menginput nilai dan evaluasi banyak santri sekaligus dalam hitungan detik, serta mencetak rekapitulasi kinerja pengajar.
 9. **Kemudahan Pembayaran SPP Online**: Dukungan integrasi pembayaran online (Midtrans Payment Gateway QRIS/Virtual Account) dan fitur penerbitan tagihan SPP dinamis oleh Admin.
+10. **Pendaftaran Fleksibel & Negosiasi Jadwal 2 Arah (Flexible Enrollment Pipeline)**: Orang Tua dapat mendaftar dengan memilih kombinasi hari (multi-select) dan jam pilihan belajar dengan penguncian harga terproteksi (`program_price`). Admin dapat menyetujui langsung atau memberikan tawaran jadwal alternatif yang dapat disetujui/ditolak oleh Orang Tua. Tagihan SPP diterbitkan otomatis setelah jadwal 100% disepakati (*Post-Deal Invoicing*).
 
 ---
 
@@ -127,7 +128,7 @@ Sistem ini mendukung **4 Peran Pengguna (Multi-Role Access Control)** yang aman 
 
 ## 🗄️ 4. PENJELASAN SELURUH DATABASE (PENYIMPANAN DATA LEMBAGA)
 
-Aplikasi ini menggunakan **18 Tabel Database MySQL** yang saling terhubung secara aman (*Relational Foreign Keys*):
+Aplikasi ini menggunakan **19 Tabel Database MySQL** yang saling terhubung secara aman (*Relational Foreign Keys*):
 
 | No | Nama Tabel | Fungsi Utama & Data yang Disimpan |
 |:--:|---|---|
@@ -141,7 +142,7 @@ Aplikasi ini menggunakan **18 Tabel Database MySQL** yang saling terhubung secar
 | 8 | **`student_program`** | Menyimpan riwayat pendaftaran kelas yang diikuti santri beserta status keaktifan. |
 | 9 | **`learning_sessions`** | Menyimpan jadwal sesi bimbingan (Tanggal, jam, metode Online/Offline/Hybrid, status sesi). |
 | 10 | **`progress`** | Menyimpan catatan nilai & hafalan santri (Surah, ayat, juz, nilai kelancaran, nilai tajwid, adab, PR). |
-| 11 | **`payments`** | Menyimpan transaksi pembayaran SPP & pendaftaran (Nominal amount, due_date, invoice_number, status). |
+| 11 | **`payments`** | Menyimpan transaksi pembayaran SPP & pendaftaran (Nominal amount, due_date, invoice_number, status, enrollment_id, payment_purpose). |
 | 12 | **`messages`** | Menyimpan komunikasi pesan internal dua arah antara Orang Tua dan Mentor (Sender, Receiver, Content, Is_read). |
 | 13 | **`session_confirmations`** | Menyimpan data konfirmasi kehadiran anak dari Orang Tua (Session ID, Parent ID, status Hadir/Izin/Sakit). |
 | 14 | **`settings`** | Menyimpan variabel konfigurasi dinamis website (No. WA CS, email, Instagram, alamat). |
@@ -149,6 +150,7 @@ Aplikasi ini menggunakan **18 Tabel Database MySQL** yang saling terhubung secar
 | 16 | **`notifications`** | Menyimpan pesan notifikasi internal sistem (Judul, isi pesan, type, status dibaca). |
 | 17 | **`mentor_activity_logs`** | Menyimpan rekam jejak aktivitas harian pengajar (Waktu & aksi yang dilakukan). |
 | 18 | **`mentor_availabilities`** | Menyimpan ketersediaan jam & hari mengajar mentor (Day, Start Time, End Time, Max Students, Status Holiday). |
+| 19 | **`enrollments`** | Menyimpan permohonan pendaftaran fleksibel & negosiasi jadwal 2 arah (Santri, Program, `program_price` snapshot, requested/offered days & time, `status`, `confirmed_at`, `paid_at`, `start_date`). |
 
 ---
 
@@ -237,7 +239,7 @@ al-hikmah-lms/
 ## 🎯 7. KESIMPULAN & REKOMENDASI LANGKAH KE DEPAN
 
 ### 🏁 Kesimpulan Akhir:
-Aplikasi **AL-HIKMAH LMS (Versi 3.0)** berada dalam kondisi **100% Selesai, Teruji (79 Passed Tests dengan 342 assertions), dan Siap Digunakan (Production Ready)**. Seluruh fitur dari manajemen pengguna & role, proteksi biaya berbasis hak akses, halaman depan publik, Single Source of Truth program belajar & biaya, modal pra-pendaftaran terintegrasi, panel matriks ketersediaan guru & alokasi santri, portal operasional guru, hingga portal orang tua (Modul A - F & Notifikasi Real-time) telah terintegrasi secara stabil, aman, cepat, dan modern.
+Aplikasi **AL-HIKMAH LMS (Versi 3.1)** berada dalam kondisi **100% Selesai, Teruji (82 Passed Tests dengan 366 assertions - 100% GREEN), dan Siap Digunakan (Production Ready)**. Seluruh fitur dari pendaftaran program fleksibel & negosiasi jadwal 2 arah, manajemen pengguna & role, proteksi biaya berbasis hak akses, halaman depan publik, Single Source of Truth program belajar & biaya, modal pra-pendaftaran terintegrasi, panel matriks ketersediaan guru & alokasi santri, portal operasional guru, hingga portal orang tua (Modul A - F & Notifikasi Real-time) telah terintegrasi secara stabil, aman, cepat, dan modern.
 
 ### 🚀 Rekomendasi Langkah Ke Depan untuk Pimpinan / Manajemen:
 1. **Go-Live / Deploy ke Server Production**: Aplikasi sudah sangat siap diunggah ke server domain utama lembaga.

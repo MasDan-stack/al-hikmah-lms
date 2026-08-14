@@ -15,7 +15,9 @@ class Payment extends Model
     protected $fillable = [
         'student_id',
         'program_id',
+        'enrollment_id',
         'amount',
+        'payment_purpose',
         'invoice_number',
         'status',
         'payment_date',
@@ -47,5 +49,10 @@ class Payment extends Model
     public function program(): BelongsTo
     {
         return $this->belongsTo(Program::class);
+    }
+
+    public function enrollment(): BelongsTo
+    {
+        return $this->belongsTo(Enrollment::class);
     }
 }

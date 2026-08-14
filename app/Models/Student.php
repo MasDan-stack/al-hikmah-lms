@@ -60,6 +60,11 @@ class Student extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
     public function getDisplayName(): string
     {
         return $this->user?->name ?? $this->full_name ?? 'Santri';

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EnrollmentController as AdminEnrollmentController;
 use App\Http\Controllers\Admin\MentorAvailabilityController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\SettingController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Mentor\ProgressController as MentorProgressController;
 use App\Http\Controllers\Mentor\ReportController as MentorReportController;
 use App\Http\Controllers\Mentor\SessionController as MentorSessionController;
 use App\Http\Controllers\Mentor\StudentController as MentorStudentController;
+use App\Http\Controllers\Parent\EnrollmentController as ParentEnrollmentController;
 use App\Http\Controllers\Parent\ParentChildController;
 use App\Http\Controllers\Parent\ParentDashboardController;
 use App\Http\Controllers\Parent\ParentMessageController;
@@ -104,6 +106,14 @@ Route::middleware(['auth', 'role:admin'])
         Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
         Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+
+        // Flexible Enrollment & Schedule Negotiation
+        Route::get('/enrollments', [AdminEnrollmentController::class, 'index'])->name('enrollments.index');
+        Route::get('/enrollments/{id}/edit', [AdminEnrollmentController::class, 'edit'])->name('enrollments.edit');
+        Route::post('/enrollments/{id}/accept', [AdminEnrollmentController::class, 'accept'])->name('enrollments.accept');
+        Route::post('/enrollments/{id}/offer', [AdminEnrollmentController::class, 'offerAlternative'])->name('enrollments.offer');
+        Route::post('/enrollments/bulk-accept', [AdminEnrollmentController::class, 'bulkAccept'])->name('enrollments.bulk-accept');
+        Route::post('/enrollments/{id}/cancel', [AdminEnrollmentController::class, 'cancel'])->name('enrollments.cancel');
     });
 
 // ==========================================
@@ -172,6 +182,14 @@ Route::middleware(['auth', 'role:parent'])
         Route::post('/profile/password', [ParentProfileController::class, 'updatePassword'])->name('profile.password');
         Route::get('/profile/children', [ParentProfileController::class, 'children'])->name('profile.children');
         Route::post('/profile/children', [ParentProfileController::class, 'storeChild'])->name('profile.store-child');
+
+        // G. Modul Pendaftaran & Negosiasi Jadwal
+        Route::get('/enrollments', [ParentEnrollmentController::class, 'index'])->name('enrollments.index');
+        Route::get('/enrollments/create', [ParentEnrollmentController::class, 'create'])->name('enrollments.create');
+        Route::post('/enrollments', [ParentEnrollmentController::class, 'store'])->name('enrollments.store');
+        Route::get('/enrollments/{id}', [ParentEnrollmentController::class, 'show'])->name('enrollments.show');
+        Route::post('/enrollments/{id}/accept-offer', [ParentEnrollmentController::class, 'acceptOffer'])->name('enrollments.accept-offer');
+        Route::post('/enrollments/{id}/reject-offer', [ParentEnrollmentController::class, 'rejectOffer'])->name('enrollments.reject-offer');
     });
 
 // ==========================================

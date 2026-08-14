@@ -76,7 +76,7 @@ class ProgramAndPricingTest extends TestCase
         $response->assertSee('Tahsin Dasar');
         $response->assertSee('Rp 450.000');
         $response->assertSee('150.000');
-        $response->assertSee('Pilih Program Ini');
+        $response->assertSee('Pilih Program & Jadwal', false);
     }
 
     public function test_pre_register_program_stores_session_and_redirects(): void

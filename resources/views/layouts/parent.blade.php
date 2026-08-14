@@ -73,6 +73,9 @@
                 <a href="{{ route('parent.schedules.index') }}" class="admin-nav-item {{ request()->routeIs('parent.schedules.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar-check"></i> Jadwal Belajar
                 </a>
+                <a href="{{ route('parent.enrollments.index') }}" class="admin-nav-item {{ request()->routeIs('parent.enrollments.*') ? 'active' : '' }}">
+                    <i class="bi bi-journal-plus"></i> Pendaftaran & Negosiasi
+                </a>
                 <a href="{{ route('parent.payments.index') }}" class="admin-nav-item {{ request()->routeIs('parent.payments.*') ? 'active' : '' }}">
                     <i class="bi bi-wallet2"></i> Tagihan & SPP
                 </a>

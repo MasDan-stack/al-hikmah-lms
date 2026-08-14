@@ -81,15 +81,19 @@
                                 </div>
                             </div>
                             <div class="px-3 pb-3 mt-3">
-                                <button type="button" 
-                                        class="btn {{ $program->is_popular ? 'btn-primary-custom' : 'btn-outline-custom' }} w-100 py-2 rounded-pill btn-pilih-program"
-                                        data-program-id="{{ $program->id }}"
-                                        data-program-name="{{ $program->name }}"
-                                        data-program-price="{{ $program->formatted_price }}"
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#modalProgramDaftar">
-                                    <i class="bi bi-pencil-square me-1"></i> Pilih Program Ini
-                                </button>
+                                @auth
+                                    @if(auth()->user()->isParent())
+                                        <a href="{{ route('parent.enrollments.create', ['program_id' => $program->id]) }}" 
+                                           class="btn {{ $program->is_popular ? 'btn-primary-custom' : 'btn-outline-custom' }} w-100 py-2 rounded-pill">
+                                            <i class="bi bi-calendar-plus me-1"></i> Pilih Program & Jadwal
+                                        </a>
+                                    @elseif(auth()->user()->isAdmin())
+                                        <a href="{{ route('admin.enrollments.index') }}" 
+                                           class="btn btn-outline-warning w-100 py-2 rounded-pill">
+                                            <i class="bi bi-gear me-1"></i> Kelola Pendaftaran (Admin)
+                                        </a>
+                                    @endif
+                                @endauth
                             </div>
                         </div>
                     </div>
