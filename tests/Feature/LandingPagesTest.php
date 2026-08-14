@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Program;
+use App\Models\User;
 
 test('public landing pages return HTTP 200 status', function () {
     $this->get(route('home'))->assertStatus(200);
@@ -8,7 +9,7 @@ test('public landing pages return HTTP 200 status', function () {
     $this->get(route('program'))->assertStatus(200);
     $this->get(route('metode'))->assertStatus(200);
     $this->get(route('tahfidz'))->assertStatus(200);
-    $this->get(route('biaya'))->assertStatus(200);
+    $this->get(route('biaya'))->assertStatus(403);
 });
 
 test('program page renders dynamic database programs when available', function () {
@@ -25,7 +26,7 @@ test('program page renders dynamic database programs when available', function (
         ->assertSee('Tahfidz Juz 30 Super');
 });
 
-test('biaya page renders dynamic program prices when available', function () {
+test('biaya page renders dynamic program prices when accessed by parent', function () {
     Program::create([
         'name' => 'Paket Bimbingan Tajwid Extra',
         'description' => 'Pendampingan tajwid intensif',
@@ -34,7 +35,9 @@ test('biaya page renders dynamic program prices when available', function () {
         'level' => 'Menengah',
     ]);
 
-    $this->get(route('biaya'))
+    $parentUser = User::factory()->parent()->create();
+
+    $this->actingAs($parentUser)->get(route('biaya'))
         ->assertStatus(200)
         ->assertSee('Paket Bimbingan Tajwid Extra')
         ->assertSee('500.000');

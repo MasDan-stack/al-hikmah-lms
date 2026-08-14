@@ -1,7 +1,8 @@
 @extends('layouts.landing')
 
 @section('title', 'Metode Belajar | AL-HIKMAH')
-@section('description', 'Metode belajar AL-HIKMAH — Online, Offline (Home Visit), dan Hybrid. Sistem pendampingan
+@section('description',
+    'Metode belajar AL-HIKMAH — Online, Offline (Home Visit), dan Hybrid. Sistem pendampingan
     fleksibel untuk keluarga.')
 
 @section('content')
@@ -29,7 +30,9 @@
                             <li><i class="bi bi-check-circle-fill"></i> Bagi keluarga di luar jangkauan tatap muka</li>
                             <li><i class="bi bi-check-circle-fill"></i> Jadwal fleksibel</li>
                         </ul>
-                        <a href="{{ wa_url('Assalamualaikum, saya ingin menanyakan bimbingan metode Online') }}" class="btn btn-outline-custom w-100 rounded-pill mt-2" target="_blank"><i class="bi bi-whatsapp me-1"></i> Pilih Online</a>
+                        <a href="{{ wa_url('Assalamualaikum, saya ingin menanyakan bimbingan metode Online') }}"
+                            class="btn btn-outline-custom w-100 rounded-pill mt-2" target="_blank"><i
+                                class="bi bi-whatsapp me-1"></i> Pilih Online</a>
                         <div class="kelas-badge">Online</div>
                     </div>
                 </div>
@@ -43,7 +46,9 @@
                             <li><i class="bi bi-check-circle-fill"></i> Pendamping hadir langsung di rumah</li>
                             <li><i class="bi bi-check-circle-fill"></i> Interaksi lebih dekat</li>
                         </ul>
-                        <a href="{{ wa_url('Assalamualaikum, saya ingin menanyakan bimbingan metode Offline (Home Visit)') }}" class="btn btn-primary-custom w-100 rounded-pill mt-2" target="_blank"><i class="bi bi-whatsapp me-1"></i> Pilih Home Visit</a>
+                        <a href="{{ wa_url('Assalamualaikum, saya ingin menanyakan bimbingan metode Offline (Home Visit)') }}"
+                            class="btn btn-primary-custom w-100 rounded-pill mt-2" target="_blank"><i
+                                class="bi bi-whatsapp me-1"></i> Pilih Home Visit</a>
                         <div class="kelas-badge">Home Visit</div>
                     </div>
                 </div>
@@ -57,14 +62,25 @@
                             <li><i class="bi bi-check-circle-fill"></i> Sesuai kondisi dan kebutuhan</li>
                             <li><i class="bi bi-check-circle-fill"></i> Pendampingan personal</li>
                         </ul>
-                        <a href="{{ wa_url('Assalamualaikum, saya ingin menanyakan bimbingan metode Hybrid') }}" class="btn btn-outline-custom w-100 rounded-pill mt-2" target="_blank"><i class="bi bi-whatsapp me-1"></i> Pilih Hybrid</a>
+                        <a href="{{ wa_url('Assalamualaikum, saya ingin menanyakan bimbingan metode Hybrid') }}"
+                            class="btn btn-outline-custom w-100 rounded-pill mt-2" target="_blank"><i
+                                class="bi bi-whatsapp me-1"></i> Pilih Hybrid</a>
                         <div class="kelas-badge">Fleksibel</div>
                     </div>
                 </div>
             </div>
             <div class="text-center mt-4" data-reveal>
-                <a href="{{ route('program') }}" class="btn btn-outline-custom me-2"><i class="bi bi-journal-bookmark me-1"></i> Lihat Program</a>
-                <a href="{{ route('biaya') }}" class="btn btn-primary-custom"><i class="bi bi-info-circle me-1"></i> Informasi Pendampingan</a>
+                <a href="{{ route('program') }}" class="btn btn-outline-custom me-2"><i
+                        class="bi bi-journal-bookmark me-1"></i> Lihat Program</a>
+                @auth
+                    @if (auth()->user()->isParent())
+                        <a href="{{ route('biaya') }}" class="btn btn-primary-custom"><i class="bi bi-info-circle me-1"></i>
+                            Informasi Pendampingan</a>
+                    @elseif (auth()->user()->isAdmin())
+                        <a href="{{ route('biaya') }}" class="btn btn-primary-custom"><i class="bi bi-info-circle me-1"></i>
+                            Informasi Pendampingan (Kamu Administrator)</a>
+                    @endif
+                @endauth
             </div>
         </div>
     </section>
@@ -126,7 +142,8 @@
                     <p>Pendamping datang ke rumah Anda. Tersedia juga kelas online untuk seluruh Indonesia.</p>
                 </div>
                 <a href="{{ wa_url('Assalamualaikum, apakah area saya tercakup AL-HIKMAH?') }}"
-                    class="btn btn-sm btn-primary-custom" target="_blank"><i class="bi bi-whatsapp me-1"></i> Cek Area</a>
+                    class="btn btn-sm btn-primary-custom" target="_blank"><i class="bi bi-whatsapp me-1"></i> Cek
+                    Area</a>
             </div>
         </div>
     </section>

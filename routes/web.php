@@ -4,8 +4,10 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MentorAvailabilityController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\RegisterMentorController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Mentor\AvailabilityController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\ProgressController as MentorProgressController;
@@ -38,12 +40,8 @@ Route::get('/tentang-kami', function () {
     return view('tentang-kami', compact('totalStudents', 'totalMentors', 'totalPrograms'));
 })->name('tentang-kami');
 
-// Halaman Program Belajar (dengan data program dari DB)
-Route::get('/program', function () {
-    $programs = Program::all();
-
-    return view('program', compact('programs'));
-})->name('program');
+// Halaman Program Belajar (dengan data program dari DB via LandingController)
+Route::get('/program', [LandingController::class, 'program'])->name('program');
 
 Route::get('/metode', function () {
     return view('metode');
@@ -54,12 +52,11 @@ Route::get('/tahfidz', function () {
 })->name('tahfidz');
 Route::post('/tahfidz/pre-register', [RegisteredUserController::class, 'preRegisterTahfidz'])->name('tahfidz.pre-register');
 
-// Halaman Biaya (dengan data paket dari DB)
-Route::get('/biaya', function () {
-    $programs = Program::orderBy('price', 'asc')->get();
+// Halaman Biaya (dengan data paket dari DB via LandingController)
+Route::get('/biaya', [LandingController::class, 'biaya'])->name('biaya');
 
-    return view('biaya', compact('programs'));
-})->name('biaya');
+// Pre-Register Khusus Program
+Route::post('/program/pre-register', [RegisteredUserController::class, 'preRegisterProgram'])->name('program.pre-register');
 
 // Halaman Bergabung (Pendaftaran Pendamping / Guru Al-Qur'an)
 Route::get('/bergabung', [RegisterMentorController::class, 'create'])->name('bergabung');
@@ -101,6 +98,12 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/mentors/available-api', [MentorAvailabilityController::class, 'getAvailableMentors'])->name('mentors.available-api');
         Route::post('/mentors/assign-student', [MentorAvailabilityController::class, 'assignStudent'])->name('mentors.assign-student');
         Route::post('/mentors/unassign-student', [MentorAvailabilityController::class, 'unassignStudent'])->name('mentors.unassign-student');
+
+        // User Management & Role Access Control
+        Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+        Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+        Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
     });
 
 // ==========================================

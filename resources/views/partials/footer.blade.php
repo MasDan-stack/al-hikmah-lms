@@ -27,9 +27,13 @@
                     <li><a href="{{ route('metode') }}">Metode Belajar</a></li>
                     <li><a href="{{ route('home') }}#galeri">Galeri</a></li>
                     <li><a href="{{ route('home') }}#faq">FAQ</a></li>
-                    @if (auth()->check() && (auth()->user()->isParent() || auth()->user()->isAdmin()))
-                        <li><a href="{{ route('biaya') }}">Biaya</a></li>
-                    @endif
+                    @auth
+                        @if (auth()->user()->isParent())
+                            <li><a href="{{ route('biaya') }}">Biaya</a></li>
+                        @elseif (auth()->user()->isAdmin())
+                            <li><a href="{{ route('biaya') }}">Biaya (Admin)</a></li>
+                        @endif
+                    @endauth
                     <li><a href="{{ route('home') }}#kontak">Kontak</a></li>
                     @guest
                         <li><a href="{{ route('bergabung') }}">Bergabung</a></li>

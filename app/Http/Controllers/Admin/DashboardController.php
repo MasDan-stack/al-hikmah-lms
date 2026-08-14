@@ -10,6 +10,7 @@ use App\Models\Payment;
 use App\Models\Session;
 use App\Models\SessionConfirmation;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -20,6 +21,10 @@ class DashboardController extends Controller
         $totalMentors = Mentor::count();
         $todaySessions = Session::whereDate('date', today())->count();
         $totalParents = ParentProfile::count();
+        $totalUsers = User::count();
+
+        // 📌 Widget Monitor User Terdaftar & Role
+        $recentUsers = User::with('role')->latest()->take(5)->get();
 
         // 📌 Widget Monitor Aktivitas Orang Tua (Parent Monitoring Activity)
         $recentConfirmations = SessionConfirmation::with(['session.student.user', 'parent.user'])
@@ -42,6 +47,8 @@ class DashboardController extends Controller
             'totalMentors',
             'todaySessions',
             'totalParents',
+            'totalUsers',
+            'recentUsers',
             'recentConfirmations',
             'recentPayments',
             'recentParentMessages'

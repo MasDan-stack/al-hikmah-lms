@@ -3,8 +3,8 @@
 > **Dokumen Resmi untuk Manajemen / Pimpinan Lembaga (Non-Technical Executive Guide)**  
 > **Nama Sistem:** AL-HIKMAH Learning Management System (LMS)  
 > **Status Aplikasi:** ✅ **100% Selesai, Teruji, & Siap Digunakan (Production Ready)**  
-> **Versi:** 2.4 (Complete Executive, Pre-Registration & Mentor Scheduling Edition)  
-> **Tanggal:** 13 Agustus 2026  
+> **Versi:** 3.0 (Granular Role-Based Visibility & User-Role Management Edition)  
+> **Tanggal:** 14 Agustus 2026  
 
 ---
 
@@ -25,35 +25,40 @@
 **AL-HIKMAH LMS** adalah platform manajemen pendampingan belajar Al-Qur'an terpadu berbasis web yang dirancang khusus untuk memfasilitasi anak-anak dan dewasa dalam belajar membaca Al-Qur'an (Iqra/Tahsin), menghafal (Tahfidz), memahami Tajwid, serta pembiasaan Adab & Doa Harian.
 
 ### 💡 Masalah Utama yang Berhasil Diselesaikan:
-1. **Alur Pendaftaran Terintegrasi ("Mulai Perjalanan")**: Calon orang tua murid yang mendaftar melalui modal formulir konsultasi di halaman depan secara otomatis dibuatkan akun **Orang Tua (`parent`)** dan akun **Murid (`student`)** dengan identitas terpisah yang akurat, menghilangkan proses manual lewat pesan WhatsApp.
-2. **Pencatatan Terpusat & Bebas Data Tercecer**: Pendaftaran santri, catatan hafalan harian, dan pembayaran SPP yang dulu dicatat manual kini tersimpan aman dan otomatis terstruktur di sistem database.
-3. **Pengelolaan Website Mandiri Tanpa Coding**: Manajemen atau Admin dapat merubah nomor WhatsApp CS, alamat lembaga, email resmi, dan tarif harga program kapan saja langsung dari halaman web tanpa memerlukan bantuan programmer.
-4. **Transparansi & Kemudahan Orang Tua (Parent Portal)**: Orang tua santri dapat memantau perkembangan nilai tajwid, capaian surah/juz anaknya secara real-time, mengonfirmasi kehadiran anak, memantau akun email LMS anak, menerima notifikasi tagihan SPP, hingga mengunduh **Laporan Perkembangan Format PDF Resmi**.
-5. **Efisiensi Kerja Pengajar / Mentor**: Fitur *Catat Progres Massal* memungkinkan pengajar menginput nilai dan evaluasi banyak santri sekaligus dalam hitungan detik, serta mencetak rekapitulasi kinerja pengajar.
-6. **Kemudahan Pembayaran SPP Online**: Dukungan integrasi pembayaran online (Midtrans Payment Gateway QRIS/Virtual Account) dan fitur penerbitan tagihan SPP dinamis oleh Admin.
+1. **Manajemen Pengguna & Kontrol Role Terpusat (User Management)**: Administrator kini memiliki panel terpusat untuk melihat daftar seluruh pengguna, mencari berdasarkan nama/email/telepon, mengedit data diri, membuat akun baru, hingga mengubah role pengguna dengan sinkronisasi profil domain otomatis (*Domain Profile Sync* untuk Mentor, Parent, dan Student) serta proteksi anti-lockout (*Anti-Self Deletion* & *Anti-Demotion Guard*).
+2. **Granular Role-Based Visibility & Proteksi Biaya**: Halaman rincian biaya (`/biaya`) terproteksi khusus untuk Orang Tua dan Administrator. Pengunjung publik (guest), santri, dan mentor disembunyikan dari tombol biaya di seluruh landing page (`/metode`, `/tahfidz`, `/program`, Navbar, Footer). Administrator diberikan penanda visual `(Kamu Administrator)` yang jelas di antarmuka.
+3. **Arsitektur Single Source of Truth Program & Biaya**: Informasi kurikulum program belajar dan biaya terpusat 100% dari database. Halaman `/program` menyajikan kurikulum deskriptif per kategori (Anak, Dewasa & Muslimah, Bahasa Arab) tanpa membingungkan calon wali dengan angka, sementara halaman `/biaya` menyajikan transparansi investasi belajar, biaya pendaftaran, dan tombol pendaftaran program langsung bagi orang tua.
+4. **Alur Pendaftaran Terintegrasi & Anti-Drop-Off**: Calon orang tua murid yang mendaftar melalui formulir konsultasi navbar ("Mulai Perjalanan"), halaman khusus Tahfidz, maupun tombol *"Pilih Program Ini"* di halaman Biaya secara otomatis dibuatkan akun **Orang Tua (`parent`)** dan akun **Murid (`student`)** serta langsung terhubung ke program pilihannya, menghilangkan proses manual lewat pesan WhatsApp acak.
+5. **Pencatatan Terpusat & Bebas Data Tercecer**: Pendaftaran santri, catatan hafalan harian, dan pembayaran SPP yang dulu dicatat manual kini tersimpan aman dan otomatis terstruktur di sistem database.
+6. **Pengelolaan Website Mandiri Tanpa Coding**: Manajemen atau Admin dapat merubah nomor WhatsApp CS, alamat lembaga, email resmi, susunan/urutan program, dan tarif harga program kapan saja langsung dari halaman web tanpa memerlukan bantuan programmer.
+7. **Transparansi & Kemudahan Orang Tua (Parent Portal)**: Orang tua santri dapat memantau perkembangan nilai tajwid, capaian surah/juz anaknya secara real-time, mengonfirmasi kehadiran anak, memantau akun email LMS anak, menerima notifikasi tagihan SPP, hingga mengunduh **Laporan Perkembangan Format PDF Resmi**.
+8. **Efisiensi Kerja Pengajar / Mentor**: Fitur *Catat Progres Massal* memungkinkan pengajar menginput nilai dan evaluasi banyak santri sekaligus dalam hitungan detik, serta mencetak rekapitulasi kinerja pengajar.
+9. **Kemudahan Pembayaran SPP Online**: Dukungan integrasi pembayaran online (Midtrans Payment Gateway QRIS/Virtual Account) dan fitur penerbitan tagihan SPP dinamis oleh Admin.
 
 ---
 
-## 🔄 2. TAHAPAN & ALUR KERJA UTAMA APLIKASI
+## 2. TAHAPAN & ALUR KERJA UTAMA APLIKASI
 
 Operasional aplikasi AL-HIKMAH LMS terbagi menjadi **5 Tahapan Utama**:
 
 ```mermaid
 flowchart LR
-    A[1. Pra-Pendaftaran & Registrasi Publik] --> B[2. Pengelolaan Data & SPP oleh Admin]
+    A[1. Pra-Pendaftaran & Registrasi Publik] --> B[2. Pengelolaan User, Data & SPP Admin]
     B --> C[3. Penjadwalan & Konfirmasi Sesi]
     C --> D[4. Bimbingan & Input Progres Mentor]
     D --> E[5. Pantau Perkembangan & Laporan PDF]
 ```
 
 ### 📋 Penjelasan Rinci 5 Tahapan Operasional:
-1. **Tahap 1 - Pra-Pendaftaran & Registrasi Publik ("Mulai Perjalanan")**: 
-   - Calon wali santri membuka website AL-HIKMAH, melihat rincian program & biaya.
-   - Mengeklik tombol **"Mulai Perjalanan"** pada navbar untuk membuka modal pendaftaran (`daftarModal`).
-   - Mengisi Nama Orang Tua, Nama Murid/Anak, No. WhatsApp, Usia, Gender, Lokasi, Program, dan Metode Belajar.
+1. **Tahap 1 - Pra-Pendaftaran & Registrasi Publik Terintegrasi**: 
+   - Calon wali santri dapat mendaftar melalui 3 pintu masuk:
+     - **Modal "Mulai Perjalanan"** di navbar/hero halaman utama.
+     - **Formulir Khusus Tahfidz** pada halaman `/tahfidz`.
+     - **Modal Pendaftaran Program** via tombol *"Pilih Program Ini"* pada halaman `/biaya`.
+   - Mengisi data awal Orang Tua, Murid, No. WhatsApp, Usia, Gender, Lokasi, dan Metode Belajar.
    - Sistem menyimpan data awal ke Session Laravel (`pre_registration`) dan mengarahkan ke halaman registrasi (`/register`) dengan role yang otomatis terkunci pada **Orang Tua / Wali (`parent`)**.
-   - Setelah melengkapi email & password, sistem otomatis membuat akun Orang Tua & akun Murid terpisah yang terhubung.
-2. **Tahap 2 - Pengelolaan Data & SPP oleh Admin**: Admin mendaftarkan akun santri, menentukan mentor pembimbing, dan menerbitkan tagihan SPP bulanan dengan tanggal jatuh tempo serta nominal angka yang fleksibel.
+   - Setelah melengkapi password, sistem otomatis membuat akun Orang Tua & akun Murid terpisah yang saling terhubung dan otomatis menambatkan program pilihan (`program_id`).
+2. **Tahap 2 - Pengelolaan User, Role, Data & SPP oleh Admin**: Admin mengelola akun pengguna & hak akses role (`/admin/users`), mendaftarkan akun santri, menentukan mentor pembimbing, dan menerbitkan tagihan SPP bulanan dengan tanggal jatuh tempo serta nominal angka yang fleksibel.
 3. **Tahap 3 - Penjadwalan Sesi & Konfirmasi Kehadiran**: Admin atau Mentor menjadwalkan sesi mengajar (Online, Home Visit/Offline, atau Hybrid). Wali Santri menerima pengingat dan melakukan **Konfirmasi Kehadiran Anak** (`Hadir`/`Izin`/`Sakit`).
 4. **Tahap 4 - Bimbingan & Pencatatan Progres**: Mentor melatih santri, kemudian mencatat capaian surah/ayat, juz, nilai tajwid, kelancaran, adab, dan tugas rumah (bisa satuan maupun massal/bulk).
 5. **Tahap 5 - Evaluasi & Pelaporan Transparan**: Sistem mengolah nilai menjadi grafik tren 6 bulan (Chart.js), notifikasi real-time lonceng header Livewire, dan laporan ringkasan perkembangan format PDF yang dapat diunduh oleh Orang Tua.
@@ -65,26 +70,34 @@ flowchart LR
 Sistem ini mendukung **4 Peran Pengguna (Multi-Role Access Control)** yang aman dan terisolasi:
 
 ### A. Keamanan, Otentikasi & Pra-Pendaftaran Terpusat
-- **Alur Pra-Pendaftaran Modal ("Mulai Perjalanan")**: Menangkap formulir konsultasi dari modal landing page, menyimpan data pra-pendaftaran ke HTTP Session, dan mengarahkan pengguna ke halaman registrasi akun resmi.
-- **Login Multi-Role Terproteksi (`/login`)**: Halaman masuk terpusat dengan enkripsi enkapsulasi standar keamanan Laravel.
+- **Alur Pra-Pendaftaran Multi-Pintu**: Menangkap formulir konsultasi dari modal navbar, landing Tahfidz, maupun halaman Biaya, menyimpan data pra-pendaftaran ke HTTP Session, dan mengarahkan pengguna ke halaman registrasi akun resmi.
+- **Login Multi-Role Terproteksi (`/login`)**: Halaman masuk terpusat dengan enkripsi standar keamanan Laravel.
 - **Auto-Redirect Cerdas (`/dashboard`)**: Otomatis mengarahkan pengguna ke halaman Admin, Portal Mentor, Portal Orang Tua, atau Dashboard Santri sesuai jenis akunnya.
-- **Proteksi Hak Akses (Middleware RBAC)**: Mencegah pengguna membuka halaman di luar hak aksesnya.
+- **Proteksi Hak Akses (Middleware RBAC)**: Mencegah pengguna membuka halaman di luar hak aksesnya dengan template error 403 berdesain tema resmi AL-HIKMAH (`style.css`).
 - **Pendaftaran Mandiri Mentor (`/bergabung`)**: Form registrasi khusus untuk calon pengajar Al-Qur'an baru.
 - **Logout Sesi Safe Exits (`/logout`)**: Fitur keluar sistem untuk mengamankan akun dari perangkat umum.
 
 ### B. Halaman Depan Publik (Dapat Diakses Umum)
 - **Halaman Utama (Home)**: Tampilan modern dengan banner promo, keunggulan lembaga, modal "Mulai Perjalanan", statistik real-time santri & mentor, serta testimoni wali santri.
-- **Halaman Tentang Kami**: Profil lembaga, visi-misi, dan jajaran pengajar Al-Qur'an.
-- **Halaman Program Belajar**: Rincian kelas (Program Anak, Program Dewasa, & Kelas Bahasa Arab).
-- **Halaman Biaya & Investasi**: Transparansi biaya pendaftaran, SPP bulanan, dan fasilitas.
+- **Halaman Tentang Kami (`/tentang-kami`)**: Profil lembaga, visi-misi, nilai-nilai utama, jajaran pengajar Al-Qur'an, dan counter statistik dinamis database.
+- **Halaman Program Belajar (`/program`)**: Katalog kurikulum edukatif yang mengelompokkan materi ke dalam 3 rumpun utama (Program Anak 10–15 th, Program Dewasa & Muslimah, Program Bahasa Arab) tanpa distraksi harga.
+- **Halaman Biaya & Investasi (`/biaya`)**: Khusus Orang Tua & Admin (terproteksi 403 untuk guest/santri/mentor), informasi biaya transparan terhubung database, rincian biaya pendaftaran, kartu paket belajar, serta **Modal Pendaftaran Program Interaktif** (`#modalProgramDaftar`).
+- **Halaman Khusus Tahfidz (`/tahfidz`)**: Halaman landing khusus akselerasi hafalan Qur'an dengan modal pra-registrasi target juz dan level santri.
+- **Halaman Metode Belajar (`/metode`)**: Penjelasan metode Talaqqi, Sorogan, dan Private Intensif dengan kontrol visibilitas tombol biaya berbasis role.
 - **Halaman Galeri**: Dokumentasi foto kegiatan mengajar & syiar Al-Qur'an.
 - **Tombol Floating WhatsApp CS**: Tombol pesan langsung ke WhatsApp Pengelola dengan teks otomatis.
 
 ### C. Portal Admin (Pengelola Pusat / Administrator)
-- **Dashboard Admin & Widget Parent Monitor**: Ringkasan total santri aktif, total guru/mentor, jumlah program, status pembayaran, serta **Widget Monitor Aktivitas Orang Tua** (memantau konfirmasi kehadiran anak `Hadir/Izin/Sakit`, riwayat pembayaran SPP, dan pesan masuk Wali Santri).
+- **Dashboard Admin & Widget Monitoring**: Ringkasan total santri aktif, total guru/mentor, jumlah program, status pembayaran, serta widget daftar pengguna & ringkasan role.
+- **Manajemen Pengguna & Role (`/admin/users`)**:
+  - Tabel data user interaktif (Nama, Role badge, Email, No. Telp / WA link, Tanggal dibuat).
+  - Filter pencarian keyword (Nama/Email/Telepon) & filter role dropdown.
+  - Tambah Akun Pengguna Baru (Nama, Email, Telepon, Role, Password).
+  - Edit Profil & Hak Akses Role (Bisa mengganti role pengguna dengan sinkronisasi domain otomatis `Mentor`/`ParentProfile`/`Student`).
+  - Hapus Pengguna Aman (*Protected Deletion* mencegah penghapusan akun diri sendiri & user yang memiliki data relasi santri/sesi/pembayaran aktif).
 - **Manajemen Santri**: Menambah santri baru, merubah data diri, menautkan ke Orang Tua & Mentor pembimbing.
 - **Manajemen Mentor/Pengajar**: Mengelola data pengajar, spesialisasi, biografi, rating, dan status keaktifan.
-- **Manajemen Program**: Menyesuaikan durasi kelas, tingkat kesulitan, dan tarif biaya program.
+- **Manajemen Program**: Menyesuaikan durasi kelas, kategori, ikon, status popularitas, urutan tampil (`sort_order`), status aktif, dan tarif biaya program.
 - **Manajemen Pembayaran & SPP (`/admin/payments`)**: 
   - **Input Tagihan SPP Baru**: Modal form khusus bagi Admin untuk menginput nominal SPP dalam Rupiah, menentukan tanggal jatuh tempo, dan memilih santri binaan.
   - **Edit Tagihan & Status**: Merubah nominal tagihan SPP dan memperbarui status pembayaran (`Pending` -> `Paid`).
@@ -114,7 +127,7 @@ Sistem ini mendukung **4 Peran Pengguna (Multi-Role Access Control)** yang aman 
 
 ## 🗄️ 4. PENJELASAN SELURUH DATABASE (PENYIMPANAN DATA LEMBAGA)
 
-Aplikasi ini menggunakan **17 Tabel Database MySQL** yang saling terhubung secara aman (*Relational Foreign Keys*):
+Aplikasi ini menggunakan **18 Tabel Database MySQL** yang saling terhubung secara aman (*Relational Foreign Keys*):
 
 | No | Nama Tabel | Fungsi Utama & Data yang Disimpan |
 |:--:|---|---|
@@ -124,8 +137,8 @@ Aplikasi ini menggunakan **17 Tabel Database MySQL** yang saling terhubung secar
 | 4 | **`students`** | Menyimpan data pribadi Santri (Nama lengkap, umur, gender, lokasi, catatan khusus, parent_id). |
 | 5 | **`parents`** | Menyimpan data profil Orang Tua/Wali (`ParentProfile`: nomor darurat, alamat rumah). |
 | 6 | **`mentor_student`** | Tabel relasi penghubung Many-to-Many antara Pengajar dan Santri Binaan. |
-| 7 | **`programs`** | Menyimpan daftar kelas/program belajar Al-Qur'an (Tahsin, Tahfidz, Iqra, biaya, durasi). |
-| 8 | **`student_program`** | Menyimpan riwayat pendaftaran kelas yang diikuti santri. |
+| 7 | **`programs`** | Menyimpan daftar kelas/program belajar Al-Qur'an (Kategori `anak`/`dewasa`/`bahasa_arab`, ikon Bootstrap Icons, harga paket, durasi, `is_popular`, `is_active`, `sort_order`). |
+| 8 | **`student_program`** | Menyimpan riwayat pendaftaran kelas yang diikuti santri beserta status keaktifan. |
 | 9 | **`learning_sessions`** | Menyimpan jadwal sesi bimbingan (Tanggal, jam, metode Online/Offline/Hybrid, status sesi). |
 | 10 | **`progress`** | Menyimpan catatan nilai & hafalan santri (Surah, ayat, juz, nilai kelancaran, nilai tajwid, adab, PR). |
 | 11 | **`payments`** | Menyimpan transaksi pembayaran SPP & pendaftaran (Nominal amount, due_date, invoice_number, status). |
@@ -135,7 +148,7 @@ Aplikasi ini menggunakan **17 Tabel Database MySQL** yang saling terhubung secar
 | 15 | **`galleries`** | Menyimpan galeri foto dokumentasi kegiatan lembaga. |
 | 16 | **`notifications`** | Menyimpan pesan notifikasi internal sistem (Judul, isi pesan, type, status dibaca). |
 | 17 | **`mentor_activity_logs`** | Menyimpan rekam jejak aktivitas harian pengajar (Waktu & aksi yang dilakukan). |
-| 18 | **`mentor_availabilities`** | Menyimpan ketersediaan jam & hari mengajar mentor (Day, Start Time, End Time, Max Students, Status Hiliday). |
+| 18 | **`mentor_availabilities`** | Menyimpan ketersediaan jam & hari mengajar mentor (Day, Start Time, End Time, Max Students, Status Holiday). |
 
 ---
 
@@ -147,7 +160,7 @@ Aplikasi ini menggunakan **17 Tabel Database MySQL** yang saling terhubung secar
 3. **`Mentor.php`**: Mengatur profil pengajar dan relasinya ke santri binaan serta log aktivitas.
 4. **`Student.php`**: Mengatur data santri dan relasinya ke orang tua, kelas program, dan catatan progres.
 5. **`ParentProfile.php`**: Mengatur data wali santri dan anak-anak binaannya (`parents`).
-6. **`Program.php`**: Mengatur rincian kelas belajar Al-Qur'an.
+6. **`Program.php`**: Mengatur data kelas program belajar dengan query scopes (`scopeAnak()`, `scopeDewasa()`, `scopeBahasaArab()`), casts, dan accessor harga Rupiah (`formatted_price`).
 7. **`Session.php`**: Mengatur logika jadwal sesi mengajar (`learning_sessions`).
 8. **`Progress.php`**: Mengatur pencatatan nilai tajwid, kelancaran, hafalan surah, dan adab.
 9. **`Payment.php`**: Mengatur transaksi pembayaran SPP, nominal, tanggal jatuh tempo, dan status.
@@ -160,26 +173,28 @@ Aplikasi ini menggunakan **17 Tabel Database MySQL** yang saling terhubung secar
 16. **`MentorAvailability.php`**: Mengatur ketersediaan hari & jam mengajar mentor serta batas kuota murid.
 
 ### B. Daftar Controller & Komponen Livewire (Pemroses Logika Aplikasi)
-1. **`Auth\RegisteredUserController.php`**: Memproses pra-pendaftaran dari modal landing page (`preRegister`), penyimpanan data sementara ke session, serta pembuatan akun Orang Tua & Akun Murid (dengan generator email slug unik & password acak) via *Database Transaction* (`store`).
-2. **`Auth\RegisterMentorController.php`**: Memproses pendaftaran mandiri akun guru/mentor baru.
-3. **`Admin\DashboardController.php`**: Mengolah data statistik utama Admin dan Widget Monitor Aktivitas Orang Tua.
-4. **`Admin\PaymentController.php`**: Memproses penerbitan tagihan SPP baru (`store`), penyesuaian nominal & tanggal jatuh tempo (`update`), pembatalan tagihan (`destroy`), laporan tagihan pending/paid, dan pengiriman pengingat massal (`sendReminder`).
-5. **`Admin\SettingController.php`**: Memproses pengubahan nomor CS WhatsApp, Instagram, dan informasi kontak website.
-6. **`Livewire\Parent\ParentNotifications.php`**: Komponen Livewire real-time header lonceng notifikasi untuk orang tua (`unreadCount`, `markAsRead`).
-7. **`Mentor\DashboardController.php`**: Mengolah statistik guru, grafik tren Chart.js, alert santri khusus, dan feed aktivitas.
-8. **`Mentor\ProgressController.php`**: Memproses penyimpanan nilai progres santri (baik penginputan *single* maupun *massal/bulk*).
-9. **`Mentor\SessionController.php`**: Mengatur pengubahan status sesi mengajar (`Sedang Berlangsung`, `Selesai`, `Batal`).
-10. **`Mentor\StudentController.php`**: Menampilkan daftar santri binaan guru dan detail riwayat belajarnya.
-11. **`Admin\MentorAvailabilityController.php`**: Mengolah matriks ketersediaan jam mengajar 7 hari seluruh mentor, mengecek sisa kuota murid per hari, serta mengalokasikan santri baru ke mentor yang memiliki kuota.
-12. **`Mentor\AvailabilityController.php`**: Mengolah formulir mandiri mentor dalam mengatur jam mengajar, hari libur, dan batas kuota murid per hari.
-11. **`Mentor\ReportController.php`**: Membuat laporan kinerja guru & santri yang siap dicetak/diunduh sebagai PDF.
-12. **`Parent\ParentDashboardController.php`**: Mengolah data statistik portal orang tua, 4 kartu ringkasan, progres terbaru, dan jadwal 7 hari.
-13. **`Parent\ParentChildController.php`**: Mengolah daftar anak, detail progres hafalan, grafik Chart.js perkembangan 6 bulan, dan laporan cetak PDF.
-14. **`Parent\ParentScheduleController.php`**: Mengolah kalender sesi bimbingan anak, filter status sesi, dan konfirmasi kehadiran anak.
-15. **`Parent\ParentPaymentController.php`**: Mengolah daftar tagihan aktif, riwayat lunas, detail invoice, bayar online Midtrans, dan cetak invoice PDF.
-16. **`Parent\ParentMessageController.php`**: Mengolah inbox pesan, form tulis pesan baru ke mentor, dan ruang chat interaktif.
-17. **`Parent\ParentProfileController.php`**: Mengolah pembaharuan data diri wali santri, preferensi notifikasi, ubah password, serta pengisian data anak baru.
-18. **`ReportController.php`**: Mengolah pencetakan ringkasan laporan perkembangan santri untuk Orang Tua.
+1. **`Admin\UserController.php` (NEW)**: Mengatur CRUD data pengguna (User Management), filter role, pencarian nama/email/telepon, sinkronisasi profil domain otomatis (`syncUserProfile`), proteksi anti-self deletion, dan proteksi anti-demotion role admin.
+2. **`LandingController.php`**: Mengatur penampilan katalog kurikulum program deskriptif (`program`) dan halaman investasi/biaya belajar terproteksi otorisasi Parent/Admin (`biaya`).
+3. **`Auth\RegisteredUserController.php`**: Memproses pra-pendaftaran modal umum (`preRegister`), pra-pendaftaran Tahfidz (`preRegisterTahfidz`), pra-pendaftaran Program Biaya (`preRegisterProgram`), penyimpanan session, serta pembuatan akun Orang Tua & Akun Murid via *Database Transaction* (`store`).
+4. **`Auth\RegisterMentorController.php`**: Memproses pendaftaran mandiri akun guru/mentor baru.
+5. **`Admin\DashboardController.php`**: Mengolah data statistik utama Admin, ringkasan user terbaru, dan Widget Monitor Aktivitas Orang Tua.
+6. **`Admin\PaymentController.php`**: Memproses penerbitan tagihan SPP baru (`store`), penyesuaian nominal & tanggal jatuh tempo (`update`), pembatalan tagihan (`destroy`), laporan tagihan pending/paid, dan pengiriman pengingat massal (`sendReminder`).
+7. **`Admin\SettingController.php`**: Memproses pengubahan nomor CS WhatsApp, Instagram, dan informasi kontak website.
+8. **`Admin\MentorAvailabilityController.php`**: Mengolah matriks ketersediaan jam mengajar 7 hari seluruh mentor, mengecek sisa kuota murid per hari, serta mengalokasikan santri baru ke mentor yang memiliki kuota.
+9. **`Livewire\Parent\ParentNotifications.php`**: Komponen Livewire real-time header lonceng notifikasi untuk orang tua (`unreadCount`, `markAsRead`).
+10. **`Mentor\DashboardController.php`**: Mengolah statistik guru, grafik tren Chart.js, alert santri khusus, dan feed aktivitas.
+11. **`Mentor\ProgressController.php`**: Memproses penyimpanan nilai progres santri (baik penginputan *single* maupun *massal/bulk*).
+12. **`Mentor\SessionController.php`**: Mengatur pengubahan status sesi mengajar (`Sedang Berlangsung`, `Selesai`, `Batal`).
+13. **`Mentor\StudentController.php`**: Menampilkan daftar santri binaan guru dan detail riwayat belajarnya.
+14. **`Mentor\AvailabilityController.php`**: Mengolah formulir mandiri mentor dalam mengatur jam mengajar, hari libur, dan batas kuota murid per hari.
+15. **`Mentor\ReportController.php`**: Membuat laporan kinerja guru & santri yang siap dicetak/diunduh sebagai PDF.
+16. **`Parent\ParentDashboardController.php`**: Mengolah data statistik portal orang tua, 4 kartu ringkasan, progres terbaru, dan jadwal 7 hari.
+17. **`Parent\ParentChildController.php`**: Mengolah daftar anak, detail progres hafalan, grafik Chart.js perkembangan 6 bulan, dan laporan cetak PDF.
+18. **`Parent\ParentScheduleController.php`**: Mengolah kalender sesi bimbingan anak, filter status sesi, dan konfirmasi kehadiran anak.
+19. **`Parent\ParentPaymentController.php`**: Mengolah daftar tagihan aktif, riwayat lunas, detail invoice, bayar online Midtrans, dan cetak invoice PDF.
+20. **`Parent\ParentMessageController.php`**: Mengolah inbox pesan, form tulis pesan baru ke mentor, dan ruang chat interaktif.
+21. **`Parent\ParentProfileController.php`**: Mengolah pembaharuan data diri wali santri, preferensi notifikasi, ubah password, serta pengisian data anak baru.
+22. **`ReportController.php`**: Mengolah pencetakan ringkasan laporan perkembangan santri untuk Orang Tua.
 
 ---
 
@@ -190,29 +205,31 @@ Berikut adalah peta struktur direktori proyek AL-HIKMAH LMS beserta kegunaannya:
 ```text
 al-hikmah-lms/
 ├── 📁 app/                     --> Pusat Logika Utama Aplikasi (Model, Controller, Livewire, Middleware)
-│   ├── 📁 Http/Controllers/    --> Pengendali alur kerja aplikasi (Admin, Mentor, Parent, Auth)
+│   ├── 📁 Http/Controllers/    --> Pengendali alur kerja aplikasi (Landing, Admin, Mentor, Parent, Auth)
+│   │   └── 📁 Admin/           --> Controller Admin (UserController, PaymentController, DashboardController, dll)
 │   ├── 📁 Livewire/Parent/     --> Komponen interaktif real-time Livewire (ParentNotifications)
 │   └── 📁 Models/              --> Pengatur struktur data & relasi database (16 Models)
 ├── 📁 bootstrap/               --> File inisialisasi awal penjalankan sistem Laravel 12
 ├── 📁 config/                  --> Berkas konfigurasi pengaturan sistem (database, mail, session)
 ├── 📁 database/                --> Pusat pengelolaan database
 │   ├── 📁 factories/           --> Pembuat data uji coba otomatis
-│   ├── 📁 migrations/          --> Berkas pembentuk tabel-tabel database (20 Migrations)
+│   ├── 📁 migrations/          --> Berkas pembentuk tabel-tabel database (21 Migrations)
 │   └── 📁 seeders/             --> Berkas pengisi data awal (10 Seeders akun default, role, program, ketersediaan mentor)
 ├── 📁 public/                  --> Folder yang dapat diakses publik/browser
-│   └── 📁 assets/              --> Gambar logo, foto galeri, CSS gaya tampilan, & JavaScript
+│   └── 📁 assets/              --> Gambar logo, foto galeri, CSS gaya tampilan (style.css), & JavaScript
 ├── 📁 resources/               --> Tampilan Antarmuka Pengguna (User Interface)
 │   └── 📁 views/               --> Berkas tampilan halaman web (.blade.php)
-│       ├── 📁 admin/           --> Halaman-halaman panel Admin (Dashboard, Payments, Settings)
+│       ├── 📁 admin/           --> Halaman-halaman panel Admin (Users, Dashboard, Payments, Settings)
+│       ├── 📁 errors/          --> Halaman error responsif bertema AL-HIKMAH (403, 404, dll)
 │       ├── 📁 mentor/          --> Halaman-halaman portal Mentor/Guru (Dashboard, Progress, Report)
 │       ├── 📁 parent/          --> Halaman-halaman portal Orang Tua (Dashboard, Children, Payments, Messages, dll)
 │       ├── 📁 partials/        --> Komponen parsial (Navbar, Footer, Modal Pendaftaran)
 │       ├── 📁 livewire/        --> Tampilan view untuk komponen Livewire
-│       ├── 📁 layouts/         --> Kerangka template utama halaman (admin, mentor, parent, app)
+│       ├── 📁 layouts/         --> Kerangka template utama halaman (admin, mentor, parent, app, landing)
 │       └── 📁 reports/         --> Template laporan cetak PDF
 ├── 📁 routes/                  --> Berkas pendaftaran alamat URL website (web.php, auth.php)
 ├── 📁 storage/                 --> Tempat menyimpan berkas unggahan, file cache, & catatan log
-└── 📁 tests/                   --> Pengujian kualitas otomatis (Automated Testing Pest PHP - 54 Passed Tests)
+└── 📁 tests/                   --> Pengujian kualitas otomatis (Automated Testing Pest PHP - 79 Passed Tests)
 ```
 
 ---
@@ -220,12 +237,13 @@ al-hikmah-lms/
 ## 🎯 7. KESIMPULAN & REKOMENDASI LANGKAH KE DEPAN
 
 ### 🏁 Kesimpulan Akhir:
-Aplikasi **AL-HIKMAH LMS** berada dalam kondisi **100% Selesai, Teruji (54 Passed Tests dengan 236 assertions), dan Siap Digunakan (Production Ready)**. Seluruh fitur dari halaman depan publik, modal pra-pendaftaran "Mulai Perjalanan", panel matriks ketersediaan guru & alokasi santri, portal operasional guru, hingga portal orang tua (Modul A - F & Notifikasi Real-time) telah terintegrasi secara stabil, cepat, dan modern.
+Aplikasi **AL-HIKMAH LMS (Versi 3.0)** berada dalam kondisi **100% Selesai, Teruji (79 Passed Tests dengan 342 assertions), dan Siap Digunakan (Production Ready)**. Seluruh fitur dari manajemen pengguna & role, proteksi biaya berbasis hak akses, halaman depan publik, Single Source of Truth program belajar & biaya, modal pra-pendaftaran terintegrasi, panel matriks ketersediaan guru & alokasi santri, portal operasional guru, hingga portal orang tua (Modul A - F & Notifikasi Real-time) telah terintegrasi secara stabil, aman, cepat, dan modern.
 
 ### 🚀 Rekomendasi Langkah Ke Depan untuk Pimpinan / Manajemen:
 1. **Go-Live / Deploy ke Server Production**: Aplikasi sudah sangat siap diunggah ke server domain utama lembaga.
-2. **Sosialisasi & Pelatihan Pengajar**: Mengadakan orientasi singkat penggunaan portal pengajar (fitur *Catat Progres Massal* & *Cetak PDF*).
-3. **Sosialisasi Orang Tua / Wali Santri**: Menginformasikan alur pendaftaran mandiri *"Mulai Perjalanan"* serta akses login Portal Orang Tua agar wali santri dapat mengonfirmasi kehadiran anak dan memantau akun email anak secara transparan.
+2. **Sosialisasi Manajemen User untuk Admin**: Melatih administrator lembaga dalam mengelola pengguna baru dan mengatur role via panel `/admin/users`.
+3. **Sosialisasi & Pelatihan Pengajar**: Mengadakan orientasi singkat penggunaan portal pengajar (fitur *Catat Progres Massal* & *Cetak PDF*).
+4. **Sosialisasi Orang Tua / Wali Santri**: Menginformasikan kemudahan memilih program belajar di halaman `/biaya` serta akses login Portal Orang Tua agar wali santri dapat mengonfirmasi kehadiran anak dan memantau akun email anak secara transparan.
 
 ---
 

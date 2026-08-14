@@ -44,6 +44,33 @@ class RegisteredUserController extends Controller
     }
 
     /**
+     * Handle data awal dari Modal Pendaftaran Program di Halaman Biaya (Step 1)
+     */
+    public function preRegisterProgram(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'program_id' => 'required|exists:programs,id',
+            'nama' => 'required|string|max:255',
+            'nama_anak' => 'required|string|max:255',
+            'whatsapp' => 'required|string|max:30',
+            'usia' => 'nullable|string|max:100',
+            'gender' => 'nullable|string|in:L,P',
+            'lokasi' => 'required|string|max:255',
+            'metode' => 'nullable|string|max:100',
+        ]);
+
+        $program = Program::findOrFail($validated['program_id']);
+        $validated['program'] = $program->name;
+        $validated['program_name'] = $program->name;
+        $validated['program_id'] = $program->id;
+
+        session(['pre_registration' => $validated]);
+
+        return redirect()->route('register')
+            ->with('info', "Anda memilih program: {$program->name}. Silakan lengkapi kata sandi untuk membuat akun.");
+    }
+
+    /**
      * Handle data awal dari Modal Pendaftaran Khusus Tahfidz
      */
     public function preRegisterTahfidz(Request $request): RedirectResponse
@@ -160,8 +187,15 @@ class RegisteredUserController extends Controller
                         'notes' => $notes,
                     ]);
 
-                    // Attach to Program Tahfidz if available
-                    if (! empty($preRegData['is_tahfidz'])) {
+                    // Attach to Program if pre-registered from /biaya, /program or landing Tahfidz
+                    if (! empty($preRegData['program_id'])) {
+                        $student->programs()->syncWithoutDetaching([
+                            $preRegData['program_id'] => [
+                                'status' => 'active',
+                                'enrolled_at' => now(),
+                            ],
+                        ]);
+                    } elseif (! empty($preRegData['is_tahfidz'])) {
                         $tahfidzProgram = Program::where('name', 'like', '%Tahfidz%')->first();
                         if ($tahfidzProgram) {
                             $student->programs()->syncWithoutDetaching([$tahfidzProgram->id => ['status' => 'active', 'enrolled_at' => now()]]);

@@ -65,7 +65,14 @@
                                 Daftar Program Tahfidz <i class="bi bi-arrow-right ms-2"></i>
                             </button>
                         @endauth
-                        <a href="{{ route('biaya') }}" class="btn btn-outline-custom ms-2">Informasi Pendampingan</a>
+
+                        @auth
+                            @if (auth()->user()->isParent())
+                                <a href="{{ route('biaya') }}" class="btn btn-outline-custom ms-2"><i class="bi bi-info-circle me-1"></i> Informasi Pendampingan</a>
+                            @elseif (auth()->user()->isAdmin())
+                                <a href="{{ route('biaya') }}" class="btn btn-outline-custom ms-2"><i class="bi bi-info-circle me-1"></i> Informasi Pendampingan (Kamu Administrator)</a>
+                            @endif
+                        @endauth
                     </div>
                 </div>
             </div>

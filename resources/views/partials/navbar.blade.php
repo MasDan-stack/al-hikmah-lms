@@ -75,13 +75,21 @@
                         </li>
 
                         {{-- Hanya Tampil untuk Orang Tua (Parent) dan Admin yang Sudah Login --}}
-                        @if (auth()->check() && (auth()->user()->isParent() || auth()->user()->isAdmin()))
-                            <li>
-                                <a class="dropdown-item" href="{{ route('biaya') }}">
-                                    <i class="bi bi-info-circle"></i> Informasi Pendampingan
-                                </a>
-                            </li>
-                        @endif
+                        @auth
+                            @if (auth()->user()->isParent())
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('biaya') }}">
+                                        <i class="bi bi-info-circle"></i> Informasi Pendampingan
+                                    </a>
+                                </li>
+                            @elseif (auth()->user()->isAdmin())
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('biaya') }}">
+                                        <i class="bi bi-info-circle"></i> Informasi Pendampingan <span class="badge bg-warning text-dark ms-1">Admin</span>
+                                    </a>
+                                </li>
+                            @endif
+                        @endauth
 
                         {{-- Hanya Tampil untuk Guest (Belum Login / Publik) --}}
                         @guest

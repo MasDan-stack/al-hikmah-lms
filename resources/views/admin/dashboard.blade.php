@@ -8,6 +8,68 @@
 <!-- Row Statistik Cards (Livewire) -->
 @livewire('dashboard-stats')
 
+<!-- Section Widget Tabel Pengguna & Role Terdaftar -->
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm rounded-4 bg-white">
+            <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <h5 class="fw-bold text-dark mb-1">
+                        <i class="bi bi-people-fill text-primary me-2"></i>Daftar Pengguna & Hak Akses Role
+                    </h5>
+                    <small class="text-muted">Ringkasan akun pengguna terdaftar di sistem AL-HIKMAH LMS</small>
+                </div>
+                <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
+                    Lihat Semua Pengguna ({{ $totalUsers }}) <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+            <div class="card-body p-4">
+                <div class="table-responsive">
+                    <table class="table align-middle table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nama Pengguna</th>
+                                <th>Hak Akses (Role)</th>
+                                <th>Alamat Email</th>
+                                <th>No. Telepon</th>
+                                <th class="text-end">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($recentUsers as $u)
+                                <tr>
+                                    <td class="fw-bold text-dark">{{ $u->name }}</td>
+                                    <td>
+                                        @php
+                                            $rName = strtolower($u->role?->name ?? '');
+                                        @endphp
+                                        @if($rName === 'admin')
+                                            <span class="badge bg-danger-subtle text-danger px-3 py-1 rounded-pill fw-semibold">Admin</span>
+                                        @elseif($rName === 'mentor')
+                                            <span class="badge bg-primary-subtle text-primary px-3 py-1 rounded-pill fw-semibold">Mentor</span>
+                                        @elseif($rName === 'parent')
+                                            <span class="badge bg-success-subtle text-success px-3 py-1 rounded-pill fw-semibold">Parent</span>
+                                        @else
+                                            <span class="badge bg-info-subtle text-info px-3 py-1 rounded-pill fw-semibold">Santri</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-secondary fw-semibold">{{ $u->email }}</td>
+                                    <td>{{ $u->phone ?? '-' }}</td>
+                                    <td class="text-end">
+                                        <a href="{{ route('admin.users.index', ['search' => $u->email]) }}" class="btn btn-sm btn-light rounded-pill px-3 fw-bold text-primary">
+                                            <i class="bi bi-gear me-1"></i> Kelola Role
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Section Widget Monitor Aktivitas Orang Tua (Parent Monitoring Widget) -->
 <div class="row g-4 mb-4">
     <div class="col-12">
