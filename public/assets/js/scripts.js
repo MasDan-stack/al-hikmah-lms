@@ -278,13 +278,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ============================================
-    // Form Submission - Validation & WhatsApp Format Fix
+    // Form Submission - Modal Pendaftaran ke Register Form
     // ============================================
     const registrationForm = document.getElementById('registrationForm');
     if (registrationForm) {
         registrationForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-
             // Clean previous feedback messages
             this.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
 
@@ -296,7 +294,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     isValid = false;
                     input.classList.add('is-invalid');
 
-                    // Add contextual error text
                     const feedback = document.createElement('div');
                     feedback.className = 'invalid-feedback';
                     feedback.textContent = 'Wajib diisi';
@@ -306,41 +303,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            if (isValid) {
-                const nama = this.querySelector('[name="nama"]')?.value || '-';
-                const whatsapp = this.querySelector('[name="whatsapp"]')?.value || '-';
-                const usia = this.querySelector('[name="usia"]')?.value || '-';
-                const lokasi = this.querySelector('[name="lokasi"]')?.value || '-';
-                const program = this.querySelector('[name="program"]')?.value || '-';
-                const metode = this.querySelector('[name="metode"]')?.value || '-';
-                
-                // Gunakan karakter \n asli agar encodeURIComponent menghasilkan %0A yang valid
-                let message = 'Assalamualaikum warahmatullahi wabarakatuh,\n\n';
-                message += 'Saya ingin mendaftar program belajar di AL-HIKMAH:\n\n';
-                message += '📛 Nama: ' + nama + '\n';
-                message += '📱 WhatsApp: ' + whatsapp + '\n';
-                message += '🎂 Usia: ' + usia + '\n';
-                message += '📍 Lokasi: ' + lokasi + '\n';
-                message += '📚 Program: ' + program + '\n';
-                message += '💻 Metode: ' + metode + '\n\n';
-                message += 'Mohon info lebih lanjut. Jazakallahu khairan.';
-                
-                const waNumber = (window.ALHIKMAH_CONFIG && window.ALHIKMAH_CONFIG.whatsappNumber) 
-                    ? window.ALHIKMAH_CONFIG.whatsappNumber.replace(/[^0-9]/g, '') 
-                    : '6285786689008';
-                window.open('https://wa.me/' + waNumber + '?text=' + encodeURIComponent(message), '_blank');
-                
-                // Close modal
-                const modalElement = document.getElementById('daftarModal');
-                if (modalElement && typeof bootstrap !== 'undefined') {
-                    const modal = bootstrap.Modal.getInstance(modalElement);
-                    if (modal) modal.hide();
-                }
-                
-                // Reset form state
-                this.reset();
-                this.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-                this.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+            if (!isValid) {
+                e.preventDefault();
             }
         });
     }

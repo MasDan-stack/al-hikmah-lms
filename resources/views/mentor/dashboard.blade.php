@@ -74,6 +74,12 @@
 
     <!-- Quick Action Buttons -->
     <div class="d-flex gap-2 mb-4 flex-wrap">
+        <a href="{{ route('mentor.availability.index') }}" class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm text-dark">
+            <i class="bi bi-clock-history me-2"></i>Atur Ketersediaan Jam
+        </a>
+        <a href="{{ route('mentor.students.parents') }}" class="btn btn-info text-white rounded-pill px-4 fw-bold shadow-sm">
+            <i class="bi bi-person-lines-fill me-2"></i>Data Orang Tua Wali
+        </a>
         <a href="{{ route('mentor.progress.create') }}" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
             <i class="bi bi-pencil-square me-2"></i>Catat Progres Hafalan
         </a>
@@ -81,7 +87,7 @@
             <i class="bi bi-layers-fill me-2"></i>Catat Progres Massal
         </a>
         <a href="{{ route('mentor.reports.export') }}" class="btn btn-outline-dark rounded-pill px-4 fw-bold">
-            <i class="bi bi-file-earmark-pdf me-2"></i>Export Laporan Mentor
+            <i class="bi bi-file-earmark-pdf me-2"></i>Export Laporan
         </a>
         <a href="{{ route('mentor.students.index') }}" class="btn btn-outline-primary rounded-pill px-4 fw-bold">
             <i class="bi bi-people me-2"></i>Lihat Semua Santri
@@ -321,6 +327,37 @@
                                         <span class="badge bg-success-subtle text-success small">Tajwid: {{ $prog->nilai_tajwid ?? '-' }}</span>
                                         <span class="badge bg-primary-subtle text-primary small">Adab: {{ $prog->nilai_adab ?? '-' }}</span>
                                     </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- 👨‍👩‍👧 Widget Santri Binaan & Wali -->
+            <div class="card border-0 shadow-sm rounded-4 mt-4 bg-white">
+                <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold text-dark mb-0"><i class="bi bi-people-fill me-2 text-info"></i>Santri & Kontak Wali</h5>
+                    <a href="{{ route('mentor.students.parents') }}" class="btn btn-sm btn-link text-info text-decoration-none">Lihat Semua</a>
+                </div>
+                <div class="card-body p-4">
+                    @if($students->isEmpty())
+                        <div class="text-center py-3 text-muted small">Belum ada santri binaan aktif.</div>
+                    @else
+                        <div class="list-group list-group-flush">
+                            @foreach($students->take(4) as $st)
+                                <div class="list-group-item px-0 py-2 border-bottom d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-bold text-dark small">{{ $st->getDisplayName() }}</div>
+                                        <div class="text-muted text-truncate style-sub" style="font-size: 0.78rem;">
+                                            <i class="bi bi-person me-1"></i>Wali: {{ $st->getParentNameAttribute() }}
+                                        </div>
+                                    </div>
+                                    @if($st->getParentPhoneAttribute() !== '-')
+                                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $st->getParentPhoneAttribute()) }}" target="_blank" class="btn btn-sm btn-success rounded-circle" title="WhatsApp Orang Tua">
+                                            <i class="bi bi-whatsapp"></i>
+                                        </a>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>

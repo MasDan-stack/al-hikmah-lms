@@ -70,8 +70,14 @@
                 <a href="{{ route('mentor.sessions.index') }}" class="admin-nav-item {{ request()->routeIs('mentor.sessions.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar-check"></i> Jadwal Sesi
                 </a>
-                <a href="{{ route('mentor.students.index') }}" class="admin-nav-item {{ request()->routeIs('mentor.students.*') ? 'active' : '' }}">
+                <a href="{{ route('mentor.students.index') }}" class="admin-nav-item {{ request()->routeIs('mentor.students.index') ? 'active' : '' }}">
                     <i class="bi bi-people"></i> Santri Binaan
+                </a>
+                <a href="{{ route('mentor.students.parents') }}" class="admin-nav-item {{ request()->routeIs('mentor.students.parents') ? 'active' : '' }}">
+                    <i class="bi bi-person-lines-fill"></i> Data Orang Tua
+                </a>
+                <a href="{{ route('mentor.availability.index') }}" class="admin-nav-item {{ request()->routeIs('mentor.availability.*') ? 'active' : '' }}">
+                    <i class="bi bi-clock-history"></i> Atur Ketersediaan
                 </a>
                 <a href="{{ route('mentor.progress.create') }}" class="admin-nav-item {{ request()->routeIs('mentor.progress.create') ? 'active' : '' }}">
                     <i class="bi bi-pencil-square"></i> Catat Progres

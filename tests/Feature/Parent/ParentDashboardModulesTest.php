@@ -8,17 +8,17 @@ use App\Models\Role;
 use App\Models\Session;
 use App\Models\Student;
 use App\Models\User;
-use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->seed(DatabaseSeeder::class);
+    $this->seed(RoleSeeder::class);
 
-    $this->parentRole = Role::where('name', 'parent')->first() ?? Role::create(['name' => 'parent', 'label' => 'Parent']);
-    $this->mentorRole = Role::where('name', 'mentor')->first() ?? Role::create(['name' => 'mentor', 'label' => 'Mentor']);
-    $this->studentRole = Role::where('name', 'student')->first() ?? Role::create(['name' => 'student', 'label' => 'Student']);
+    $this->parentRole = Role::firstOrCreate(['name' => 'parent'], ['label' => 'Parent']);
+    $this->mentorRole = Role::firstOrCreate(['name' => 'mentor'], ['label' => 'Mentor']);
+    $this->studentRole = Role::firstOrCreate(['name' => 'student'], ['label' => 'Student']);
 
     // Setup Parent 1
     $this->parentUser = User::factory()->create([

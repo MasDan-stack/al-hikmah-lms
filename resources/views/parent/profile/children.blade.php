@@ -85,7 +85,12 @@
                             <tbody>
                                 @foreach($children as $c)
                                     <tr>
-                                        <td class="fw-bold text-primary">{{ $c->user?->name ?? $c->full_name }}</td>
+                                        <td class="fw-bold text-primary">
+                                            {{ $c->user?->name ?? $c->full_name }}
+                                            @if($c->user?->email)
+                                                <br><small class="text-muted fw-normal"><i class="bi bi-envelope me-1"></i>{{ $c->user->email }}</small>
+                                            @endif
+                                        </td>
                                         <td>{{ $c->age }} Thn</td>
                                         <td>{{ $c->gender === 'L' ? 'Laki-Laki' : 'Perempuan' }}</td>
                                         <td>{{ $c->location ?? 'Online' }}</td>

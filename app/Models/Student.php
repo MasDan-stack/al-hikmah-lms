@@ -33,7 +33,16 @@ class Student extends Model
 
     public function mentors(): BelongsToMany
     {
-        return $this->belongsToMany(Mentor::class, 'mentor_student')->withTimestamps();
+        return $this->belongsToMany(Mentor::class, 'mentor_student')
+            ->withPivot(['day_assigned', 'time_assigned', 'is_active'])
+            ->withTimestamps();
+    }
+
+    public function programs(): BelongsToMany
+    {
+        return $this->belongsToMany(Program::class, 'student_program')
+            ->withPivot('status', 'enrolled_at')
+            ->withTimestamps();
     }
 
     public function progress()
@@ -49,5 +58,20 @@ class Student extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function getDisplayName(): string
+    {
+        return $this->user?->name ?? $this->full_name ?? 'Santri';
+    }
+
+    public function getParentNameAttribute(): ?string
+    {
+        return $this->parent?->user?->name ?? 'Orang Tua';
+    }
+
+    public function getParentPhoneAttribute(): ?string
+    {
+        return $this->parent?->user?->phone ?? $this->parent?->emergency_phone ?? '-';
     }
 }

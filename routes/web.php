@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MentorAvailabilityController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\RegisterMentorController;
+use App\Http\Controllers\Mentor\AvailabilityController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\ProgressController as MentorProgressController;
 use App\Http\Controllers\Mentor\ReportController as MentorReportController;
@@ -49,6 +52,7 @@ Route::get('/metode', function () {
 Route::get('/tahfidz', function () {
     return view('tahfidz');
 })->name('tahfidz');
+Route::post('/tahfidz/pre-register', [RegisteredUserController::class, 'preRegisterTahfidz'])->name('tahfidz.pre-register');
 
 // Halaman Biaya (dengan data paket dari DB)
 Route::get('/biaya', function () {
@@ -91,6 +95,12 @@ Route::middleware(['auth', 'role:admin'])
         Route::put('/payments/{id}', [AdminPaymentController::class, 'update'])->name('payments.update');
         Route::delete('/payments/{id}', [AdminPaymentController::class, 'destroy'])->name('payments.destroy');
         Route::post('/payments/send-reminder', [AdminPaymentController::class, 'sendReminder'])->name('payments.send-reminder');
+
+        // Mentor Availability & Allocation Management
+        Route::get('/mentors/availability', [MentorAvailabilityController::class, 'index'])->name('mentors.availability');
+        Route::get('/mentors/available-api', [MentorAvailabilityController::class, 'getAvailableMentors'])->name('mentors.available-api');
+        Route::post('/mentors/assign-student', [MentorAvailabilityController::class, 'assignStudent'])->name('mentors.assign-student');
+        Route::post('/mentors/unassign-student', [MentorAvailabilityController::class, 'unassignStudent'])->name('mentors.unassign-student');
     });
 
 // ==========================================
@@ -104,7 +114,10 @@ Route::middleware(['auth', 'role:mentor'])
         Route::get('/sessions', [MentorSessionController::class, 'index'])->name('sessions.index');
         Route::post('/sessions/{id}/status', [MentorSessionController::class, 'updateStatus'])->name('sessions.update-status');
         Route::get('/students', [MentorStudentController::class, 'index'])->name('students.index');
+        Route::get('/students/parents', [MentorStudentController::class, 'parents'])->name('students.parents');
         Route::get('/students/{id}', [MentorStudentController::class, 'show'])->name('students.show');
+        Route::get('/availability', [AvailabilityController::class, 'index'])->name('availability.index');
+        Route::post('/availability/update-bulk', [AvailabilityController::class, 'updateBulk'])->name('availability.update-bulk');
         Route::get('/progress/create', [MentorProgressController::class, 'create'])->name('progress.create');
         Route::post('/progress', [MentorProgressController::class, 'store'])->name('progress.store');
         Route::get('/progress/bulk', [MentorProgressController::class, 'createBulk'])->name('progress.bulk-create');
@@ -127,6 +140,7 @@ Route::middleware(['auth', 'role:parent'])
         Route::get('/children', [ParentChildController::class, 'index'])->name('children.index');
         Route::get('/children/{id}', [ParentChildController::class, 'show'])->name('children.show');
         Route::get('/children/{id}/report', [ParentChildController::class, 'exportReport'])->name('children.report');
+        Route::post('/enroll-tahfidz', [ParentChildController::class, 'enrollTahfidz'])->name('enroll-tahfidz');
 
         // C. Modul Jadwal Belajar
         Route::get('/schedules', [ParentScheduleController::class, 'index'])->name('schedules.index');

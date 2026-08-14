@@ -29,4 +29,20 @@ class StudentController extends Controller
 
         return view('mentor.students.show', compact('student', 'progresses'));
     }
+
+    public function parents(): View
+    {
+        $mentor = auth()->user()->mentor;
+        $students = $mentor ? $mentor->students()->with(['user', 'parent.user'])->get() : collect();
+
+        $parents = $students->map(function ($student) {
+            return [
+                'student' => $student,
+                'parent' => $student->parent,
+                'parent_user' => $student->parent?->user,
+            ];
+        })->unique('parent.id');
+
+        return view('mentor.students.parents', compact('parents'));
+    }
 }

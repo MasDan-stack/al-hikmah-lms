@@ -1,8 +1,7 @@
 @extends('layouts.landing')
 
 @section('title', 'Program Tahfidz | AL-HIKMAH')
-@section('description', 'Program Tahfidz AL-HIKMAH — Pendampingan menghafal Al-Qur\'an dengan setoran rutin, murajaah,
-    dan target yang disesuaikan.')
+@section('description', 'Program Tahfidz AL-HIKMAH — Pendampingan menghafal Al-Qur\'an dengan setoran rutin, murajaah, dan target yang disesuaikan.')
 
 @section('content')
     <!-- Page Header -->
@@ -43,10 +42,29 @@
                     <p style="font-style:italic;color:var(--text-muted);margin-top:20px">Semoga ayat yang dihafal menjadi
                         cahaya dalam kehidupan.</p>
                     <div class="mt-4">
-                        <a href="{{ wa_url('Assalamualaikum, saya ingin mendaftar Program Tahfidz Al-Qur\'an AL-HIKMAH') }}"
-                           class="btn btn-primary-custom" target="_blank">
-                           Daftar Program Tahfidz <i class="bi bi-arrow-right ms-2"></i>
-                        </a>
+                        @auth
+                            @if(auth()->user()->isParent())
+                                <button type="button" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#tahfidzLoggedInModal">
+                                    Daftar Program Tahfidz <i class="bi bi-arrow-right ms-2"></i>
+                                </button>
+                            @else
+                                @php
+                                    $dashRoute = match(true) {
+                                        auth()->user()->isAdmin() => route('admin.dashboard'),
+                                        auth()->user()->isMentor() => route('mentor.dashboard'),
+                                        auth()->user()->isStudent() => route('student.dashboard'),
+                                        default => route('parent.dashboard'),
+                                    };
+                                @endphp
+                                <a href="{{ $dashRoute }}" class="btn btn-primary-custom">
+                                    Masuk ke Dashboard <i class="bi bi-speedometer2 ms-2"></i>
+                                </a>
+                            @endif
+                        @else
+                            <button type="button" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#tahfidzDaftarModal">
+                                Daftar Program Tahfidz <i class="bi bi-arrow-right ms-2"></i>
+                            </button>
+                        @endauth
                         <a href="{{ route('biaya') }}" class="btn btn-outline-custom ms-2">Informasi Pendampingan</a>
                     </div>
                 </div>
@@ -61,9 +79,22 @@
             <div class="cta-content" data-reveal>
                 <h2 class="cta-title">Mulai Perjalanan <span class="text-gradient-light">Menghafal Al-Qur'an</span></h2>
                 <p class="cta-subtitle">Dari satu ayat, satu halaman, satu juz — setiap langkah adalah kebaikan.</p>
-                <a href="{{ wa_url('Assalamualaikum, saya ingin berkonsultasi mengenai Program Tahfidz Al-Qur\'an AL-HIKMAH') }}" class="btn btn-outline-light-custom btn-lg" target="_blank"><i
-                        class="bi bi-whatsapp me-2"></i>Konsultasi Program Tahfidz</a>
+                @auth
+                    @if(auth()->user()->isParent())
+                        <button type="button" class="btn btn-outline-light-custom btn-lg" data-bs-toggle="modal" data-bs-target="#tahfidzLoggedInModal">
+                            <i class="bi bi-book-half me-2"></i>Daftarkan Anak ke Tahfidz
+                        </button>
+                    @endif
+                @else
+                    <button type="button" class="btn btn-outline-light-custom btn-lg" data-bs-toggle="modal" data-bs-target="#tahfidzDaftarModal">
+                        <i class="bi bi-pencil-square me-2"></i>Konsultasi & Daftar Program Tahfidz
+                    </button>
+                @endauth
             </div>
         </div>
     </section>
+
+    <!-- Modal Form Partials -->
+    @include('partials.modal-tahfidz-daftar')
+    @include('partials.modal-tahfidz-logged-in')
 @endsection

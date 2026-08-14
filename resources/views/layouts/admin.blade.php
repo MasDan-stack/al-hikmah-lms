@@ -190,8 +190,11 @@
                 <a href="{{ route('admin.students.index') }}" class="admin-nav-item {{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
                     <i class="bi bi-people"></i> Data Santri
                 </a>
-                <a href="{{ route('admin.mentors.index') }}" class="admin-nav-item {{ request()->routeIs('admin.mentors.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.mentors.index') }}" class="admin-nav-item {{ request()->routeIs('admin.mentors.index') ? 'active' : '' }}">
                     <i class="bi bi-person-badge"></i> Pendamping
+                </a>
+                <a href="{{ route('admin.mentors.availability') }}" class="admin-nav-item {{ request()->routeIs('admin.mentors.availability') ? 'active' : '' }}">
+                    <i class="bi bi-calendar-week"></i> Ketersediaan & Alokasi
                 </a>
                 <a href="{{ route('admin.students.index') }}" class="admin-nav-item {{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar-event"></i> Jadwal Sesi
