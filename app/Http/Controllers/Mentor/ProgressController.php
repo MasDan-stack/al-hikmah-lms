@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Mentor;
 
+use App\Enums\EnrollmentStatus;
+use App\Enums\NotificationType;
 use App\Http\Controllers\Controller;
 use App\Models\MentorActivityLog;
 use App\Models\Progress;
 use App\Models\Session;
+use App\Models\Student;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +20,15 @@ class ProgressController extends Controller
     public function create(Request $request): View
     {
         $mentor = auth()->user()->mentor;
-        $students = $mentor ? $mentor->students()->with('user')->get() : collect();
+        $students = $mentor
+            ? Student::where(function ($q) use ($mentor) {
+                $q->whereHas('mentors', fn ($m) => $m->where('mentors.id', $mentor->id))
+                    ->orWhereHas('enrollments', fn ($e) => $e->where('mentor_id', $mentor->id)->whereIn('status', [
+                        EnrollmentStatus::CONFIRMED->value,
+                        EnrollmentStatus::ACTIVE->value,
+                    ]));
+            })->with(['user', 'parent.user', 'programs'])->get()
+            : collect();
 
         $selectedStudentId = $request->query('student_id');
         $selectedSessionId = $request->query('session_id');
@@ -55,6 +67,20 @@ class ProgressController extends Controller
             Session::where('id', $validated['session_id'])->update(['status' => 'completed']);
         }
 
+        // Notifikasi ke Orang Tua Santri via NotificationService
+        $student = Student::with('parent.user')->find($validated['student_id']);
+        if ($student?->parent?->user_id) {
+            NotificationService::send(
+                $student->parent->user_id,
+                'Laporan Progres Belajar Santri',
+                "Pendamping {$mentor?->getDisplayName()} telah menambahkan catatan progres {$validated['kategori']} untuk ananda {$student->getDisplayName()}.",
+                NotificationType::SUCCESS,
+                route('parent.dashboard'),
+                'progress',
+                true
+            );
+        }
+
         MentorActivityLog::log(
             $mentor?->id,
             'catat_progres',
@@ -69,7 +95,15 @@ class ProgressController extends Controller
     public function createBulk(): View
     {
         $mentor = auth()->user()->mentor;
-        $students = $mentor ? $mentor->students()->with('user')->get() : collect();
+        $students = $mentor
+            ? Student::where(function ($q) use ($mentor) {
+                $q->whereHas('mentors', fn ($m) => $m->where('mentors.id', $mentor->id))
+                    ->orWhereHas('enrollments', fn ($e) => $e->where('mentor_id', $mentor->id)->whereIn('status', [
+                        EnrollmentStatus::CONFIRMED->value,
+                        EnrollmentStatus::ACTIVE->value,
+                    ]));
+            })->with(['user', 'parent.user', 'programs'])->get()
+            : collect();
         $sessions = $mentor ? Session::where('mentor_id', $mentor->id)->orderBy('date', 'desc')->get() : collect();
 
         return view('mentor.progress.bulk', compact('students', 'sessions'));

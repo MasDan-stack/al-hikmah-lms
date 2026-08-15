@@ -22,11 +22,11 @@
                 <h6 class="footer-title">Navigasi</h6>
                 <ul class="footer-links">
                     <li><a href="{{ route('home') }}">Beranda</a></li>
+                    <li><a href="{{ route('roadmap') }}">Alur Belajar (Roadmap)</a></li>
                     <li><a href="{{ route('tentang-kami') }}">Tentang Kami</a></li>
                     <li><a href="{{ route('program') }}">Program</a></li>
                     <li><a href="{{ route('metode') }}">Metode Belajar</a></li>
-                    <li><a href="{{ route('home') }}#galeri">Galeri</a></li>
-                    <li><a href="{{ route('home') }}#faq">FAQ</a></li>
+                    <li><a href="{{ route('faq') }}">Tanya Jawab (FAQ)</a></li>
                     @auth
                         @if (auth()->user()->isParent())
                             <li><a href="{{ route('biaya') }}">Biaya</a></li>
@@ -34,7 +34,7 @@
                             <li><a href="{{ route('biaya') }}">Biaya (Admin)</a></li>
                         @endif
                     @endauth
-                    <li><a href="{{ route('home') }}#kontak">Kontak</a></li>
+                    <li><a href="{{ route('contact') }}">Hubungi Kami</a></li>
                     @guest
                         <li><a href="{{ route('bergabung') }}">Bergabung</a></li>
                     @endguest

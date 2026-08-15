@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
         html.style.transition = 'background-color 0.3s ease, color 0.3s ease';
         html.setAttribute('data-bs-theme', isDark ? 'dark' : 'light');
 
-        const themeIcons = document.querySelectorAll('.theme-toggle-btn i, #themeIcon');
+        const themeIcons = document.querySelectorAll('.theme-toggle-btn i, #themeIcon, #themeIconMobile');
         themeIcons.forEach(function (icon) {
             icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
         });
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Event Delegation: Global click listener for theme toggle buttons
     document.addEventListener('click', function (e) {
-        const toggleBtn = e.target.closest('.theme-toggle-btn, #themeToggle');
+        const toggleBtn = e.target.closest('.theme-toggle-btn, #themeToggle, #themeToggleMobile');
         if (toggleBtn) {
             e.preventDefault();
             const isDark = html.getAttribute('data-bs-theme') === 'dark';
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateNavbar() {
         if (!navbar) return;
 
-        if (window.scrollY > 50) {
+        if (window.scrollY > 40) {
             navbar.classList.add('navbar-scrolled');
         } else {
             navbar.classList.remove('navbar-scrolled');
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         anchor.addEventListener('click', function (e) {
             const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
+            if (targetId === '#' || targetId === '') return;
 
             const targetEl = document.querySelector(targetId);
             if (targetEl) {
@@ -131,15 +131,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ============================================
-    // Active Nav Link on Scroll - Throttled
+    // Active Nav Link on Scroll - Only for on-page sections
     // ============================================
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
     let activeTicking = false;
 
     function updateActiveNav() {
+        if (!sections || sections.length === 0) return;
+
         let current = '';
-        const scrollPos = window.scrollY + 100;
+        const scrollPos = window.scrollY + 120;
 
         sections.forEach(function (section) {
             const sectionTop = section.offsetTop;
@@ -149,15 +151,15 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        navLinks.forEach(function (link) {
-            link.classList.remove('active');
-        });
-
         if (current) {
             navLinks.forEach(function (link) {
-                const href = link.getAttribute('href');
-                if (href === '#' + current && !link.classList.contains('dropdown-toggle')) {
-                    link.classList.add('active');
+                const href = link.getAttribute('href') || '';
+                if (href.includes('#')) {
+                    if (href === '#' + current || href.endsWith('#' + current)) {
+                        link.classList.add('active');
+                    } else if (href.startsWith('#')) {
+                        link.classList.remove('active');
+                    }
                 }
             });
         }

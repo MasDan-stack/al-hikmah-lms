@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Mentor;
 
+use App\Enums\EnrollmentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Progress;
 use App\Models\Student;
@@ -12,7 +13,18 @@ class StudentController extends Controller
     public function index(): View
     {
         $mentor = auth()->user()->mentor;
-        $students = $mentor ? $mentor->students()->with(['user'])->paginate(10) : collect();
+
+        if (! $mentor) {
+            $students = collect();
+
+            return view('mentor.students.index', compact('students'));
+        }
+
+        $students = Student::where(function ($q) use ($mentor) {
+            $q->whereHas('mentors', fn ($m) => $m->where('mentors.id', $mentor->id)->where('mentor_student.is_active', true))
+                ->orWhereHas('enrollments', fn ($e) => $e->where('mentor_id', $mentor->id)->where('status', EnrollmentStatus::ACTIVE->value));
+        })->with(['user', 'parent.user', 'programs', 'enrollments' => fn ($e) => $e->where('mentor_id', $mentor->id)->where('status', EnrollmentStatus::ACTIVE->value)])
+            ->paginate(10);
 
         return view('mentor.students.index', compact('students'));
     }
@@ -33,7 +45,17 @@ class StudentController extends Controller
     public function parents(): View
     {
         $mentor = auth()->user()->mentor;
-        $students = $mentor ? $mentor->students()->with(['user', 'parent.user'])->get() : collect();
+
+        if (! $mentor) {
+            $parents = collect();
+
+            return view('mentor.students.parents', compact('parents'));
+        }
+
+        $students = Student::where(function ($q) use ($mentor) {
+            $q->whereHas('mentors', fn ($m) => $m->where('mentors.id', $mentor->id)->where('mentor_student.is_active', true))
+                ->orWhereHas('enrollments', fn ($e) => $e->where('mentor_id', $mentor->id)->where('status', EnrollmentStatus::ACTIVE->value));
+        })->with(['user', 'parent.user'])->get();
 
         $parents = $students->map(function ($student) {
             return [
@@ -41,7 +63,7 @@ class StudentController extends Controller
                 'parent' => $student->parent,
                 'parent_user' => $student->parent?->user,
             ];
-        })->unique('parent.id');
+        })->filter(fn ($item) => $item['parent'] !== null)->unique('parent.id');
 
         return view('mentor.students.parents', compact('parents'));
     }

@@ -44,12 +44,18 @@
             <div class="program-section-title text-center mb-4">
                 <i class="bi bi-journal-bookmark text-success me-2"></i>Daftar Pilihan Program & Investasi Belajar
             </div>
-            
-            <div class="row g-4 justify-content-center">
+                     <div class="row g-4 justify-content-center">
                 @foreach($programs as $index => $program)
+                    @php
+                        $parentEnrollment = isset($parentEnrollments) ? $parentEnrollments->firstWhere('program_id', $program->id) : null;
+                    @endphp
                     <div class="col-lg-4 col-md-6" data-reveal data-reveal-delay="{{ ($index % 3) * 100 }}">
-                        <div class="paket-card {{ $program->is_popular ? 'paket-popular' : '' }} h-100 d-flex flex-column justify-content-between">
-                            @if($program->is_popular)
+                        <div class="paket-card {{ $program->is_popular ? 'paket-popular' : '' }} {{ $parentEnrollment ? 'border-2 border-success shadow' : '' }} h-100 d-flex flex-column justify-content-between">
+                            @if($parentEnrollment)
+                                <div class="paket-popular-ribbon" style="background: linear-gradient(135deg, #0d7a3e 0%, #198754 100%);">
+                                    <span>✔ Terdaftar</span>
+                                </div>
+                            @elseif($program->is_popular)
                                 <div class="paket-popular-ribbon"><span>⭐ Paling Diminati</span></div>
                             @endif
                             <div>
@@ -58,6 +64,50 @@
                                     <span class="paket-badge {{ $program->is_popular ? 'popular' : '' }}">{{ $program->duration_weeks }} Minggu</span>
                                 </div>
                                 <div class="paket-card-body">
+                                    @if($parentEnrollment)
+                                        @if($parentEnrollment->isWaitingAdmin())
+                                            <div class="alert alert-warning border-0 py-2 px-3 mb-3 rounded-3 text-start small">
+                                                <div class="d-flex align-items-center gap-2 fw-bold text-dark mb-1">
+                                                    <i class="bi bi-hourglass-split text-warning"></i> Status: Sedang Direview
+                                                </div>
+                                                <div class="text-secondary" style="font-size: 0.8rem;">
+                                                    Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
+                                                    Lembaga sedang mereview jadwal &amp; ketersediaan guru.
+                                                </div>
+                                            </div>
+                                        @elseif($parentEnrollment->isWaitingParent())
+                                            <div class="alert alert-info border-0 py-2 px-3 mb-3 rounded-3 text-start small">
+                                                <div class="d-flex align-items-center gap-2 fw-bold text-info-emphasis mb-1">
+                                                    <i class="bi bi-chat-dots-fill text-info"></i> Status: Menunggu Respon Anda
+                                                </div>
+                                                <div class="text-secondary" style="font-size: 0.8rem;">
+                                                    Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
+                                                    Ada tawaran alternatif jadwal dari lembaga.
+                                                </div>
+                                            </div>
+                                        @elseif($parentEnrollment->isConfirmed())
+                                            <div class="alert alert-primary border-0 py-2 px-3 mb-3 rounded-3 text-start small">
+                                                <div class="d-flex align-items-center gap-2 fw-bold text-primary-emphasis mb-1">
+                                                    <i class="bi bi-check-circle-fill text-primary"></i> Status: Jadwal Deal (Siap Bayar)
+                                                </div>
+                                                <div class="text-secondary" style="font-size: 0.8rem;">
+                                                    Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
+                                                    Guru: <strong>{{ $parentEnrollment->mentor?->getDisplayName() ?? 'Ditentukan Lembaga' }}</strong>
+                                                </div>
+                                            </div>
+                                        @elseif($parentEnrollment->isActive())
+                                            <div class="alert alert-success border-0 py-2 px-3 mb-3 rounded-3 text-start small">
+                                                <div class="d-flex align-items-center gap-2 fw-bold text-success mb-1">
+                                                    <i class="bi bi-award-fill text-success"></i> Status: Bimbingan Aktif Berjalan
+                                                </div>
+                                                <div class="text-secondary" style="font-size: 0.8rem;">
+                                                    Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
+                                                    Guru: <strong>{{ $parentEnrollment->mentor?->getDisplayName() ?? 'Guru Aktif' }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endif
+
                                     <div class="paket-price">
                                         <span class="price-amount">{{ $program->formatted_price }}</span>
                                         <span class="price-period">/ paket</span>
@@ -76,17 +126,50 @@
                                     </div>
                                     <div class="paket-detail">
                                         <span class="detail-label">Fasilitas</span>
-                                        <span class="detail-value">Modul & Rapor Berkala</span>
+                                        <span class="detail-value">Modul &amp; Rapor Berkala</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="px-3 pb-3 mt-3">
                                 @auth
                                     @if(auth()->user()->isParent())
-                                        <a href="{{ route('parent.enrollments.create', ['program_id' => $program->id]) }}" 
-                                           class="btn {{ $program->is_popular ? 'btn-primary-custom' : 'btn-outline-custom' }} w-100 py-2 rounded-pill">
-                                            <i class="bi bi-calendar-plus me-1"></i> Pilih Program & Jadwal
-                                        </a>
+                                        @if($parentEnrollment)
+                                            @if($parentEnrollment->isWaitingAdmin())
+                                                <a href="{{ route('parent.enrollments.show', $parentEnrollment->id) }}" 
+                                                   class="btn btn-warning text-dark w-100 py-2 rounded-pill fw-bold shadow-sm mb-2">
+                                                    <i class="bi bi-eye me-1"></i> Pantau Status Jadwal
+                                                </a>
+                                            @elseif($parentEnrollment->isWaitingParent())
+                                                <a href="{{ route('parent.enrollments.show', $parentEnrollment->id) }}" 
+                                                   class="btn btn-info text-white w-100 py-2 rounded-pill fw-bold shadow-sm mb-2">
+                                                    <i class="bi bi-chat-dots me-1"></i> Konfirmasi Tawaran Jadwal
+                                                </a>
+                                            @elseif($parentEnrollment->isConfirmed())
+                                                <a href="{{ route('parent.enrollments.show', $parentEnrollment->id) }}" 
+                                                   class="btn btn-primary-custom w-100 py-2 rounded-pill fw-bold shadow-sm mb-2">
+                                                    <i class="bi bi-credit-card me-1"></i> Bayar Sekarang
+                                                </a>
+                                            @elseif($parentEnrollment->isActive())
+                                                <a href="{{ route('parent.enrollments.show', $parentEnrollment->id) }}" 
+                                                   class="btn btn-success w-100 py-2 rounded-pill fw-bold shadow-sm mb-2">
+                                                    <i class="bi bi-calendar-check me-1"></i> Lihat Sesi Bimbingan
+                                                </a>
+                                            @else
+                                                <a href="{{ route('parent.enrollments.create', ['program_id' => $program->id]) }}" 
+                                                   class="btn {{ $program->is_popular ? 'btn-primary-custom' : 'btn-outline-custom' }} w-100 py-2 rounded-pill mb-2">
+                                                    <i class="bi bi-calendar-plus me-1"></i> Pilih Program & Jadwal
+                                                </a>
+                                            @endif
+                                            <a href="{{ route('parent.enrollments.create', ['program_id' => $program->id]) }}" 
+                                               class="btn btn-outline-secondary btn-sm w-100 py-1 rounded-pill" style="font-size: 0.8rem;">
+                                                <i class="bi bi-person-plus me-1"></i> + Daftar Santri Lain
+                                            </a>
+                                        @else
+                                            <a href="{{ route('parent.enrollments.create', ['program_id' => $program->id]) }}" 
+                                               class="btn {{ $program->is_popular ? 'btn-primary-custom' : 'btn-outline-custom' }} w-100 py-2 rounded-pill">
+                                                <i class="bi bi-calendar-plus me-1"></i> Pilih Program & Jadwal
+                                            </a>
+                                        @endif
                                     @elseif(auth()->user()->isAdmin())
                                         <a href="{{ route('admin.enrollments.index') }}" 
                                            class="btn btn-outline-warning w-100 py-2 rounded-pill">

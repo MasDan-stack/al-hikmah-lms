@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Mentor;
 
+use App\Enums\EnrollmentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\MentorActivityLog;
 use App\Models\Progress;
 use App\Models\Session;
+use App\Models\Student;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -17,14 +19,20 @@ class DashboardController extends Controller
 
         $mentorId = $mentor ? $mentor->id : null;
 
+        // Students (Deduplicated - Active Paid Only)
+        $students = $mentorId
+            ? Student::where(function ($q) use ($mentor) {
+                $q->whereHas('mentors', fn ($m) => $m->where('mentors.id', $mentor->id)->where('mentor_student.is_active', true))
+                    ->orWhereHas('enrollments', fn ($e) => $e->where('mentor_id', $mentor->id)->where('status', EnrollmentStatus::ACTIVE->value));
+            })->with(['user', 'parent.user', 'programs'])->get()
+            : collect();
+
         // Statistics
         $todaySessionsCount = $mentorId
             ? Session::where('mentor_id', $mentorId)->whereDate('date', today())->count()
             : 0;
 
-        $activeStudentsCount = $mentorId
-            ? $mentor->students()->count()
-            : 0;
+        $activeStudentsCount = $students->count();
 
         $upcomingSessionsCount = $mentorId
             ? Session::where('mentor_id', $mentorId)
@@ -37,18 +45,13 @@ class DashboardController extends Controller
             ? round(Progress::where('mentor_id', $mentorId)->avg('nilai_tajwid') ?? 0, 1)
             : 0;
 
-        // Today's schedule
+        // Today's schedule with confirmation
         $todaySessions = $mentorId
-            ? Session::with(['student.user'])
+            ? Session::with(['student.user', 'student.parent.user', 'confirmation'])
                 ->where('mentor_id', $mentorId)
                 ->whereDate('date', today())
                 ->orderBy('time', 'asc')
                 ->get()
-            : collect();
-
-        // Students & recent progress
-        $students = $mentorId
-            ? $mentor->students()->with(['user'])->get()
             : collect();
 
         $recentProgress = $mentorId

@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\EnrollmentStatus;
+use App\Enums\NotificationType;
 use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
 use App\Models\Mentor;
 use App\Models\MentorActivityLog;
-use App\Models\Notification;
 use App\Models\Payment;
+use App\Services\NotificationService;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class EnrollmentController extends Controller
 {
@@ -103,15 +106,25 @@ class EnrollmentController extends Controller
                 'confirmed_at' => now(),
             ]);
 
+            // Kunci kuota mentor di mentor_student
+            $enrollment->syncToMentorStudent(true);
+
             // Menerbitkan invoice pembayaran jika belum ada
             if (! $enrollment->payment()->exists()) {
+                $programFee = (float) ($enrollment->program_price ?? $enrollment->program?->price ?? 400000);
+                $hasPaidReg = $enrollment->student?->hasPaidRegistrationFee() ?? false;
+                $registrationFee = $hasPaidReg ? 0.00 : (float) site_setting('registration_fee', 150000);
+                $totalAmount = $programFee + $registrationFee;
+
                 Payment::create([
                     'student_id' => $enrollment->student_id,
                     'program_id' => $enrollment->program_id,
                     'enrollment_id' => $enrollment->id,
-                    'amount' => $enrollment->program_price ?? $enrollment->program->price ?? 400000,
+                    'program_fee' => $programFee,
+                    'registration_fee' => $registrationFee,
+                    'amount' => $totalAmount,
                     'payment_purpose' => 'registration',
-                    'due_date' => now()->addDays(3)->toDateString(),
+                    'due_date' => Carbon::parse($validated['start_date'])->subDay()->toDateString(),
                     'status' => 'pending',
                     'invoice_number' => 'INV-'.date('Ymd').'-'.str_pad((string) $enrollment->id, 4, '0', STR_PAD_LEFT),
                 ]);
@@ -124,15 +137,17 @@ class EnrollmentController extends Controller
                 "Admin mengkonfirmasi jadwal pendaftaran #{$enrollment->id} santri {$enrollment->student->getDisplayName()} untuk mentor {$mentor->getDisplayName()}."
             );
 
-            // Notifikasi ke Orang Tua
+            // Notifikasi ke Orang Tua via NotificationService
             if ($enrollment->student?->parent?->user_id) {
-                Notification::create([
-                    'user_id' => $enrollment->student->parent->user_id,
-                    'type' => 'enrollment_accepted',
-                    'title' => 'Jadwal Pendaftaran Disetujui!',
-                    'message' => "Jadwal belajar program {$enrollment->program->name} untuk {$enrollment->student->getDisplayName()} telah disetujui. Silakan lakukan pembayaran tagihan.",
-                    'is_read' => false,
-                ]);
+                NotificationService::send(
+                    $enrollment->student->parent->user_id,
+                    'Jadwal Pendaftaran Disetujui!',
+                    "Jadwal belajar program {$enrollment->program->name} untuk {$enrollment->student->getDisplayName()} telah disetujui bersama {$mentor->getDisplayName()}. Silakan lakukan pembayaran tagihan.",
+                    NotificationType::SUCCESS,
+                    route('parent.enrollments.show', $enrollment->id),
+                    'enrollment',
+                    true
+                );
             }
         });
 
@@ -163,15 +178,17 @@ class EnrollmentController extends Controller
             'status' => EnrollmentStatus::WAITING_PARENT,
         ]);
 
-        // Notifikasi ke Orang Tua
+        // Notifikasi ke Orang Tua via NotificationService
         if ($enrollment->student?->parent?->user_id) {
-            Notification::create([
-                'user_id' => $enrollment->student->parent->user_id,
-                'type' => 'schedule_offer',
-                'title' => 'Tawaran Alternatif Jadwal Belajar',
-                'message' => "Lembaga memberikan alternatif jadwal untuk program {$enrollment->program->name}. Silakan tinjau dan konfirmasi di portal Anda.",
-                'is_read' => false,
-            ]);
+            NotificationService::send(
+                $enrollment->student->parent->user_id,
+                'Tawaran Alternatif Jadwal Belajar',
+                "Lembaga memberikan alternatif jadwal untuk program {$enrollment->program->name}. Silakan tinjau dan konfirmasi di portal Anda.",
+                NotificationType::WARNING,
+                route('parent.enrollments.show', $enrollment->id),
+                'enrollment',
+                true
+            );
         }
 
         return redirect()->route('admin.enrollments.index')
@@ -202,12 +219,21 @@ class EnrollmentController extends Controller
                     'start_date' => $enrollment->start_date ?? now()->addDays(7)->toDateString(),
                 ]);
 
+                $enrollment->syncToMentorStudent(true);
+
                 if (! $enrollment->payment()->exists()) {
+                    $programFee = (float) ($enrollment->program_price ?? $enrollment->program?->price ?? 400000);
+                    $hasPaidReg = $enrollment->student?->hasPaidRegistrationFee() ?? false;
+                    $registrationFee = $hasPaidReg ? 0.00 : (float) site_setting('registration_fee', 150000);
+                    $totalAmount = $programFee + $registrationFee;
+
                     Payment::create([
                         'student_id' => $enrollment->student_id,
                         'program_id' => $enrollment->program_id,
                         'enrollment_id' => $enrollment->id,
-                        'amount' => $enrollment->program_price ?? $enrollment->program->price ?? 400000,
+                        'program_fee' => $programFee,
+                        'registration_fee' => $registrationFee,
+                        'amount' => $totalAmount,
                         'payment_purpose' => 'registration',
                         'due_date' => now()->addDays(3)->toDateString(),
                         'status' => 'pending',
@@ -238,5 +264,64 @@ class EnrollmentController extends Controller
 
         return redirect()->route('admin.enrollments.index')
             ->with('warning', "Permohonan pendaftaran #{$enrollment->id} telah dibatalkan.");
+    }
+
+    /**
+     * Export data pendaftaran ke format CSV / Excel
+     */
+    public function export(Request $request): StreamedResponse
+    {
+        $fileName = 'data-pendaftaran-alhikmah-'.date('Y-m-d').'.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$fileName}\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        return response()->stream(function () {
+            $handle = fopen('php://output', 'w');
+            fwrite($handle, "\xEF\xBB\xBF"); // UTF-8 BOM untuk Excel
+
+            fputcsv($handle, [
+                'ID Permohonan',
+                'Nama Santri',
+                'Nama Orang Tua / Wali',
+                'Nomor WhatsApp',
+                'Program Belajar',
+                'Guru Pembimbing / Mentor',
+                'Hari Belajar',
+                'Jam Belajar',
+                'Status Pendaftaran',
+                'Status Pembayaran',
+                'Tanggal Pengajuan',
+                'Tanggal Mulai Belajar',
+            ]);
+
+            $enrollments = Enrollment::with(['student.parent.user', 'program', 'mentor.user', 'payment'])
+                ->latest()
+                ->get();
+
+            foreach ($enrollments as $row) {
+                fputcsv($handle, [
+                    '#ENR-'.str_pad($row->id, 5, '0', STR_PAD_LEFT),
+                    $row->student?->getDisplayName() ?? '-',
+                    $row->student?->parent_name ?? '-',
+                    $row->student?->getParentPhone() ?? '-',
+                    $row->program?->name ?? '-',
+                    $row->mentor?->getDisplayName() ?? 'Belum ditentukan',
+                    $row->effective_days_label,
+                    $row->effective_time_label,
+                    $row->status->label(),
+                    $row->payment?->status ? strtoupper($row->payment->status) : 'BELUM TERBIT',
+                    $row->created_at->format('d/m/Y H:i'),
+                    $row->start_date_label,
+                ]);
+            }
+
+            fclose($handle);
+        }, 200, $headers);
     }
 }

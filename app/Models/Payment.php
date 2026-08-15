@@ -17,6 +17,8 @@ class Payment extends Model
         'program_id',
         'enrollment_id',
         'amount',
+        'registration_fee',
+        'program_fee',
         'payment_purpose',
         'invoice_number',
         'status',
@@ -29,10 +31,18 @@ class Payment extends Model
     protected function casts(): array
     {
         return [
+            'amount' => 'decimal:2',
+            'registration_fee' => 'decimal:2',
+            'program_fee' => 'decimal:2',
             'payment_date' => 'datetime',
             'due_date' => 'date',
             'gateway_response' => 'array',
         ];
+    }
+
+    public function hasRegistrationFee(): bool
+    {
+        return (float) $this->registration_fee > 0;
     }
 
     /**

@@ -140,8 +140,11 @@ class EnrollmentNegotiationTest extends TestCase
 
         $payment = Payment::where('enrollment_id', $enrollment->id)->first();
         $this->assertNotNull($payment);
-        $this->assertEquals(500000, $payment->amount);
+        $this->assertEquals(500000, $payment->program_fee);
+        $this->assertEquals(150000, $payment->registration_fee);
+        $this->assertEquals(650000, $payment->amount);
         $this->assertEquals('registration', $payment->payment_purpose);
+
     }
 
     public function test_admin_can_offer_alternative_and_parent_can_accept_or_reject(): void

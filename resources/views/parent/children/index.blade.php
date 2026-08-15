@@ -48,8 +48,8 @@
                             <div class="mb-1"><i class="bi bi-geo-alt me-2"></i>Lokasi: {{ $child->location ?? 'Online / Home' }}</div>
                             <div>
                                 <i class="bi bi-person-workspace me-2"></i>Mentor: 
-                                @if($child->mentors->isNotEmpty())
-                                    <strong class="text-dark">{{ $child->mentors->first()?->user?->name ?? $child->mentors->first()?->full_name }}</strong>
+                                @if($child->getActiveMentor())
+                                    <strong class="text-dark">Ustadz/ah {{ $child->getActiveMentor()->getDisplayName() }}</strong>
                                 @else
                                     <span class="text-muted">Belum ditentukan</span>
                                 @endif

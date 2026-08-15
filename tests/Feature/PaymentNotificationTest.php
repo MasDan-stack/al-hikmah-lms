@@ -59,7 +59,7 @@ test('admin dapat menginput angka nominal tagihan spp baru dan mengirimkan notif
 
     $this->assertDatabaseHas('notifications', [
         'user_id' => $this->parentUser->id,
-        'type' => 'payment_reminder',
+        'type' => 'warning',
     ]);
 });
 
@@ -126,7 +126,7 @@ test('admin dapat mengirimkan pengingat tagihan spp massal ke orang tua santri',
 
     $this->assertDatabaseHas('notifications', [
         'user_id' => $this->parentUser->id,
-        'type' => 'payment_reminder',
+        'type' => 'warning',
         'title' => 'Pengingat Pembayaran SPP',
     ]);
 });

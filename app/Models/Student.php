@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EnrollmentStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -78,5 +79,69 @@ class Student extends Model
     public function getParentPhoneAttribute(): ?string
     {
         return $this->parent?->user?->phone ?? $this->parent?->emergency_phone ?? '-';
+    }
+
+    /**
+     * Cek apakah santri sudah pernah melunasi biaya pendaftaran (1x payment).
+     */
+    public function hasPaidRegistrationFee(): bool
+    {
+        return $this->payments()
+            ->where('status', 'paid')
+            ->where('registration_fee', '>', 0)
+            ->exists();
+    }
+
+    /**
+     * Mendapatkan alamat lengkap santri (dari profil wali atau kolom lokasi santri)
+     */
+    public function getFullAddress(): string
+    {
+        if (! empty($this->parent?->address)) {
+            return $this->parent->address;
+        }
+
+        return $this->location ?? 'Alamat belum dilengkapi';
+    }
+
+    /**
+     * Mendapatkan nomor WhatsApp aktif wali santri
+     */
+    public function getParentPhone(): ?string
+    {
+        $phone = $this->parent?->emergency_phone ?? $this->parent?->user?->phone ?? null;
+
+        return $phone !== '-' ? $phone : null;
+    }
+
+    /**
+     * Mendapatkan mentor aktif santri (dari pivot mentor_student atau enrollment aktif)
+     */
+    public function getActiveMentor(): ?Mentor
+    {
+        // 1. Prioritaskan dari pivot mentor_student yang aktif
+        $activeMentor = $this->mentors()->wherePivot('is_active', true)->first();
+        if ($activeMentor) {
+            return $activeMentor;
+        }
+
+        // 2. Fallback dari enrollment berstatus CONFIRMED atau ACTIVE
+        $enrollment = $this->enrollments()
+            ->whereIn('status', [
+                EnrollmentStatus::CONFIRMED->value,
+                EnrollmentStatus::ACTIVE->value,
+            ])
+            ->whereNotNull('mentor_id')
+            ->latest()
+            ->first();
+
+        return $enrollment?->mentor;
+    }
+
+    public function getMentorNameAttribute(): string
+    {
+        $mentor = $this->getActiveMentor();
+
+        return $mentor ? $mentor->getDisplayName() : 'Belum ditentukan';
     }
 }

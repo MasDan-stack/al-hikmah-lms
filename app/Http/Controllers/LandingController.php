@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Enrollment;
 use App\Models\Program;
 use Illuminate\View\View;
 
@@ -20,6 +21,25 @@ class LandingController extends Controller
     }
 
     /**
+     * Tampilkan peta alur & roadmap belajar
+     */
+    public function roadmap(): View
+    {
+        $parentEnrollments = collect();
+
+        if (auth()->check() && auth()->user()->isParent()) {
+            $parentProfile = auth()->user()->parentProfile;
+            if ($parentProfile) {
+                $parentEnrollments = Enrollment::whereHas('student', function ($query) use ($parentProfile) {
+                    $query->where('parent_id', $parentProfile->id);
+                })->with(['program', 'student', 'mentor'])->latest('id')->get();
+            }
+        }
+
+        return view('roadmap', compact('parentEnrollments'));
+    }
+
+    /**
      * Tampilkan informasi paket & biaya belajar (Terhubung Database, Khusus Orang Tua & Admin)
      */
     public function biaya(): View
@@ -35,6 +55,16 @@ class LandingController extends Controller
 
         $registrationFee = 150000;
 
-        return view('biaya', compact('programs', 'registrationFee'));
+        $parentEnrollments = collect();
+        if (auth()->user()->isParent()) {
+            $parentProfile = auth()->user()->parentProfile;
+            if ($parentProfile) {
+                $parentEnrollments = Enrollment::whereHas('student', function ($query) use ($parentProfile) {
+                    $query->where('parent_id', $parentProfile->id);
+                })->with(['program', 'student', 'mentor'])->latest('id')->get();
+            }
+        }
+
+        return view('biaya', compact('programs', 'registrationFee', 'parentEnrollments'));
     }
 }

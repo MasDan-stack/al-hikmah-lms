@@ -51,6 +51,35 @@
                             @error('student_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        <!-- Pilih Metode Belajar -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold small text-secondary d-block">Pilih Metode Belajar <span class="text-danger">*</span></label>
+                            <div class="row g-2">
+                                <div class="col-md-4">
+                                    <div class="form-check p-2 border rounded-3 text-center">
+                                        <input class="form-check-input ms-0 me-2" type="radio" name="learning_method" value="offline" id="method_offline" {{ old('learning_method', 'offline') === 'offline' ? 'checked' : '' }}>
+                                        <label class="form-check-label fw-medium small" for="method_offline">
+                                            🏠 Offline (Home Visit)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check p-2 border rounded-3 text-center">
+                                        <input class="form-check-input ms-0 me-2" type="radio" name="learning_method" value="online" id="method_online" {{ old('learning_method') === 'online' ? 'checked' : '' }}>
+                                        <label class="form-check-label fw-medium small" for="method_online">
+                                            💻 Online (Zoom / Video)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check p-2 border rounded-3 text-center">
+                                        <input class="form-check-input ms-0 me-2" type="radio" name="learning_method" value="hybrid" id="method_hybrid" {{ old('learning_method') === 'hybrid' ? 'checked' : '' }}>
+                                        <label class="form-check-label fw-medium small" for="method_hybrid">
+                                            🔄 Hybrid (Kombinasi)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Pilih Hari -->

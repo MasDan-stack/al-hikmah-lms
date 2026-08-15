@@ -148,8 +148,14 @@
                             @foreach($upcomingSessions as $ses)
                                 <div class="list-group-item px-0 py-3 border-bottom">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <span class="fw-bold text-primary">{{ $ses->date->format('d M Y') }} ({{ $ses->time }})</span>
-                                        <span class="badge bg-info-subtle text-info rounded-pill">{{ ucfirst($ses->method) }}</span>
+                                        <span class="fw-bold text-primary">{{ $ses->date ? \Carbon\Carbon::parse($ses->date)->locale('id')->isoFormat('dddd, D MMMM Y') : '-' }} ({{ date('H:i', strtotime($ses->time)) }} WIB)</span>
+                                        @if($ses->method === 'offline')
+                                            <span class="badge bg-success-subtle text-success rounded-pill px-2 border border-success-subtle">Offline</span>
+                                        @elseif($ses->method === 'online')
+                                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2 border border-primary-subtle">Online</span>
+                                        @else
+                                            <span class="badge bg-info-subtle text-info rounded-pill px-2 border border-info-subtle">Hybrid</span>
+                                        @endif
                                     </div>
                                     <div class="fw-semibold text-dark">{{ $ses->student?->user?->name ?? $ses->student?->full_name }}</div>
                                     <small class="text-muted d-block">Mentor: {{ $ses->mentor?->user?->name ?? 'Ustaz/Ustazah' }}</small>

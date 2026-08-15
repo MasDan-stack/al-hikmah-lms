@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Parent;
 
+use App\Enums\NotificationType;
 use App\Http\Controllers\Controller;
 use App\Models\Mentor;
 use App\Models\Message;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ParentMessageController extends Controller
@@ -71,13 +74,24 @@ class ParentMessageController extends Controller
             'message' => 'required|string|max:1000',
         ]);
 
-        Message::create([
+        $messageObj = Message::create([
             'sender_id' => auth()->id(),
             'receiver_id' => $request->receiver_id,
             'student_id' => $request->student_id,
             'message' => $request->message,
             'is_read' => false,
         ]);
+
+        // Notifikasi ke Penerima Pesan
+        $senderName = auth()->user()->name;
+        NotificationService::send(
+            $request->receiver_id,
+            "Pesan Baru dari {$senderName}",
+            Str::limit($request->message, 100),
+            NotificationType::INFO,
+            route('mentor.messages.chat', auth()->id()),
+            'chat'
+        );
 
         return redirect()
             ->back()

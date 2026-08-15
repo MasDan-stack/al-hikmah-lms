@@ -70,7 +70,7 @@
                                     <select name="entries[0][session_id]" class="form-select form-select-sm">
                                         <option value="">-- Tanpa Sesi --</option>
                                         @foreach($sessions as $ses)
-                                            <option value="{{ $ses->id }}">{{ $ses->date->format('d M') }} ({{ $ses->time }})</option>
+                                            <option value="{{ $ses->id }}">{{ $ses->date ? \Carbon\Carbon::parse($ses->date)->locale('id')->isoFormat('dddd, D MMMM Y') : '' }} ({{ date('H:i', strtotime($ses->time)) }} WIB)</option>
                                         @endforeach
                                     </select>
                                 </td>

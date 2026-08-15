@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.parent')
 
 @section('title', 'Dashboard Santri')
 @section('header', 'Ruang Belajar Santri')

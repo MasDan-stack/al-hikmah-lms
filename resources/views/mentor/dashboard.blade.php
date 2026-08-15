@@ -184,7 +184,7 @@
                                 <i class="bi bi-distribute-vertical me-1"></i>Timeline
                             </button>
                         </div>
-                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3">{{ today()->format('d M Y') }}</span>
+                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3">{{ today()->locale('id')->isoFormat('dddd, D MMMM Y') }}</span>
                     </div>
                 </div>
 
@@ -203,7 +203,8 @@
                                         <th>Waktu</th>
                                         <th>Santri</th>
                                         <th>Mode</th>
-                                        <th>Status</th>
+                                        <th>Konfirmasi Wali</th>
+                                        <th>Status Sesi</th>
                                         <th>Aksi Cepat</th>
                                     </tr>
                                 </thead>
@@ -216,7 +217,43 @@
                                                 <small class="text-muted">{{ $session->notes }}</small>
                                             </td>
                                             <td>
-                                                <span class="badge bg-info-subtle text-info rounded-pill px-2">{{ ucfirst($session->method) }}</span>
+                                                @if($session->method === 'offline')
+                                                    <span class="badge bg-success-subtle text-success rounded-pill px-2 border border-success-subtle">
+                                                        <i class="bi bi-house-door me-1"></i> Offline
+                                                    </span>
+                                                @elseif($session->method === 'online')
+                                                    <span class="badge bg-primary-subtle text-primary rounded-pill px-2 border border-primary-subtle">
+                                                        <i class="bi bi-camera-video me-1"></i> Online
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-info-subtle text-info rounded-pill px-2 border border-info-subtle">
+                                                        <i class="bi bi-arrow-repeat me-1"></i> Hybrid
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($session->confirmation)
+                                                    @if($session->confirmation->status === 'hadir')
+                                                        <span class="badge bg-success text-white rounded-pill px-2">
+                                                            <i class="bi bi-check-circle me-1"></i> Hadir
+                                                        </span>
+                                                    @elseif($session->confirmation->status === 'izin')
+                                                        <span class="badge bg-warning text-dark rounded-pill px-2" title="{{ $session->confirmation->notes }}">
+                                                            <i class="bi bi-info-circle me-1"></i> Izin
+                                                        </span>
+                                                    @elseif($session->confirmation->status === 'sakit')
+                                                        <span class="badge bg-danger text-white rounded-pill px-2" title="{{ $session->confirmation->notes }}">
+                                                            <i class="bi bi-heart-pulse me-1"></i> Sakit
+                                                        </span>
+                                                    @endif
+                                                    @if($session->confirmation->notes)
+                                                        <small class="d-block text-muted fst-italic mt-1" style="max-width: 150px;">"{{ \Illuminate\Support\Str::limit($session->confirmation->notes, 25) }}"</small>
+                                                    @endif
+                                                @else
+                                                    <span class="badge bg-light text-secondary rounded-pill border px-2">
+                                                        <i class="bi bi-hourglass-split me-1"></i> Belum Konfirmasi
+                                                    </span>
+                                                @endif
                                             </td>
                                             <td>
                                                 @if($session->status === 'completed')

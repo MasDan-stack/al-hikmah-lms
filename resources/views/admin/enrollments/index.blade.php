@@ -59,6 +59,11 @@
                 <h5 class="fw-bold mb-1"><i class="bi bi-journal-text me-2 text-success"></i>Antrean Permohonan & Negosiasi Jadwal</h5>
                 <p class="text-muted small mb-0">Verifikasi ketersediaan mentor dan proses jadwal permohonan santri baru.</p>
             </div>
+            <div>
+                <a href="{{ route('admin.enrollments.export') }}" class="btn btn-outline-success btn-sm rounded-pill px-3">
+                    <i class="bi bi-file-earmark-excel me-1"></i> Export Data Excel (CSV)
+                </a>
+            </div>
         </div>
 
         <div class="card-body p-4">
@@ -146,10 +151,34 @@
                                         </span>
                                     </td>
                                     <td class="text-end">
-                                        <a href="{{ route('admin.enrollments.edit', $enrollment->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                            <i class="bi bi-pencil-square me-1"></i> Proses
-                                        </a>
+                                        @if($enrollment->isWaitingAdmin())
+                                            <a href="{{ route('admin.enrollments.edit', $enrollment->id) }}" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm">
+                                                <i class="bi bi-pencil-square me-1"></i> Proses Negosiasi
+                                            </a>
+                                        @elseif($enrollment->status->value === 'waiting_parent_response')
+                                            <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-3 py-2">
+                                                <i class="bi bi-hourglass-split me-1"></i> Menunggu Respon Wali
+                                            </span>
+                                        @elseif($enrollment->status->value === 'schedule_confirmed')
+                                            <div class="d-inline-flex align-items-center gap-1">
+                                                <span class="badge bg-info-subtle text-info-emphasis rounded-pill px-3 py-2">
+                                                    <i class="bi bi-credit-card me-1"></i> Menunggu Pembayaran
+                                                </span>
+                                                @if($enrollment->payment)
+                                                    <a href="{{ route('admin.payments.index') }}" class="btn btn-sm btn-outline-secondary rounded-pill px-2" title="Lihat Tagihan">
+                                                        <i class="bi bi-receipt"></i>
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        @elseif($enrollment->isActive())
+                                            <a href="{{ route('admin.active-enrollments.index', ['search' => $enrollment->student->getDisplayName()]) }}" class="btn btn-sm btn-outline-success rounded-pill px-3">
+                                                <i class="bi bi-eye me-1"></i> Lihat di Santri Aktif
+                                            </a>
+                                        @else
+                                            <span class="badge bg-secondary rounded-pill px-3 py-2">Batal</span>
+                                        @endif
                                     </td>
+
                                 </tr>
                             @empty
                                 <tr>

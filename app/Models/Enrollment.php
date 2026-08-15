@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Enums\EnrollmentStatus;
+use App\Services\WhatsAppService;
+use Carbon\Carbon;
 use Database\Factories\EnrollmentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 
 class Enrollment extends Model
 {
@@ -18,6 +21,7 @@ class Enrollment extends Model
         'student_id',
         'program_id',
         'program_price',
+        'learning_method',
         'mentor_id',
         'requested_days',
         'requested_time',
@@ -113,6 +117,31 @@ class Enrollment extends Model
         return 'Rp '.number_format($amount, 0, ',', '.');
     }
 
+    public function getEffectiveDaysLabelAttribute(): string
+    {
+        $days = ! empty($this->offered_days) ? $this->offered_days : ($this->requested_days ?? []);
+        if (empty($days)) {
+            return '-';
+        }
+        $labels = array_map(fn ($day) => self::DAYS[$day] ?? ucfirst($day), $days);
+
+        return implode(', ', $labels);
+    }
+
+    public function getEffectiveTimeLabelAttribute(): string
+    {
+        $time = $this->offered_time ?? $this->requested_time;
+
+        return $time ? date('H:i', strtotime($time)).' WIB' : 'Fleksibel';
+    }
+
+    public function getStartDateLabelAttribute(): string
+    {
+        return $this->start_date
+            ? $this->start_date->translatedFormat('l, d F Y')
+            : 'Menunggu penetapan';
+    }
+
     // State Helper Checks
     public function isWaitingAdmin(): bool
     {
@@ -132,5 +161,162 @@ class Enrollment extends Model
     public function isActive(): bool
     {
         return $this->status === EnrollmentStatus::ACTIVE;
+    }
+
+    /**
+     * Helper terpusat: Sinkronisasi ke tabel pivot mentor_student per hari belajar
+     */
+    public function syncToMentorStudent(bool $isActive = true): void
+    {
+        if (! $this->mentor_id || ! $this->student_id) {
+            return;
+        }
+
+        $days = ! empty($this->offered_days) ? $this->offered_days : ($this->requested_days ?? ['monday']);
+        $timeAssigned = $this->offered_time ?? $this->requested_time ?? '16:00:00';
+
+        if (is_array($days)) {
+            foreach ($days as $day) {
+                DB::table('mentor_student')->updateOrInsert(
+                    [
+                        'mentor_id' => $this->mentor_id,
+                        'student_id' => $this->student_id,
+                        'day_assigned' => $day,
+                    ],
+                    [
+                        'time_assigned' => $timeAssigned,
+                        'is_active' => $isActive,
+                        'updated_at' => now(),
+                        'created_at' => now(),
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
+     * Tandai enrollment sebagai lunas dan aktifkan program serta penugasan mentor (Idempotent & Transactional)
+     */
+    public function markAsPaidAndActive(): void
+    {
+        if ($this->status === EnrollmentStatus::ACTIVE) {
+            return;
+        }
+
+        DB::transaction(function () {
+            $this->update([
+                'status' => EnrollmentStatus::ACTIVE,
+                'paid_at' => now(),
+            ]);
+
+            // 1. Hubungkan santri ke program di tabel pivot student_program
+            if ($this->student_id && $this->program_id) {
+                $student = Student::find($this->student_id);
+                $student?->programs()->syncWithoutDetaching([
+                    $this->program_id => [
+                        'status' => 'active',
+                        'enrolled_at' => now(),
+                    ],
+                ]);
+            }
+
+            // 2. Hubungkan santri ke mentor di tabel pivot mentor_student per HARI BELAJAR
+            $this->syncToMentorStudent(true);
+
+            // 3. Generate Otomatis Sesi Belajar (learning_sessions) untuk 4 Minggu ke Depan
+            $this->generateInitialLearningSessions();
+
+            // 4. Catat log mentor
+            if ($this->mentor_id) {
+                MentorActivityLog::log(
+                    $this->mentor_id,
+                    'student_activated',
+                    'Santri '.($this->student?->getDisplayName() ?? 'Santri').' resmi aktif pada program '.($this->program?->name ?? 'Program').'.'
+                );
+            }
+
+            // 5. Kirim notifikasi internal ke Orang Tua
+            if ($this->student?->parent?->user_id) {
+                Notification::create([
+                    'user_id' => $this->student->parent->user_id,
+                    'type' => 'enrollment_active',
+                    'title' => 'Program '.($this->program?->name ?? 'Program').' Telah Aktif!',
+                    'message' => 'Pembayaran berhasil. Bimbingan belajar '.($this->student->getDisplayName()).' bersama Ustadz/Ustadzah '.($this->mentor?->getDisplayName() ?? 'Mentor').' siap dimulai pada '.($this->start_date_label).'.',
+                    'is_read' => false,
+                ]);
+            }
+
+            // 6. Notifikasi WhatsApp Otomatis (Opsional)
+            $parentPhone = $this->student?->getParentPhone();
+            if ($parentPhone) {
+                $waMessage = "Assalamu'alaikum Ayah/Bunda,\n\nAlhamdulillah pembayaran pendaftaran program *{$this->program?->name}* untuk ananda *{$this->student?->getDisplayName()}* telah berhasil kami terima.\n\n"
+                    ."👳‍♂️ *Guru Pembimbing:* {$this->mentor?->getDisplayName()}\n"
+                    ."📅 *Jadwal Bimbingan:* {$this->effective_days_label} ({$this->effective_time_label})\n"
+                    ."🚀 *Mulai Bimbingan:* {$this->start_date_label}\n\n"
+                    .'Silakan pantau jadwal dan materi bimbingan di portal: '.route('parent.schedules.index')."\n\n_Jazakumullahu Khairan - AL-HIKMAH LMS_";
+
+                app(WhatsAppService::class)->sendMessage($parentPhone, $waMessage);
+            }
+        });
+    }
+
+    /**
+     * Generate 4 minggu sesi bimbingan awal di tabel learning_sessions
+     */
+    public function generateInitialLearningSessions(): void
+    {
+        if (! $this->student_id || ! $this->mentor_id) {
+            return;
+        }
+
+        $days = ! empty($this->offered_days) ? $this->offered_days : $this->requested_days;
+        if (empty($days) || ! is_array($days)) {
+            return;
+        }
+
+        $timeAssigned = $this->offered_time ?? $this->requested_time ?? '16:00:00';
+        $startDate = $this->start_date ? Carbon::parse($this->start_date) : Carbon::today();
+        $method = $this->learning_method ?? 'offline';
+
+        $dayMap = [
+            'sunday' => Carbon::SUNDAY,
+            'monday' => Carbon::MONDAY,
+            'tuesday' => Carbon::TUESDAY,
+            'wednesday' => Carbon::WEDNESDAY,
+            'thursday' => Carbon::THURSDAY,
+            'friday' => Carbon::FRIDAY,
+            'saturday' => Carbon::SATURDAY,
+        ];
+
+        foreach ($days as $dayName) {
+            if (! isset($dayMap[$dayName])) {
+                continue;
+            }
+
+            $carbonDay = $dayMap[$dayName];
+            $currentDate = $startDate->copy();
+
+            if ($currentDate->dayOfWeek !== $carbonDay) {
+                $currentDate->next($carbonDay);
+            }
+
+            for ($week = 0; $week < 4; $week++) {
+                $sessionDate = $currentDate->copy()->addWeeks($week)->toDateString();
+
+                Session::firstOrCreate(
+                    [
+                        'student_id' => $this->student_id,
+                        'mentor_id' => $this->mentor_id,
+                        'date' => $sessionDate,
+                        'time' => $timeAssigned,
+                    ],
+                    [
+                        'method' => $method,
+                        'status' => 'scheduled',
+                        'notes' => 'Sesi bimbingan rutin program '.($this->program?->name ?? 'Al-Hikmah'),
+                    ]
+                );
+            }
+        }
     }
 }

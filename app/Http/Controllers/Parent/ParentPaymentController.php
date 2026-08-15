@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Parent;
 
+use App\Enums\EnrollmentStatus;
 use App\Http\Controllers\Controller;
+use App\Models\Enrollment;
 use App\Models\Payment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,7 +25,14 @@ class ParentPaymentController extends Controller
                 ->get()
             : collect();
 
-        return view('parent.payments.index', compact('pendingPayments'));
+        $activeEnrollments = count($childIds) > 0
+            ? Enrollment::with(['student.user', 'program', 'mentor.user'])
+                ->whereIn('student_id', $childIds)
+                ->where('status', EnrollmentStatus::ACTIVE->value)
+                ->get()
+            : collect();
+
+        return view('parent.payments.index', compact('pendingPayments', 'activeEnrollments'));
     }
 
     public function history(): View
@@ -61,7 +70,7 @@ class ParentPaymentController extends Controller
         $parent = auth()->user()->parentProfile;
         $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
 
-        $payment = Payment::findOrFail($id);
+        $payment = Payment::with('enrollment')->findOrFail($id);
         if (! in_array($payment->student_id, $childIds)) {
             abort(403, 'Akses tagihan ditolak.');
         }
@@ -73,9 +82,14 @@ class ParentPaymentController extends Controller
             'payment_method' => $request->input('payment_method', 'Midtrans Transfer/QRIS'),
         ]);
 
+        if ($payment->enrollment) {
+            $payment->enrollment->markAsPaidAndActive();
+        }
+
         return redirect()
             ->route('parent.payments.history')
-            ->with('success', 'Pembayaran berhasil dikonfirmasi dan lunas!');
+            ->with('success', 'Pembayaran berhasil dikonfirmasi dan kelas bimbingan telah aktif!');
+
     }
 
     public function downloadInvoice(int $id)

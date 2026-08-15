@@ -56,9 +56,17 @@
                     <tbody>
                         @foreach($sessions as $ses)
                             <tr>
-                                <td class="fw-bold text-primary">{{ $ses->date->format('d/m/Y') }} ({{ $ses->time }})</td>
+                                <td class="fw-bold text-primary">{{ $ses->date ? \Carbon\Carbon::parse($ses->date)->locale('id')->isoFormat('dddd, D MMMM Y') : '-' }} ({{ date('H:i', strtotime($ses->time)) }} WIB)</td>
                                 <td class="fw-semibold">{{ $ses->student?->user?->name ?? $ses->student?->full_name }}</td>
-                                <td><span class="badge bg-info-subtle text-info rounded-pill">{{ ucfirst($ses->method) }}</span></td>
+                                <td>
+                                    @if($ses->method === 'offline')
+                                        <span class="badge bg-success-subtle text-success rounded-pill px-2 border border-success-subtle">Offline</span>
+                                    @elseif($ses->method === 'online')
+                                        <span class="badge bg-primary-subtle text-primary rounded-pill px-2 border border-primary-subtle">Online</span>
+                                    @else
+                                        <span class="badge bg-info-subtle text-info rounded-pill px-2 border border-info-subtle">Hybrid</span>
+                                    @endif
+                                </td>
                                 <td>{{ $ses->mentor?->user?->name ?? 'Ustaz' }}</td>
                                 <td>
                                     @if($ses->status === 'completed')

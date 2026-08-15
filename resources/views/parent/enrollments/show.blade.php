@@ -45,13 +45,14 @@
                 <!-- Kolom Alternatif Lembaga -->
                 <div class="col-md-6">
                     <div class="p-3 rounded-3 {{ $enrollment->isWaitingParent() ? 'bg-warning-subtle border border-warning' : 'bg-light border' }} h-100">
-                        <h6 class="fw-bold text-secondary mb-3"><i class="bi bi-building me-2"></i>Respon / Alternatif Lembaga</h6>
-                        @if($enrollment->offered_days || $enrollment->admin_notes)
-                            <p class="mb-2 small"><strong>Hari Ditawarkan:</strong> {{ $enrollment->offered_days_label }}</p>
-                            <p class="mb-2 small"><strong>Jam Ditawarkan:</strong> {{ $enrollment->offered_time_label }}</p>
+                        <h6 class="fw-bold text-secondary mb-3"><i class="bi bi-building me-2"></i>Respon & Guru Pembimbing dari Lembaga</h6>
+                        @if($enrollment->offered_days || $enrollment->admin_notes || $enrollment->mentor_id || $enrollment->isConfirmed() || $enrollment->isActive())
+                            <p class="mb-2 small"><strong>Hari Belajar:</strong> {{ $enrollment->effective_days_label }}</p>
+                            <p class="mb-2 small"><strong>Jam Belajar:</strong> {{ $enrollment->effective_time_label }}</p>
                             @if($enrollment->mentor)
-                                <p class="mb-2 small"><strong>Mentor Disarankan:</strong> {{ $enrollment->mentor->getDisplayName() }}</p>
+                                <p class="mb-2 small"><strong>Guru Pembimbing (Mentor):</strong> Ustadz/ah {{ $enrollment->mentor->getDisplayName() }}</p>
                             @endif
+                            <p class="mb-2 small"><strong>Mulai Belajar:</strong> {{ $enrollment->start_date_label }}</p>
                             <p class="mb-0 small"><strong>Catatan Lembaga:</strong> {{ $enrollment->admin_notes ?? '-' }}</p>
                         @else
                             <p class="text-muted small mb-0">Lembaga sedang mereview jadwal dan ketersediaan kuota guru pembimbing.</p>

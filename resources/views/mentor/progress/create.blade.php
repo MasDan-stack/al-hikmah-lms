@@ -38,7 +38,7 @@
                                     <option value="">-- Sesi Belajar Terkait --</option>
                                     @foreach($sessions as $sess)
                                         <option value="{{ $sess->id }}">
-                                            {{ $sess->date ? \Carbon\Carbon::parse($sess->date)->format('d M Y') : '' }} - {{ $sess->student?->user?->name }} ({{ $sess->time }})
+                                            {{ $sess->date ? \Carbon\Carbon::parse($sess->date)->locale('id')->isoFormat('dddd, D MMMM Y') : '' }} - {{ $sess->student?->user?->name ?? $sess->student?->full_name }} ({{ date('H:i', strtotime($sess->time)) }} WIB)
                                         </option>
                                     @endforeach
                                 </select>

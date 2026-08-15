@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\ActiveEnrollmentController;
+use App\Http\Controllers\Admin\ContactMessageController as AdminContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnrollmentController as AdminEnrollmentController;
 use App\Http\Controllers\Admin\MentorAvailabilityController;
@@ -8,9 +10,11 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\RegisterMentorController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Mentor\AvailabilityController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
+use App\Http\Controllers\Mentor\MentorMessageController;
 use App\Http\Controllers\Mentor\ProgressController as MentorProgressController;
 use App\Http\Controllers\Mentor\ReportController as MentorReportController;
 use App\Http\Controllers\Mentor\SessionController as MentorSessionController;
@@ -64,6 +68,18 @@ Route::post('/program/pre-register', [RegisteredUserController::class, 'preRegis
 Route::get('/bergabung', [RegisterMentorController::class, 'create'])->name('bergabung');
 Route::post('/bergabung', [RegisterMentorController::class, 'store'])->middleware('guest');
 
+// Halaman Roadmap / Peta Alur Belajar
+Route::get('/roadmap', [LandingController::class, 'roadmap'])->name('roadmap');
+
+// Halaman FAQ / Tanya Jawab Interaktif
+Route::get('/faq', function () {
+    return view('faq');
+})->name('faq');
+
+// Halaman Hubungi Kami (Contact Form)
+Route::get('/kontak', [ContactController::class, 'index'])->name('contact');
+Route::post('/kontak', [ContactController::class, 'store'])->name('contact.store');
+
 // ==========================================
 // 📌 ROUTE ADMIN (HARUS ADA)
 // ==========================================
@@ -109,11 +125,18 @@ Route::middleware(['auth', 'role:admin'])
 
         // Flexible Enrollment & Schedule Negotiation
         Route::get('/enrollments', [AdminEnrollmentController::class, 'index'])->name('enrollments.index');
+        Route::get('/enrollments/export', [AdminEnrollmentController::class, 'export'])->name('enrollments.export');
+        Route::get('/active-enrollments', [ActiveEnrollmentController::class, 'index'])->name('active-enrollments.index');
         Route::get('/enrollments/{id}/edit', [AdminEnrollmentController::class, 'edit'])->name('enrollments.edit');
         Route::post('/enrollments/{id}/accept', [AdminEnrollmentController::class, 'accept'])->name('enrollments.accept');
         Route::post('/enrollments/{id}/offer', [AdminEnrollmentController::class, 'offerAlternative'])->name('enrollments.offer');
         Route::post('/enrollments/bulk-accept', [AdminEnrollmentController::class, 'bulkAccept'])->name('enrollments.bulk-accept');
         Route::post('/enrollments/{id}/cancel', [AdminEnrollmentController::class, 'cancel'])->name('enrollments.cancel');
+
+        // Contact Messages Management
+        Route::get('/contacts', [AdminContactMessageController::class, 'index'])->name('contacts.index');
+        Route::put('/contacts/{id}', [AdminContactMessageController::class, 'updateStatus'])->name('contacts.update-status');
+        Route::delete('/contacts/{id}', [AdminContactMessageController::class, 'destroy'])->name('contacts.destroy');
     });
 
 // ==========================================
@@ -137,6 +160,12 @@ Route::middleware(['auth', 'role:mentor'])
         Route::post('/progress/bulk', [MentorProgressController::class, 'storeBulk'])->name('progress.bulk-store');
         Route::get('/reports/export', [MentorReportController::class, 'export'])->name('reports.export');
         Route::get('/profile', [MentorDashboardController::class, 'profile'])->name('profile');
+
+        // Mentor Messages & Chat with Parents
+        Route::get('/messages', [MentorMessageController::class, 'index'])->name('messages.index');
+        Route::get('/messages/create', [MentorMessageController::class, 'create'])->name('messages.create');
+        Route::get('/messages/chat/{parent_user_id}', [MentorMessageController::class, 'chat'])->name('messages.chat');
+        Route::post('/messages', [MentorMessageController::class, 'store'])->name('messages.store');
     });
 
 // ==========================================

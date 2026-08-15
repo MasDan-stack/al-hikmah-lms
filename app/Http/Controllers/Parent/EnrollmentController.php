@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Parent;
 
 use App\Enums\EnrollmentStatus;
+use App\Enums\NotificationType;
 use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
-use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\Program;
-use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -71,6 +71,7 @@ class EnrollmentController extends Controller
         $validated = $request->validate([
             'student_id' => ['required', 'exists:students,id'],
             'program_id' => ['required', 'exists:programs,id'],
+            'learning_method' => ['nullable', 'in:offline,online,hybrid'],
             'requested_days' => ['required', 'array', 'min:1'],
             'requested_days.*' => ['in:monday,tuesday,wednesday,thursday,friday,saturday,sunday'],
             'requested_time' => ['nullable', 'date_format:H:i'],
@@ -96,27 +97,36 @@ class EnrollmentController extends Controller
             return back()->withInput()->with('error', 'Santri ini sudah memiliki pendaftaran yang sedang berjalan untuk program yang sama.');
         }
 
+        $sessionMethod = session('pre_registration.metode', 'offline');
+        if (stripos($sessionMethod, 'online') !== false) {
+            $sessionMethod = 'online';
+        } elseif (stripos($sessionMethod, 'hybrid') !== false) {
+            $sessionMethod = 'hybrid';
+        } else {
+            $sessionMethod = 'offline';
+        }
+
+        $learningMethod = $validated['learning_method'] ?? $sessionMethod;
+
         $enrollment = Enrollment::create([
             'student_id' => $student->id,
             'program_id' => $program->id,
             'program_price' => $program->price, // Snapshot harga terkunci
+            'learning_method' => $learningMethod,
             'requested_days' => $validated['requested_days'],
             'requested_time' => $validated['requested_time'] ?? null,
             'parent_notes' => $validated['parent_notes'] ?? null,
             'status' => EnrollmentStatus::WAITING_ADMIN,
         ]);
 
-        // Notifikasi ke seluruh Admin
-        $admins = User::whereHas('role', fn ($q) => $q->where('name', 'admin'))->get();
-        foreach ($admins as $admin) {
-            Notification::create([
-                'user_id' => $admin->id,
-                'type' => 'enrollment_request',
-                'title' => 'Permohonan Jadwal Belajar Baru',
-                'message' => "Permohonan pendaftaran program {$program->name} untuk santri {$student->getDisplayName()} telah masuk.",
-                'is_read' => false,
-            ]);
-        }
+        // Notifikasi ke seluruh Admin via NotificationService terpusat
+        NotificationService::notifyAdmins(
+            'Permohonan Jadwal Belajar Baru',
+            "Permohonan pendaftaran program {$program->name} untuk santri {$student->getDisplayName()} telah masuk.",
+            NotificationType::INFO,
+            route('admin.enrollments.edit', $enrollment->id),
+            'enrollment'
+        );
 
         return redirect()->route('parent.enrollments.show', $enrollment->id)
             ->with('success', 'Permohonan pendaftaran & pilihan jadwal berhasil diajukan. Pengelola lembaga akan mereview jadwal Anda.');
@@ -191,7 +201,7 @@ class EnrollmentController extends Controller
     }
 
     /**
-     * Helper privat membuat record tagihan pendaftaran
+     * Helper privat membuat record tagihan pendaftaran dengan rincian biaya
      */
     private function createEnrollmentInvoice(Enrollment $enrollment): void
     {
@@ -199,25 +209,31 @@ class EnrollmentController extends Controller
             return;
         }
 
-        $amount = $enrollment->program_price ?? $enrollment->program->price ?? 400000;
+        $programFee = (float) ($enrollment->program_price ?? $enrollment->program?->price ?? 400000);
+        $hasPaidReg = $enrollment->student?->hasPaidRegistrationFee() ?? false;
+        $registrationFee = $hasPaidReg ? 0.00 : (float) site_setting('registration_fee', 150000);
+        $totalAmount = $programFee + $registrationFee;
 
         $payment = Payment::create([
             'student_id' => $enrollment->student_id,
             'program_id' => $enrollment->program_id,
             'enrollment_id' => $enrollment->id,
-            'amount' => $amount,
+            'program_fee' => $programFee,
+            'registration_fee' => $registrationFee,
+            'amount' => $totalAmount,
             'payment_purpose' => 'registration',
             'due_date' => now()->addDays(3)->toDateString(),
             'status' => 'pending',
             'invoice_number' => 'INV-'.date('Ymd').'-'.str_pad((string) $enrollment->id, 4, '0', STR_PAD_LEFT),
         ]);
 
-        Notification::create([
-            'user_id' => auth()->id(),
-            'type' => 'payment_reminder',
-            'title' => "Tagihan Pendaftaran: {$enrollment->program->name}",
-            'message' => 'Jadwal belajar telah disepakati. Tagihan pendaftaran sebesar Rp '.number_format($payment->amount, 0, ',', '.').' telah siap untuk dibayarkan.',
-            'is_read' => false,
-        ]);
+        NotificationService::send(
+            auth()->id(),
+            "Tagihan Pendaftaran: {$enrollment->program->name}",
+            'Jadwal belajar telah disepakati. Tagihan pendaftaran sebesar Rp '.number_format($payment->amount, 0, ',', '.').' telah siap untuk dibayarkan.',
+            NotificationType::WARNING,
+            route('parent.enrollments.show', $enrollment->id),
+            'payment'
+        );
     }
 }

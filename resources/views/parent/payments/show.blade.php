@@ -16,33 +16,62 @@
     <div class="row g-4">
         <div class="col-lg-7">
             <div class="card border-0 shadow-sm rounded-4 bg-white p-4 h-100">
-                <h5 class="fw-bold text-dark border-bottom pb-3 mb-3">Rincian Tagihan</h5>
+                <div class="table-responsive mb-3">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="py-2">Item Pembayaran</th>
+                                <th class="text-end py-2" style="width: 160px;">Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 1. Paket Program Belajar -->
+                            <tr>
+                                <td class="py-3">
+                                    <div class="fw-bold text-dark">Paket Belajar: {{ $payment->program?->name ?? 'Program Bimbingan' }}</div>
+                                    <small class="text-muted">Investasi kurikulum dan bimbingan mentor terstruktur</small>
+                                </td>
+                                <td class="text-end fw-bold text-dark">
+                                    Rp {{ number_format($payment->program_fee > 0 ? $payment->program_fee : $payment->amount, 0, ',', '.') }}
+                                </td>
+                            </tr>
 
-                <div class="mb-3">
-                    <div class="text-muted small fw-bold">SANTRI:</div>
-                    <div class="fs-5 fw-bold text-dark">{{ $payment->student?->user?->name ?? $payment->student?->full_name }}</div>
+                            <!-- 2. Biaya Pendaftaran 1x (Jika Ada) -->
+                            @if($payment->registration_fee > 0)
+                            <tr class="table-warning-subtle">
+                                <td class="py-3">
+                                    <div class="fw-bold text-dark d-flex align-items-center gap-2">
+                                        <span>Biaya Pendaftaran Santri Baru</span>
+                                        <span class="badge bg-primary text-white rounded-pill px-2 py-1 small">1x Sekali Bayar</span>
+                                    </div>
+                                    <small class="text-secondary">Administrasi pendaftaran awal, pembuatan akun & assessment santri</small>
+                                </td>
+                                <td class="text-end fw-bold text-dark">
+                                    Rp {{ number_format($payment->registration_fee, 0, ',', '.') }}
+                                </td>
+                            </tr>
+                            @endif
+                        </tbody>
+                        <tfoot class="table-light">
+                            <tr>
+                                <td class="text-end fw-bold fs-6">TOTAL PEMBAYARAN:</td>
+                                <td class="text-end fw-bold fs-5 text-success">
+                                    Rp {{ number_format($payment->amount, 0, ',', '.') }}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
 
-                <div class="mb-3">
-                    <div class="text-muted small fw-bold">PROGRAM / KELAS:</div>
-                    <div class="fw-semibold text-dark">{{ $payment->program?->name ?? 'SPP Bimbingan Al-Qur\'an' }}</div>
-                </div>
-
-                <div class="mb-3">
-                    <div class="text-muted small fw-bold">STATUS PEMBAYARAN:</div>
-                    @if($payment->status === 'paid')
-                        <span class="badge bg-success fs-6 rounded-pill px-3 py-1">LUNAS</span>
-                    @else
-                        <span class="badge bg-warning fs-6 rounded-pill px-3 py-1 text-dark">PENDING / BELUM DIBAYAR</span>
-                    @endif
-                </div>
-
-                <div class="p-4 bg-light rounded-4 mt-4">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="fw-bold text-secondary">TOTAL PEMBAYARAN:</span>
-                        <span class="fs-3 fw-bold text-success">Rp {{ number_format($payment->amount, 0, ',', '.') }}</span>
+                @if($payment->registration_fee > 0)
+                <div class="alert alert-info border-0 rounded-3 d-flex align-items-start gap-2 mb-0 py-2 px-3">
+                    <i class="bi bi-info-circle-fill text-info fs-5 mt-1"></i>
+                    <div class="small text-dark">
+                        <strong>Informasi Biaya Pendaftaran:</strong> Biaya pendaftaran Rp {{ number_format($payment->registration_fee, 0, ',', '.') }} hanya dibebankan <strong>1 kali</strong> saat pertama kali santri mendaftar di AL-HIKMAH LMS. Pendaftaran program selanjutnya untuk santri ini tidak akan dikenakan biaya registrasi lagi.
                     </div>
                 </div>
+                @endif
+
             </div>
         </div>
 

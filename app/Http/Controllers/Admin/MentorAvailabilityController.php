@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\Mentors\AssignStudentAction;
+use App\Enums\EnrollmentStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AssignStudentRequest;
 use App\Models\Mentor;
@@ -38,6 +39,11 @@ class MentorAvailabilityController extends Controller
 
         $unassignedStudents = Student::whereDoesntHave('mentors', function ($q) {
             $q->where('mentor_student.is_active', true);
+        })->whereDoesntHave('enrollments', function ($q) {
+            $q->whereIn('status', [
+                EnrollmentStatus::CONFIRMED->value,
+                EnrollmentStatus::ACTIVE->value,
+            ])->whereNotNull('mentor_id');
         })->get();
 
         $days = MentorAvailability::DAYS_ORDER;

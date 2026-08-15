@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Events\StudentAssignedToMentor;
 use App\Listeners\LogMentorActivityListener;
 use App\Listeners\SendAssignmentNotificationListener;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Carbon::setLocale('id');
+        setlocale(LC_TIME, 'id_ID.utf8', 'id_ID', 'id', 'ind');
+
         Event::listen(
             StudentAssignedToMentor::class,
             SendAssignmentNotificationListener::class
