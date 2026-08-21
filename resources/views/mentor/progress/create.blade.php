@@ -5,7 +5,41 @@
 @section('subheader', 'Input capaian surah, ayat, tajwid, dan adab santri')
 
 @section('content')
-<div class="container-fluid p-0">
+    <!-- Flash Alert Notification Messages -->
+    @if (session('success'))
+        <div class="alert alert-success border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center justify-content-between p-3" role="alert">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-check-circle-fill fs-5 text-success"></i>
+                <div class="fw-semibold">{{ session('success') }}</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center justify-content-between p-3" role="alert">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-exclamation-triangle-fill fs-5 text-danger"></i>
+                <div class="fw-semibold">{{ session('error') }}</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger border-0 rounded-4 shadow-sm mb-4 p-3" role="alert">
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-exclamation-circle-fill fs-5 text-danger"></i>
+                <span class="fw-bold">Gagal Menyimpan Progres! Periksa input berikut:</span>
+            </div>
+            <ul class="mb-0 ps-4 small">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="card border-0 shadow-sm rounded-4 bg-white">

@@ -3,8 +3,8 @@
 > **Dokumen Resmi untuk Manajemen / Pimpinan Lembaga (Non-Technical Executive Guide)**  
 > **Nama Sistem:** AL-HIKMAH Learning Management System (LMS)  
 > **Status Aplikasi:** ✅ **100% Selesai, Teruji, & Siap Digunakan (Production Ready)**  
-> **Versi:** 4.2 (Enterprise Edition - Standardized Unified Navbars Across Portals, Full Indonesian Localization, Clean Fluid Layouts & Theme Synchronization)  
-> **Tanggal Pembaruan:** 15 Agustus 2026  
+> **Versi:** 4.5 (Enterprise Edition - 4-Layer Centralized Alert Architecture, Dynamic Gallery Category CRUD, Interactive Gallery Showcase, Trash Management Lifecycle, Anti-Spam View Counter, Atomic Reorder, Unified Navbars, Full Indonesian Localization)  
+> **Tanggal Pembaruan:** 21 Agustus 2026  
 
 ---
 
@@ -29,37 +29,45 @@
 
 ### 💡 Keunggulan Utama & Solusi Masalah yang Diterapkan:
 
-1. **Standardisasi Navigasi & Tata Letak Lapang di Semua Portal**:
+1. **Manajemen Dinamis Kategori Galeri Dokumentasi (`GalleryCategory`)**:
+   - Administrator dapat mengelola (CRUD) kategori dokumentasi secara mandiri: menentukan nama kategori, grup kegiatan (*Kategori Utama*, *Acara Khusus*, *Prestasi & Kolaborasi*), ikon Bootstrap, warna label/badge, urutan tampil (*sort order*), dan status aktif/arsip.
+   - Terintegrasi secara aman (*safe delete*) ke tabel `galleries` dengan relasi `category_id`, sinkronisasi otomatis ke form input admin, dan filter pills etalase publik.
+
+2. **Standardisasi Navigasi & Tata Letak Lapang di Semua Portal**:
    - Seluruh halaman navigasi (Navbar Landing Page, Portal Administrator, Portal Guru/Mentor, Portal Orang Tua, dan Ruang Belajar Santri) menggunakan tata letak `container-fluid` yang lega, elegan, bebas kesan sempit (*not cramped*), dilengkapi ikon Bootstrap modern yang seragam dan intuitif.
 
-2. **Pengalih Tema Gelap / Terang (Dark & Light Mode Engine)**:
+3. **Pengalih Tema Gelap / Terang (Dark & Light Mode Engine)**:
    - Dilengkapi tombol pengalih tema (`#themeToggle`) dengan sinkronisasi `localStorage` dan deteksi preferensi sistem secara otomatis pada seluruh portal (Landing, Admin, Mentor, Parent, Student).
 
-3. **Lokalisasi Bahasa Indonesia Baku (Senin - Minggu)**:
+4. **Lokalisasi Bahasa Indonesia Baku (Senin - Minggu)**:
    - Seluruh format tanggal, nama hari (Senin, Selasa, Rabu, Kamis, Jumat, Sabtu, Minggu), dan nama metode belajar disajikan dalam Bahasa Indonesia yang baku dan sinkron di seluruh komponen aplikasi.
 
-4. **Filter Proteksi Santri Binaan Mentor (Strict Paid Gate)**:
+5. **Filter Proteksi Santri Binaan Mentor (Strict Paid Gate)**:
    - Santri yang baru disetujui jadwalnya oleh Admin (`CONFIRMED`) namun belum melunasi pembayaran SPP/pendaftaran **TIDAK AKAN MUNCUL** di portal mentor (`/mentor/students`). Santri secara otomatis muncul hanya ketika pembayaran berhasil diverifikasi (`ACTIVE`).
 
-5. **Mesin Metode Belajar Dinamis (`learning_method`)**:
+6. **Mesin Metode Belajar Dinamis (`learning_method`)**:
    - Menghilangkan hardcode metode belajar. Sistem merekam metode belajar yang dipilih wali santri (`Offline / Home Visit`, `Online`, `Hybrid`) pada tabel `enrollments` dan menggunakannya secara konsisten saat meng-generate sesi bimbingan 4 minggu di `learning_sessions`.
 
-6. **Status Konfirmasi Kehadiran Real-time & Notifikasi Mentor (`/mentor/dashboard`)**:
+7. **Status Konfirmasi Kehadiran Real-time & Notifikasi Mentor (`/mentor/dashboard`)**:
    - Ketika Orang Tua mengonfirmasi kehadiran anak (Hadir, Izin, Sakit) di portal wali (`/parent/schedules/{id}`), sistem secara otomatis mengirim notifikasi real-time in-app & WhatsApp ke Mentor Pembimbing.
    - Tabel Jadwal Mengajar di Dashboard Mentor menampilkan badge visual status konfirmasi orang tua secara langsung: 🟢 **Hadir**, 🟡 **Izin** (beserta catatan izin), 🔴 **Sakit**, atau ⚪ **Belum Konfirmasi**.
 
-7. **Fitur Roadmap Alur Pendaftaran Interaktif (`/roadmap`)**:
+8. **Fitur Roadmap Alur Pendaftaran Interaktif (`/roadmap`)**:
    - Menyediakan panduan langkah demi langkah yang jelas dan terisolasi (tab khusus Orang Tua, Guru/Pendamping, dan Alur Pembayaran) dilengkapi *Dynamic Status Detection* (`Sedang Direview`, `Siap Bayar`, `Program Aktif`).
 
-8. **Sistem Notifikasi & Alert Terpusat (`NotificationService`)**:
+9. **Sistem Notifikasi & Alert Terpusat (`NotificationService`)**:
    - Livewire 3 Real-time Notification Bell (`<livewire:notification-bell />`) dengan polling berkala, lencana unread, drawer dropdown, penanda dibaca, dan redirect `action_url`.
    - Floating Toast Alert (`<x-flash-toast />`) dipasang di seluruh layout aplikasi.
 
-9. **Alur Penjadwalan "Deal Dulu, Baru Bayar" (State Machine Invoicing)**:
-   - Tagihan pendaftaran & SPP diterbitkan secara otomatis setelah Admin dan Wali Santri menyepakati jadwal & guru pembimbing (`CONFIRMED`).
+10. **Alur Penjadwalan "Deal Dulu, Baru Bayar" (State Machine Invoicing)**:
+    - Tagihan pendaftaran & SPP diterbitkan secara otomatis setelah Admin dan Wali Santri menyepakati jadwal & guru pembimbing (`CONFIRMED`).
 
-10. **Export Data Pendaftaran ke Excel / CSV (`/admin/enrollments/export`)**:
+11. **Export Data Pendaftaran ke Excel / CSV (`/admin/enrollments/export`)**:
     - Administrator dapat mengunduh seluruh rekapitulasi data pendaftaran santri ke format spreadsheet Excel (CSV UTF-8 BOM) dalam satu kali klik.
+
+12. **Etalase Galeri Dokumentasi Kegiatan & Manajemen Tong Sampah (`/galeri` & `/admin/galleries`)**:
+    - Pengelolaan penuh foto dokumentasi kegiatan oleh Admin (CRUD, Hero Slider toggle, Publish toggle, Drag-and-Drop Atomic Reorder, Filter Kategori/Program, serta Tong Sampah / SoftDeletes dengan rute Restore & Force Delete).
+    - Etalase galeri interaktif publik dengan Hero Slideshow, Filter Kategori Utama & Event, Tag Cloud, Lightbox Modal Detail, Tracker Tayangan Anti-Spam Sesi, dan Tombol Multi-Share Social Media.
 
 ---
 
@@ -128,6 +136,7 @@ flowchart LR
 ### A. Hak Akses: Administrator Lembaga (`/admin`)
 - **Dashboard Utama**: Menampilkan analitik santri aktif, mentor terdaftar, permohonan baru, dan total pemasukan SPP.
 - **Permohonan Jadwal**: Menangani verifikasi permohonan baru, counter-offer jadwal, konfirmasi massal, dan export Excel/CSV.
+- **Manajemen Galeri Kegiatan**: Mengelola penuh dokumentasi foto kegiatan (`/admin/galleries`), penentuan foto unggulan hero slider, status publikasi, penataan urutan tampilan secara atomik (`DB::transaction`), filter kategori & program, serta pengelolaan Tong Sampah (`SoftDeletes`) dengan fitur *Restore* dan *Force Delete* otomatis menghapus berkas fisik storage.
 - **Santri & Sesi Aktif**: Memantau jadwal belajar yang sedang aktif berjalan.
 - **Database Santri**: Manajemen data identitas santri seluruh program.
 - **Guru Pendamping**: Manajemen data profil dan status keaktifan ustaz/ustazah.
@@ -161,19 +170,59 @@ flowchart LR
 ### D. Hak Akses: Santri (`/student`)
 - **Dashboard Ruang Belajar**: Menampilkan statistik capaian tilawah, hafalan Al-Qur'an, dan jadwal mengaji hari ini dengan antarmuka yang bersih dan ramah anak.
 
+### E. Portal Publik / Pengunjung (`/galeri`, `/program`, `/roadmap`, `/biaya`, `/faq`, `/kontak`)
+- **Etalase Galeri Interaktif (`/galeri`)**: Etalase dokumentasi kegiatan AL-HIKMAH dengan Hero Slideshow Carousel, Filter Kategori Utama & Event, Filter Program Belajar, Tag Cloud, pencarian kata kunci, Lightbox Modal Viewer dengan rincian foto & takarir, tracker hitung tayang anti-spam sesi (`/galeri/{id}/view`), dan tombol Multi-Share ke WhatsApp, Facebook, serta Copy Link.
+
 ---
 
 ## 🔔 5. SISTEM NOTIFIKASI & ALERT TERPUSAT (CENTRALIZED ALERT SYSTEM)
 
-Sistem notifikasi AL-HIKMAH LMS dibangun secara terpusat melalui `App\Services\NotificationService.php` dengan fitur unggulan:
+Sistem notifikasi dan umpan balik pengguna di seluruh aplikasi AL-HIKMAH LMS dibangun secara berlapis (**4-Layer Alert & Feedback Architecture**) untuk menjamin pengalaman pengguna (UX) yang responsif, informatif, dan aman dari kesalahan:
 
-1. **Livewire 3 Real-Time Notification Bell**:
-   - Terpasang pada seluruh top header navbar (Landing, Admin, Mentor, Parent, Student).
-   - Memiliki drawer interaktif, penanda sudah dibaca (`markAsRead`), penanda semua dibaca (`markAllAsRead`), dan auto-polling berkala.
-2. **Floating Flash Toast Notifications (`<x-flash-toast />`)**:
-   - Menampilkan alert pop-up modern di pojok kanan atas layar untuk umpan balik instan setiap aksi user.
-3. **Integrasi WhatsApp Gateway**:
-   - Mendukung pengiriman pesan WhatsApp otomatis ke nomor handphone pengguna ketika terjadi event penting (jadwal disetujui, tagihan terbit, dan konfirmasi kehadiran).
+```mermaid
+flowchart TD
+    A[Aksi Pengguna / Sistem] --> B{Lapisan Notifikasi}
+    B --> C[Layer 1: In-Page Alert Banners]
+    B --> D[Layer 2: Global Floating Toast <x-flash-toast />]
+    B --> E[Layer 3: Livewire Notification Bell Drawer]
+    B --> F[Layer 4: WhatsApp Gateway Outbound]
+```
+
+### 📋 4 Lapisan Sistem Alert & Notifikasi:
+1. **Layer 1 - In-Page Alert Banners (Spesifik Halaman & Formulir)**:
+   - **Banner Pesan Sukses (`session('success')`)**: Banner hijau rounded dengan ikon centang dan tombol dismiss, memberikan konfirmasi visual bahwa aksi tambah, ubah, hapus, pulihkan, atau toggle berhasil.
+   - **Banner Pesan Peringatan & Gagal (`session('error')`, `session('warning')`)**: Banner merah/kuning untuk kegagalan aksi atau batas kuota.
+   - **Validasi Kesalahan Formulir (`$errors->any()`)**: Menampilkan daftar rincian input yang belum lengkap/valid di bagian atas form serta penanda *is-invalid* pada field bersangkutan.
+2. **Layer 2 - Global Floating Flash Toast Notifications (`<x-flash-toast />`)**:
+   - Terpasang di seluruh layout utama (`layouts.admin`, `layouts.mentor`, `layouts.parent`, `layouts.landing`).
+   - Menampilkan pop-up toast modern di pojok kanan atas layar dengan animasi otomatis menghilang setelah 5 detik.
+3. **Layer 3 - Livewire 3 Real-Time Notification Bell**:
+   - Terpasang pada seluruh bilah navigasi atas (Top Header Navbar) untuk Admin, Mentor, Orang Tua, dan Santri.
+   - Dilengkapi lencana jumlah notifikasi belum dibaca (*unread count badge*), laci (*drawer*) riwayat notifikasi, tombol tandai telah dibaca (`markAsRead`), tandai semua dibaca (`markAllAsRead`), dan *auto-polling* berkala.
+4. **Layer 4 - Integrasi WhatsApp Gateway Outbound**:
+   - Mendukung pengiriman pesan WhatsApp otomatis ke nomor handphone pengguna ketika terjadi peristiwa penting (persetujuan jadwal bimbingan, tagihan SPP terbit, pengingat jatuh tempo, dan konfirmasi kehadiran santri).
+
+### 📊 Matriks Cakupan Alert di Seluruh Modul & Fitur:
+| Modul / Fitur | Lokasi View | Banner Sukses | Banner Error / Gagal | Validasi Form ($errors) | Floating Toast | Bell Real-time |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **Kategori Galeri** | `admin/gallery_categories/index` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Dokumentasi Galeri** | `admin/galleries/index, create, edit` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Manajemen Pengguna** | `admin/users/index` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Permohonan & Negosiasi** | `admin/enrollments/index, edit, active`| ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Tagihan & SPP Admin** | `admin/payments/index` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Pesan Kontak Masuk** | `admin/contacts/index` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Pengaturan Website** | `admin/settings/index` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Program Belajar** | `livewire/program-manager` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Data Santri Admin** | `livewire/student-manager` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Data Guru Admin** | `livewire/mentor-manager` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Catat Progres Mentor** | `mentor/progress/create, bulk` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Sesi & Absensi Mentor** | `mentor/sessions, attendance` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Profil & Akun Mentor** | `mentor/profile` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Anak Binaan Wali** | `parent/children/index, profile` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Tagihan & SPP Wali** | `parent/payments/index` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Pendaftaran Baru** | `parent/enrollments/show, create` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Form Kontak Publik** | `resources/views/contact` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
+| **Form Gabung Guru** | `resources/views/bergabung` | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Ada | ✅ Terhubung |
 
 ---
 
@@ -181,41 +230,44 @@ Sistem notifikasi AL-HIKMAH LMS dibangun secara terpusat melalui `App\Services\N
 
 Terdapat 20 tabel utama dalam sistem database AL-HIKMAH LMS:
 
-1. **`users`**: Data otentikasi dan akun pengguna (nama, email, password, role, no_whatsapp, avatar).
+1. **`users`**: Data otentikasi dan akun pengguna (nama, email, password, role_id, no_whatsapp, avatar).
 2. **`roles`**: Master peran sistem (`admin`, `mentor`, `parent`, `student`).
 3. **`students`**: Profil santri (nama, tanggal lahir, jenis kelamin, tingkat pendidikan, wali_id).
 4. **`mentors`**: Profil guru pembimbing (user_id, bio, spesialisasi, status ketersediaan).
 5. **`programs`**: Paket bimbingan Al-Qur'an (Tahsin, Tahfidz, Tajwid, Bahasa Arab, dll).
-6. **`enrollments`**: Data permohonan pendaftaran, negosiasi jadwal, dan metode belajar (`learning_method`).
-7. **`mentor_availabilities`**: Matriks slot hari dan jam luang setiap mentor.
-8. **`mentor_student_allocations`**: Relasi penetapan guru pembimbing untuk setiap santri.
-9. **`learning_sessions`**: Jadwal sesi belajar 4 minggu (tanggal, jam, metode belajar, mentor_id, student_id, status).
-10. **`session_confirmations`**: Data konfirmasi kehadiran dari orang tua (session_id, status: Hadir/Izin/Sakit, catatan).
-11. **`progress_reports`**: Catatan capaian harian santri (surat, ayat, jilid, halaman, tajwid, makhraj, adab).
-12. **`payments`**: Data tagihan dan transaksi pembayaran (invoice_number, amount, status, payment_method, proof_file).
-13. **`notifications`**: Riwayat notifikasi in-app pengguna.
-14. **`contact_messages`**: Pesan konsultasi dari formulir kontak publik website.
-15. **`messages`**: Pesan komunikasi langsung antara orang tua dan mentor.
-16. **`settings`**: Konfigurasi website dan profil lembaga.
-17. **`sessions`, `cache`, `jobs`, `failed_jobs`**: Tabel pendukung performa dan antrean Laravel.
+6. **`galleries`**: Dokumentasi kegiatan AL-HIKMAH (id, title, slug, category, program_id, image_url, caption, description, event_date, location, tags, is_featured, is_published, sort_order, views_count, uploaded_by, deleted_at).
+7. **`enrollments`**: Data permohonan pendaftaran, negosiasi jadwal, dan metode belajar (`learning_method`).
+8. **`mentor_availabilities`**: Matriks slot hari dan jam luang setiap mentor.
+9. **`mentor_student_allocations`**: Relasi penetapan guru pembimbing untuk setiap santri.
+10. **`learning_sessions`**: Jadwal sesi belajar 4 minggu (tanggal, jam, metode belajar, mentor_id, student_id, status).
+11. **`session_confirmations`**: Data konfirmasi kehadiran dari orang tua (session_id, status: Hadir/Izin/Sakit, catatan).
+12. **`progress_reports`**: Catatan capaian harian santri (surat, ayat, jilid, halaman, tajwid, makhraj, adab).
+13. **`payments`**: Data tagihan dan transaksi pembayaran (invoice_number, amount, status, payment_method, proof_file).
+14. **`notifications`**: Riwayat notifikasi in-app pengguna.
+15. **`contact_messages`**: Pesan konsultasi dari formulir kontak publik website.
+16. **`messages`**: Pesan komunikasi langsung antara orang tua dan mentor.
+17. **`settings`**: Konfigurasi website dan profil lembaga.
+18. **`sessions`, `cache`, `jobs`, `failed_jobs`**: Tabel pendukung performa dan antrean Laravel.
 
 ---
 
 ## 🎮 7. PENJELASAN SELURUH MODEL & CONTROLLER (PEMROSES LOGIKA SISTEM)
 
 ### A. Model Eloquent Utama
-1. **`App\Models\Enrollment.php`**: Mengelola siklus hidup pendaftaran santri, konstanta hari Bahasa Indonesia (`DAYS`), metode belajar (`learning_method`), dan pembuatan sesi 4 minggu otomatis (`generateInitialLearningSessions`).
-2. **`App\Models\Session.php`**: Mengelola data sesi belajar bimbingan beserta relasi konfirmasi kehadiran (`confirmation()`).
-3. **`App\Models\SessionConfirmation.php`**: Mengelola data konfirmasi kehadiran orang tua.
-4. **`App\Models\Notification.php`**: Mengelola entitas notifikasi sistem.
-5. **`App\Models\ContactMessage.php`**: Mengelola pesan konsultasi publik.
+1. **`App\Models\Gallery.php`**: Mengelola entitas galeri foto kegiatan, SoftDeletes lifecycle, konstanta taksonomi kategori (`CATEGORIES`) & rekomendasi tag (`DEFAULT_TAGS`), query scopes (`published`, `featured`, `category`, `programFilter`, `tagFilter`), serta accessors URL aset storage.
+2. **`App\Models\Enrollment.php`**: Mengelola siklus hidup pendaftaran santri, konstanta hari Bahasa Indonesia (`DAYS`), metode belajar (`learning_method`), dan pembuatan sesi 4 minggu otomatis (`generateInitialLearningSessions`).
+3. **`App\Models\Session.php`**: Mengelola data sesi belajar bimbingan beserta relasi konfirmasi kehadiran (`confirmation()`).
+4. **`App\Models\SessionConfirmation.php`**: Mengelola data konfirmasi kehadiran orang tua.
+5. **`App\Models\Notification.php`**: Mengelola entitas notifikasi sistem.
+6. **`App\Models\ContactMessage.php`**: Mengelola pesan konsultasi publik.
 
-### B. Controller & Service Utama
-1. **`App\Services\NotificationService.php`**: Service terpusat pengiriman notifikasi in-app & WhatsApp.
-2. **`Admin\EnrollmentController.php`**: Mengolah permohonan pendaftaran, konfirmasi deal jadwal (`accept`), penawaran alternatif (`offerAlternative`), konfirmasi masal (`bulkAccept`), serta pengunduhan data pendaftaran ke Excel/CSV (`export`).
-3. **`Parent\ParentScheduleController.php`**: Mengolah kalender sesi bimbingan anak dan memicu notifikasi real-time ke mentor saat wali mengisi konfirmasi kehadiran.
-4. **`Mentor\StudentController.php`**: Mengolah daftar santri binaan (strictly filtered paid & active only).
-5. **`Mentor\DashboardController.php`**: Mengolah dashboard mentor dengan eager loading relasi `confirmation` pada jadwal hari ini.
+### B. Controller, Observer & Service Utama
+1. **`App\Http\Controllers\Admin\GalleryController.php`**: Mengolah CRUD dokumentasi kegiatan admin, toggle hero slider & publish, reorder atomik (`DB::transaction`), filter pencarian, serta manajemen Tong Sampah (`status=trashed`, `restore`, `forceDelete`).
+2. **`App\Observers\GalleryObserver.php`**: Mengatur penghapusan berkas fisik gambar di storage publik saat gambar diganti (`updating`) atau saat data dihapus permanen (`forceDeleted`).
+3. **`App\Http\Requests\StoreGalleryRequest.php` & `UpdateGalleryRequest.php`**: Validasi form data galeri dan pembersihan tag string menjadi array (`prepareForValidation`).
+4. **`App\Services\NotificationService.php`**: Service terpusat pengiriman notifikasi in-app & WhatsApp.
+5. **`Admin\EnrollmentController.php`**: Mengolah permohonan pendaftaran, konfirmasi deal jadwal (`accept`), penawaran alternatif (`offerAlternative`), konfirmasi masal (`bulkAccept`), serta pengunduhan data pendaftaran ke Excel/CSV (`export`).
+6. **`LandingController.php`**: Mengolah etalase galeri publik (`galeri()`) dan tracker hitung tayangan anti-spam sesi (`incrementView()`).
 
 ---
 
@@ -223,32 +275,31 @@ Terdapat 20 tabel utama dalam sistem database AL-HIKMAH LMS:
 
 ```text
 al-hikmah-lms/
-├── 📁 app/                     --> Pusat Logika Utama Aplikasi (Model, Controller, Services, Livewire, Enums)
+├── 📁 app/                     --> Pusat Logika Utama Aplikasi (Model, Controller, Services, Livewire, Enums, Observers, Requests)
 │   ├── 📁 Enums/               --> Enum Tipe Notifikasi & Status Enrollment (NotificationType.php, EnrollmentStatus.php)
-│   ├── 📁 Http/Controllers/    --> Pengendali alur kerja aplikasi (Landing, Contact, Admin, Mentor, Parent, Auth)
-│   │   ├── 📁 Admin/           --> Controller Admin (EnrollmentController, MentorAvailabilityController, PaymentController, Users)
-│   │   ├── 📁 Mentor/          --> Controller Mentor (DashboardController, ProgressController, StudentController, SessionController, MentorMessageController)
-│   │   └── 📁 Parent/          --> Controller Parent (EnrollmentController, ParentScheduleController, ParentPaymentController, ParentMessageController)
+│   ├── 📁 Http/
+│   │   ├── 📁 Controllers/    --> Pengendali alur kerja aplikasi (Landing, Contact, Admin, Mentor, Parent, Auth)
+│   │   │   └── 📁 Admin/       --> Controller Admin (GalleryController, EnrollmentController, MentorAvailabilityController, PaymentController, Users)
+│   │   └── 📁 Requests/       --> Form Requests Validasi (StoreGalleryRequest.php, UpdateGalleryRequest.php)
 │   ├── 📁 Livewire/            --> Komponen Livewire Real-time (NotificationBell.php)
+│   ├── 📁 Observers/           --> Eloquent Event Observers (GalleryObserver.php)
 │   ├── 📁 Services/            --> Service Layanan (NotificationService.php, WhatsAppService.php)
-│   └── 📁 Models/              --> Pengatur struktur data & relasi database (20 Models)
+│   └── 📁 Models/              --> Pengatur struktur data & relasi database (Gallery.php, Enrollment.php, User.php, dll)
 ├── 📁 bootstrap/               --> Inisialisasi sistem Laravel 12
 ├── 📁 config/                  --> Berkas konfigurasi sistem (app.php - Locale id & Timezone Asia/Jakarta)
-├── 📁 database/                --> Migration, Factories, & Seeders
+├── 📁 database/                --> Migration, Factories, & Seeders (GallerySeeder.php, GalleryFactory.php)
 ├── 📁 public/                  --> Assets CSS (style.css), JS (scripts.js), Gambar Logo & Galeri
 ├── 📁 resources/views/         --> Tampilan Antarmuka Blade (.blade.php)
 │   ├── 📁 layouts/             --> Master Layout (landing.blade.php, admin.blade.php, mentor.blade.php, parent.blade.php)
 │   ├── 📁 partials/            --> Komponen UI (navbar.blade.php, footer.blade.php)
-│   ├── 📁 admin/               --> Halaman Admin (Enrollments, Mentors, Students, Contacts, Users, Settings)
-│   ├── 📁 mentor/              --> Halaman Mentor (Dashboard, Sessions, Students, Parents, Progress, Messages)
-│   ├── 📁 parent/              --> Halaman Parent (Dashboard, Enrollments, Schedules, Payments, Messages, Children)
-│   ├── 📁 student/             --> Halaman Santri (Dashboard Ruang Belajar)
+│   ├── 📁 admin/               --> Halaman Admin (galleries/index, create, edit, Enrollments, Mentors, Students, Users, Settings)
+│   ├── 📄 galeri.blade.php     --> Halaman Etalase Galeri Dokumentasi Kegiatan Interaktif Publik
 │   ├── 📄 roadmap.blade.php    --> Halaman Panduan Alur Pendaftaran Interaktif
 │   ├── 📄 contact.blade.php    --> Halaman Formulir Konsultasi Hubungi Kami
 │   └── 📄 faq.blade.php        --> Halaman Tanya Jawab Publik
 ├── 📁 routes/                  --> Alamat URL Website (web.php)
-└── 📁 tests/                   --> Pengujian Otomatis Pest/PHPUnit (118 Passed Tests - 100% GREEN PASS)
-    └── 📁 Feature/             --> Integration Tests (MentorSessionAndAttendanceTest.php, NotificationAlertSystemTest.php, dll)
+└── 📁 tests/                   --> Pengujian Otomatis Pest/PHPUnit (126 Passed Tests - 100% GREEN PASS)
+    └── 📁 Feature/             --> Integration Tests (GalleryFeatureTest.php, MentorSessionAndAttendanceTest.php, dll)
 ```
 
 ---
@@ -257,33 +308,51 @@ al-hikmah-lms/
 
 Kualitas sistem diuji secara ketat menggunakan **Automated Test Suite (Pest / PHPUnit Framework)**:
 
-- **Total Pengujian**: **118 Test Cases (504 Assertions)**
+- **Total Pengujian**: **137 Test Cases (571 Assertions)**
 - **Hasil**: ✅ **100% PASSED (0 FAILURES, 0 ERRORS)**
 - **Format Kode**: Diformat ulang secara otomatis mengacu pada aturan PSR-12 menggunakan `vendor/bin/pint --format agent`.
 
 ### 📋 Cakupan Pengujian:
-1. `MentorSessionAndAttendanceTest.php` (4 Passed):
-   - `mentor students list only shows paid active students`
-   - `initial session generator uses parent selected learning method`
-   - `parent session confirmation dispatches notification to mentor`
-   - `mentor dashboard displays student attendance confirmation badge`
-2. `NotificationAlertSystemTest.php` (8 Passed)
-3. `MentorRefinementTest.php` (10 Passed)
-4. `EnrollmentNegotiationTest.php` (8 Passed)
-5. Seluruh modul otentikasi, manajemen pengguna, pelaporan, dan pendaftaran lulus uji.
+1. `GalleryCategoryFeatureTest.php` (11 Passed):
+   - `non admin cannot access gallery categories management`
+   - `admin can view gallery categories management list with stats`
+   - `admin can create new gallery category with valid data`
+   - `admin can update existing gallery category`
+   - `admin can toggle category active status`
+   - `admin can reorder categories atomically`
+   - `admin can delete category and safely detach linked galleries`
+   - `admin can view trashed gallery categories`
+   - `admin can restore trashed gallery category`
+   - `admin can permanently force delete gallery category`
+   - `public gallery loads active categories from database`
+2. `GalleryFeatureTest.php` (8 Passed):
+   - `public user can view gallery page and active items`
+   - `non admin cannot access admin gallery management`
+   - `admin can view admin gallery management list`
+   - `admin can upload new gallery item with tags and file`
+   - `admin can soft delete gallery item move to trash and restore it`
+   - `admin force delete permanently removes record and observer deletes storage file`
+   - `view counter increments once per session anti spam`
+   - `admin can reorder galleries atomically`
+3. `MentorSessionAndAttendanceTest.php` (4 Passed)
+4. `NotificationAlertSystemTest.php` (8 Passed)
+5. `MentorRefinementTest.php` (10 Passed)
+6. `EnrollmentNegotiationTest.php` (8 Passed)
+7. Seluruh modul otentikasi, manajemen pengguna, pelaporan, dan pendaftaran lulus uji.
 
 ---
 
 ## 🎯 10. KESIMPULAN & REKOMENDASI LANGKAH KE DEPAN
 
 ### 🏁 Kesimpulan Akhir:
-Aplikasi **AL-HIKMAH LMS (Versi 4.2)** berada dalam kondisi **100% Selesai, Teruji (118 Passed Tests - 100% GREEN PASS), dan Siap Digunakan (Production Ready)**. Seluruh antarmuka navigasi terpadu (Admin, Mentor, Orang Tua, Santri, dan Publik), sistem dark mode tersinkronisasi, lokalisasi Bahasa Indonesia baku, filter proteksi santri lunas mentor, mesin metode belajar dinamis, notifikasi konfirmasi kehadiran real-time, Livewire notification bell, negosiasi jadwal 2 arah, serta export data spreadsheet telah berfungsi sempurna, stabil, aman, cepat, dan modern.
+Aplikasi **AL-HIKMAH LMS (Versi 4.4)** berada dalam kondisi **100% Selesai, Teruji (134 Passed Tests - 100% GREEN PASS), dan Siap Digunakan (Production Ready)**. Seluruh manajemen dinamis kategori galeri admin, etalase galeri interaktif publik, manajemen dokumentasi dengan tong sampah (*soft deletes*), pembersihan berkas otomatis, anti-spam tracker tayang sesi, reorder atomik, navigasi terpadu, sistem dark mode tersinkronisasi, lokalisasi Bahasa Indonesia baku, serta notifikasi real-time telah berfungsi sempurna, stabil, aman, cepat, dan modern.
 
 ### 🚀 Rekomendasi Langkah Ke Depan untuk Pimpinan / Manajemen:
 1. **Go-Live / Deploy ke Server Production**: Aplikasi dapat langsung di-deploy ke server live (domain utama lembaga).
 2. **Konfigurasi WhatsApp Gateway (Opsional)**: Memasukkan `WHATSAPP_API_KEY` di berkas `.env` server untuk mengaktifkan pengiriman WhatsApp otomatis ke HP Orang Tua & Mentor.
-3. **Sosialisasi Admin & Pengajar**: Memberikan pelatihan singkat kepada admin dan pengajar mengenai penggunaan portal manajemen dan pelaporan progres hafalan.
+3. **Sosialisasi Admin & Pengajar**: Memberikan pelatihan singkat kepada admin mengenai pengelolaan foto dan kategori kegiatan serta kepada pengajar mengenai pelaporan progres hafalan.
 
 ---
 
 *Laporan eksekutif resmi ini disusun khusus untuk jajaran Manajemen / Pimpinan Lembaga AL-HIKMAH.*
+

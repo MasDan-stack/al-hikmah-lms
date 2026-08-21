@@ -222,6 +222,12 @@
                 <a href="{{ route('admin.programs.index') }}" class="admin-nav-item {{ request()->routeIs('admin.programs.*') ? 'active' : '' }}">
                     <i class="bi bi-journal-bookmark"></i> Program Belajar
                 </a>
+                <a href="{{ route('admin.galleries.index') }}" class="admin-nav-item {{ request()->routeIs('admin.galleries.*') ? 'active' : '' }}">
+                    <i class="bi bi-images"></i> Galeri Kegiatan
+                </a>
+                <a href="{{ route('admin.gallery-categories.index') }}" class="admin-nav-item {{ request()->routeIs('admin.gallery-categories.*') ? 'active' : '' }}">
+                    <i class="bi bi-tags"></i> Kategori Galeri
+                </a>
 
                 <div class="admin-nav-section-title mt-2">Keuangan & Komunikasi</div>
 

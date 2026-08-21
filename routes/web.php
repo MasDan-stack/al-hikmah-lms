@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\ActiveEnrollmentController;
 use App\Http\Controllers\Admin\ContactMessageController as AdminContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnrollmentController as AdminEnrollmentController;
+use App\Http\Controllers\Admin\GalleryCategoryController;
+use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\MentorAvailabilityController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\SettingController;
@@ -80,6 +82,10 @@ Route::get('/faq', function () {
 Route::get('/kontak', [ContactController::class, 'index'])->name('contact');
 Route::post('/kontak', [ContactController::class, 'store'])->name('contact.store');
 
+// Halaman Galeri Interaktif Publik
+Route::get('/galeri', [LandingController::class, 'galeri'])->name('galeri');
+Route::post('/galeri/{id}/view', [LandingController::class, 'incrementView'])->name('galeri.view');
+
 // ==========================================
 // 📌 ROUTE ADMIN (HARUS ADA)
 // ==========================================
@@ -132,6 +138,19 @@ Route::middleware(['auth', 'role:admin'])
         Route::post('/enrollments/{id}/offer', [AdminEnrollmentController::class, 'offerAlternative'])->name('enrollments.offer');
         Route::post('/enrollments/bulk-accept', [AdminEnrollmentController::class, 'bulkAccept'])->name('enrollments.bulk-accept');
         Route::post('/enrollments/{id}/cancel', [AdminEnrollmentController::class, 'cancel'])->name('enrollments.cancel');
+
+        // Manajemen Galeri Kegiatan & Kategori
+        Route::post('/gallery-categories/reorder', [GalleryCategoryController::class, 'reorder'])->name('gallery-categories.reorder');
+        Route::post('/gallery-categories/{id}/toggle', [GalleryCategoryController::class, 'toggle'])->name('gallery-categories.toggle');
+        Route::post('/gallery-categories/{id}/restore', [GalleryCategoryController::class, 'restore'])->name('gallery-categories.restore');
+        Route::delete('/gallery-categories/{id}/force-delete', [GalleryCategoryController::class, 'forceDelete'])->name('gallery-categories.force-delete');
+        Route::resource('gallery-categories', GalleryCategoryController::class)->except(['show', 'create', 'edit']);
+
+        Route::post('/galleries/reorder', [GalleryController::class, 'reorder'])->name('galleries.reorder');
+        Route::post('/galleries/{id}/toggle', [GalleryController::class, 'toggle'])->name('galleries.toggle');
+        Route::post('/galleries/{id}/restore', [GalleryController::class, 'restore'])->name('galleries.restore');
+        Route::delete('/galleries/{id}/force-delete', [GalleryController::class, 'forceDelete'])->name('galleries.force-delete');
+        Route::resource('galleries', GalleryController::class)->except(['show']);
 
         // Contact Messages Management
         Route::get('/contacts', [AdminContactMessageController::class, 'index'])->name('contacts.index');

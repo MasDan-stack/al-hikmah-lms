@@ -23,9 +23,37 @@
                         </div>
                     </div>
 
+                    @if(session('success'))
+                        <div class="alert alert-success border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center justify-content-between p-3" role="alert">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-check-circle-fill fs-5 text-success"></i>
+                                <div class="fw-semibold">{{ session('success') }}</div>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
                     @if(session('error'))
-                        <div class="alert alert-danger border-0 rounded-3 mb-4">
-                            <i class="bi bi-exclamation-triangle me-2"></i>{{ session('error') }}
+                        <div class="alert alert-danger border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center justify-content-between p-3" role="alert">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-exclamation-triangle-fill fs-5 text-danger"></i>
+                                <div class="fw-semibold">{{ session('error') }}</div>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger border-0 rounded-4 shadow-sm mb-4 p-3" role="alert">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-exclamation-circle-fill fs-5 text-danger"></i>
+                                <span class="fw-bold">Terdapat kesalahan input:</span>
+                            </div>
+                            <ul class="mb-0 ps-4 small">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
                         </div>
                     @endif
 

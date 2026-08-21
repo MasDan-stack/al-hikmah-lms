@@ -132,7 +132,7 @@
                     </a>
                     <ul class="dropdown-menu shadow-sm border-0 rounded-4">
                         <li>
-                            <a class="dropdown-item" href="{{ route('home') }}#galeri">
+                            <a class="dropdown-item {{ request()->routeIs('galeri') ? 'active' : '' }}" href="{{ route('galeri') }}">
                                 <i class="bi bi-images text-success"></i> Galeri Kegiatan
                             </a>
                         </li>

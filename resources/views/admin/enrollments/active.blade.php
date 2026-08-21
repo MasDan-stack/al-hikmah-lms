@@ -4,8 +4,28 @@
 @section('header', 'Santri & Jadwal Bimbingan Aktif')
 @section('subheader', 'Daftar seluruh santri aktif pasca-kesepakatan jadwal dan pelunasan pembayaran')
 
-@section('content')
 <div class="container-fluid p-0">
+    <!-- Flash Alert Notification Messages -->
+    @if (session('success'))
+        <div class="alert alert-success border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center justify-content-between p-3" role="alert">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-check-circle-fill fs-5 text-success"></i>
+                <div class="fw-semibold">{{ session('success') }}</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center justify-content-between p-3" role="alert">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-exclamation-triangle-fill fs-5 text-danger"></i>
+                <div class="fw-semibold">{{ session('error') }}</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="card border-0 shadow-sm rounded-4 bg-white">
         <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
             <!-- Filter Bar -->
