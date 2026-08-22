@@ -142,6 +142,76 @@ class Enrollment extends Model
             : 'Menunggu penetapan';
     }
 
+    /**
+     * Accessor badge warna Bootstrap berdasarkan status pendaftaran.
+     */
+    public function getStatusBadgeClassAttribute(): string
+    {
+        if ($this->status instanceof EnrollmentStatus) {
+            return $this->status->badgeClass();
+        }
+
+        return match ($this->status) {
+            EnrollmentStatus::WAITING_ADMIN->value => 'warning',
+            EnrollmentStatus::WAITING_PARENT->value => 'info',
+            EnrollmentStatus::CONFIRMED->value => 'primary',
+            EnrollmentStatus::ACTIVE->value => 'success',
+            EnrollmentStatus::CANCELLED->value => 'danger',
+            default => 'secondary',
+        };
+    }
+
+    /**
+     * Accessor label bahasa Indonesia berdasarkan status pendaftaran.
+     */
+    public function getStatusLabelAttribute(): string
+    {
+        if ($this->status instanceof EnrollmentStatus) {
+            return $this->status->label();
+        }
+
+        return match ($this->status) {
+            EnrollmentStatus::WAITING_ADMIN->value => 'Menunggu Review Lembaga',
+            EnrollmentStatus::WAITING_PARENT->value => 'Menunggu Respon Anda',
+            EnrollmentStatus::CONFIRMED->value => 'Jadwal Disepakati (Siap Bayar)',
+            EnrollmentStatus::ACTIVE->value => 'Kelas Aktif',
+            EnrollmentStatus::CANCELLED->value => 'Dibatalkan / Expired',
+            default => (string) $this->status,
+        };
+    }
+
+    /**
+     * Accessor persentase progress untuk mini progress bar di sidebar & dashboard.
+     */
+    public function getProgressPercentAttribute(): int
+    {
+        $statusValue = $this->status instanceof EnrollmentStatus ? $this->status->value : $this->status;
+
+        return match ($statusValue) {
+            EnrollmentStatus::WAITING_ADMIN->value => 35,
+            EnrollmentStatus::WAITING_PARENT->value => 65,
+            EnrollmentStatus::CONFIRMED->value => 85,
+            EnrollmentStatus::ACTIVE->value => 100,
+            default => 20,
+        };
+    }
+
+    /**
+     * Accessor ringkasan langkah pendaftaran saat ini.
+     */
+    public function getProgressStepLabelAttribute(): string
+    {
+        $statusValue = $this->status instanceof EnrollmentStatus ? $this->status->value : $this->status;
+
+        return match ($statusValue) {
+            EnrollmentStatus::WAITING_ADMIN->value => '1. Review Jadwal Lembaga',
+            EnrollmentStatus::WAITING_PARENT->value => '2. Konfirmasi Tawaran Jadwal',
+            EnrollmentStatus::CONFIRMED->value => '3. Pembayaran Pendaftaran',
+            EnrollmentStatus::ACTIVE->value => 'Kelas Bimbingan Aktif',
+            default => 'Proses Pendaftaran',
+        };
+    }
+
     // State Helper Checks
     public function isWaitingAdmin(): bool
     {

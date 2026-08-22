@@ -114,6 +114,19 @@ class PaymentController extends Controller
                     true
                 );
             }
+
+            // Notifikasi ke Orang Tua bahwa pembayaran berhasil dan program aktif
+            if ($payment->student?->parent?->user_id) {
+                NotificationService::send(
+                    $payment->student->parent->user_id,
+                    'Pembayaran Berhasil & Program Aktif!',
+                    "Pembayaran tagihan {$payment->invoice_number} telah lunas. Program bimbingan untuk {$payment->student->getDisplayName()} sekarang sudah aktif.",
+                    NotificationType::SUCCESS,
+                    route('parent.dashboard'),
+                    'payment',
+                    true
+                );
+            }
         }
 
         return redirect()->back()->with('success', 'Data tagihan SPP #'.$payment->invoice_number.' berhasil diperbarui!');

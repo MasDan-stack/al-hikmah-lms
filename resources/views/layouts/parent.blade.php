@@ -19,13 +19,15 @@
     </script>
     <title>@yield('title', 'Dashboard') | AL-HIKMAH LMS</title>
 
-    <!-- Bootstrap 5 & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.1.1/index.min.css" rel="stylesheet">
 
-    <!-- Custom CSS AL-HIKMAH -->
+    <!-- DataTables CSS (Bootstrap 5 & Responsive) -->
+    <link href="{{ asset('assets/DataTables/datatables.min.css') }}" rel="stylesheet">
+
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    @stack('styles')
 
     <style>
         .admin-wrapper {
@@ -34,17 +36,17 @@
         }
 
         .admin-sidebar {
-            width: 270px;
-            background: var(--card-bg, #ffffff);
+            width: 280px;
+            background: var(--card-bg);
             border-right: 1px solid var(--border-color);
             position: fixed;
             top: 0;
             bottom: 0;
             left: 0;
-            z-index: 1020;
+            z-index: 1030;
             display: flex;
             flex-direction: column;
-            transition: var(--transition, all 0.3s ease);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .admin-sidebar-brand {
@@ -53,10 +55,11 @@
             align-items: center;
             gap: 12px;
             border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
         }
 
         .admin-sidebar-brand img {
-            height: 42px;
+            height: 40px;
             width: auto;
         }
 
@@ -64,43 +67,46 @@
             font-weight: 800;
             font-size: 1.15rem;
             color: var(--text-primary);
+            letter-spacing: -0.5px;
         }
 
         .admin-sidebar-nav {
-            padding: 1.25rem 0.85rem;
+            padding: 1rem 1rem;
             flex-grow: 1;
             overflow-y: auto;
+            scrollbar-width: thin;
         }
 
         .admin-nav-section-title {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             font-weight: 700;
             letter-spacing: 0.8px;
             color: var(--text-muted);
-            padding: 8px 14px 4px;
+            padding: 12px 14px 6px;
         }
 
         .admin-nav-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 9px 14px;
+            padding: 10px 14px;
             color: var(--text-secondary);
             font-weight: 500;
-            font-size: 0.88rem;
-            border-radius: var(--radius-md, 10px);
+            font-size: 0.9rem;
+            border-radius: var(--radius-md);
             text-decoration: none;
-            transition: all 0.2s ease;
-            margin-bottom: 3px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 4px;
+            border-left: 3px solid transparent;
         }
 
         .admin-nav-item i {
             font-size: 1.1rem;
-            width: 20px;
+            width: 22px;
             text-align: center;
             color: var(--text-muted);
-            transition: var(--transition, all 0.2s ease);
+            transition: color 0.2s ease;
         }
 
         .admin-nav-item:hover,
@@ -108,6 +114,7 @@
             background: var(--primary-lighter);
             color: var(--primary);
             font-weight: 600;
+            border-left-color: var(--primary);
         }
 
         .admin-nav-item:hover i,
@@ -116,44 +123,60 @@
         }
 
         .admin-main {
-            margin-left: 270px;
+            margin-left: 280px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             background: var(--bg-secondary);
-            transition: var(--transition, all 0.3s ease);
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .admin-header {
             height: 72px;
             background: var(--glass-bg-strong);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid var(--border-color);
-            padding: 0 1.75rem;
+            padding: 0 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
-            z-index: 1010;
-            box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.04);
+            z-index: 1020;
+            box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.03);
         }
 
         .admin-content {
-            padding: 2rem 1.75rem;
+            padding: 2rem;
             flex-grow: 1;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1025;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.show {
+            opacity: 1;
+            visibility: visible;
         }
 
         @media (max-width: 991.98px) {
             .admin-sidebar {
                 transform: translateX(-100%);
+                box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
             }
 
             .admin-sidebar.show {
                 transform: translateX(0);
-                box-shadow: 0 0 40px rgba(0, 0, 0, 0.25);
             }
 
             .admin-main {
@@ -161,11 +184,12 @@
             }
 
             .admin-header {
-                padding: 0 1rem;
+                padding: 0 1.25rem;
+                height: 64px;
             }
 
             .admin-content {
-                padding: 1.25rem 1rem;
+                padding: 1.5rem 1.25rem;
             }
         }
     </style>
@@ -174,45 +198,89 @@
 </head>
 
 <body>
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader-container">
+            <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH" height="80"
+                style="margin-bottom: 20px;">
+            <div class="loader-text">AL-HIKMAH</div>
+            <div class="loader-subtext">Memuat Dashboard...</div>
+        </div>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="admin-wrapper">
-        <!-- Sidebar Navigation Parent / Santri -->
         <aside class="admin-sidebar" id="adminSidebar">
             <div class="admin-sidebar-brand">
                 <a href="{{ route('dashboard') }}" class="d-flex align-items-center gap-2 text-decoration-none">
                     <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH Logo">
-                    <div class="admin-sidebar-brand-text">
-                        AL<span style="color: var(--primary)">-HIKMAH</span>
-                    </div>
+                    <div class="admin-sidebar-brand-text">AL<span style="color: var(--primary)">-HIKMAH</span></div>
                 </a>
             </div>
 
             <nav class="admin-sidebar-nav">
-                @if(auth()->user()->isStudent())
+                @if (auth()->user()->isStudent())
                     <div class="admin-nav-section-title">Ruang Belajar Santri</div>
-                    <a href="{{ route('student.dashboard') }}" class="admin-nav-item {{ request()->routeIs('student.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('student.dashboard') }}"
+                        class="admin-nav-item {{ request()->routeIs('student.dashboard') ? 'active' : '' }}">
                         <i class="bi bi-speedometer2"></i> Dashboard Belajar
                     </a>
                 @else
                     <div class="admin-nav-section-title">Portal Orang Tua</div>
-                    <a href="{{ route('parent.dashboard') }}" class="admin-nav-item {{ request()->routeIs('parent.dashboard') ? 'active' : '' }}">
+                    
+                    <!-- SELALU MUNCUL (STATE 1, 2, 3) -->
+                    <a href="{{ route('parent.dashboard') }}"
+                        class="admin-nav-item {{ request()->routeIs('parent.dashboard') ? 'active' : '' }}">
                         <i class="bi bi-speedometer2"></i> Dashboard Utama
                     </a>
-                    <a href="{{ route('parent.children.index') }}" class="admin-nav-item {{ request()->routeIs('parent.children.*') ? 'active' : '' }}">
-                        <i class="bi bi-people"></i> Anak & Progres
-                    </a>
-                    <a href="{{ route('parent.schedules.index') }}" class="admin-nav-item {{ request()->routeIs('parent.schedules.*') ? 'active' : '' }}">
-                        <i class="bi bi-calendar-check"></i> Jadwal & Kehadiran
-                    </a>
-                    <a href="{{ route('parent.enrollments.index') }}" class="admin-nav-item {{ request()->routeIs('parent.enrollments.*') ? 'active' : '' }}">
-                        <i class="bi bi-journal-plus"></i> Pendaftaran & Jadwal
-                    </a>
-                    <a href="{{ route('parent.payments.index') }}" class="admin-nav-item {{ request()->routeIs('parent.payments.*') ? 'active' : '' }}">
-                        <i class="bi bi-wallet2"></i> Tagihan & SPP
-                    </a>
-                    <a href="{{ route('parent.messages.index') }}" class="admin-nav-item {{ request()->routeIs('parent.messages.*') ? 'active' : '' }}">
-                        <i class="bi bi-chat-dots"></i> Pesan & Chat Mentor
-                    </a>
-                    <a href="{{ route('parent.profile.edit') }}" class="admin-nav-item {{ request()->routeIs('parent.profile.*') ? 'active' : '' }}">
+
+                    <!-- HANYA MUNCUL DI STATE 1 (Belum Punya Program) -->
+                    @if(!auth()->user()->hasPendingInvoiceOrEnrollment() && !auth()->user()->hasActivePaidProgram())
+                        @if(!auth()->user()->hasChildren())
+                            <a href="{{ route('parent.profile.children') }}"
+                                class="admin-nav-item {{ request()->routeIs('parent.profile.children') ? 'active' : '' }}">
+                                <i class="bi bi-person-plus"></i> Isi Data Anak
+                                <span class="badge bg-warning text-dark ms-auto" style="font-size: 0.65rem;">Wajib</span>
+                            </a>
+                        @else
+                            <a href="{{ url('/biaya') }}"
+                                class="admin-nav-item {{ request()->is('biaya') ? 'active' : '' }}">
+                                <i class="bi bi-cart-plus"></i> Pilih Program Baru
+                            </a>
+                        @endif
+                    @endif
+
+                    <!-- MUNCUL DI STATE 2 & 3 (Transisi & Aktif) -->
+                    @if(auth()->user()->hasPendingInvoiceOrEnrollment() || auth()->user()->hasActivePaidProgram())
+                        <a href="{{ route('parent.enrollments.index') }}"
+                            class="admin-nav-item {{ request()->routeIs('parent.enrollments.*') ? 'active' : '' }}">
+                            <i class="bi bi-journal-plus"></i> Pendaftaran & Jadwal
+                        </a>
+                        <a href="{{ route('parent.payments.index') }}"
+                            class="admin-nav-item {{ request()->routeIs('parent.payments.*') ? 'active' : '' }}">
+                            <i class="bi bi-wallet2"></i> Tagihan & SPP
+                        </a>
+                    @endif
+
+                    <!-- HANYA MUNCUL DI STATE 3 (Aktif / Lunas) -->
+                    @if(auth()->user()->hasActivePaidProgram())
+                        <a href="{{ route('parent.children.index') }}"
+                            class="admin-nav-item {{ request()->routeIs('parent.children.*') ? 'active' : '' }}">
+                            <i class="bi bi-people"></i> Anak & Progres
+                        </a>
+                        <a href="{{ route('parent.schedules.index') }}"
+                            class="admin-nav-item {{ request()->routeIs('parent.schedules.*') ? 'active' : '' }}">
+                            <i class="bi bi-calendar-check"></i> Jadwal & Kehadiran
+                        </a>
+                        <a href="{{ route('parent.messages.index') }}"
+                            class="admin-nav-item {{ request()->routeIs('parent.messages.*') ? 'active' : '' }}">
+                            <i class="bi bi-chat-dots"></i> Pesan & Chat Mentor
+                        </a>
+                    @endif
+
+                    <!-- SELALU MUNCUL (STATE 1, 2, 3) -->
+                    <a href="{{ route('parent.profile.edit') }}"
+                        class="admin-nav-item {{ request()->routeIs('parent.profile.*') ? 'active' : '' }}">
                         <i class="bi bi-person-circle"></i> Profil & Akun
                     </a>
                 @endif
@@ -221,7 +289,7 @@
                     <i class="bi bi-globe"></i> Buka Halaman Depan
                 </a>
 
-                <hr class="my-3" style="border-color: var(--border-color);">
+                <hr class="my-3" style="border-color: var(--border-color); opacity: 0.5;">
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -232,64 +300,71 @@
             </nav>
         </aside>
 
-        <!-- Main Area -->
         <div class="admin-main">
-            <!-- Top Header Navbar -->
             <header class="admin-header">
                 <div class="d-flex align-items-center gap-3">
-                    <button class="btn btn-outline-secondary btn-sm d-lg-none rounded-circle" id="sidebarToggleBtn" aria-label="Toggle Sidebar">
+                    <button class="btn btn-outline-secondary btn-sm d-lg-none rounded-circle" id="sidebarToggleBtn"
+                        aria-label="Toggle Sidebar"
+                        style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;">
                         <i class="bi bi-list fs-5"></i>
                     </button>
                     <div>
-                        <h5 class="fw-bold mb-0 text-primary">@yield('header', auth()->user()->isStudent() ? 'Ruang Belajar Santri' : 'Dashboard Orang Tua')</h5>
-                        <small class="text-muted">@yield('subheader', 'Pantau perkembangan hafalan & bimbingan ananda')</small>
+                        <h5 class="fw-bold mb-0 text-primary" style="font-size: 1.1rem;">@yield('header', auth()->user()->isStudent() ? 'Ruang Belajar Santri' : 'Dashboard Orang Tua')</h5>
+                        <small class="text-muted" style="font-size: 0.8rem;">@yield('subheader', 'Pantau perkembangan hafalan & bimbingan ananda')</small>
                     </div>
                 </div>
 
                 <div class="d-flex align-items-center gap-2 gap-md-3">
-                    <!-- Home Route Link Button -->
-                    <a href="{{ route('home') }}" class="btn btn-outline-custom rounded-pill px-3 py-1 btn-sm d-none d-sm-inline-flex align-items-center" target="_blank">
-                        <i class="bi bi-house-door me-1 text-success"></i> Beranda
+                    <a href="{{ route('home') }}"
+                        class="btn btn-outline-custom rounded-pill px-3 py-1 btn-sm d-none d-sm-inline-flex align-items-center"
+                        target="_blank">
+                        <i class="bi bi-house-door me-1" style="color: var(--primary);"></i> Beranda
                     </a>
-
-                    <!-- Livewire Realtime Notification Bell Drawer -->
                     <livewire:notification-bell />
-
-                    <!-- Theme Toggle Button -->
-                    <button type="button" class="theme-toggle-btn" id="themeToggle" title="Ganti Tema (Gelap/Terang)" aria-label="Ganti Tema">
+                    <button type="button" class="theme-toggle-btn" id="themeToggle" title="Ganti Tema"
+                        aria-label="Ganti Tema">
                         <i class="bi bi-moon-fill" id="themeIcon"></i>
                     </button>
 
-                    <!-- User Profile Dropdown -->
                     <div class="dropdown">
-                        <button class="btn btn-outline-custom dropdown-toggle d-flex align-items-center gap-2 py-1 px-3 rounded-pill"
-                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi {{ auth()->user()->isStudent() ? 'bi-mortarboard' : 'bi-person-heart' }} fs-5 text-success"></i>
+                        <button
+                            class="btn btn-outline-custom dropdown-toggle d-flex align-items-center gap-2 py-1 px-3 rounded-pill"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi {{ auth()->user()->isStudent() ? 'bi-mortarboard' : 'bi-person-heart' }} fs-5"
+                                style="color: var(--primary);"></i>
                             <div class="d-none d-md-block text-start">
-                                <div class="fw-semibold text-dark small leading-tight">{{ auth()->user()->name ?? 'Wali Santri' }}</div>
+                                <div class="fw-semibold small leading-tight" style="color: var(--text-primary);">
+                                    {{ auth()->user()->name ?? 'Wali Santri' }}</div>
                             </div>
-                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2 py-1 small">
+                            <span class="badge rounded-pill px-2 py-1 small"
+                                style="background: var(--primary-lighter); color: var(--primary);">
                                 {{ auth()->user()->role?->label ?? (auth()->user()->isStudent() ? 'Santri' : 'Orang Tua') }}
                             </span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm rounded-4 border-0 mt-2 p-2">
-                            <li class="px-3 py-2 border-bottom mb-1">
-                                <div class="fw-bold text-dark small">{{ auth()->user()->name }}</div>
-                                <div class="text-muted" style="font-size: 0.78rem;">{{ auth()->user()->email }}</div>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 border-0 mt-2 p-2"
+                            style="min-width: 220px;">
+                            <li class="px-3 py-2 border-bottom mb-1"
+                                style="border-color: var(--border-color) !important;">
+                                <div class="fw-bold small" style="color: var(--text-primary);">
+                                    {{ auth()->user()->name }}</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">{{ auth()->user()->email }}</div>
                             </li>
-                            @if(!auth()->user()->isStudent())
+                            @if (!auth()->user()->isStudent())
                                 <li>
-                                    <a class="dropdown-item rounded-3 py-2" href="{{ route('parent.profile.edit') }}">
-                                        <i class="bi bi-person text-primary me-2"></i> Profil & Akun
+                                    <a class="dropdown-item rounded-3 py-2"
+                                        href="{{ route('parent.profile.edit') }}">
+                                        <i class="bi bi-person me-2" style="color: var(--primary);"></i> Profil & Akun
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item rounded-3 py-2" href="{{ route('parent.payments.index') }}">
-                                        <i class="bi bi-wallet2 text-success me-2"></i> Tagihan & SPP
+                                    <a class="dropdown-item rounded-3 py-2"
+                                        href="{{ route('parent.payments.index') }}">
+                                        <i class="bi bi-wallet2 me-2" style="color: var(--primary);"></i> Tagihan &
+                                        SPP
                                     </a>
                                 </li>
                                 <li>
-                                    <hr class="dropdown-divider my-1">
+                                    <hr class="dropdown-divider my-1" style="border-color: var(--border-color);">
                                 </li>
                             @endif
                             <li>
@@ -311,16 +386,22 @@
         </div>
     </div>
 
-    <!-- Global Flash Toast Notification -->
     <x-flash-toast />
-
-    <!-- Bootstrap 5 & Custom JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/datatables-init.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
     <script>
-        document.getElementById('sidebarToggleBtn')?.addEventListener('click', function() {
-            document.getElementById('adminSidebar')?.classList.toggle('show');
-        });
+        const sidebar = document.getElementById('adminSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const toggleBtn = document.getElementById('sidebarToggleBtn');
+
+        function toggleSidebar() {
+            sidebar?.classList.toggle('show');
+            overlay?.classList.toggle('show');
+        }
+        toggleBtn?.addEventListener('click', toggleSidebar);
+        overlay?.addEventListener('click', toggleSidebar);
     </script>
     @stack('scripts')
 </body>

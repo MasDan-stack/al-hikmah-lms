@@ -6,6 +6,7 @@ use App\Enums\EnrollmentStatus;
 use App\Models\Enrollment;
 use App\Models\Mentor;
 use App\Models\ParentProfile;
+use App\Models\Payment;
 use App\Models\Program;
 use App\Models\Session;
 use App\Models\SessionConfirmation;
@@ -61,18 +62,45 @@ class MentorSessionAndAttendanceTest extends TestCase
         ]);
 
         $this->program = Program::create([
-            'name' => 'Tahsin Intensif',
-            'slug' => 'tahsin-intensif',
-            'price' => 350000,
+            'name' => 'Tahsin Dasar',
+            'price' => 450000,
+            'description' => 'Test Program',
             'is_active' => true,
+        ]);
+
+        $enrollment = Enrollment::create([
+            'student_id' => $this->student->id,
+            'program_id' => $this->program->id,
+            'mentor_id' => $this->mentor->id,
+            'status' => EnrollmentStatus::ACTIVE->value,
+            'requested_days' => ['monday'],
+            'learning_method' => 'offline',
+        ]);
+
+        Payment::create([
+            'student_id' => $this->student->id,
+            'program_id' => $this->program->id,
+            'enrollment_id' => $enrollment->id,
+            'amount' => 450000,
+            'status' => 'paid',
+            'invoice_number' => 'INV-TEST-SESSION',
         ]);
     }
 
     public function test_mentor_students_list_only_shows_paid_active_students(): void
     {
+        $unpaidChildUser = User::factory()->student()->create(['name' => 'Santri Belum Lunas']);
+        $unpaidStudent = Student::create([
+            'user_id' => $unpaidChildUser->id,
+            'parent_id' => $this->parentProfile->id,
+            'full_name' => 'Santri Belum Lunas',
+            'age' => 10,
+            'gender' => 'L',
+        ]);
+
         // Enrollment status CONFIRMED (belum bayar)
         $unpaidEnrollment = Enrollment::create([
-            'student_id' => $this->student->id,
+            'student_id' => $unpaidStudent->id,
             'program_id' => $this->program->id,
             'mentor_id' => $this->mentor->id,
             'status' => EnrollmentStatus::CONFIRMED,
@@ -80,14 +108,14 @@ class MentorSessionAndAttendanceTest extends TestCase
 
         $response = $this->actingAs($this->mentorUser)->get(route('mentor.students.index'));
         $response->assertStatus(200);
-        $response->assertDontSee('Ahmad Santri');
+        $response->assertDontSee('Santri Belum Lunas');
 
         // Setelah lunas & ACTIVE
         $unpaidEnrollment->markAsPaidAndActive();
 
         $responseActive = $this->actingAs($this->mentorUser)->get(route('mentor.students.index'));
         $responseActive->assertStatus(200);
-        $responseActive->assertSee('Ahmad Santri');
+        $responseActive->assertSee('Santri Belum Lunas');
     }
 
     public function test_initial_session_generator_uses_parent_selected_learning_method(): void

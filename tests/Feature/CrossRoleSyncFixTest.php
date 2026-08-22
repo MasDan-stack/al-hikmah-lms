@@ -109,7 +109,9 @@ class CrossRoleSyncFixTest extends TestCase
             'status' => 'pending',
         ]);
 
-        // Verification: mentor_student pivot synced per day
+        // Verification: mentor_student pivot synced per day once marked as paid & active
+        $enrollment->markAsPaidAndActive();
+
         $this->assertDatabaseHas('mentor_student', [
             'mentor_id' => $this->mentor->id,
             'student_id' => $this->student->id,

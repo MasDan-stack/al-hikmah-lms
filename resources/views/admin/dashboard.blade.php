@@ -25,14 +25,14 @@
             </div>
             <div class="card-body p-4">
                 <div class="table-responsive">
-                    <table class="table align-middle table-hover mb-0">
+                    <table class="table align-middle table-hover mb-0 datatable" data-page-length="5">
                         <thead class="table-light">
                             <tr>
                                 <th>Nama Pengguna</th>
                                 <th>Hak Akses (Role)</th>
                                 <th>Alamat Email</th>
                                 <th>No. Telepon</th>
-                                <th class="text-end">Aksi</th>
+                                <th class="text-end no-sort">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,39 +73,35 @@
 <!-- Section Widget Monitor Aktivitas Orang Tua (Parent Monitoring Widget) -->
 <div class="row g-4 mb-4">
     <div class="col-12">
-        <div class="card border-0 shadow-sm rounded-4 bg-white">
-            <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden">
+            <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
                 <div>
-                    <h5 class="fw-bold text-dark mb-1">
-                        <i class="bi bi-people-fill text-primary me-2"></i>Monitor Aktivitas Orang Tua (Parent Monitoring)
-                    </h5>
-                    <small class="text-muted">Pantau respon konfirmasi kehadiran anak, pembayaran SPP, dan pesan dari Wali Santri</small>
+                    <h5 class="fw-bold text-dark mb-1"><i class="bi bi-person-heart me-2 text-primary"></i>Parent Monitoring Panel</h5>
+                    <p class="text-muted small mb-0">Pantau interaksi, konfirmasi absensi, serta kepatuhan pembayaran dari para Wali Santri</p>
                 </div>
-                <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 fw-bold">
-                    <i class="bi bi-person-hearts me-1"></i> Total {{ $totalParents }} Wali Santri Terdaftar
-                </span>
+                <div>
+                    <ul class="nav nav-pills" id="parentTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active rounded-pill px-3" id="confirmations-tab" data-bs-toggle="tab" data-bs-target="#confirmations-pane" type="button" role="tab">
+                                <i class="bi bi-check2-circle me-1"></i> Konfirmasi Kehadiran
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rounded-pill px-3" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments-pane" type="button" role="tab">
+                                <i class="bi bi-credit-card me-1"></i> Pembayaran SPP
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rounded-pill px-3" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages-pane" type="button" role="tab">
+                                <i class="bi bi-chat-dots me-1"></i> Pesan & Konsultasi
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <div class="card-body p-4">
-                <ul class="nav nav-pills nav-fill bg-light p-1 rounded-pill mb-4" id="parentActivityTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active rounded-pill fw-bold" id="tab-confirmations" data-bs-toggle="pill" data-bs-target="#confirmations-pane" type="button" role="tab">
-                            <i class="bi bi-check2-circle me-1 text-success"></i> Konfirmasi Kehadiran Anak ({{ $recentConfirmations->count() }})
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link rounded-pill fw-bold" id="tab-payments" data-bs-toggle="pill" data-bs-target="#payments-pane" type="button" role="tab">
-                            <i class="bi bi-wallet2 me-1 text-warning"></i> Pembayaran SPP Orang Tua ({{ $recentPayments->count() }})
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link rounded-pill fw-bold" id="tab-messages" data-bs-toggle="pill" data-bs-target="#messages-pane" type="button" role="tab">
-                            <i class="bi bi-chat-text me-1 text-info"></i> Pesan & Konsultasi ({{ $recentParentMessages->count() }})
-                        </button>
-                    </li>
-                </ul>
-
-                <div class="tab-content" id="parentActivityContent">
+                <div class="tab-content" id="parentTabsContent">
                     <!-- Tab 1: Konfirmasi Kehadiran Sesi Anak -->
                     <div class="tab-pane fade show active" id="confirmations-pane" role="tabpanel">
                         @if($recentConfirmations->isEmpty())
@@ -114,7 +110,7 @@
                             </div>
                         @else
                             <div class="table-responsive">
-                                <table class="table align-middle table-hover">
+                                <table class="table align-middle table-hover datatable" data-page-length="5">
                                     <thead class="table-light">
                                         <tr>
                                             <th>Wali Santri</th>
@@ -171,7 +167,7 @@
                             </div>
                         @else
                             <div class="table-responsive">
-                                <table class="table align-middle table-hover">
+                                <table class="table align-middle table-hover datatable" data-page-length="5">
                                     <thead class="table-light">
                                         <tr>
                                             <th>No. Invoice</th>

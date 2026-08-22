@@ -30,7 +30,7 @@
                 </div>
             @else
                 <div class="table-responsive">
-                    <table class="table align-middle table-hover">
+                    <table class="table align-middle table-hover datatable" id="tableMentorSessions">
                         <thead class="table-light">
                             <tr>
                                 <th>Tanggal & Waktu</th>
@@ -39,7 +39,7 @@
                                 <th>Metode Belajar</th>
                                 <th>Konfirmasi Wali</th>
                                 <th>Status Sesi</th>
-                                <th>Ubah Status</th>
+                                <th class="no-sort">Ubah Status</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -4,8 +4,10 @@ namespace Tests\Feature;
 
 use App\Enums\Role as RoleEnum;
 use App\Models\ParentProfile;
+use App\Models\Payment;
 use App\Models\Program;
 use App\Models\Role;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -88,6 +90,22 @@ class TahfidzRegistrationTest extends TestCase
         $parentRole = Role::firstOrCreate(['name' => RoleEnum::PARENT->value], ['label' => RoleEnum::PARENT->label()]);
         $parentUser = User::factory()->create(['role_id' => $parentRole->id]);
         $parentProfile = ParentProfile::create(['user_id' => $parentUser->id]);
+
+        $studentUser = User::factory()->student()->create();
+        $initialStudent = Student::create([
+            'user_id' => $studentUser->id,
+            'parent_id' => $parentProfile->id,
+            'full_name' => 'Kakak Bilal',
+            'age' => 14,
+            'gender' => 'L',
+        ]);
+
+        Payment::create([
+            'student_id' => $initialStudent->id,
+            'status' => 'paid',
+            'amount' => 350000,
+            'invoice_number' => 'INV-TEST-TAHFIDZ',
+        ]);
 
         $response = $this->withoutExceptionHandling()->actingAs($parentUser)->post(route('parent.enroll-tahfidz'), [
             'student_id' => 'new',

@@ -197,30 +197,12 @@ Route::middleware(['auth', 'role:parent'])
         // A. Dashboard Utama
         Route::get('/dashboard', [ParentDashboardController::class, 'index'])->name('dashboard');
 
-        // B. Modul Anak & Progress
-        Route::get('/children', [ParentChildController::class, 'index'])->name('children.index');
-        Route::get('/children/{id}', [ParentChildController::class, 'show'])->name('children.show');
-        Route::get('/children/{id}/report', [ParentChildController::class, 'exportReport'])->name('children.report');
-        Route::post('/enroll-tahfidz', [ParentChildController::class, 'enrollTahfidz'])->name('enroll-tahfidz');
-
-        // C. Modul Jadwal Belajar
-        Route::get('/schedules', [ParentScheduleController::class, 'index'])->name('schedules.index');
-        Route::get('/schedules/list', [ParentScheduleController::class, 'list'])->name('schedules.list');
-        Route::get('/schedules/{id}', [ParentScheduleController::class, 'show'])->name('schedules.show');
-        Route::post('/schedules/{id}/confirm', [ParentScheduleController::class, 'confirm'])->name('schedules.confirm');
-
         // D. Modul Pembayaran
         Route::get('/payments', [ParentPaymentController::class, 'index'])->name('payments.index');
         Route::get('/payments/history', [ParentPaymentController::class, 'history'])->name('payments.history');
         Route::get('/payments/{id}', [ParentPaymentController::class, 'show'])->name('payments.show');
         Route::post('/payments/{id}/pay', [ParentPaymentController::class, 'payOnline'])->name('payments.pay');
         Route::get('/payments/{id}/download', [ParentPaymentController::class, 'downloadInvoice'])->name('payments.download');
-
-        // E. Modul Komunikasi
-        Route::get('/messages', [ParentMessageController::class, 'index'])->name('messages.index');
-        Route::get('/messages/create', [ParentMessageController::class, 'create'])->name('messages.create');
-        Route::get('/messages/{mentor_id}', [ParentMessageController::class, 'chat'])->name('messages.chat');
-        Route::post('/messages', [ParentMessageController::class, 'store'])->name('messages.store');
 
         // F. Modul Profil & Pengaturan
         Route::get('/profile', [ParentProfileController::class, 'edit'])->name('profile.edit');
@@ -238,6 +220,29 @@ Route::middleware(['auth', 'role:parent'])
         Route::get('/enrollments/{id}', [ParentEnrollmentController::class, 'show'])->name('enrollments.show');
         Route::post('/enrollments/{id}/accept-offer', [ParentEnrollmentController::class, 'acceptOffer'])->name('enrollments.accept-offer');
         Route::post('/enrollments/{id}/reject-offer', [ParentEnrollmentController::class, 'rejectOffer'])->name('enrollments.reject-offer');
+
+        // =================================================================
+        // 🔒 SUB-ROUTE KHUSUS YANG SUDAH LUNAS / AKTIF (PROTECTED BY GUARD)
+        // =================================================================
+        Route::middleware(['parent.paid'])->group(function () {
+            // Modul Anak & Capaian Belajar
+            Route::get('/children', [ParentChildController::class, 'index'])->name('children.index');
+            Route::get('/children/{id}', [ParentChildController::class, 'show'])->name('children.show');
+            Route::get('/children/{id}/report', [ParentChildController::class, 'exportReport'])->name('children.report');
+            Route::post('/enroll-tahfidz', [ParentChildController::class, 'enrollTahfidz'])->name('enroll-tahfidz');
+
+            // Modul Jadwal Belajar
+            Route::get('/schedules', [ParentScheduleController::class, 'index'])->name('schedules.index');
+            Route::get('/schedules/list', [ParentScheduleController::class, 'list'])->name('schedules.list');
+            Route::get('/schedules/{id}', [ParentScheduleController::class, 'show'])->name('schedules.show');
+            Route::post('/schedules/{id}/confirm', [ParentScheduleController::class, 'confirm'])->name('schedules.confirm');
+
+            // Modul Komunikasi
+            Route::get('/messages', [ParentMessageController::class, 'index'])->name('messages.index');
+            Route::get('/messages/create', [ParentMessageController::class, 'create'])->name('messages.create');
+            Route::get('/messages/{mentor_id}', [ParentMessageController::class, 'chat'])->name('messages.chat');
+            Route::post('/messages', [ParentMessageController::class, 'store'])->name('messages.store');
+        });
     });
 
 // ==========================================

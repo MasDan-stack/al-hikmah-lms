@@ -47,7 +47,7 @@
                 </div>
             @else
                 <div class="table-responsive">
-                    <table class="table align-middle table-hover">
+                    <table class="table align-middle table-hover datatable" id="tableChildProgressHistory">
                         <thead class="table-light">
                             <tr>
                                 <th>Tanggal</th>

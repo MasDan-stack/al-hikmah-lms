@@ -58,17 +58,17 @@
 
     <!-- Tabel Data Pengguna -->
     <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-body p-0">
+        <div class="card-body p-3">
             <div class="table-responsive">
-                <table class="table align-middle table-hover mb-0">
+                <table class="table align-middle table-hover mb-0 datatable" id="tableAdminUsers">
                     <thead class="table-light">
                         <tr>
-                            <th class="ps-4">Nama Pengguna</th>
+                            <th class="ps-3">Nama Pengguna</th>
                             <th>Hak Akses (Role)</th>
                             <th>Alamat Email</th>
                             <th>Nomor Telepon</th>
                             <th>Terdaftar Sejak</th>
-                            <th class="text-end pe-4">Aksi</th>
+                            <th class="text-end pe-3 no-sort">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>

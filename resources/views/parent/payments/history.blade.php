@@ -23,7 +23,7 @@
             </div>
         @else
             <div class="table-responsive">
-                <table class="table align-middle table-hover">
+                <table class="table align-middle table-hover datatable" id="tableParentPaymentHistory">
                     <thead class="table-light">
                         <tr>
                             <th>No. Invoice</th>
@@ -32,7 +32,7 @@
                             <th>Program / Item</th>
                             <th>Metode</th>
                             <th>Nominal</th>
-                            <th>Aksi</th>
+                            <th class="no-sort">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>

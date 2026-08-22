@@ -3751,3 +3751,132 @@ noscript div {
         scroll-behavior: auto !important;
     }
 }
+
+/* ============================================
+   DATATABLES AL-HIKMAH CUSTOM THEME
+   ============================================ */
+.dt-container,
+.dataTables_wrapper {
+    padding: 0.5rem 0;
+}
+
+.dt-container .dt-layout-row,
+.dataTables_wrapper .row {
+    margin-bottom: 0.75rem;
+    align-items: center;
+}
+
+.dt-container .dt-search input,
+.dataTables_wrapper .dataTables_filter input {
+    border-radius: var(--radius-full) !important;
+    border: 1px solid var(--border-color-strong) !important;
+    padding: 0.4rem 1rem !important;
+    font-size: 0.875rem !important;
+    color: var(--text-primary) !important;
+    background-color: var(--bg-primary) !important;
+    transition: var(--transition) !important;
+    outline: none !important;
+    min-width: 220px;
+}
+
+.dt-container .dt-search input:focus,
+.dataTables_wrapper .dataTables_filter input:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 122, 62, 0.15) !important;
+}
+
+.dt-container .dt-length select,
+.dataTables_wrapper .dataTables_length select {
+    border-radius: var(--radius-full) !important;
+    border: 1px solid var(--border-color-strong) !important;
+    padding: 0.35rem 2rem 0.35rem 0.85rem !important;
+    font-size: 0.875rem !important;
+    color: var(--text-primary) !important;
+    background-color: var(--bg-primary) !important;
+}
+
+.dt-container .dt-info,
+.dataTables_wrapper .dataTables_info {
+    font-size: 0.85rem !important;
+    color: var(--text-muted) !important;
+    padding-top: 0.5rem !important;
+}
+
+.dt-container .dt-paging,
+.dataTables_wrapper .dataTables_paginate {
+    padding-top: 0.5rem !important;
+}
+
+.dt-container .dt-paging .dt-paging-button,
+.dataTables_wrapper .dataTables_paginate .page-link {
+    border-radius: var(--radius-full) !important;
+    margin: 0 2px !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    background-color: var(--bg-primary) !important;
+    transition: var(--transition) !important;
+}
+
+.dt-container .dt-paging .dt-paging-button.current,
+.dt-container .dt-paging .dt-paging-button.active,
+.dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #ffffff !important;
+    box-shadow: var(--shadow-primary) !important;
+}
+
+.dt-container .dt-paging .dt-paging-button:hover:not(.current):not(.disabled),
+.dataTables_wrapper .dataTables_paginate .page-link:hover {
+    background: var(--primary-lighter) !important;
+    color: var(--primary) !important;
+    border-color: var(--primary-light) !important;
+}
+
+.dt-container .dt-paging .dt-paging-button.disabled,
+.dataTables_wrapper .dataTables_paginate .page-item.disabled .page-link {
+    opacity: 0.4 !important;
+    cursor: not-allowed !important;
+}
+
+table.dataTable thead th {
+    font-weight: 700 !important;
+    font-size: 0.85rem !important;
+    color: var(--text-secondary) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    border-bottom: 2px solid var(--border-color-strong) !important;
+    background-color: var(--bg-secondary) !important;
+    vertical-align: middle !important;
+}
+
+table.dataTable tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+
+table.dataTable tbody tr:hover {
+    background-color: rgba(13, 122, 62, 0.04) !important;
+}
+
+/* Dark Mode Overrides for DataTables */
+[data-bs-theme="dark"] table.dataTable tbody tr:hover {
+    background-color: rgba(18, 168, 82, 0.08) !important;
+}
+
+[data-bs-theme="dark"] .dt-container .dt-search input,
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_filter input,
+[data-bs-theme="dark"] .dt-container .dt-length select,
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_length select {
+    background-color: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-bs-theme="dark"] .dt-container .dt-paging .dt-paging-button:not(.current),
+[data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .page-link {
+    background-color: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}

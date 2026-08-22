@@ -4,6 +4,7 @@
 @section('header', 'Santri & Jadwal Bimbingan Aktif')
 @section('subheader', 'Daftar seluruh santri aktif pasca-kesepakatan jadwal dan pelunasan pembayaran')
 
+@section('content')
 <div class="container-fluid p-0">
     <!-- Flash Alert Notification Messages -->
     @if (session('success'))
@@ -60,7 +61,7 @@
 
         <div class="card-body p-4">
             <div class="table-responsive">
-                <table class="table table-hover align-middle">
+                <table class="table table-hover align-middle datatable" id="tableActiveEnrollments">
                     <thead class="table-light">
                         <tr>
                             <th>Santri & Program</th>

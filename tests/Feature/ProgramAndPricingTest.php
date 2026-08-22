@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\ParentProfile;
 use App\Models\Program;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -69,6 +71,15 @@ class ProgramAndPricingTest extends TestCase
         ]);
 
         $parentUser = User::factory()->parent()->create();
+        $parentProfile = ParentProfile::create(['user_id' => $parentUser->id]);
+        $studentUser = User::factory()->student()->create();
+        Student::create([
+            'user_id' => $studentUser->id,
+            'parent_id' => $parentProfile->id,
+            'full_name' => 'Santri Anak',
+            'age' => 10,
+            'gender' => 'L',
+        ]);
 
         $response = $this->actingAs($parentUser)->get(route('biaya'));
 

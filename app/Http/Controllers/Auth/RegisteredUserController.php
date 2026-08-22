@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\EnrollmentStatus;
 use App\Enums\Role as RoleEnum;
 use App\Http\Controllers\Controller;
+use App\Models\Enrollment;
 use App\Models\ParentProfile;
 use App\Models\Program;
 use App\Models\Role;
@@ -188,18 +190,30 @@ class RegisteredUserController extends Controller
                     ]);
 
                     // Attach to Program if pre-registered from /biaya, /program or landing Tahfidz
-                    if (! empty($preRegData['program_id'])) {
+                    $programId = $preRegData['program_id'] ?? null;
+                    if (! empty($preRegData['is_tahfidz'])) {
+                        $tahfidzProgram = Program::where('name', 'like', '%Tahfidz%')->first();
+                        $programId = $tahfidzProgram?->id ?? $programId;
+                    }
+
+                    if ($programId) {
                         $student->programs()->syncWithoutDetaching([
-                            $preRegData['program_id'] => [
+                            $programId => [
                                 'status' => 'active',
                                 'enrolled_at' => now(),
                             ],
                         ]);
-                    } elseif (! empty($preRegData['is_tahfidz'])) {
-                        $tahfidzProgram = Program::where('name', 'like', '%Tahfidz%')->first();
-                        if ($tahfidzProgram) {
-                            $student->programs()->syncWithoutDetaching([$tahfidzProgram->id => ['status' => 'active', 'enrolled_at' => now()]]);
-                        }
+
+                        // Buat Enrollment jika program_id valid
+                        Enrollment::create([
+                            'parent_id' => $parentProfile->id,
+                            'student_id' => $student->id,
+                            'program_id' => $programId,
+                            'status' => EnrollmentStatus::WAITING_ADMIN->value,
+                            'total_fee' => 0,
+                            'payment_status' => 'unpaid',
+                            'notes' => 'Pendaftaran awal dari form registrasi.',
+                        ]);
                     }
                 }
 

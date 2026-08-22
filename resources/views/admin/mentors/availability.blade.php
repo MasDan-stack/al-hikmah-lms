@@ -73,8 +73,8 @@
             <span class="badge bg-light text-secondary border">Total Mentor Aktif: {{ count($availabilityData) }}</span>
         </div>
         <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle text-center mb-0" style="min-width: 900px;">
+            <div class="table-responsive p-3">
+                <table class="table table-hover align-middle text-center mb-0 datatable" id="tableMentorAvailability" style="min-width: 900px;">
                     <thead class="bg-light text-secondary small text-uppercase">
                         <tr>
                             <th class="text-start ps-4" style="width: 240px;">Nama Mentor</th>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Parent;
 
 use App\Http\Controllers\Controller;
+use App\Models\ParentProfile;
 use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
@@ -93,30 +94,49 @@ class ParentProfileController extends Controller
     {
         $request->validate([
             'full_name' => 'required|string|max:255',
-            'age' => 'required|integer|min:4|max:25',
+            'age' => 'required|integer|min:3|max:25',
             'gender' => 'required|in:L,P',
             'location' => 'nullable|string|max:255',
         ]);
 
-        $parent = auth()->user()->parentProfile;
-        $studentRole = Role::firstOrCreate(['name' => 'student'], ['label' => 'Student']);
+        $user = auth()->user();
+        $parent = $user->parentProfile;
+        if (! $parent) {
+            $parent = ParentProfile::create([
+                'user_id' => $user->id,
+                'address' => $request->location,
+                'emergency_phone' => $user->phone,
+            ]);
+        }
+
+        $studentRole = Role::firstOrCreate(
+            ['name' => \App\Enums\Role::STUDENT->value],
+            ['label' => \App\Enums\Role::STUDENT->label()]
+        );
+
+        $baseSlug = Str::slug($request->full_name);
+        $studentEmail = $baseSlug.'.'.Str::random(5).'@alhikmah.com';
+        while (User::where('email', $studentEmail)->exists()) {
+            $studentEmail = $baseSlug.'.'.Str::random(5).'@alhikmah.com';
+        }
 
         $studentUser = User::create([
             'name' => $request->full_name,
-            'email' => Str::slug($request->full_name).rand(100, 999).'@alhikmah.com',
-            'password' => Hash::make('password'),
+            'email' => $studentEmail,
+            'password' => Hash::make(Str::random(10)),
             'role_id' => $studentRole->id,
         ]);
 
         Student::create([
             'user_id' => $studentUser->id,
-            'parent_id' => $parent?->id,
+            'parent_id' => $parent->id,
             'full_name' => $request->full_name,
             'age' => $request->age,
             'gender' => $request->gender,
-            'location' => $request->location,
+            'location' => $request->location ?? $parent->address ?? 'Indonesia',
         ]);
 
-        return redirect()->back()->with('success', 'Data anak baru berhasil ditambahkan!');
+        return redirect()->route('parent.profile.children')
+            ->with('success', "Data ananda ({$request->full_name}) berhasil ditambahkan! Anda sekarang dapat memilih program belajar.");
     }
 }

@@ -25,10 +25,50 @@
 
         <div class="col-lg-9">
             @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4 shadow-sm" role="alert">
+                <div class="alert alert-success alert-dismissible fade show rounded-4 mb-4 shadow-sm" role="alert">
                     <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+            @endif
+
+            @if(session('warning'))
+                <div class="alert alert-warning alert-dismissible fade show rounded-4 mb-4 shadow-sm border-0 d-flex align-items-center gap-2 p-3" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill fs-5 text-warning"></i>
+                    <div class="fw-semibold">{{ session('warning') }}</div>
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show rounded-4 mb-4 shadow-sm border-0 d-flex align-items-center gap-2 p-3" role="alert">
+                    <i class="bi bi-x-circle-fill fs-5 text-danger"></i>
+                    <div class="fw-semibold">{{ session('error') }}</div>
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if(!auth()->user()->hasActivePaidProgram() && !auth()->user()->hasPendingInvoiceOrEnrollment())
+                @if($children->isNotEmpty())
+                    <div class="card border-0 shadow-sm rounded-4 bg-success-subtle border border-success-subtle p-3 mb-4 d-flex flex-row justify-content-between align-items-center flex-wrap gap-2">
+                        <div class="d-flex align-items-center gap-2 text-success-emphasis">
+                            <i class="bi bi-check2-circle fs-4 text-success"></i>
+                            <div>
+                                <span class="fw-bold">Data anak sudah terdaftar!</span>
+                                <div class="small text-muted">Langkah selanjutnya adalah memilih paket program & jadwal bimbingan untuk ananda.</div>
+                            </div>
+                        </div>
+                        <a href="{{ url('/biaya') }}" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
+                            <i class="bi bi-cart-plus me-1"></i> Pilih Program Sekarang <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                @else
+                    <div class="alert alert-info border-0 shadow-sm rounded-4 p-3 mb-4 d-flex align-items-center gap-3">
+                        <i class="bi bi-info-circle-fill text-info fs-4"></i>
+                        <div class="small">
+                            <strong>Langkah 1 dari 3:</strong> Silakan lengkapi data calon santri pada formulir di bawah ini. Setelah tersimpan, sistem akan mengaktifkan akses ke halaman pemilihan program belajar.
+                        </div>
+                    </div>
+                @endif
             @endif
 
             <!-- Form Tambah Anak Baru -->
@@ -72,7 +112,7 @@
                     <div class="text-center py-4 text-muted">Belum ada data anak terdaftar.</div>
                 @else
                     <div class="table-responsive">
-                        <table class="table align-middle">
+                        <table class="table align-middle datatable" id="tableParentChildren">
                             <thead class="table-light">
                                 <tr>
                                     <th>Nama Santri</th>

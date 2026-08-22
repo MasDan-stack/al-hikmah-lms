@@ -89,10 +89,10 @@
             <!-- Ringkasan Santri Binaan -->
             <h5 class="fw-bold text-dark mb-3"><i class="bi bi-people-fill text-primary me-2"></i>Daftar Santri Binaan & Capaian Rata-Rata</h5>
             <div class="table-responsive mb-4">
-                <table class="table table-bordered align-middle">
+                <table class="table table-bordered align-middle datatable" id="tableMentorExportStudents" data-page-length="5">
                     <thead class="table-light">
                         <tr>
-                            <th>No</th>
+                            <th class="text-center" style="width: 50px;">No</th>
                             <th>Nama Santri</th>
                             <th>Total Catatan</th>
                             <th>Rata-rata Tajwid</th>
@@ -130,7 +130,7 @@
             <!-- Detail Riwayat Progres Terakhir -->
             <h5 class="fw-bold text-dark mb-3"><i class="bi bi-journal-check text-success me-2"></i>Riwayat Catatan Progres Terbaru</h5>
             <div class="table-responsive">
-                <table class="table table-striped table-bordered align-middle small">
+                <table class="table table-striped table-bordered align-middle small datatable" id="tableMentorExportProgress">
                     <thead class="table-light">
                         <tr>
                             <th>Tanggal</th>

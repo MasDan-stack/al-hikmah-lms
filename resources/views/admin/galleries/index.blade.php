@@ -181,12 +181,12 @@
     </div>
 
     <!-- Grid / Tabel Dokumentasi -->
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden p-3">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0 datatable" id="tableAdminGalleries">
                 <thead class="table-light">
                     <tr>
-                        <th style="width: 80px;">Foto</th>
+                        <th style="width: 80px;" class="no-sort">Foto</th>
                         <th>Judul & Takarir</th>
                         <th>Kategori & Program</th>
                         <th>Tanggal & Lokasi</th>
@@ -196,7 +196,7 @@
                         @else
                             <th class="text-center">Dihapus Pada</th>
                         @endif
-                        <th class="text-end" style="width: 150px;">Aksi</th>
+                        <th class="text-end no-sort" style="width: 150px;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="sortableGalleryList">
@@ -294,31 +294,6 @@
                                     <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1" data-bs-toggle="modal" data-bs-target="#forceDeleteModal{{ $item->id }}" title="Hapus Permanen">
                                         <i class="bi bi-x-circle me-1"></i> Hapus
                                     </button>
-
-                                    <!-- Modal Force Delete -->
-                                    <div class="modal fade" id="forceDeleteModal{{ $item->id }}" tabindex="-1" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content rounded-4 border-0 text-start">
-                                                <div class="modal-header border-0 pb-0">
-                                                    <h5 class="modal-title fw-bold text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Hapus Permanen</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body py-3">
-                                                    <p class="mb-1 text-danger fw-semibold">Peringatan: Tindakan ini tidak dapat dibatalkan!</p>
-                                                    <p class="mb-1">Foto dokumentasi dan berkas fisik di server akan dimusnahkan:</p>
-                                                    <p class="fw-bold text-dark">"{{ $item->title }}"</p>
-                                                </div>
-                                                <div class="modal-footer border-0 pt-0">
-                                                    <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Batal</button>
-                                                    <form action="{{ route('admin.galleries.force-delete', $item->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger rounded-pill px-4">Ya, Hapus Permanen</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 @endif
                             </td>
                         </tr>
@@ -333,6 +308,36 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Modals Force Delete (di luar tabel untuk performa maksimal DataTables) -->
+        @if ($isTrashedView)
+            @foreach ($galleries as $item)
+                <div class="modal fade" id="forceDeleteModal{{ $item->id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content rounded-4 border-0 text-start">
+                            <div class="modal-header border-0 pb-0">
+                                <h5 class="modal-title fw-bold text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Hapus Permanen</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body py-3">
+                                <p class="mb-1 text-danger fw-semibold">Peringatan: Tindakan ini tidak dapat dibatalkan!</p>
+                                <p class="mb-1">Foto dokumentasi dan berkas fisik di server akan dimusnahkan:</p>
+                                <p class="fw-bold text-dark">"{{ $item->title }}"</p>
+                            </div>
+                            <div class="modal-footer border-0 pt-0">
+                                <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Batal</button>
+                                <form action="{{ route('admin.galleries.force-delete', $item->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger rounded-pill px-4">Ya, Hapus Permanen</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        @endif
+
         @if ($galleries->hasPages())
             <div class="card-footer bg-transparent border-0 p-3">
                 {{ $galleries->links() }}

@@ -17,16 +17,16 @@
         <div class="card-header bg-white border-0 py-3">
             <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-journal-text text-success me-2"></i>Kontak Wali Santri Binaan</h6>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body p-3">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table table-hover align-middle mb-0 datatable" id="tableMentorParents">
                     <thead class="bg-light text-secondary small text-uppercase">
                         <tr>
-                            <th class="ps-4">Nama Santri</th>
+                            <th class="ps-3">Nama Santri</th>
                             <th>Nama Orang Tua / Wali</th>
                             <th>No. WhatsApp / Telepon</th>
                             <th>Alamat Rumah</th>
-                            <th class="text-end pe-4">Aksi Cepat</th>
+                            <th class="text-end pe-3 no-sort">Aksi Cepat</th>
                         </tr>
                     </thead>
                     <tbody>

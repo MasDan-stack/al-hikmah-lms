@@ -42,7 +42,7 @@
             </div>
         @else
             <div class="table-responsive">
-                <table class="table align-middle table-hover">
+                <table class="table align-middle table-hover datatable" id="tableParentSchedules">
                     <thead class="table-light">
                         <tr>
                             <th>Tanggal & Jam</th>
@@ -50,7 +50,7 @@
                             <th>Metode</th>
                             <th>Mentor</th>
                             <th>Status</th>
-                            <th>Aksi</th>
+                            <th class="no-sort">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>

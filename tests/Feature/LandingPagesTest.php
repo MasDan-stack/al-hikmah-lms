@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\ParentProfile;
 use App\Models\Program;
+use App\Models\Student;
 use App\Models\User;
 
 test('public landing pages return HTTP 200 status', function () {
@@ -36,6 +38,15 @@ test('biaya page renders dynamic program prices when accessed by parent', functi
     ]);
 
     $parentUser = User::factory()->parent()->create();
+    $parentProfile = ParentProfile::create(['user_id' => $parentUser->id]);
+    $studentUser = User::factory()->student()->create();
+    Student::create([
+        'user_id' => $studentUser->id,
+        'parent_id' => $parentProfile->id,
+        'full_name' => 'Santri Anak',
+        'age' => 10,
+        'gender' => 'L',
+    ]);
 
     $this->actingAs($parentUser)->get(route('biaya'))
         ->assertStatus(200)

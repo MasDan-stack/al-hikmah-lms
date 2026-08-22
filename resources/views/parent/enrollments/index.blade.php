@@ -54,7 +54,7 @@
                 </div>
             @else
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover align-middle datatable" id="tableParentEnrollments">
                         <thead class="table-light">
                             <tr>
                                 <th>No</th>
@@ -63,7 +63,7 @@
                                 <th>Jadwal Diminta</th>
                                 <th>Status</th>
                                 <th>Tagihan</th>
-                                <th class="text-end">Aksi</th>
+                                <th class="text-end no-sort">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

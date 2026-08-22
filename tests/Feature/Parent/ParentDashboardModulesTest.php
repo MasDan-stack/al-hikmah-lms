@@ -1,8 +1,11 @@
 <?php
 
+use App\Enums\EnrollmentStatus;
+use App\Models\Enrollment;
 use App\Models\Mentor;
 use App\Models\ParentProfile;
 use App\Models\Payment;
+use App\Models\Program;
 use App\Models\Progress;
 use App\Models\Role;
 use App\Models\Session;
@@ -55,6 +58,32 @@ beforeEach(function () {
         'user_id' => $this->mentorUser->id,
         'full_name' => 'Ustaz Abdullah',
         'specialization' => 'Tahfidz Al-Qur\'an',
+    ]);
+
+    // Setup Active Program & Paid Payment for State 3 access
+    $this->program = Program::create([
+        'name' => 'Tahsin Reguler',
+        'price' => 500000,
+        'description' => 'Test Program',
+        'is_active' => true,
+    ]);
+
+    $this->enrollment = Enrollment::create([
+        'student_id' => $this->student->id,
+        'program_id' => $this->program->id,
+        'mentor_id' => $this->mentor->id,
+        'status' => EnrollmentStatus::ACTIVE->value,
+        'requested_days' => ['monday', 'thursday'],
+        'learning_method' => 'online',
+    ]);
+
+    Payment::create([
+        'student_id' => $this->student->id,
+        'program_id' => $this->program->id,
+        'enrollment_id' => $this->enrollment->id,
+        'amount' => 500000,
+        'status' => 'paid',
+        'invoice_number' => 'INV-TEST-MODULES',
     ]);
 });
 

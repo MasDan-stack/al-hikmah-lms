@@ -7,6 +7,7 @@ use App\Models\Gallery;
 use App\Models\GalleryCategory;
 use App\Models\Program;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -129,10 +130,16 @@ class LandingController extends Controller
     /**
      * Tampilkan informasi paket & biaya belajar (Terhubung Database, Khusus Orang Tua & Admin)
      */
-    public function biaya(): View
+    public function biaya(): View|RedirectResponse
     {
         if (! auth()->check() || (! auth()->user()->isParent() && ! auth()->user()->isAdmin())) {
             abort(403, 'Informasi rincian investasi dan biaya belajar hanya dapat diakses oleh Orang Tua / Wali dan Administrator yang telah terdaftar.');
+        }
+
+        // Jika Orang Tua belum mendaftarkan anak, arahkan untuk isi data anak dulu
+        if (auth()->user()->isParent() && ! auth()->user()->hasChildren()) {
+            return redirect()->route('parent.profile.children')
+                ->with('warning', 'Sebelum memilih program belajar, silakan daftarkan data lengkap anak binaan Anda terlebih dahulu.');
         }
 
         $programs = Program::where('is_active', true)

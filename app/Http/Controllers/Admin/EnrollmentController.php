@@ -106,8 +106,8 @@ class EnrollmentController extends Controller
                 'confirmed_at' => now(),
             ]);
 
-            // Kunci kuota mentor di mentor_student
-            $enrollment->syncToMentorStudent(true);
+            // Kunci kuota mentor di mentor_student HANYA KETIKA LUNAS (via markAsPaidAndActive)
+            // $enrollment->syncToMentorStudent(true);
 
             // Menerbitkan invoice pembayaran jika belum ada
             if (! $enrollment->payment()->exists()) {
@@ -219,7 +219,7 @@ class EnrollmentController extends Controller
                     'start_date' => $enrollment->start_date ?? now()->addDays(7)->toDateString(),
                 ]);
 
-                $enrollment->syncToMentorStudent(true);
+                // $enrollment->syncToMentorStudent(true); // Dipindahkan ke markAsPaidAndActive
 
                 if (! $enrollment->payment()->exists()) {
                     $programFee = (float) ($enrollment->program_price ?? $enrollment->program?->price ?? 400000);

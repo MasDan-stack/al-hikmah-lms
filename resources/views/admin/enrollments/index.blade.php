@@ -108,16 +108,16 @@
             <form action="{{ route('admin.enrollments.bulk-accept') }}" method="POST" id="bulkForm">
                 @csrf
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover align-middle datatable" id="tableAdminEnrollments">
                         <thead class="table-light">
                             <tr>
-                                <th style="width: 40px;"><input type="checkbox" id="selectAll" class="form-check-input"></th>
+                                <th style="width: 40px;" class="no-sort"><input type="checkbox" id="selectAll" class="form-check-input"></th>
                                 <th>Santri & Wali</th>
                                 <th>Program</th>
                                 <th>Jadwal Request</th>
                                 <th>Mentor Assigned</th>
                                 <th>Status</th>
-                                <th class="text-end">Aksi</th>
+                                <th class="text-end no-sort">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

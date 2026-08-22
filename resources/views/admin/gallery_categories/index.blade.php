@@ -186,18 +186,18 @@
     @endif
 
     <!-- Tabel Data Kategori -->
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden p-3">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0 datatable" id="tableAdminGalleryCategories">
                 <thead class="table-light">
                     <tr>
-                        <th class="ps-4" style="width: 60px;">Urutan</th>
+                        <th class="ps-3" style="width: 60px;">Urutan</th>
                         <th>Kategori & Slug</th>
                         <th>Grup Kegiatan</th>
                         <th>Badge & Ikon Pratinjau</th>
                         <th class="text-center">Foto Terhubung</th>
                         <th class="text-center">{{ $isTrashedView ? 'Tanggal Dihapus' : 'Status' }}</th>
-                        <th class="text-end pe-4" style="width: {{ $isTrashedView ? '220px' : '140px' }};">Aksi</th>
+                        <th class="text-end pe-3 no-sort" style="width: {{ $isTrashedView ? '220px' : '140px' }};">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -197,7 +197,7 @@
                     @else
                         <!-- 1️⃣ TABEL VIEW -->
                         <div id="tableViewContainer" class="table-responsive">
-                            <table class="table align-middle table-hover">
+                            <table class="table align-middle table-hover datatable" id="tableMentorTodaySessions" data-page-length="5">
                                 <thead class="table-light">
                                     <tr>
                                         <th>Waktu</th>
@@ -205,7 +205,7 @@
                                         <th>Mode</th>
                                         <th>Konfirmasi Wali</th>
                                         <th>Status Sesi</th>
-                                        <th>Aksi Cepat</th>
+                                        <th class="no-sort">Aksi Cepat</th>
                                     </tr>
                                 </thead>
                                 <tbody>
