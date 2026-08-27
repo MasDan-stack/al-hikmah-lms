@@ -22,6 +22,9 @@ class DatabaseSeeder extends Seeder
             PaymentSeeder::class,
             GallerySeeder::class,
             NotificationSeeder::class,
+            BlogCategorySeeder::class,
+            BlogTagSeeder::class,
+            ArticleSeeder::class,
         ]);
     }
 }

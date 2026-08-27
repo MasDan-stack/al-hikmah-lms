@@ -20,6 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
 
+        $middleware->validateCsrfTokens(except: [
+            'api/webhook/pakasir',
+            'webhook/pakasir',
+        ]);
+
         $middleware->alias([
             'role' => EnsureUserHasRole::class,
             'parent.paid' => EnsureParentHasPaidProgram::class,

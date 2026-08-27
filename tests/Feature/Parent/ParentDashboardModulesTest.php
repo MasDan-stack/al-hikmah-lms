@@ -170,7 +170,7 @@ test('modul jadwal bimbingan dan konfirmasi kehadiran berfungsi dengan baik', fu
     ]);
 });
 
-test('modul tagihan dan pembayaran online Midtrans berjalan aman', function () {
+test('modul tagihan dan pembayaran online Pakasir berjalan aman', function () {
     $payment = Payment::create([
         'student_id' => $this->student->id,
         'amount' => 250000,
@@ -184,10 +184,20 @@ test('modul tagihan dan pembayaran online Midtrans berjalan aman', function () {
     $responseShow = $this->actingAs($this->parentUser)->get(route('parent.payments.show', $payment->id));
     $responseShow->assertStatus(200);
 
+    // Inisialisasi pembayaran online via Pakasir
     $responsePay = $this->actingAs($this->parentUser)->post(route('parent.payments.pay', $payment->id), [
-        'payment_method' => 'Midtrans QRIS',
+        'payment_method' => 'qris',
     ]);
-    $responsePay->assertRedirect(route('parent.payments.history'));
+    $responsePay->assertRedirect(route('parent.payments.show', $payment->id));
+
+    // Webhook callback simulasi pembayaran berhasil
+    $responseWebhook = $this->postJson(route('api.webhook.pakasir'), [
+        'order_id' => 'INV-TEST-001',
+        'amount' => 251750,
+        'status' => 'completed',
+        'payment_method' => 'qris',
+    ]);
+    $responseWebhook->assertStatus(200);
 
     $this->assertDatabaseHas('payments', [
         'id' => $payment->id,

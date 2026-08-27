@@ -172,12 +172,21 @@ class PaymentRegistrationFeeTest extends TestCase
             'invoice_number' => 'INV-TEST-001',
         ]);
 
-        // Parent bayar online
+        // Parent inisialisasi bayar online via Pakasir
         $response = $this->actingAs($this->parentUser)->post(route('parent.payments.pay', $payment->id), [
-            'payment_method' => 'Midtrans QRIS',
+            'payment_method' => 'qris',
         ]);
 
-        $response->assertRedirect(route('parent.payments.history'));
+        $response->assertRedirect(route('parent.payments.show', $payment->id));
+
+        // Simulasi Webhook Pakasir callback
+        $webhookResponse = $this->postJson(route('api.webhook.pakasir'), [
+            'order_id' => $payment->invoice_number,
+            'amount' => 604200,
+            'status' => 'completed',
+            'payment_method' => 'qris',
+        ]);
+        $webhookResponse->assertStatus(200);
 
         $enrollment->refresh();
         $this->assertEquals(EnrollmentStatus::ACTIVE, $enrollment->status);

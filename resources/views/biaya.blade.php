@@ -4,14 +4,20 @@
 @section('description', 'Biaya dan Paket Belajar AL-HIKMAH — Informasi transparan tentang pilihan pendampingan belajar Al-Qur\'an.')
 
 @section('content')
-    <!-- Page Header -->
-    <section class="page-header section-padding"
-        style="padding-top:120px;background:linear-gradient(170deg,var(--bg-primary)0%,var(--primary-lighter)100%)">
-        <div class="container text-center">
-            <div class="section-badge mx-auto" data-reveal><i class="bi bi-info-circle"></i> Informasi</div>
-            <h1 class="section-title" data-reveal>Pilihan <span class="text-gradient">Pendampingan Belajar</span></h1>
-            <p class="section-description mx-auto" data-reveal>Kami berusaha menjaga informasi biaya tetap transparan agar
-                setiap keluarga dapat mempertimbangkan pilihan yang sesuai.</p>
+    <!-- ============================================ -->
+    <!-- 1. ETRAIN BREADCRUMB HEADER -->
+    <!-- ============================================ -->
+    <section class="breadcrumb_bg" aria-label="Header Biaya Belajar">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb_iner_item" data-reveal>
+                        <div class="section-badge mx-auto mb-2"><i class="bi bi-tag-fill"></i> Investasi Pendidikan</div>
+                        <h2>Pilihan <span class="text-gradient">Investasi &amp; Paket Belajar</span></h2>
+                        <p>Transparan, terjangkau, dan fleksibel untuk mendukung kelancaran belajar Al-Qur'an keluarga Anda.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\NotificationType;
 use App\Models\Notification;
+use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -103,5 +104,34 @@ class NotificationService
         }
 
         return $notifications;
+    }
+
+    /**
+     * Kirim notifikasi pembayaran sukses ke wali santri dan admin
+     */
+    public static function notifyPaymentSuccess(Payment $payment, User $parentUser): void
+    {
+        $amountFmt = 'Rp '.number_format($payment->total_amount ?? $payment->amount, 0, ',', '.');
+        $invoiceNo = $payment->invoice_number ?? ('INV-'.$payment->id);
+
+        // Notifikasi ke Orang Tua
+        self::send(
+            $parentUser,
+            'Pembayaran Berhasil Dikonfirmasi 🎉',
+            "Alhamdulillah, pembayaran invoice #{$invoiceNo} sebesar {$amountFmt} telah berhasil diverifikasi. Kelas belajar ananda kini telah aktif.",
+            NotificationType::SUCCESS,
+            route('parent.payments.show', $payment->id),
+            'payment',
+            true
+        );
+
+        // Notifikasi ke Admin
+        self::notifyAdmins(
+            'Pembayaran Masuk (Online)',
+            "Pembayaran invoice #{$invoiceNo} sebesar {$amountFmt} dari wali santri {$parentUser->name} telah berhasil diterima secara online.",
+            NotificationType::SUCCESS,
+            route('admin.payments.index'),
+            'payment'
+        );
     }
 }

@@ -60,7 +60,7 @@
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-body p-3">
             <div class="table-responsive">
-                <table class="table align-middle table-hover mb-0 datatable" id="tableAdminUsers">
+                <table class="table align-middle table-hover mb-0 datatable" id="tableAdminUsers" data-no-paging="true" data-export="true">
                     <thead class="table-light">
                         <tr>
                             <th class="ps-3">Nama Pengguna</th>

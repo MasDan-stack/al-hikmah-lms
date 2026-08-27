@@ -4,14 +4,20 @@
 @section('meta_description', 'Kirim pesan dan konsultasi seputar bimbingan belajar Al-Qur\'an AL-HIKMAH. Tim kami siap merespons via WhatsApp.')
 
 @section('content')
-<!-- PAGE HEADER -->
-<section class="page-header section-padding" style="padding-top:130px;background:linear-gradient(170deg,var(--bg-primary) 0%,var(--primary-lighter) 100%)">
-    <div class="container text-center">
-        <div class="section-badge mx-auto mb-3" data-reveal><i class="bi bi-envelope-paper"></i> Layanan Konsultasi</div>
-        <h1 class="section-title" data-reveal>Mari Berbincang<br><span class="text-gradient">Dengan Tim AL-HIKMAH</span></h1>
-        <p class="section-description mx-auto" data-reveal>
-            Sampaikan pertanyaan, permintaan jadwal khusus, atau konsultasi kebutuhan belajar ananda. Tim pengelola kami akan segera merespons Anda melalui WhatsApp.
-        </p>
+<!-- ============================================ -->
+<!-- 1. ETRAIN BREADCRUMB HEADER -->
+<!-- ============================================ -->
+<section class="breadcrumb_bg" aria-label="Header Kontak">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb_iner_item" data-reveal>
+                    <div class="section-badge mx-auto mb-2"><i class="bi bi-envelope-paper"></i> Layanan Konsultasi</div>
+                    <h2>Mari Berbincang <span class="text-gradient">Dengan Tim AL-HIKMAH</span></h2>
+                    <p>Sampaikan pertanyaan, permintaan jadwal khusus, atau konsultasi kebutuhan belajar ananda kepada tim pengelola kami.</p>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -122,8 +128,8 @@
                         </div>
 
                         <div class="col-12 mt-4">
-                            <button type="submit" class="btn btn-primary-custom w-100 py-3 rounded-pill fw-bold shadow-sm">
-                                <i class="bi bi-send-fill me-2"></i> Kirim Pesan Konsultasi
+                            <button type="submit" class="btn_1 w-100 text-center border-0">
+                                <i class="bi bi-send-fill me-1"></i> Kirim Pesan Konsultasi
                             </button>
                         </div>
                     </form>

@@ -4,21 +4,27 @@
 @section('meta_description', 'Pertanyaan yang sering diajukan seputar program bimbingan Al-Qur\'an, pencocokan jadwal, profil guru pembimbing, dan metode di AL-HIKMAH.')
 
 @section('content')
-<!-- PAGE HEADER -->
-<section class="page-header section-padding" style="padding-top:130px;background:linear-gradient(170deg,var(--bg-primary) 0%,var(--primary-lighter) 100%)">
-    <div class="container text-center">
-        <div class="section-badge mx-auto mb-3" data-reveal><i class="bi bi-question-circle"></i> Pusat Bantuan & Informasi</div>
-        <h1 class="section-title" data-reveal>Sebelum Memulai<br><span class="text-gradient">Perjalanan Bersama Kami</span></h1>
-        <p class="section-description mx-auto" data-reveal>
-            Kami memahami bahwa setiap keluarga memiliki pertanyaan dan kebutuhan yang berbeda. Temukan jawaban lengkap di bawah ini atau gunakan fitur pencarian cepat.
-        </p>
+<!-- ============================================ -->
+<!-- 1. ETRAIN BREADCRUMB HEADER -->
+<!-- ============================================ -->
+<section class="breadcrumb_bg" aria-label="Header Tanya Jawab">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb_iner_item" data-reveal>
+                    <div class="section-badge mx-auto mb-2"><i class="bi bi-question-circle"></i> Pusat Bantuan &amp; Informasi</div>
+                    <h2>Sebelum Memulai <span class="text-gradient">Perjalanan Bersama Kami</span></h2>
+                    <p>Temukan jawaban lengkap seputar metode, jadwal, guru pendamping, dan tata cara pendaftaran bimbingan Al-Qur'an.</p>
 
-        <!-- Live FAQ Search Bar -->
-        <div class="row justify-content-center mt-4" data-reveal>
-            <div class="col-md-8 col-lg-6">
-                <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border bg-white">
-                    <span class="input-group-text bg-white border-0 ps-4 text-muted"><i class="bi bi-search"></i></span>
-                    <input type="text" id="faqSearchInput" class="form-control border-0 py-3" placeholder="Ketik pertanyaan Anda (misal: jadwal, biaya, rumah, offline)..." aria-label="Cari FAQ">
+                    <!-- Live FAQ Search Bar -->
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-md-8 col-lg-6">
+                            <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border bg-white">
+                                <span class="input-group-text bg-white border-0 ps-4 text-muted"><i class="bi bi-search"></i></span>
+                                <input type="text" id="faqSearchInput" class="form-control border-0 py-3" placeholder="Ketik pertanyaan (jadwal, biaya, guru, offline)..." aria-label="Cari FAQ">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

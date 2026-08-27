@@ -58,5 +58,16 @@ test('tentang kami page displays statistic counters', function () {
     $this->get(route('tentang-kami'))
         ->assertStatus(200)
         ->assertSee('Santri Terdaftar')
-        ->assertSee('Pendamping Aktif');
+        ->assertSee('Pendamping Aktif')
+        ->assertSee('Program Belajar');
+});
+
+test('home page renders real-time prayer times widget and modals', function () {
+    $this->get(route('home'))
+        ->assertStatus(200)
+        ->assertSee('Waktu Ibadah Harian')
+        ->assertSee('id="jadwal-sholat"', false)
+        ->assertSee('id="cityModal"', false)
+        ->assertSee('id="qiblaModal"', false)
+        ->assertSee('btn-detect-gps');
 });

@@ -79,7 +79,7 @@
             </div>
         @else
             <div class="table-responsive">
-                <table class="table align-middle table-hover datatable" id="tableAdminPayments">
+                <table class="table align-middle table-hover datatable" id="tableAdminPayments" data-export="true">
                     <thead class="table-light">
                         <tr>
                             <th>No. Invoice</th>

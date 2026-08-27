@@ -191,7 +191,7 @@
                                                         <span class="badge bg-warning text-dark rounded-pill px-3">PENDING</span>
                                                     @endif
                                                 </td>
-                                                <td class="small text-secondary">{{ $pay->payment_method ?? 'Midtrans' }}</td>
+                                                <td class="small text-secondary">{{ $pay->payment_method ?? 'Pembayaran Digital' }}</td>
                                                 <td class="small text-muted">{{ $pay->updated_at->diffForHumans() }}</td>
                                             </tr>
                                         @endforeach

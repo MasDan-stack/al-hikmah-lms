@@ -26,6 +26,12 @@ class Payment extends Model
         'due_date',
         'payment_method',
         'gateway_response',
+        'checkout_url',
+        'qr_content',
+        'pakasir_order_id',
+        'admin_fee',
+        'total_amount',
+        'expired_at',
     ];
 
     protected function casts(): array
@@ -34,8 +40,11 @@ class Payment extends Model
             'amount' => 'decimal:2',
             'registration_fee' => 'decimal:2',
             'program_fee' => 'decimal:2',
+            'admin_fee' => 'decimal:2',
+            'total_amount' => 'decimal:2',
             'payment_date' => 'datetime',
             'due_date' => 'date',
+            'expired_at' => 'datetime',
             'gateway_response' => 'array',
         ];
     }

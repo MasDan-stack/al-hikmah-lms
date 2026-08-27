@@ -19,14 +19,20 @@
     </script>
     <title>@yield('title', 'Dashboard') | AL-HIKMAH LMS</title>
 
+    <!-- Google Font Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.1.1/index.min.css" rel="stylesheet">
 
     <!-- DataTables CSS (Bootstrap 5 & Responsive) -->
     <link href="{{ asset('assets/DataTables/datatables.min.css') }}" rel="stylesheet">
 
-    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    <!-- Custom CSS AL-HIKMAH (Cache Busting) -->
+    <link href="{{ asset('assets/css/style.css') }}?v={{ file_exists(public_path('assets/css/style.css')) ? filemtime(public_path('assets/css/style.css')) : time() }}" rel="stylesheet">
     @stack('styles')
 
     <style>
@@ -389,8 +395,8 @@
     <x-flash-toast />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/datatables-init.js') }}"></script>
-    <script src="{{ asset('assets/js/scripts.js') }}"></script>
+    <script src="{{ asset('assets/js/datatables-init.js') }}?v={{ file_exists(public_path('assets/js/datatables-init.js')) ? filemtime(public_path('assets/js/datatables-init.js')) : time() }}"></script>
+    <script src="{{ asset('assets/js/scripts.js') }}?v={{ file_exists(public_path('assets/js/scripts.js')) ? filemtime(public_path('assets/js/scripts.js')) : time() }}"></script>
     <script>
         const sidebar = document.getElementById('adminSidebar');
         const overlay = document.getElementById('sidebarOverlay');

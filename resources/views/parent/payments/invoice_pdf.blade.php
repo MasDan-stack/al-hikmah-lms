@@ -65,7 +65,7 @@
                             <div class="fw-bold">Paket Belajar: {{ $payment->program?->name ?? 'Program Bimbingan' }}</div>
                             <small class="text-muted">Bimbingan & Kurikulum Terstruktur</small>
                         </td>
-                        <td>{{ $payment->payment_method ?? 'Midtrans Digital Payment' }}</td>
+                        <td>{{ $payment->payment_method ?? 'Pembayaran Digital / QRIS' }}</td>
                         <td class="text-end fw-bold">Rp {{ number_format($payment->program_fee > 0 ? $payment->program_fee : $payment->amount, 0, ',', '.') }}</td>
                     </tr>
                     @if($payment->registration_fee > 0)
@@ -74,7 +74,7 @@
                             <div class="fw-bold">Biaya Pendaftaran Santri Baru (1x Sekali Bayar)</div>
                             <small class="text-muted">Administrasi Pendaftaran & Assessment Santri</small>
                         </td>
-                        <td>{{ $payment->payment_method ?? 'Midtrans Digital Payment' }}</td>
+                        <td>{{ $payment->payment_method ?? 'Pembayaran Digital / QRIS' }}</td>
                         <td class="text-end fw-bold">Rp {{ number_format($payment->registration_fee, 0, ',', '.') }}</td>
                     </tr>
                     @endif

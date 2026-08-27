@@ -142,10 +142,27 @@
                                 <i class="bi bi-question-circle text-info"></i> Tanya Jawab (FAQ)
                             </a>
                         </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('home') }}#jadwal-sholat">
+                                <i class="bi bi-clock-history text-success"></i> Jadwal Sholat & Kiblat
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
-                <!-- 6. Kontak -->
+                <!-- 6. Blog & Artikel -->
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('blog*') ? 'active' : '' }}"
+                        href="{{ route('blog.index') }}">
+                        <i class="bi bi-newspaper"></i>
+                        <span>Blog & Artikel</span>
+                    </a>
+                </li>
+
+                <!-- 7. Kontak -->
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}"
                         href="{{ route('contact') }}">

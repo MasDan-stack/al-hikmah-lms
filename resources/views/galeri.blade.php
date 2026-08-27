@@ -17,25 +17,18 @@
 
 @section('content')
     <!-- ============================================ -->
-    <!-- HEADER GALERI - MODERN & LEGA -->
+    <!-- 1. ETRAIN BREADCRUMB HEADER -->
     <!-- ============================================ -->
-    <section class="gallery-header" aria-label="Header Galeri">
-        <div class="container position-relative">
-            <div class="text-center">
-                <div class="section-badge mx-auto mb-3" data-reveal>
-                    <i class="bi bi-images"></i> Galeri Dokumentasi
+    <section class="breadcrumb_bg" aria-label="Header Galeri">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb_iner_item" data-reveal>
+                        <div class="section-badge mx-auto mb-2"><i class="bi bi-images"></i> Dokumentasi Kegiatan</div>
+                        <h2>Menyimpan Momen, <span class="text-gradient">Menyaksikan Perjalanan</span></h2>
+                        <p>Setiap pertemuan memiliki cerita. Inilah rekaman perjalanan nyata santri dan pendamping dalam mencintai Al-Qur'an.</p>
+                    </div>
                 </div>
-                <h1 class="section-title" data-reveal>
-                    Menyimpan Momen,<br>
-                    <span class="text-gradient">Menyaksikan Perjalanan</span>
-                </h1>
-                <p class="section-description" data-reveal>
-                    Setiap pertemuan memiliki cerita. Inilah rekaman perjalanan nyata santri dan pendamping
-                    dalam mencintai Al-Qur'an.
-                </p>
-                <p class="text-muted small mt-2" data-reveal>
-                    <i class="bi bi-info-circle me-1"></i> Gambar yang ditampilkan adalah dokumentasi suasana belajar.
-                </p>
             </div>
         </div>
     </section>

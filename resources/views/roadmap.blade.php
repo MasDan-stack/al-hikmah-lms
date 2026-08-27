@@ -6,22 +6,19 @@
 
 @section('content')
     <!-- ============================================================ -->
-    <!-- PAGE HEADER -->
+    <!-- 1. ETRAIN BREADCRUMB HEADER -->
     <!-- ============================================================ -->
-    <section class="page-header section-padding"
-        style="padding-top:130px;background:linear-gradient(170deg,var(--bg-primary) 0%,var(--primary-lighter) 100%)">
-        <div class="container text-center">
-            <div class="section-badge mx-auto mb-3" data-reveal>
-                <i class="bi bi-map"></i> Panduan Langkah Awal
+    <section class="breadcrumb_bg" aria-label="Header Peta Alur Belajar">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb_iner_item" data-reveal>
+                        <div class="section-badge mx-auto mb-2"><i class="bi bi-map"></i> Panduan Langkah Awal</div>
+                        <h2>Peta Perjalanan Belajar <span class="text-gradient">AL-HIKMAH</span></h2>
+                        <p>Panduan langkah terarah mulai dari pendaftaran, pencocokan guru &amp; jadwal, hingga proses bimbingan belajar berjalan lancar.</p>
+                    </div>
+                </div>
             </div>
-            <h1 class="section-title" data-reveal>
-                Peta Perjalanan Belajar<br>
-                <span class="text-gradient">AL-HIKMAH LMS</span>
-            </h1>
-            <p class="section-description mx-auto" data-reveal style="max-width:680px;">
-                Bingung harus mulai dari mana? Pilih jalur Anda di bawah ini untuk melihat alur terarah dari pendaftaran,
-                pencocokan guru &amp; jadwal, hingga sesi bimbingan berjalan.
-            </p>
         </div>
     </section>
 
@@ -144,7 +141,7 @@
                                             @break
 
                                             @case(5)
-                                                Lakukan pembayaran mudah melalui <strong>Midtrans Payment Gateway</strong> (QRIS,
+                                                Lakukan pembayaran mudah melalui <strong>Payment Gateway Otomatis</strong> (QRIS,
                                                 GoPay, Transfer Bank VA). Tagihan otomatis lunas seketika.
                                             @break
 
@@ -432,7 +429,7 @@
                                                     @break
 
                                                     @case(3)
-                                                        Pelunasan Midtrans
+                                                        Pelunasan Otomatis (QRIS / VA)
                                                     @break
 
                                                     @case(4)

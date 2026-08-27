@@ -83,9 +83,40 @@
             }
         }
 
-        const mergedOptions = Object.assign({}, window.defaultDataTableOptions, options);
+        let mergedOptions = Object.assign({}, window.defaultDataTableOptions, options);
+
+        // 🔥 1. HANDLER data-no-paging / data-no-info
+        if (el.hasAttribute('data-no-paging') || el.dataset.noPaging === 'true') {
+            mergedOptions.paging = false;
+            mergedOptions.info = false;
+        }
+
+        // 🔥 2. HANDLER data-export (Excel, PDF, Print)
+        if (el.hasAttribute('data-export') || el.dataset.export === 'true') {
+            if (typeof $.fn.dataTable.Buttons !== 'undefined' || typeof DataTable.Buttons !== 'undefined') {
+                mergedOptions.layout = {
+                    topStart: 'pageLength',
+                    topEnd: {
+                        search: true,
+                        buttons: [
+                            { extend: 'excelHtml5', className: 'btn btn-sm btn-outline-success rounded-pill me-1', text: '<i class="bi bi-file-earmark-excel me-1"></i> Excel' },
+                            { extend: 'pdfHtml5', className: 'btn btn-sm btn-outline-danger rounded-pill me-1', text: '<i class="bi bi-file-earmark-pdf me-1"></i> PDF' },
+                            { extend: 'print', className: 'btn btn-sm btn-outline-secondary rounded-pill', text: '<i class="bi bi-printer me-1"></i> Cetak' }
+                        ]
+                    }
+                };
+            }
+        }
+
         try {
             const instance = new DataTable(el, mergedOptions);
+
+            // Tambahkan tooltip pada header kolom yang dapat di-sort
+            el.querySelectorAll('thead th:not(.no-sort)').forEach(function (th) {
+                if (!th.hasAttribute('title')) {
+                    th.setAttribute('title', 'Klik untuk mengurutkan');
+                }
+            });
 
             // Sesuaikan kolom saat window resize
             window.addEventListener('resize', () => {

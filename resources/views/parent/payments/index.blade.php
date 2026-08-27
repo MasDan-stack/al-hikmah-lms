@@ -64,7 +64,7 @@
 
                         <div class="d-grid gap-2">
                             <a href="{{ route('parent.payments.show', $p->id) }}" class="btn btn-success rounded-pill fw-bold">
-                                <i class="bi bi-credit-card me-1"></i> Bayar Online (Midtrans)
+                                <i class="bi bi-credit-card me-1"></i> Bayar Sekarang (Online)
                             </a>
                         </div>
                     </div>

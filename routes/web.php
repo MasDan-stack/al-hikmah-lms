@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\ActiveEnrollmentController;
+use App\Http\Controllers\Admin\AdminBlogCategoryController;
+use App\Http\Controllers\Admin\AdminBlogController;
+use App\Http\Controllers\Admin\AdminBlogTagController;
 use App\Http\Controllers\Admin\ContactMessageController as AdminContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnrollmentController as AdminEnrollmentController;
@@ -10,6 +13,7 @@ use App\Http\Controllers\Admin\MentorAvailabilityController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Api\PakasirWebhookController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\RegisterMentorController;
 use App\Http\Controllers\ContactController;
@@ -17,6 +21,7 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Mentor\AvailabilityController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\MentorMessageController;
+use App\Http\Controllers\Mentor\MentorQuestionController;
 use App\Http\Controllers\Mentor\ProgressController as MentorProgressController;
 use App\Http\Controllers\Mentor\ReportController as MentorReportController;
 use App\Http\Controllers\Mentor\SessionController as MentorSessionController;
@@ -28,7 +33,9 @@ use App\Http\Controllers\Parent\ParentMessageController;
 use App\Http\Controllers\Parent\ParentPaymentController;
 use App\Http\Controllers\Parent\ParentProfileController;
 use App\Http\Controllers\Parent\ParentScheduleController;
+use App\Http\Controllers\PublicBlogController;
 use App\Http\Controllers\ReportController;
+use App\Models\Article;
 use App\Models\Mentor;
 use App\Models\Program;
 use App\Models\Student;
@@ -36,7 +43,13 @@ use Illuminate\Support\Facades\Route;
 
 // Halaman Home
 Route::get('/', function () {
-    return view('home');
+    $latestArticles = Article::published()
+        ->with(['category', 'user'])
+        ->latest('published_at')
+        ->take(3)
+        ->get();
+
+    return view('home', compact('latestArticles'));
 })->name('home');
 
 // Halaman Tentang Kami (dengan statistik real-time)
@@ -85,6 +98,19 @@ Route::post('/kontak', [ContactController::class, 'store'])->name('contact.store
 // Halaman Galeri Interaktif Publik
 Route::get('/galeri', [LandingController::class, 'galeri'])->name('galeri');
 Route::post('/galeri/{id}/view', [LandingController::class, 'incrementView'])->name('galeri.view');
+
+// ==========================================
+// 📖 PUBLIC BLOG & SEO SITEMAP ROUTES
+// ==========================================
+Route::get('/sitemap.xml', [PublicBlogController::class, 'sitemap'])->name('sitemap');
+
+Route::prefix('blog')->name('blog.')->group(function () {
+    Route::get('/', [PublicBlogController::class, 'index'])->name('index');
+    Route::get('/kategori/{slug}', [PublicBlogController::class, 'category'])->name('category');
+    Route::get('/tag/{slug}', [PublicBlogController::class, 'tag'])->name('tag');
+    Route::get('/{slug}', [PublicBlogController::class, 'show'])->name('show');
+    Route::post('/{slug}/share', [PublicBlogController::class, 'trackShare'])->name('share');
+});
 
 // ==========================================
 // 📌 ROUTE ADMIN (HARUS ADA)
@@ -154,8 +180,29 @@ Route::middleware(['auth', 'role:admin'])
 
         // Contact Messages Management
         Route::get('/contacts', [AdminContactMessageController::class, 'index'])->name('contacts.index');
+        Route::get('/contacts/{id}', [AdminContactMessageController::class, 'show'])->name('contacts.show');
         Route::put('/contacts/{id}', [AdminContactMessageController::class, 'updateStatus'])->name('contacts.update-status');
         Route::delete('/contacts/{id}', [AdminContactMessageController::class, 'destroy'])->name('contacts.destroy');
+
+        // Blog CMS Management
+        Route::prefix('blog')->name('blog.')->group(function () {
+            Route::post('/upload-image', [AdminBlogController::class, 'uploadImage'])->name('upload-image');
+            Route::get('/trash', [AdminBlogController::class, 'trash'])->name('trash');
+            Route::post('/{id}/restore', [AdminBlogController::class, 'restore'])->name('restore');
+            Route::delete('/{id}/force-delete', [AdminBlogController::class, 'forceDelete'])->name('force-delete');
+            Route::post('/{id}/toggle-status', [AdminBlogController::class, 'toggleStatus'])->name('toggle-status');
+            Route::post('/{id}/toggle-featured', [AdminBlogController::class, 'toggleFeatured'])->name('toggle-featured');
+
+            Route::get('/', [AdminBlogController::class, 'index'])->name('index');
+            Route::get('/create', [AdminBlogController::class, 'create'])->name('create');
+            Route::post('/', [AdminBlogController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [AdminBlogController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [AdminBlogController::class, 'update'])->name('update');
+            Route::delete('/{id}', [AdminBlogController::class, 'destroy'])->name('destroy');
+
+            Route::resource('categories', AdminBlogCategoryController::class)->except(['show']);
+            Route::resource('tags', AdminBlogTagController::class)->except(['show']);
+        });
     });
 
 // ==========================================
@@ -185,6 +232,18 @@ Route::middleware(['auth', 'role:mentor'])
         Route::get('/messages/create', [MentorMessageController::class, 'create'])->name('messages.create');
         Route::get('/messages/chat/{parent_user_id}', [MentorMessageController::class, 'chat'])->name('messages.chat');
         Route::post('/messages', [MentorMessageController::class, 'store'])->name('messages.store');
+
+        // Bank Soal & AI Generator Routes
+        Route::get('/questions', [MentorQuestionController::class, 'index'])->name('questions.index');
+        Route::get('/questions/generate', [MentorQuestionController::class, 'create'])->name('questions.generate');
+        Route::post('/questions/generate-preview', [MentorQuestionController::class, 'preview'])
+            ->middleware('throttle:10,1')
+            ->name('questions.preview');
+        Route::post('/questions/store-batch', [MentorQuestionController::class, 'storeBatch'])->name('questions.store-batch');
+        Route::get('/questions/trash', [MentorQuestionController::class, 'trash'])->name('questions.trash');
+        Route::post('/questions/{id}/restore', [MentorQuestionController::class, 'restore'])->name('questions.restore');
+        Route::delete('/questions/{id}/force-delete', [MentorQuestionController::class, 'forceDelete'])->name('questions.force-delete');
+        Route::delete('/questions/{question}', [MentorQuestionController::class, 'destroy'])->name('questions.destroy');
     });
 
 // ==========================================
@@ -202,6 +261,8 @@ Route::middleware(['auth', 'role:parent'])
         Route::get('/payments/history', [ParentPaymentController::class, 'history'])->name('payments.history');
         Route::get('/payments/{id}', [ParentPaymentController::class, 'show'])->name('payments.show');
         Route::post('/payments/{id}/pay', [ParentPaymentController::class, 'payOnline'])->name('payments.pay');
+        Route::get('/payments/{id}/status', [ParentPaymentController::class, 'checkStatus'])->name('payments.status');
+        Route::post('/payments/{id}/cancel', [ParentPaymentController::class, 'cancelPayment'])->name('payments.cancel');
         Route::get('/payments/{id}/download', [ParentPaymentController::class, 'downloadInvoice'])->name('payments.download');
 
         // F. Modul Profil & Pengaturan
@@ -287,5 +348,11 @@ Route::get('/dashboard', function () {
 Route::get('/report/download/{student?}', [ReportController::class, 'downloadProgress'])
     ->middleware(['auth'])
     ->name('report.download');
+
+// ==========================================
+// 💳 PAKASIR PAYMENT GATEWAY WEBHOOK
+// ==========================================
+Route::post('/api/webhook/pakasir', [PakasirWebhookController::class, 'handle'])->name('api.webhook.pakasir');
+Route::post('/webhook/pakasir', [PakasirWebhookController::class, 'handle']);
 
 require __DIR__.'/auth.php';
