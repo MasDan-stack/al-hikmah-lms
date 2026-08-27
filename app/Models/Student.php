@@ -20,6 +20,20 @@ class Student extends Model
         'gender',
         'location',
         'notes',
+        'total_points',
+        'current_streak',
+        'longest_streak',
+        'last_setoran_date',
+        'privacy_leaderboard',
+    ];
+
+    protected $casts = [
+        'age' => 'integer',
+        'total_points' => 'integer',
+        'current_streak' => 'integer',
+        'longest_streak' => 'integer',
+        'last_setoran_date' => 'date',
+        'privacy_leaderboard' => 'boolean',
     ];
 
     public function user(): BelongsTo
@@ -49,6 +63,43 @@ class Student extends Model
     public function progress()
     {
         return $this->hasMany(Progress::class);
+    }
+
+    public function hifzTargets()
+    {
+        return $this->hasMany(HifzTarget::class);
+    }
+
+    public function juzProgress()
+    {
+        return $this->hasMany(JuzProgress::class);
+    }
+
+    public function earnedBadges()
+    {
+        return $this->belongsToMany(Badge::class, 'student_badges')
+            ->withPivot(['earned_at', 'trigger_data', 'announced_to_parent'])
+            ->withTimestamps();
+    }
+
+    public function studentBadges()
+    {
+        return $this->hasMany(StudentBadge::class);
+    }
+
+    public function milestones()
+    {
+        return $this->hasMany(HifzMilestone::class);
+    }
+
+    public function leaderboardSnapshots()
+    {
+        return $this->hasMany(LeaderboardSnapshot::class);
+    }
+
+    public function gamificationPoints()
+    {
+        return $this->hasMany(GamificationPoint::class);
     }
 
     public function sessions()

@@ -220,4 +220,14 @@ class User extends Authenticatable
             ->latest('id')
             ->first();
     }
+
+    public function passwordResetLogs()
+    {
+        return $this->hasMany(PasswordResetLog::class, 'user_id');
+    }
+
+    public function passwordResetsMade()
+    {
+        return $this->hasMany(PasswordResetLog::class, 'changed_by');
+    }
 }

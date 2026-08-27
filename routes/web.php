@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\ActiveEnrollmentController;
+use App\Http\Controllers\Admin\AdminBadgeController;
 use App\Http\Controllers\Admin\AdminBlogCategoryController;
 use App\Http\Controllers\Admin\AdminBlogController;
 use App\Http\Controllers\Admin\AdminBlogTagController;
+use App\Http\Controllers\Admin\AdminGamificationController;
 use App\Http\Controllers\Admin\ContactMessageController as AdminContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnrollmentController as AdminEnrollmentController;
@@ -22,6 +24,7 @@ use App\Http\Controllers\Mentor\AvailabilityController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\MentorMessageController;
 use App\Http\Controllers\Mentor\MentorQuestionController;
+use App\Http\Controllers\Mentor\MentorTargetController;
 use App\Http\Controllers\Mentor\ProgressController as MentorProgressController;
 use App\Http\Controllers\Mentor\ReportController as MentorReportController;
 use App\Http\Controllers\Mentor\SessionController as MentorSessionController;
@@ -35,6 +38,10 @@ use App\Http\Controllers\Parent\ParentProfileController;
 use App\Http\Controllers\Parent\ParentScheduleController;
 use App\Http\Controllers\PublicBlogController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Student\StudentDashboardController;
+use App\Http\Controllers\Student\StudentGamificationController;
+use App\Http\Controllers\Student\StudentPasswordController;
+use App\Http\Controllers\Student\StudentTargetController;
 use App\Models\Article;
 use App\Models\Mentor;
 use App\Models\Program;
@@ -203,6 +210,13 @@ Route::middleware(['auth', 'role:admin'])
             Route::resource('categories', AdminBlogCategoryController::class)->except(['show']);
             Route::resource('tags', AdminBlogTagController::class)->except(['show']);
         });
+
+        // Gamifikasi & Badges Management
+        Route::resource('badges', AdminBadgeController::class)->except(['show', 'create', 'edit']);
+        Route::get('/gamification/settings', [AdminGamificationController::class, 'settings'])->name('gamification.settings');
+        Route::post('/gamification/settings', [AdminGamificationController::class, 'updateSettings'])->name('gamification.settings.update');
+        Route::get('/gamification/leaderboard', [AdminGamificationController::class, 'leaderboard'])->name('gamification.leaderboard');
+        Route::post('/gamification/refresh-leaderboard', [AdminGamificationController::class, 'refreshLeaderboard'])->name('gamification.refresh');
     });
 
 // ==========================================
@@ -226,6 +240,13 @@ Route::middleware(['auth', 'role:mentor'])
         Route::post('/progress/bulk', [MentorProgressController::class, 'storeBulk'])->name('progress.bulk-store');
         Route::get('/reports/export', [MentorReportController::class, 'export'])->name('reports.export');
         Route::get('/profile', [MentorDashboardController::class, 'profile'])->name('profile');
+
+        // Target Hafalan Management
+        Route::get('/targets', [MentorTargetController::class, 'index'])->name('targets.index');
+        Route::get('/targets/create', [MentorTargetController::class, 'create'])->name('targets.create');
+        Route::post('/targets', [MentorTargetController::class, 'store'])->name('targets.store');
+        Route::post('/targets/bulk', [MentorTargetController::class, 'bulkAssign'])->name('targets.bulk-assign');
+        Route::patch('/targets/{target}/evaluate', [MentorTargetController::class, 'evaluate'])->name('targets.evaluate');
 
         // Mentor Messages & Chat with Parents
         Route::get('/messages', [MentorMessageController::class, 'index'])->name('messages.index');
@@ -290,6 +311,7 @@ Route::middleware(['auth', 'role:parent'])
             Route::get('/children', [ParentChildController::class, 'index'])->name('children.index');
             Route::get('/children/{id}', [ParentChildController::class, 'show'])->name('children.show');
             Route::get('/children/{id}/report', [ParentChildController::class, 'exportReport'])->name('children.report');
+            Route::post('/children/{id}/reset-password', [ParentChildController::class, 'requestPasswordReset'])->name('children.reset-password');
             Route::post('/enroll-tahfidz', [ParentChildController::class, 'enrollTahfidz'])->name('enroll-tahfidz');
 
             // Modul Jadwal Belajar
@@ -313,9 +335,33 @@ Route::middleware(['auth', 'role:student'])
     ->prefix('student')
     ->name('student.')
     ->group(function () {
-        Route::get('/dashboard', function () {
-            return view('student.dashboard');
-        })->name('dashboard');
+        Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
+
+        // Target Hafalan
+        Route::get('/targets/today', [StudentDashboardController::class, 'targetHariIni'])->name('targets.today');
+        Route::post('/targets', [StudentTargetController::class, 'store'])->name('targets.store');
+        Route::put('/targets/{target}', [StudentTargetController::class, 'update'])->name('targets.update');
+        Route::patch('/targets/{target}/complete', [StudentTargetController::class, 'markComplete'])->name('targets.complete');
+
+        // Milestone Targets
+        Route::get('/milestones', [StudentDashboardController::class, 'milestones'])->name('milestones');
+        Route::post('/milestones', [StudentTargetController::class, 'storeMilestone'])->name('milestones.store');
+
+        // Progress Hafalan
+        Route::get('/progress/juz', [StudentDashboardController::class, 'progressPerJuz'])->name('progress.juz');
+
+        // Leaderboard
+        Route::get('/leaderboard', [StudentDashboardController::class, 'leaderboard'])->name('leaderboard');
+
+        // Badges & Gamifikasi
+        Route::get('/badges', [StudentDashboardController::class, 'badges'])->name('badges');
+        Route::get('/badges/hall-of-fame/{badgeCode}', [StudentGamificationController::class, 'hallOfFame'])->name('badges.hall-of-fame');
+        Route::get('/stats', [StudentGamificationController::class, 'myStats'])->name('stats');
+        Route::post('/privacy/toggle', [StudentGamificationController::class, 'togglePrivacy'])->name('privacy.toggle');
+
+        // Password Management
+        Route::get('/password', [StudentPasswordController::class, 'show'])->name('password.index');
+        Route::post('/password/reset', [StudentPasswordController::class, 'reset'])->name('password.reset');
     });
 
 // Dashboard Route (Role Based Redirect)
