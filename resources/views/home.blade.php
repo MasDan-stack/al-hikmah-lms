@@ -19,11 +19,17 @@
                                 dan menumbuhkan akhlak yang mulia. AL-HIKMAH hadir untuk mendampingi buah hati dan keluarga
                                 dalam setiap prosesnya.</p>
                             <div class="d-flex flex-wrap gap-3">
-                                <a href="#" class="btn_1" data-bs-toggle="modal" data-bs-target="#daftarModal">
-                                    <i class="bi bi-pencil-square"></i> Mulai Belajar
-                                </a>
+                                @auth
+                                    <a href="{{ route('dashboard') }}" class="btn_1">
+                                        <i class="bi bi-speedometer2 me-1"></i> Buka Dashboard ({{ auth()->user()->role?->label ?? 'Akun Saya' }})
+                                    </a>
+                                @else
+                                    <a href="#" class="btn_1" data-bs-toggle="modal" data-bs-target="#daftarModal">
+                                        <i class="bi bi-pencil-square me-1"></i> Mulai Belajar
+                                    </a>
+                                @endauth
                                 <a href="{{ route('tentang-kami') }}" class="btn_2">
-                                    <i class="bi bi-info-circle"></i> Kenali Kami
+                                    <i class="bi bi-info-circle me-1"></i> Kenali Kami
                                 </a>
                             </div>
                         </div>
@@ -545,18 +551,64 @@
         <div class="container">
             <div class="cta-content" data-reveal>
                 <div class="cta-icon"><i class="bi bi-book"></i></div>
-                <h2 class="cta-title">Mari Menanam Kebaikan<br><span class="text-gradient-light">Sejak Hari Ini</span>
+                <h2 class="cta-title">
+                    @auth
+                        Selamat Datang Kembali,<br><span class="text-gradient-light">{{ auth()->user()->name }}</span>
+                    @else
+                        Mari Menanam Kebaikan<br><span class="text-gradient-light">Sejak Hari Ini</span>
+                    @endauth
                 </h2>
-                <p class="cta-subtitle">Dari satu huruf, satu ayat, satu doa — perjalanan besar menuju generasi Qur'ani
-                    dimulai bersama AL-HIKMAH.</p>
+                <p class="cta-subtitle">
+                    @auth
+                        Lanjutkan aktivitas pembelajaran Al-Qur'an dan pantau perkembangan mutaba'ah hari ini.
+                    @else
+                        Dari satu huruf, satu ayat, satu doa — perjalanan besar menuju generasi Qur'ani dimulai bersama AL-HIKMAH.
+                    @endauth
+                </p>
                 <div class="d-flex justify-content-center flex-wrap gap-3 mt-4">
-                    <a href="#" class="btn_1" data-bs-toggle="modal" data-bs-target="#daftarModal">
-                        <i class="bi bi-pencil-square"></i> Mulai Perjalanan Belajar
-                    </a>
-                    <a href="{{ wa_url('Assalamualaikum, saya ingin berkonsultasi mengenai program belajar AL-HIKMAH') }}"
-                        class="btn_2 text-white border-white" target="_blank" rel="noopener">
-                        <i class="bi bi-whatsapp"></i> Konsultasi via WhatsApp
-                    </a>
+                    @auth
+                        @if(auth()->user()->isParent())
+                            <a href="{{ route('parent.enrollments.index') }}" class="btn_1">
+                                <i class="bi bi-journal-plus me-1"></i> Daftarkan Program Baru Anak
+                            </a>
+                            <a href="{{ route('parent.dashboard') }}" class="btn_2 text-white border-white">
+                                <i class="bi bi-speedometer2 me-1"></i> Dashboard Orang Tua
+                            </a>
+                        @elseif(auth()->user()->isStudent())
+                            <a href="{{ route('student.dashboard') }}" class="btn_1">
+                                <i class="bi bi-journal-check me-1"></i> Masuk Ruang Santri
+                            </a>
+                            <a href="{{ route('student.targets.today') }}" class="btn_2 text-white border-white">
+                                <i class="bi bi-bullseye me-1"></i> Target Hafalan Hari Ini
+                            </a>
+                        @elseif(auth()->user()->isMentor())
+                            <a href="{{ route('mentor.dashboard') }}" class="btn_1">
+                                <i class="bi bi-mortarboard me-1"></i> Dashboard Mengajar
+                            </a>
+                            <a href="{{ route('mentor.sessions.index') }}" class="btn_2 text-white border-white">
+                                <i class="bi bi-calendar3 me-1"></i> Jadwal Mengajar
+                            </a>
+                        @elseif(auth()->user()->isAdmin())
+                            <a href="{{ route('admin.dashboard') }}" class="btn_1">
+                                <i class="bi bi-gear-fill me-1"></i> Dashboard Admin
+                            </a>
+                            <a href="{{ route('admin.enrollments.index') }}" class="btn_2 text-white border-white">
+                                <i class="bi bi-people-fill me-1"></i> Kelola Pendaftaran
+                            </a>
+                        @else
+                            <a href="{{ route('dashboard') }}" class="btn_1">
+                                <i class="bi bi-speedometer2 me-1"></i> Ke Dashboard
+                            </a>
+                        @endif
+                    @else
+                        <a href="#" class="btn_1" data-bs-toggle="modal" data-bs-target="#daftarModal">
+                            <i class="bi bi-pencil-square me-1"></i> Mulai Perjalanan Belajar
+                        </a>
+                        <a href="{{ wa_url('Assalamualaikum, saya ingin berkonsultasi mengenai program belajar AL-HIKMAH') }}"
+                            class="btn_2 text-white border-white" target="_blank" rel="noopener">
+                            <i class="bi bi-whatsapp me-1"></i> Konsultasi via WhatsApp
+                        </a>
+                    @endauth
                 </div>
             </div>
         </div>

@@ -104,4 +104,67 @@ class LandingPagesRoleVisibilityTest extends TestCase
         $programResponse->assertSee('Lihat Informasi Biaya');
         $programResponse->assertSee('Kamu Administrator');
     }
+
+    public function test_guest_sees_registration_modal_cta_on_home_page(): void
+    {
+        $response = $this->get(route('home'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Mulai Belajar');
+        $response->assertSee('Mulai Perjalanan Belajar');
+        $response->assertSee('data-bs-target="#daftarModal"', false);
+    }
+
+    public function test_parent_sees_dashboard_and_enrollment_cta_on_home_page(): void
+    {
+        $parent = User::factory()->parent()->create(['name' => 'Bunda Siti']);
+
+        $response = $this->actingAs($parent)->get(route('home'));
+
+        $response->assertStatus(200);
+        $response->assertDontSee('Mulai Perjalanan Belajar');
+        $response->assertSee('Daftarkan Program Baru Anak');
+        $response->assertSee('Dashboard Orang Tua');
+        $response->assertSee('Selamat Datang Kembali');
+        $response->assertSee('Bunda Siti');
+    }
+
+    public function test_student_sees_ruang_santri_cta_on_home_page(): void
+    {
+        $student = User::factory()->student()->create(['name' => 'Ahmad Santri']);
+
+        $response = $this->actingAs($student)->get(route('home'));
+
+        $response->assertStatus(200);
+        $response->assertDontSee('Mulai Perjalanan Belajar');
+        $response->assertSee('Masuk Ruang Santri');
+        $response->assertSee('Target Hafalan Hari Ini');
+        $response->assertSee('Ahmad Santri');
+    }
+
+    public function test_mentor_sees_mengajar_cta_on_home_page(): void
+    {
+        $mentor = User::factory()->mentor()->create(['name' => 'Ustadz Ali']);
+
+        $response = $this->actingAs($mentor)->get(route('home'));
+
+        $response->assertStatus(200);
+        $response->assertDontSee('Mulai Perjalanan Belajar');
+        $response->assertSee('Dashboard Mengajar');
+        $response->assertSee('Jadwal Mengajar');
+        $response->assertSee('Ustadz Ali');
+    }
+
+    public function test_admin_sees_admin_dashboard_cta_on_home_page(): void
+    {
+        $admin = User::factory()->admin()->create(['name' => 'Admin Utama']);
+
+        $response = $this->actingAs($admin)->get(route('home'));
+
+        $response->assertStatus(200);
+        $response->assertDontSee('Mulai Perjalanan Belajar');
+        $response->assertSee('Dashboard Admin');
+        $response->assertSee('Kelola Pendaftaran');
+        $response->assertSee('Admin Utama');
+    }
 }
