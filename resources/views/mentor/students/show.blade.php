@@ -98,7 +98,7 @@
                                 <div class="p-3 mb-3 border rounded-3 bg-light">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <span class="badge bg-primary rounded-pill px-3">{{ ucfirst($prog->kategori) }}</span>
-                                        <small class="text-muted">{{ $prog->created_at->format('d M Y, H:i') }}</small>
+                                        <small class="text-muted"><i class="bi bi-calendar3 me-1"></i>{{ $prog->created_at->locale('id')->isoFormat('dddd, D MMMM Y • HH:mm') }} WIB</small>
                                     </div>
                                     <h6 class="fw-bold text-dark mb-1">
                                         {{ $prog->surah_start ?? 'Surah' }} 

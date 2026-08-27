@@ -50,7 +50,7 @@
                     <table class="table align-middle table-hover datatable" id="tableChildProgressHistory">
                         <thead class="table-light">
                             <tr>
-                                <th>Tanggal</th>
+                                <th>Hari & Tanggal</th>
                                 <th>Kategori</th>
                                 <th>Surah / Juz</th>
                                 <th>Nilai (Fluent / Tajwid / Adab)</th>
@@ -61,7 +61,10 @@
                         <tbody>
                             @foreach($progresses as $prog)
                                 <tr>
-                                    <td class="fw-bold text-primary">{{ $prog->created_at->format('d/m/Y H:i') }}</td>
+                                    <td class="fw-bold text-primary">
+                                        <div>{{ $prog->created_at->locale('id')->isoFormat('dddd, D MMMM Y') }}</div>
+                                        <small class="text-muted fw-normal"><i class="bi bi-clock me-1"></i>{{ $prog->created_at->format('H:i') }} WIB</small>
+                                    </td>
                                     <td><span class="badge bg-secondary-subtle text-dark">{{ $prog->kategori }}</span></td>
                                     <td>{{ $prog->surah_start ?? '-' }} (Juz {{ $prog->juz ?? 1 }})</td>
                                     <td>
