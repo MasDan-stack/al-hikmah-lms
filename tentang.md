@@ -543,8 +543,8 @@ Seluruh fungsionalitas sistem telah diverifikasi secara otomatis menggunakan **P
    PASS  Tests\Feature\StudentDashboardTest
    PASS  Tests\Feature\TahfidzRegistrationTest
 
-  Tests:    237 passed (893 assertions)
-  Duration: 21.30s
+  Tests:    239 passed (903 assertions)
+  Duration: 22.08s
 ```
 
 ### 📊 Breakdown Cakupan Pengujian (Test Coverage v8.1):
@@ -560,14 +560,14 @@ Seluruh fungsionalitas sistem telah diverifikasi secara otomatis menggunakan **P
 | **Parent Reset & WhatsApp Delivery** | 4 | 14 | ✅ 100% Passed |
 | **Autentikasi, Multi-Role, & Registrasi** | 22 | 86 | ✅ 100% Passed |
 | **Admin Panel & Manajemen Master Data** | 32 | 128 | ✅ 100% Passed |
-| **Mentor Panel & AI Question Generator** | 38 | 152 | ✅ 100% Passed |
+| **Mentor Panel & AI Question Generator** | 40 | 162 | ✅ 100% Passed |
 | **Parent Portal, Gating, & Mutabaah** | 28 | 114 | ✅ 100% Passed |
 | **Modul Blog, Kategori, Tag, & SEO** | 18 | 72 | ✅ 100% Passed |
 | **Payment Gateway Pakasir & Webhook** | 16 | 64 | ✅ 100% Passed |
 | **Galeri Foto & Album Kategori Dinamis**| 14 | 56 | ✅ 100% Passed |
 | **Sistem Notifikasi & Alert Terpusat** | 10 | 38 | ✅ 100% Passed |
-| **Landing Pages, Jadwal Sholat, & Kontak**| 9 | 16 | ✅ 100% Passed |
-| **TOTAL KESELURUHAN** | **237** | **893** | **✅ 100% GREEN PASS** |
+| **Landing Pages, Role Visibility, & Kontak**| 19 | 20 | ✅ 100% Passed |
+| **TOTAL KESELURUHAN** | **239** | **903** | **✅ 100% GREEN PASS** |
 
 ---
 
@@ -578,7 +578,7 @@ Sistem **AL-HIKMAH LMS Versi 8.1** telah berhasil mengintegrasikan pilar pembela
 ### 🏆 Kesimpulan Pencapaian:
 1. **Peningkatan Keterikatan Santri (*Student Engagement*)**: Ruang belajar santri yang interaktif dengan lencana, streak harian, dan papan peringkat mendorong keistiqomahan menghafal.
 2. **Efisiensi Total Tanpa Input Manual**: Pendaftaran santri langsung memicu pembuatan akun login, email unik, password acak kuat, dan pengiriman ke WhatsApp wali santri.
-3. **Kualitas Kode Standar Enterprise**: 237 test case lulus 100% tanpa regresi (*zero regression*).
+3. **Kualitas Kode Standar Enterprise**: 239 test case lulus 100% tanpa regresi (*zero regression*).
 
 ---
 
