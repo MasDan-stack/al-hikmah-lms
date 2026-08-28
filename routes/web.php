@@ -1,11 +1,16 @@
 <?php
 
 use App\Http\Controllers\Admin\ActiveEnrollmentController;
+use App\Http\Controllers\Admin\AdminAlertController;
 use App\Http\Controllers\Admin\AdminBadgeController;
 use App\Http\Controllers\Admin\AdminBlogCategoryController;
 use App\Http\Controllers\Admin\AdminBlogController;
 use App\Http\Controllers\Admin\AdminBlogTagController;
+use App\Http\Controllers\Admin\AdminBroadcastController;
 use App\Http\Controllers\Admin\AdminGamificationController;
+use App\Http\Controllers\Admin\AdminReportController;
+use App\Http\Controllers\Admin\AdminRevenueController;
+use App\Http\Controllers\Admin\AdminStaffController;
 use App\Http\Controllers\Admin\ContactMessageController as AdminContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnrollmentController as AdminEnrollmentController;
@@ -15,6 +20,7 @@ use App\Http\Controllers\Admin\MentorAvailabilityController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Api\AnalyticsApiController;
 use App\Http\Controllers\Api\PakasirWebhookController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\RegisterMentorController;
@@ -217,7 +223,38 @@ Route::middleware(['auth', 'role:admin'])
         Route::post('/gamification/settings', [AdminGamificationController::class, 'updateSettings'])->name('gamification.settings.update');
         Route::get('/gamification/leaderboard', [AdminGamificationController::class, 'leaderboard'])->name('gamification.leaderboard');
         Route::post('/gamification/refresh-leaderboard', [AdminGamificationController::class, 'refreshLeaderboard'])->name('gamification.refresh');
+
+        // ==========================================
+        // 📊 ANALYTICS & OPERATIONAL INTELLIGENCE (v8.2)
+        // ==========================================
+        // Revenue Analytics & Breakdown
+        Route::get('/revenue', [AdminRevenueController::class, 'index'])->name('revenue.index');
+
+        // Staff & HR Workload
+        Route::get('/staff', [AdminStaffController::class, 'index'])->name('staff.index');
+
+        // Operational Alerts Center
+        Route::get('/alerts', [AdminAlertController::class, 'index'])->name('alerts.index');
+
+        // Reports Generator & Dual Export (Excel & PDF)
+        Route::get('/reports', [AdminReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/export-excel', [AdminReportController::class, 'exportExcel'])->name('reports.export-excel');
+        Route::get('/reports/export-pdf', [AdminReportController::class, 'exportPdf'])->name('reports.export-pdf');
+
+        // WhatsApp Mass Broadcast System
+        Route::get('/broadcast', [AdminBroadcastController::class, 'index'])->name('broadcast.index');
+        Route::post('/broadcast/send', [AdminBroadcastController::class, 'send'])->name('broadcast.send');
+        Route::post('/broadcast/preview', [AdminBroadcastController::class, 'preview'])->name('broadcast.preview');
     });
+
+// ==========================================
+// 📊 ANALYTICS AJAX JSON API (APEXCHARTS)
+// ==========================================
+Route::middleware(['auth', 'role:admin'])->prefix('api/analytics')->name('api.analytics.')->group(function () {
+    Route::get('/revenue-trend', [AnalyticsApiController::class, 'revenueTrend'])->name('revenue-trend');
+    Route::get('/program-breakdown', [AnalyticsApiController::class, 'programBreakdown'])->name('program-breakdown');
+    Route::get('/payment-status', [AnalyticsApiController::class, 'paymentStatus'])->name('payment-status');
+});
 
 // ==========================================
 // 📌 ROUTE MENTOR / GURU

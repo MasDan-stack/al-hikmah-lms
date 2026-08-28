@@ -37,7 +37,7 @@ class BadgeEvaluatorService
             ->whereTime('created_at', '<=', '11:00:00')
             ->count();
         $confirmedSessionsCount = SessionConfirmation::whereHas('session', fn ($q) => $q->where('student_id', $student->id))
-            ->where('parent_confirmed', true)
+            ->where('status', 'hadir')
             ->count();
 
         foreach ($availableBadges as $badge) {

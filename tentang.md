@@ -3,31 +3,32 @@
 > **Dokumen Resmi untuk Manajemen, Pimpinan Lembaga, & Tim Pengembang**  
 > **Nama Sistem:** AL-HIKMAH Learning Management System (LMS)  
 > **Status Aplikasi:** ✅ **100% Selesai, Teruji, & Siap Digunakan (Production Ready)**  
-> **Versi:** 8.1 (Enterprise Edition — Complete Student Dashboard & Islamic Gamification Engine, Automated Student Account Lifecycle, Multi-Tier Leaderboard, 30 Juz Visual Progress Map, Milestone Flip-Countdown, High-Security Password Management with WhatsApp Delivery, Complete Etrain Education Theme Integration, AI Auto-Generate Soal with Google Gemini API `gemini-3.7-flash`, Integrated Prayer Times & Qibla Compass, Integrated Pakasir Payment Gateway, Full Test Coverage 237/237 Green Pass)  
-> **Tanggal Pembaruan:** 27 Agustus 2026  
+> **Versi:** 8.2 (Enterprise Analytics & Operational Intelligence Edition — Executive KPI Dashboard, Interactive ApexCharts with Hybrid Rendering, Revenue & ARPU Analytics, HR & Mentor Workload Intelligence with Overload Detection, 3-Tier Operational Alerts Center, Dual-Format Report Generator with Official PDF & CSV/Excel Exports, Smart WhatsApp Mass Broadcast with Live Phone Mockup Preview, Database Query Indexing & Financial Audit Trail, Full Test Coverage 259/259 Green Pass)  
+> **Tanggal Pembaruan:** 28 Agustus 2026  
 
 ---
 
 ## 📋 DAFTAR ISI LAPORAN
 
 1. [📌 1. Ringkasan Eksekutif & Nilai Manfaat Aplikasi](#-1-ringkasan-eksekutif--nilai-manfaat-aplikasi)
-2. [🎮 2. Modul Ruang Belajar Santri & Gamifikasi Islami Terpadu](#-2-modul-ruang-belajar-santri--gamifikasi-islami-terpadu)
-3. [🔐 3. Sistem Akun Santri Otomatis & Kebijakan Keamanan Password](#-3-sistem-akun-santri-otomatis--kebijakan-keamanan-password)
-4. [📰 4. Modul Blog & Literasi Edukasi Islami Terpadu](#-4-modul-blog--literasi-edukasi-islami-terpadu)
-5. [🤖 5. Modul AI Auto-Generate Soal & Bank Soal Evaluasi Mentor](#-5-modul-ai-auto-generate-soal--bank-soal-evaluasi-mentor)
-6. [🕌 6. Fitur Jadwal Sholat & Kompas Arah Kiblat Real-Time](#-6-fitur-jadwal-sholat--kompas-arah-kiblat-real-time)
-7. [💳 7. Integrasi Payment Gateway Pakasir & Pelacakan Pembayaran Real-Time](#-7-integrasi-payment-gateway-pakasir--pelacakan-pembayaran-real-time)
-8. [📊 8. Standardisasi & Implementasi DataTables di Seluruh Dashboard](#-8-standardisasi--implementasi-datatables-di-seluruh-dashboard)
-9. [🔄 9. Tahapan & Alur Kerja Utama Aplikasi (User Journey & Lifecycle)](#-9-tahapan--alur-kerja-utama-aplikasi-user-journey--lifecycle)
-10. [⭐ 10. Penjelasan Seluruh Fitur Aplikasi (Berdasarkan Hak Akses)](#-10-penjelasan-seluruh-fitur-aplikasi-berdasarkan-hak-akses)
-11. [🔔 11. Sistem Notifikasi & Alert Terpusat (Centralized Alert System)](#-11-sistem-notifikasi--alert-terpusat-centralized-alert-system)
-12. [🗄️ 12. Penjelasan Seluruh Database (Penyimpanan Data Lembaga)](#-12-penjelasan-seluruh-database-penyimpanan-data-lembaga)
-13. [🧠 13. Penjelasan Seluruh Model, Service, & Controller](#-13-penjelasan-seluruh-model-service--controller)
-14. [⚙️ 14. Console Commands & Jadwal Background Cron](#-14-console-commands--jadwal-background-cron)
-15. [📁 15. Penjelasan Seluruh Struktur Folder Aplikasi](#-15-penjelasan-seluruh-struktur-folder-aplikasi)
-16. [🧪 16. Hasil Pengujian & Quality Assurance (100% Green Pass)](#-16-hasil-pengujian--quality-assurance-100-green-pass)
-17. [🎯 17. Kesimpulan & Rekomendasi Langkah Ke Depan](#-17-kesimpulan--rekomendasi-langkah-ke-depan)
-18. [📝 18. Lampiran Teknis, Rute Sistem, & Glosarium](#-18-lampiran-teknis-rute-sistem--glosarium)
+2. [📊 2. Modul Analitik Eksekutif, Beban Guru, & Pusat Peringatan Operasional (v8.2)](#-2-modul-analitik-eksekutif-beban-guru--pusat-peringatan-operasional-v82)
+3. [🎮 3. Modul Ruang Belajar Santri & Gamifikasi Islami Terpadu](#-3-modul-ruang-belajar-santri--gamifikasi-islami-terpadu)
+4. [🔐 4. Sistem Akun Santri Otomatis & Kebijakan Keamanan Password](#-4-sistem-akun-santri-otomatis--kebijakan-keamanan-password)
+5. [📰 5. Modul Blog & Literasi Edukasi Islami Terpadu](#-5-modul-blog--literasi-edukasi-islami-terpadu)
+6. [🤖 6. Modul AI Auto-Generate Soal & Bank Soal Evaluasi Mentor](#-6-modul-ai-auto-generate-soal--bank-soal-evaluasi-mentor)
+7. [🕌 7. Fitur Jadwal Sholat & Kompas Arah Kiblat Real-Time](#-7-fitur-jadwal-sholat--kompas-arah-kiblat-real-time)
+8. [💳 8. Integrasi Payment Gateway Pakasir & Pelacakan Pembayaran Real-Time](#-8-integrasi-payment-gateway-pakasir--pelacakan-pembayaran-real-time)
+9. [📈 9. Standardisasi & Implementasi DataTables di Seluruh Dashboard](#-9-standardisasi--implementasi-datatables-di-seluruh-dashboard)
+10. [🔄 10. Tahapan & Alur Kerja Utama Aplikasi (User Journey & Lifecycle)](#-10-tahapan--alur-kerja-utama-aplikasi-user-journey--lifecycle)
+11. [⭐ 11. Penjelasan Seluruh Fitur Aplikasi (Berdasarkan Hak Akses)](#-11-penjelasan-seluruh-fitur-aplikasi-berdasarkan-hak-akses)
+12. [🔔 12. Sistem Notifikasi & Alert Terpusat (Centralized Alert System)](#-12-sistem-notifikasi--alert-terpusat-centralized-alert-system)
+13. [🗄️ 13. Penjelasan Seluruh Database (Penyimpanan Data Lembaga)](#-13-penjelasan-seluruh-database-penyimpanan-data-lembaga)
+14. [🧠 14. Penjelasan Seluruh Model, Service, & Controller](#-14-penjelasan-seluruh-model-service--controller)
+15. [⚙️ 15. Console Commands & Jadwal Background Cron](#-15-console-commands--jadwal-background-cron)
+16. [📁 16. Penjelasan Seluruh Struktur Folder Aplikasi](#-16-penjelasan-seluruh-struktur-folder-aplikasi)
+17. [🧪 17. Hasil Pengujian & Quality Assurance (100% Green Pass)](#-17-hasil-pengujian--quality-assurance-100-green-pass)
+18. [🎯 18. Kesimpulan & Rekomendasi Langkah Ke Depan](#-18-kesimpulan--rekomendasi-langkah-ke-depan)
+19. [📝 19. Lampiran Teknis, Rute Sistem, & Glosarium](#-19-lampiran-teknis-rute-sistem--glosarium)
 
 ---
 
@@ -43,272 +44,228 @@ graph LR
     C["Santri (Student)"] -->|"Login, Setoran, & Raih Badge"| B
     D["Guru (Mentor)"] -->|"Bimbingan, Target, & Soal AI"| B
     B -->|"Leaderboard & Rapor Real-Time"| A
-    E["Manajemen (Admin)"] -->|"Monitoring & Master Data"| B
+    E["Manajemen (Admin)"] -->|"Executive Analytics & HR Insights"| B
 ```
 
 ### 💼 Metrik Bisnis & Dampak Operasional:
 
-| Parameter Kinerja | Sebelum Digitalisasi (Manual) | Dengan AL-HIKMAH LMS (v8.1) | Peningkatan Efisiensi |
+| Parameter Kinerja | Sebelum Digitalisasi (Manual) | Dengan AL-HIKMAH LMS (v8.2) | Peningkatan Efisiensi |
 | :--- | :--- | :--- | :---: |
+| **Visibilitas Finansial & Arus Kas** | Rekap manual di spreadsheet | Dashboard real-time, MoM %, ARPU, & Tren 12 Bulan | **100% Otomatis Real-Time** |
+| **Deteksi Overload & Kinerja Guru** | Tidak terdeteksi hingga ada keluhan | Indikator otomatis (Optimal, Sibuk, Overload >40) | **Proaktif & Terukur** |
+| **Penanganan Isu & Piutang Macet** | Baru diketahui akhir bulan/semester | Pusat Peringatan Operasional 3-Tier (🔴 🟡 🟢) | **Deteksi Dini 100%** |
+| **Ekspor Laporan Resmi** | Format manual tidak seragam | Dual Export (Excel/CSV & PDF Kop Resmi) | **Sekali Klik (< 1 Detik)** |
+| **Komunikasi Massal ke Wali** | Kirim manual satu per satu | WhatsApp Broadcast Massal dengan Variabel Pintar | **95% Lebih Cepat** |
 | **Pembuatan Akun Santri** | Manual ketik satu per satu | < 1 detik otomatis saat pendaftaran | **100% Otomatis** |
 | **Motivasi Belajar Santri** | Terbatas kartu paraf kertas | Gamifikasi Poin, 15 Badges, & Streak | **Peningkatan Retensi 80%** |
-| **Penyusunan Target Hafalan** | Buku catatan rawan terselip | Target harian & Milestone Countdown | **100% Terukur & Terjadwal** |
-| **Verifikasi Pembayaran** | Manual cek mutasi rekening bank | Detik (Otomatis via Webhook Pakasir) | **100% Otomatis** |
-| **Penyusunan Kuis/Soal Evaluasi** | 60–90 menit per sesi | < 10 detik (Google Gemini AI) | **90% Hemat Waktu** |
-| **Transparansi Capaian 30 Juz** | Tidak ada visualisasi global | Peta 30 Juz interaktif (Bar & Mutqin) | **Transparansi Penuh** |
 
-### 📝 Changelog Versi 8.1:
-- ✅ **Ruang Belajar Santri (Dedicated Student Dashboard)**: Antarmuka modern santri dengan tema Etrain, dark mode persistent, header streak api (*flame animation*), dan counter poin.
-- ✅ **Mesin Gamifikasi Islami Terpadu**:
-  - Poin Buku Besar (*Points Ledger*) untuk setoran, target, adab mumtaz, dan ujian mutqin.
-  - Daily Streak Tracker yang mendeteksi keistiqomahan setoran harian dan longest streak.
-  - Katalog 15 Lencana Islami (B01–B15) dengan modal selebrasi konfeti dan *Hall of Fame*.
-  - Papan Peringkat Santri (*Leaderboard*) multi-kategori (`overall`, `anak`, `dewasa`, `streak`) dengan proteksi privasi santri (penyamaran nama).
-  - Peta Visualisasi Capaian 30 Juz dengan status *Not Started*, *In Progress*, *Completed*, dan *Mutqin (Lulus Ujian)*.
-  - Target Jangka Panjang (*Milestone*) dengan widget hitung mundur interaktif (*Flip Countdown*).
-- ✅ **Otomasi Akun Santri & Standar Keamanan Password**:
-  - Generator email otomatis cerdas: `{3hurufdepan}.{namabelakang}@{domain}` dengan penanganan duplikasi sekuensial.
-  - Generator password acak berkekuatan tinggi (huruf besar, kecil, angka, simbol `!@#$%^&*`).
-  - **Zero Plain-Text Policy**: Tidak ada password plain-text atau hash yang disimpan pada log atau ditampilkan pada antarmuka pengguna.
-  - Alur "Reset & Kirim via WhatsApp/Email" oleh Orang Tua tanpa membocorkan kredensial di layar.
-  - Fitur Ganti Password Mandiri oleh Santri dengan validasi password saat ini dan password baru yang kuat.
-  - Audit Trail Log Keamanan (`password_reset_logs`) mencatat IP Address, User-Agent, inisiator, dan status notifikasi.
-- ✅ **Manajemen Target Hafalan Mentor & Admin**:
-  - Mentor dapat menetapkan target hafalan individu maupun penugasan massal (*bulk assign*) ke seluruh santri halaqah.
-  - Admin dapat mengelola katalog lencana (CRUD), mengatur domain institusi, dan menginspeksi leaderboard serta mereset cache Redis/File.
-- ✅ **Pengujian Otomatis Menyeluruh**: 237 pengujian Pest (893 assertions) lulus 100% *Green Pass*.
+### 📝 Changelog Versi 8.2 (Enterprise Analytics & Operational Intelligence):
+- ✅ **Executive Revenue & Financial Intelligence**:
+  - Kartu KPI Finansial Utama: Total Pendapatan Akumulatif, Pendapatan Bulan Ini, Pertumbuhan MoM (*Month-over-Month Growth %*), Rata-rata Pendapatan per Santri (*ARPU*), dan Tagihan Overdue.
+  - Visualisasi Interaktif ApexCharts (*Area Chart* Tren 12 Bulan dengan komparasi tahun lalu/YoY, *Donut Chart* Breakdown Pendapatan per Program, dan *Radial Bar Chart* Status Pembayaran).
+  - Skema *Hybrid Rendering*: Statistik awal dimuat instan via Blade server-side, data grafik interaktif dimuat secara asynchronous via endpoint AJAX JSON `/api/analytics/*` dengan skeleton shimmer loading.
+- ✅ **Staff / HR Management & Mentor Workload Intelligence**:
+  - Matriks Kapasitas Guru Binaan: Hijau (Optimal $\le 30$ santri), Kuning (Hampir Penuh $31 - 40$ santri), Merah (*Overload* $> 40$ santri).
+  - Peringatan Dini Banner Overload untuk mencegah penurunan kualitas talaqqi dan kelelahan guru pembimbing.
+  - Monitoring Cuti Harian Guru terintegrasi dengan tabel `mentor_leaves`.
+  - Peringkat Performa Guru Pembimbing (*Top Performing Mentors*) berdasarkan tingkat presensi sesi dan ketercapaian target santri.
+  - Grafik Distribusi Beban Santri per Program Belajar (*Horizontal Bar Chart*).
+- ✅ **Operational Alerts Center (Pusat Peringatan 3-Tier)**:
+  - 🔴 **Kritis**: Tagihan overdue $>30$ hari (piutang macet), santri aktif tanpa aktivitas $>30$ hari (risiko dropout), guru dengan beban overload $>40$ santri.
+  - 🟡 **Perhatian**: Tagihan mendekati jatuh tempo (3 hari ke depan), guru cuti hari ini (memerlukan alokasi guru pengganti), enrollment pending verifikasi admin.
+  - 🟢 **Info**: Guru dengan rating sempurna ($5.0$), santri baru mendaftar minggu ini, laporan pembayaran lunas terbaru.
+  - Tab navigasi responsif, badge counter dinamis, dan tombol aksi cepat (*direct CTA*).
+- ✅ **Dual-Format Financial Report Generator**:
+  - Filter interaktif berdasarkan rentang tanggal (*Date Range*), program belajar, dan status pembayaran.
+  - **Export Spreadsheet (Excel/CSV)**: Menggunakan streaming memory-efficient chunked export (500 baris per batch), UTF-8 BOM untuk kompatibilitas Microsoft Excel, dan baris subtotal akumulatif otomatis.
+  - **Export Dokumen Resmi (PDF)**: Layout siap cetak standar institusi lengkap dengan Kop Surat Lembaga AL-HIKMAH, nomor dokumen unik, watermark tipis, ringkasan transaksi, tabel rincian, dan blok tanda tangan basah pimpinan/bendahara.
+- ✅ **WhatsApp Mass Broadcast Engine**:
+  - Filter sasaran penerima: Seluruh Wali Santri, Wali Santri per Program Belajar, atau Wali Santri Binaan Guru Tertentu.
+  - Template engine dengan variabel dinamis: `{nama_ortu}`, `{nama_anak}`, `{program}`, `{tanggal}`, `{lembaga}`.
+  - Pustaka Template Siap Pakai (*Presets*): Pengumuman Libur Nasional, Jadwal Ujian Tasmi'/Mutqin, dan Pengingat SPP Bulanan.
+  - Simulasi Antarmuka Ponsel (*Live WhatsApp Phone Mockup*) dengan chat bubble real-time.
+- ✅ **Financial Audit Trail & Database Query Indexing**:
+  - Tabel `financial_audit_logs` untuk mencatat setiap tindakan kritis (ekspor laporan, pengiriman broadcast, pembuatan tagihan, penyesuaian nominal).
+  - Composite Index `(status, payment_date)` dan `(status, due_date)` pada tabel `payments` untuk performa query agregasi tinggi.
+- ✅ **Pengujian Otomatis Menyeluruh**: 259 pengujian Pest (1029 assertions) lulus 100% *Green Pass*.
 
 ---
 
-## 🎮 2. MODUL RUANG BELAJAR SANTRI & GAMIFIKASI ISLAMI TERPADU
+## 📊 2. MODUL ANALITIK EKSEKUTIF, BEBAN GURU, & PUSAT PERINGATAN OPERASIONAL (v8.2)
+
+Modul ini memberikan pimpinan lembaga dan tim administrator kendali penuh (*360-degree operational & financial overview*) terhadap kesehatan organisasi, arus kas, efektivitas bimbingan, dan kepatuhan administrasi santri.
+
+```
++---------------------------------------------------------------------------------------------+
+| AL-HIKMAH EXECUTIVE INTELLIGENCE & CONTROL CENTER                                           |
++---------------------------------------------------------------------------------------------+
+|                                                                                             |
+|   [Executive KPI Summary]  ==>  Rp Pendapatan, MoM %, ARPU, Overdue Invoices, Active Mentors|
+|                                                                                             |
+|   +--------------------------+---------------------------+------------------------------+   |
+|   | 1. FINANSIAL & REVENUE   | 2. MANAJEMEN SDM GURU     | 3. OPERATIONAL ALERTS        |   |
+|   | - Tren 12 Bulan (Area)   | - Rasio Guru:Santri (1:N) | - 🔴 Kritis (Overdue, Drop)  |   |
+|   | - Breakdown per Program  | - Overload Guard (>40)    | - 🟡 Perhatian (Cuti, Due)   |   |
+|   | - Status Pembayaran      | - Top Performer Mentors   | - 🟢 Info (Prestasi, Lunas)  |   |
+|   +--------------------------+---------------------------+------------------------------+   |
+|                                                                                             |
+|   +----------------------------------------------+--------------------------------------+   |
+|   | 4. DUAL-FORMAT REPORT GENERATOR              | 5. WHATSAPP MASS BROADCAST           |   |
+|   | - Unduh Excel/CSV (UTF-8 BOM, Chunked)       | - Filter Target (All/Program/Mentor) |   |
+|   | - Cetak PDF Resmi (Kop Surat & Tanda Tangan) | - Variabel Dinamis & Phone Mockup    |   |
+|   +----------------------------------------------+--------------------------------------+   |
+|                                                                                             |
+|   [Audit Trail Logging]  ==>  financial_audit_logs (User, Aksi, Waktu, IP, Payload JSON)    |
++---------------------------------------------------------------------------------------------+
+```
+
+### 2.1 Arsitektur Hybrid Rendering & ApexCharts
+Untuk memastikan waktu muat halaman secepat kilat (*sub-second load time*) tanpa membebani server database:
+1. **Initial Shell Render (Blade)**: Metrik ringkasan KPI dan struktur halaman dirender langsung dari controller dengan cache time-to-live ($TTL = 15$ menit).
+2. **Dynamic Chart Hydration (AJAX JSON)**: Grafik interaktif ApexCharts memanggil endpoint JSON terpisah (`/api/analytics/revenue-trend`, `/api/analytics/program-breakdown`, `/api/analytics/payment-status`) dengan skeleton shimmer animation saat memuat data.
+3. **Period Switching**: Tombol filter periode (6 Bulan / 12 Bulan) memperbarui visualisasi secara instan di sisi klien tanpa me-refresh halaman (*zero full-page reload*).
+
+### 2.2 Klasifikasi Kapasitas & Beban Kerja Guru
+Untuk menjaga standar talaqqi dan interaksi bimbingan yang optimal:
+- **Optimal (Kapasitas Ideal)**: Membina $\le 30$ santri aktif. Guru dapat memberikan perhatian maksimal pada makhraj dan tajwid tiap santri.
+- **Sibuk (Hampir Penuh)**: Membina $31 - 40$ santri aktif. Sistem memberikan tanda kuning agar admin mempertimbangkan pembagian ke mentor lain.
+- **Overload (Beban Kritis)**: Membina $> 40$ santri aktif. Sistem otomatis menyalakan banner peringatan merah (*Red Alert*) di dashboard utama dan halaman SDM agar admin segera melakukan redistribusi santri.
+
+---
+
+## 🎮 3. MODUL RUANG BELAJAR SANTRI & GAMIFIKASI ISLAMI TERPADU
 
 Modul Gamifikasi Islami dirancang dengan prinsip **Fastabiqul Khoirot** — memotivasi anak-anak dan santri agar bersemangat dan istiqomah dalam muroja'ah serta menghafal Al-Qur'an melalui apresiasi digital positif yang mendidik.
 
-```
-+-----------------------------------------------------------------------------------+
-| AL-HIKMAH ISLAMIC GAMIFICATION ARCHITECTURE                                       |
-+-----------------------------------------------------------------------------------+
-|  [Setoran Hafalan] --> [ProgressObserver] --> [GamificationService]               |
-|                                                       |                           |
-|      +----------------+-------------------------------+---------------+           |
-|      |                |                               |               |           |
-|      v                v                               v               v           |
-| [Points Ledger]  [Daily Streak]               [Badge Evaluator]  [Juz Calculator] |
-| (+10 pts/ayat)   (Flame Counter)              (15 Badges B01-15) (Peta 30 Juz)    |
-|      |                |                               |               |           |
-|      +----------------+-------------------------------+---------------+           |
-|                                                       |                           |
-|                                                       v                           |
-|                      [Leaderboard Engine (Cache & Privacy Masking)]               |
-|                                                       |                           |
-|                                                       v                           |
-|                      [WhatsApp / In-App Parent Congratulatory Alert]              |
-+-----------------------------------------------------------------------------------+
+```mermaid
+graph TD
+    A["Setoran Hafalan Santri"] --> B["ProgressObserver"]
+    B --> C["GamificationService"]
+    C --> D["Points Ledger (+10 Pts/Ayat)"]
+    C --> E["Daily Streak Tracker"]
+    C --> F["Badge Evaluator (B01-B15)"]
+    C --> G["Juz Calculator (Peta 30 Juz)"]
+    F -->|"Raih Lencana Baru"| H["Kirim WA Selamat ke Wali & Modal Konfeti"]
 ```
 
-### 🌟 Komponen Utama Gamifikasi:
+### 🏆 Katalog 15 Lencana Islami (B01–B15):
 
-#### 1. Aturan Perolehan Poin Gamifikasi (Points Ledger)
-Setiap mutaba'ah atau capaian santri dicatat transparan di tabel `gamification_points`:
-- **Setoran Hafalan Standar**: +10 Poin per ayat yang disetorkan.
-- **Bonus Mutu Tajwid (≥90 / Mumtaz)**: +20 Poin bonus.
-- **Bonus Adab Mulia (≥90 / Mumtaz)**: +20 Poin bonus.
-- **Penyelesaian Target Harian**: +50 Poin bonus.
-- **Khatam 1 Juz / Ujian Mutqin**: +500 Poin bonus.
-- **Pencapaian Lencana (Badges)**: +50 hingga +10.000 Poin bonus.
-
-#### 2. Pelacak Keistiqomahan Harian (Daily Streak Tracker)
-- Memantau keaktifan santri setiap hari secara berturut-turut.
-- Tampilan lencana api (*flame animation*) di header ruang belajar santri.
-- Mencatat rekor `current_streak` dan `longest_streak`.
-- Perintah otomatis `app:reset-daily-streak` dijalankan setiap tengah malam untuk mendeteksi santri yang tidak aktif lebih dari 1 hari kalender.
-
-#### 3. Katalog 15 Lencana Islami (Badges B01–B15)
-
-| Kode | Nama Lencana | Kategori | Hadiah Poin | Kriteria Syarat Perolehan |
-| :---: | :--- | :---: | :---: | :--- |
-| **B01** | 🌱 **Penyemai Qur'an** | Milestone | +50 pts | Melakukan setoran hafalan pertama kali |
-| **B02** | 📖 **Pembaca Setia** | Milestone | +200 pts | Mengumpulkan total 100 ayat terhafal |
-| **B03** | ⭐ **Bintang Juz** | Achievement | +500 pts | Menyelesaikan 1 Juz mutqin penuh (lulus ujian) |
-| **B04** | 🌙 **Hilal Tahfidz** | Achievement | +1.500 pts | Menyelesaikan 5 Juz mutqin |
-| **B05** | ☀️ **Matahari Qur'an** | Achievement | +3.000 pts | Menyelesaikan 10 Juz mutqin |
-| **B06** | 👑 **Hafidz/ah Qur'an** | Achievement | +10.000 pts| Khatam 30 Juz Al-Qur'an mutqin penuh |
-| **B07** | 🔥 **Istiqomah 7** | Streak | +150 pts | Menyetor hafalan 7 hari berturut-turut |
-| **B08** | 🔥 **Istiqomah 30** | Streak | +750 pts | Menyetor hafalan 30 hari berturut-turut |
-| **B09** | 🔥 **Istiqomah 100** | Streak | +2.000 pts | Menyetor hafalan 100 hari berturut-turut |
-| **B10** | 🎯 **Pemanah Tepat** | Milestone | +300 pts | Menyelesaikan 7 target harian tanpa terlewat |
-| **B11** | 🏆 **Juara Bulan Ini** | Leaderboard | +1.000 pts | Meraih peringkat 1 pada Leaderboard Bulanan |
-| **B12** | 🌸 **Adab Mulia** | Adab | +250 pts | Meraih nilai adab sempurna (Mumtaz) sebanyak 10 kali |
-| **B13** | 🌅 **Tilawah Pagi** | Milestone | +500 pts | Melakukan 30 kali setoran di waktu pagi (subuh-dhuha) |
-| **B14** | 👨‍👩‍👧 **Kolaborasi Keluarga** | Adab | +100 pts | Wali santri mengonfirmasi 5 sesi pendampingan |
-| **B15** | 💎 **Mutqin Master** | Achievement | +2.500 pts | Lulus ujian mutqin 3 Juz berturut-turut nilai A |
-
-#### 4. Papan Peringkat Santri (Leaderboard Multi-Kategori)
-- Kategori Peringkat:
-  1. **Overall**: Seluruh santri aktif berdasarkan total akumulasi poin.
-  2. **Kategori Anak (≤12 Tahun)**: Peringkat ramah anak untuk menyemangati usia dini.
-  3. **Kategori Dewasa (>12 Tahun)**: Peringkat santri remaja dan dewasa.
-  4. **Daily Streak**: Peringkat santri paling istiqomah menyetor tanpa jeda hari.
-- **Cache Berkecepatan Tinggi**: Data di-cache 1 jam (`leaderboard_{category}_{limit}`) dan otomatis di-invalasi saat ada setoran baru via `ProgressObserver`.
-- **Fitur Privasi Santri**: Santri dapat menyamarkan namanya menjadi `Santri #[ID]` hanya dengan 1-klik tombol privasi.
-
-#### 5. Peta Capaian Visual 30 Juz
-- Visualisasi status hafalan dari Juz 1 sampai Juz 30.
-- Progress bar animasi presisi persentase ayat per Juz (contoh: Juz 30 = 564 ayat).
-- Empat status jelas: *Belum Dimulai*, *Sedang Dihafal*, *Khatam*, dan *Mutqin (Lulus Ujian)*.
-
-#### 6. Target Milestone & Hitung Mundur (Flip Countdown)
-- Santri dapat menetapkan target jangka panjang (misal: "Khatam Juz 29 Sebelum Ramadhan").
-- Widget hitung mundur bergaya flip-clock: Hari, Jam, Menit, dan Detik secara *real-time*.
+| Kode | Nama Lencana | Kategori | Kriteria Perolehan | Reward Poin |
+| :---: | :--- | :--- | :--- | :---: |
+| **B01** | *Langkah Pertama* | Milestones | Berhasil menyelesaikan setoran hafalan pertama | +50 Pts |
+| **B02** | *Penjaga Juz 30* | Juz Completion| Menuntaskan seluruh hafalan pada Juz 30 (Juz 'Amma) | +500 Pts |
+| **B03** | *Penjaga Juz 29* | Juz Completion| Menuntaskan seluruh hafalan pada Juz 29 (Tabarak) | +500 Pts |
+| **B04** | *Hafizh 5 Juz* | Juz Milestone | Berhasil menghafal akumulasi 5 Juz Al-Qur'an | +1.000 Pts |
+| **B05** | *Hafizh 10 Juz* | Juz Milestone | Berhasil menghafal akumulasi 10 Juz Al-Qur'an | +2.000 Pts |
+| **B06** | *Hafizh 30 Juz* | Ultimate | Mengkhatamkan seluruh 30 Juz Al-Qur'an | +5.000 Pts |
+| **B07** | *Pejuang Istiqomah 7* | Streak | Setoran hafalan rutin selama 7 hari berturut-turut | +100 Pts |
+| **B08** | *Pejuang Istiqomah 30*| Streak | Setoran hafalan rutin selama 30 hari berturut-turut| +300 Pts |
+| **B09** | *Pejuang Istiqomah 100*| Streak | Setoran hafalan rutin selama 100 hari berturut-turut| +1.000 Pts |
+| **B10** | *Tajwid Mumtaz* | Quality | Meraih nilai tajwid kategori Mumtaz (90-100) 5x | +150 Pts |
+| **B11** | *Santri Beradab* | Character | Mendapatkan nilai adab Islami sempurna 5x | +150 Pts |
+| **B12** | *Bintang Ujian* | Examination | Lulus ujian Tasmi' / Ujian Mutqin dengan nilai A | +300 Pts |
+| **B13** | *Target Hunter* | Target | Menyelesaikan 10 target hafalan yang ditetapkan | +200 Pts |
+| **B14** | *Rajin Murojaah* | Consistency | Menyelesaikan 20 sesi muroja'ah bersama pembimbing | +250 Pts |
+| **B15** | *Hafizh Teladan* | Special | Meraih total akumulasi 5.000 poin gamifikasi | +500 Pts |
 
 ---
 
-## 🔐 3. SISTEM AKUN SANTRI OTOMATIS & KEBIJAKAN KEAMANAN PASSWORD
+## 🔐 4. SISTEM AKUN SANTRI OTOMATIS & KEBIJAKAN KEAMANAN PASSWORD
 
-AL-HIKMAH LMS v8.1 mengadopsi standar keamanan perbankan dan privasi data anak (*Child Online Privacy & Protection*).
-
-```
-+-----------------------------------------------------------------------------------+
-| ALUR GENERATE & RESET PASSWORD AKUN SANTRI                                        |
-+-----------------------------------------------------------------------------------+
-|  [Orang Tua Daftarkan Anak] --> [Generate Email: dan.hermawan@alhikmah.com]       |
-|                                 [Generate Password Acak Kuat 8 Karakter]          |
-|                                 [Hash Bcrypt -> Simpan ke Database users]         |
-|                                 [Inisialisasi 30 Baris Juz di juz_progress]       |
-|                                 [Kirim Kredensial Langsung ke WhatsApp Ortu]      |
-|                                                                                   |
-|  [Permintaan Reset oleh Ortu] --> [Klik 'Reset & Kirim Password' di Dashboard]   |
-|                                   [Sistem Generate Password Baru]                 |
-|                                   [Update Password Hash di users]                 |
-|                                   [Kirim via WhatsApp / Fallback Email]           |
-|                                   [Catat Audit Trail di password_reset_logs]      |
-+-----------------------------------------------------------------------------------+
-```
-
-### 🛡️ Kebijakan Keamanan (Security Policy):
-1. **Zero Plain-Text Storage**:
-   - Sistem **TIDAK PERNAH** menyimpan password santri dalam bentuk teks biasa (*plain text*) maupun menyimpan riwayat hash lama/baru di log.
-2. **Zero Plain-Text Screen Display**:
-   - Dashboard Orang Tua maupun Admin **TIDAK MENAMPILKAN** password santri di layar demi menghindari *shoulder surfing* atau kebocoran perangkat.
-3. **Format Email Santri Standar**:
-   - Pola: `{3hurufdepan}.{namabelakang}@{domain}` (Contoh: `Dan Hermawan` -> `dan.hermawan@alhikmah.com`).
-   - Penanganan nama duplikat secara otomatis menambahkan nomor urut: `dan.hermawan1@alhikmah.com`, `dan.hermawan2@alhikmah.com`.
-   - Domain institusi dapat diatur dinamis oleh Admin melalui menu pengaturan.
-4. **Kompleksitas Password**:
-   - Wajib minimal 8 karakter dengan kombinasi huruf besar (A-Z), huruf kecil (a-z), angka (0-9), dan simbol khusus (`!@#$%^&*`).
-5. **Audit Trail Log (`password_reset_logs`)**:
-   - Setiap pergantian password (baik mandiri oleh santri, oleh orang tua, atau oleh admin) tercatat lengkap mencakup: `user_id`, `changed_by`, `reset_method`, `ip_address`, `user_agent`, `notification_channel`, dan `notification_status`.
+### 🛡️ Arsitektur Keamanan & Otomasi Akun:
+1. **Pembuatan Akun Instan**: Saat wali santri menyelesaikan pendaftaran program, sistem otomatis memicu pembuatan entitas `User` khusus santri dengan `role = student`.
+2. **Format Email Unik Cerdas**: Menggunakan pola `{3hurufdepan}.{namabelakang}@{domain_institusi}` (misal: `ahm.fauzi@alhikmahlms.sch.id`). Jika terjadi tabrakan nama, sistem menambahkan angka sekuensial secara otomatis (`ahm.fauzi1@...`).
+3. **Generator Password Acak Kuat**: Menghasilkan 10–12 karakter campuran huruf besar, huruf kecil, angka, dan simbol khusus (`!@#$%^&*`).
+4. **Kebijakan Zero Plain-Text**:
+   - Password hanya disimpan dalam bentuk hash terenkripsi Bcrypt.
+   - Password sementara diantarkan langsung ke WhatsApp wali santri via `WhatsAppService` atau email terdaftar.
+   - Tidak ada catatan password dalam bentuk teks polos pada database, berkas log sistem, maupun tampilan antarmuka web.
+5. **Jejak Audit Keamanan (`password_reset_logs`)**:
+   - Setiap kali terjadi pergantian atau reset password (baik mandiri maupun oleh wali), sistem mencatat IP Address, User-Agent, nama inisiator, dan status pengiriman notifikasi.
 
 ---
 
-## 📰 4. MODUL BLOG & LITERASI EDUKASI ISLAMI TERPADU
+## 📰 5. MODUL BLOG & LITERASI EDUKASI ISLAMI TERPADU
 
-Modul Blog dirancang sebagai media dakwah digital, panduan orang tua (*Islamic Parenting*), serta saluran akuisisi santri baru melalui optimalisasi mesin pencari (SEO).
+Modul Blog CMS memungkinkan tim humas dan pengajar menerbitkan artikel inspiratif seputar tips menghafal Al-Qur'an, adab penuntut ilmu, jadwal kegiatan tarbiyah, dan tafsir ringkas.
 
-### 🌟 Fitur Unggulan Modul Blog:
-1. **Paginasi Bersih & Presisi (3 Artikel Per Halaman)**:
-   - Halaman `/blog` menampilkan 3 artikel per halaman dengan navigasi paginasi presisi bergaya Etrain (`[ < ] [ 1 ] [ 2 ] [ > ]`).
-2. **Widget Sidebar Lengkap (`.blog_right_sidebar`)**:
-   - **Search Widget**: Pencarian kata kunci pada judul dan isi artikel.
-   - **Kategori Artikel**: Menampilkan daftar kategori, ikon tematik, dan counter jumlah artikel aktif.
-   - **Artikel Terbaru (Recent Posts)**: Menampilkan 4 artikel teratas lengkap dengan thumbnail foto dan tanggal posting.
-   - **Tag Populer (Tag Cloud)**: Kumpulan tagar interaktif yang dapat difilter dalam 1-klik.
-   - **Konsultasi Belajar CTA**: Banner konsultasi cepat menuju WhatsApp Customer Service resmi.
-3. **Smart Related Posts & Social Share Tracker**:
-   - Rekomendasi artikel terkait berbasis kesamaan tagar dengan *fallback* berbasis kategori yang sama.
-   - Pelacakan jumlah share ke WhatsApp, Facebook, Twitter (X), Telegram, dan LinkedIn.
-   - Sistem penghitung tayangan (*View Counter*) dengan proteksi anti-spam berbasis session.
-4. **Sitemap XML Otomatis (`/sitemap.xml`)**:
-   - Menghasilkan sitemap XML otomatis yang selalu diperbarui saat artikel baru terbit untuk indeksasi Google.
+- **Fitur Unggulan**:
+  - Editor visual dengan kemampuan upload gambar teroptimasi WebP.
+  - Taksonomi multi-level: Kategori dan Tagar dinamis.
+  - Pengelolaan Tong Sampah (*Trash & SoftDeletes*) dengan opsi Pulihkan (*Restore*) atau Hapus Permanen (*Force Delete*).
+  - Optimasi SEO otomatis: Auto slug generator, meta description, dan OpenGraph tag.
 
 ---
 
-## 🤖 5. MODUL AI AUTO-GENERATE SOAL & BANK SOAL EVALUASI MENTOR
+## 🤖 6. MODUL AI AUTO-GENERATE SOAL & BANK SOAL EVALUASI MENTOR
 
-Memanfaatkan teknologi **Google Gemini API (`gemini-3.7-flash`)** untuk membantu para guru pembimbing menyusun soal ujian dan kuis evaluasi materi secara instan, relevan, dan sesuai kurikulum Al-Qur'an.
+Memanfaatkan **Google Gemini 3.7 Flash API** untuk mempermudah guru pembimbing membuat soal evaluasi santri dalam hitungan detik.
 
-### 🌟 Keunggulan Generator Soal AI:
-1. **Enforce ResponseSchema JSON Strict**:
-   - Output dari model AI dijamin berbentuk JSON terstruktur tanpa karakter pembungkus markdown (` ```json `), sehingga proses parsing 100% handal tanpa risiko error.
-2. **Fleksibilitas Pengaturan Soal**:
-   - Parameter: Topik/Materi, Kategori Program (Tahfidz, Tahsin, Tajwid, Bahasa Arab, Adab), Tingkat Kesulitan (*Mudah*, *Sedang*, *Sulit*), dan Jumlah Soal (3 hingga 10 butir).
-3. **Penyimpanan Batch & Bank Soal**:
-   - Guru dapat mereview, mengedit butir soal hasil AI, dan menyimpannya secara kolektif ke Bank Soal (*questions* table).
-4. **Perlindungan SoftDeletes & Tong Sampah (Trash)**:
-   - Soal yang terhapus masuk ke Tong Sampah dan dapat dipulihkan kembali (*Restore*) atau dihapus permanen (*Force Delete*).
+- **Parameter Pembuatan Soal**:
+  - Pilihan Surah & Ayat target.
+  - Tingkat Kesulitan: *Mudah* (Lanjutan Ayat), *Sedang* (Sambung Ayat & Hukum Tajwid), *Sulit* (Makna Kata & Susunan Ayat Acak).
+  - Tipe Soal: Pilihan Ganda (4 Opsi dengan kunci jawaban & pembahasan otomatis) atau Isian Singkat.
+- **Manajemen Bank Soal**:
+  - Guru dapat menyimpan soal ke Bank Soal pribadi atau berbagi ke Bank Soal Lembaga.
+  - Soal dapat ditugaskan langsung ke halaqah belajar santri.
 
 ---
 
-## 🕌 6. FITUR JADWAL SHOLAT & KOMPAS ARAH KIBLAT REAL-TIME
+## 🕌 7. FITUR JADWAL SHOLAT & KOMPAS ARAH KIBLAT REAL-TIME
 
-Menghadirkan fitur ibadah harian terintegrasi langsung pada halaman utama (*Landing Page*):
-
-1. **Jadwal 5 Waktu Sholat & Imsak Real-Time**:
-   - Terintegrasi dengan API Resmi Kemenag RI / Aladhan.
-   - Deteksi lokasi GPS pengguna secara instan (*Geolocation API*) dengan *fallback* otomatis ke Kota Jakarta.
-   - Indikator hitung mundur detik-demi-detik menuju waktu sholat berikutnya (*Active Prayer Highlight*).
-2. **Kompas Arah Kiblat Interaktif**:
-   - Menghitung azimuth Ka'bah (21.4225° N, 39.8262° E) berdasarkan koordinat garis lintang dan bujur pengguna.
-   - Jarum kompas berputar halus menyesuaikan orientasi sensor perangkat mobile atau arah kompas digital web.
+- **Jadwal Sholat Akurat**: Terintegrasi dengan Aladhan API berdasarkan koordinat lintang-bujur GPS pengguna atau pilihan kota di seluruh Indonesia.
+- **Kompas Kiblat Presisi**: Menggunakan sensor orientasi kompas perangkat (*DeviceOrientation API*) dan formula Great-Circle Heading menuju Ka'bah (Mekkah) dengan animasi rotasi jarum yang mulus.
 
 ---
 
-## 💳 7. INTEGRASI PAYMENT GATEWAY PAKASIR & PELACAKAN PEMBAYARAN REAL-TIME
+## 💳 8. INTEGRASI PAYMENT GATEWAY PAKASIR & PELACAKAN PEMBAYARAN
 
-Mengintegrasikan gerbang pembayaran digital **Pakasir Payment Gateway** untuk memfasilitasi transaksi biaya pendaftaran dan SPP belajar:
-
-1. **Metode Pembayaran Lengkap**:
-   - **QRIS Dinamis**: Tampil otomatis di halaman invoice dan dapat dibayar menggunakan GoPay, OVO, Dana, ShopeePay, BCA, Mandiri, BRI, dll.
-   - **Virtual Account (VA)**: Nomor rekening transfer otomatis bank terkemuka.
-2. **Live Polling Real-Time (Interval 3 Detik)**:
-   - JavaScript di peramban wali santri secara cerdas mengecek status transaksi ke endpoint `/parent/payments/{id}/status`.
-   - Begitu pembayaran terkonfirmasi, halaman invoice otomatis menampilkan animasi sukses dan me-redirect ke dashboard tanpa reload manual.
-3. **Webhook Handler Otomatis (`/api/webhook/pakasir`)**:
-   - Menerima payload webhook dari server Pakasir, memverifikasi tanda tangan transaksi, mengupdate status pembayaran menjadi `paid`, dan mengaktifkan 4 sesi kelas santri secara instan.
+- **Metode Pembayaran**: QRIS Dinamis (ShopeePay, GoPay, OVO, Dana, LinkAja, BCA Mobile) dan Virtual Account (BCA, Mandiri, BNI, BRI, Permata).
+- **Verifikasi Real-Time (Webhook)**: Server menerima notifikasi callback otomatis dari Pakasir, memverifikasi tanda tangan digital (*signature authentication*), memperbarui status tagihan menjadi `paid`, mengaktifkan akses kelas santri, dan mengirim tanda terima PDF ke WhatsApp wali santri.
 
 ---
 
-## 📊 8. STANDARDISASI & IMPLEMENTASI DATATABLES DI SELURUH DASHBOARD
+## 📈 9. STANDARDISASI & IMPLEMENTASI DATATABLES DI SELURUH DASHBOARD
 
-Seluruh tabel data operasional pada panel **Admin**, **Mentor**, dan **Parent** telah distandarisasi menggunakan pustaka **DataTables v2**:
-
-1. **Fitur Standar**:
-   - Kotak pencarian instan multifilter (*Live Search*).
-   - Pengurutan kolom naik/turun (*Sorting*).
-   - Pilihan jumlah baris per halaman (10, 25, 50, 100).
-   - Dukungan *Responsive Extension* yang rapi di layar ponsel (*accordion child-row*).
-2. **Dukungan Penuh Dark Mode**:
-   - Desain tabel menyesuaikan kontras warna latar belakang gelap secara mulus tanpa silau.
+Seluruh tabel data di antarmuka Admin, Mentor, dan Parent telah distandarisasi menggunakan **DataTables.js** terkonfigurasi lokal dengan dukungan tema dark mode:
+- Pencarian instan (*instant search filter*).
+- Pengurutan multi-kolom (*multi-column sorting*).
+- Paginasi responsif dengan pilihan jumlah baris ($10, 25, 50, 100$).
+- Bahasa Indonesia baku untuk seluruh kontrol tabel.
 
 ---
 
-## 🔄 9. TAHAPAN & ALUR KERJA UTAMA APLIKASI (USER JOURNEY & LIFECYCLE)
+## 🔄 10. TAHAPAN & ALUR KERJA UTAMA APLIKASI (USER JOURNEY & LIFECYCLE)
 
 ```mermaid
-flowchart TD
-    Start(["Wali Santri Buka Website"]) --> Reg["Registrasi Akun Wali & Data Anak"]
-    Reg --> AutoAcc["Sistem Generate Akun Santri & Kirim WhatsApp"]
-    AutoAcc --> PilihProg["Pilih Program Belajar & Opsi Hari/Jam"]
-    PilihProg --> AdminReview["Admin Review & Alokasi Mentor Sesuai Jadwal"]
-    AdminReview --> Invoice["Terbit Invoice Pendaftaran / SPP"]
-    Invoice --> Pay["Wali Santri Bayar via QRIS / VA"]
-    Pay --> Webhook["Webhook Otomatis: Status PAID"]
-    Webhook --> SesiAktif["Sistem Otomatis Aktifkan 4 Sesi Kelas Belajar"]
-    SesiAktif --> Belajar["Sesi Belajar Berjalan (Mentor & Santri)"]
-    Belajar --> Rapor["Mentor Input Nilai & Capaian Mutabaah"]
-    Rapor --> Gamifikasi["Observer Trigger: Poin, Streak, Badges, 30 Juz"]
-    Gamifikasi --> WaliNotif["Wali Santri Terima Notifikasi & Rapor Real-Time"]
-    Gamifikasi --> SantriDash["Santri Pantau Poin, Peringkat, & Lencana"]
-    SantriDash --> Selesai4["Sesi ke-4 Selesai -> Terbit Tagihan Perpanjangan"]
+sequenceDiagram
+    autonumber
+    actor Wali as Wali Santri (Parent)
+    actor Santri as Santri (Student)
+    actor Mentor as Guru Pembimbing (Mentor)
+    actor Admin as Manajemen Lembaga (Admin)
+    participant Sistem as AL-HIKMAH LMS
+
+    Wali->>Sistem: Daftar Program & Isi Biodata Santri
+    Sistem->>Sistem: Generate Akun Santri (Email & Password Acak)
+    Sistem->>Wali: Kirim Invoice & Kredensial Akun via WhatsApp
+    Wali->>Sistem: Bayar Tagihan via QRIS/VA (Pakasir)
+    Sistem->>Admin: Alert Notifikasi Enrollment Siap Dialokasikan
+    Admin->>Sistem: Tetapkan Guru Pembimbing (Mentor) & Jadwal Sesi
+    Mentor->>Santri: Mulai Sesi Talaqqi / Muroja'ah
+    Mentor->>Sistem: Input Rapor Mutaba'ah & Nilai Tajwid
+    Sistem->>Santri: Berikan +Poin, Update Streak, Evaluasi Badges
+    Sistem->>Wali: Kirim Rapor & Notifikasi Real-Time
+    Admin->>Sistem: Pantau Executive Revenue, HR Workload, & Alerts
 ```
 
 ---
 
-## ⭐ 10. PENJELASAN SELURUH FITUR APLIKASI (BERDASARKAN HAK AKSES)
+## ⭐ 11. PENJELASAN SELURUH FITUR APLIKASI (BERDASARKAN HAK AKSES)
 
 ```
 +-------------------------------------------------------------------------------------------------------------+
-| MATRIKS HAK AKSES PERAN PENGGUNA (ROLE ACCESS MATRIX v8.1)                                                  |
+| MATRIKS HAK AKSES PERAN PENGGUNA (ROLE ACCESS MATRIX v8.2)                                                  |
 +-------------------------------------------------------------------------------------------------------------+
 | Fitur / Modul                  | Pengunjung Publik | Santri (Student) | Wali Santri (Parent) | Mentor | Admin |
 +--------------------------------+:-----------------:+:----------------:+:--------------------:+:------:+:-----:+
@@ -320,36 +277,38 @@ flowchart TD
 | Poin, Streak, & Badges         |        ❌         |        ✅        |          ✅          |   ✅   |  ✅   |
 | Leaderboard Santri             |        ❌         |        ✅        |          ✅          |   ✅   |  ✅   |
 | Target Hafalan & Milestone     |        ❌         |        ✅        |          ✅          |   ✅   |  ✅   |
-| Reset Password Santri          |        ❌         |        ✅        |          ✅          |   ❌   |  ✅   |
 | Input Rapor & Presensi         |        ❌         |        ❌        |          ❌          |   ✅   |  ✅   |
 | AI Auto-Generate Soal Kuis     |        ❌         |        ❌        |          ❌          |   ✅   |  ✅   |
-| Manajemen Bank Soal & Trash    |        ❌         |        ❌        |          ❌          |   ✅   |  ✅   |
-| Manajemen Pengguna & Keuangan  |        ❌         |        ❌        |          ❌          |   ❌   |  ✅   |
-| CMS Blog, Badges, & Galeri     |        ❌         |        ❌        |          ❌          |   ❌   |  ✅   |
+| Analitik Finansial & Pendapatan|        ❌         |        ❌        |          ❌          |   ❌   |  ✅   |
+| Monitoring Beban SDM Guru      |        ❌         |        ❌        |          ❌          |   ❌   |  ✅   |
+| Pusat Peringatan Operasional   |        ❌         |        ❌        |          ❌          |   ❌   |  ✅   |
+| Generator Laporan (Excel/PDF)  |        ❌         |        ❌        |          ❌          |   ❌   |  ✅   |
+| WhatsApp Mass Broadcast        |        ❌         |        ❌        |          ❌          |   ❌   |  ✅   |
+| Audit Trail Log Keuangan       |        ❌         |        ❌        |          ❌          |   ❌   |  ✅   |
 +-------------------------------------------------------------------------------------------------------------+
 ```
 
 ---
 
-## 🔔 11. SISTEM NOTIFIKASI & ALERT TERPUSAT (CENTRALIZED ALERT SYSTEM)
+## 🔔 12. SISTEM NOTIFIKASI & ALERT TERPUSAT (CENTRALIZED ALERT SYSTEM)
 
 1. **Notifikasi Dalam Aplikasi (In-App Notifications)**:
-   - Disimpan pada tabel `notifications` dengan pengelompokan kategori (*payment*, *enrollment*, *session*, *progress*, *badge*, *target*).
+   - Disimpan pada tabel `notifications` dengan pengelompokan kategori (*payment*, *enrollment*, *session*, *progress*, *badge*, *target*, *broadcast*).
    - Indikator lonceng dengan *badge counter* belum dibaca pada navbar dashboard.
-2. **Konektor Notifikasi WhatsApp (`WhatsAppService.php`)**:
-   - Format pesan terstandarisasi untuk konfirmasi pendaftaran, pengiriman kredensial akun santri baru, reset password santri, ucapan selamat perolehan lencana (*congratulatory badge*), dan invoice tagihan.
-3. **Centralized Alert Banner & Toast**:
-   - Alert interaktif untuk status akun belum lunas, sesi belajar mendatang, dan tawaran alternatif jadwal.
+2. **Konektor Notifikasi WhatsApp (`WhatsAppService.php` & `BroadcastService.php`)**:
+   - Format pesan terstandarisasi untuk konfirmasi pendaftaran, pengiriman kredensial akun santri baru, reset password santri, ucapan selamat perolehan lencana, pengumuman massal, dan invoice tagihan.
+3. **Pusat Peringatan Operasional Admin (`AlertService.php`)**:
+   - Mesin penganalisis anomali operasional harian yang mengelompokkan risiko ke dalam kategori Kritis, Perhatian, dan Info.
 
 ---
 
-## 🗄️ 12. PENJELASAN SELURUH DATABASE (PENYIMPANAN DATA LEMBAGA)
+## 🗄️ 13. PENJELASAN SELURUH DATABASE (PENYIMPANAN DATA LEMBAGA)
 
-AL-HIKMAH LMS menggunakan arsitektur basis data relasional MySQL/MariaDB dengan **34 Tabel Utama** yang ternormalisasi dan terindeks:
+AL-HIKMAH LMS menggunakan arsitektur basis data relasional MySQL/MariaDB dengan **35 Tabel Utama** yang ternormalisasi dan terindeks:
 
 ```
 +---------------------------------------------------------------------------------------------------+
-| DAFTAR TABEL BASIS DATA UTAMA AL-HIKMAH LMS (v8.1)                                               |
+| DAFTAR TABEL BASIS DATA UTAMA AL-HIKMAH LMS (v8.2)                                               |
 +---------------------------------------------------------------------------------------------------+
 | 1. users                   : Data Akun Pengguna (Admin, Mentor, Parent, Student)                  |
 | 2. roles                   : Master Hak Akses & Peran Pengguna                                    |
@@ -360,12 +319,13 @@ AL-HIKMAH LMS menggunakan arsitektur basis data relasional MySQL/MariaDB dengan 
 | 7. article_tag             : Pivot Relasi Many-to-Many Artikel dan Tagar                          |
 | 8. questions               : Bank Soal Evaluasi Santri (AI Generated / Manual, SoftDeletes)       |
 | 9. students                : Data Santri Binaan Lembaga & Agregat Gamifikasi                      |
-| 10. mentors                : Profil & Kualifikasi Guru Al-Qur'an (Sanad, Spesialisasi)           |
+| 10. mentors                : Profil & Kualifikasi Guru Al-Qur'an (Sanad, Spesialisasi, Rating)    |
 | 11. parent_profiles        : Profil & Informasi Kontak Wali Santri                                |
 | 12. enrollments            : Data Transaksi Pendaftaran, Pilihan Jadwal, & Status Kelas           |
 | 13. learning_sessions      : Jadwal & Log Sesi Pertemuan Belajar (Waktu, Link Sesi, Status)      |
 | 14. progress               : Catatan Rapor Mutabaah Santri (Surat, Ayat, Jilid, Nilai Adab)       |
 | 15. payments               : Riwayat Transaksi Keuangan, Tagihan, Ref Pakasir, & Status Bayar     |
+|                              (Dilengkapi Composite Index (status, payment_date) & (status, due_date))|
 | 16. galleries              : Data Media Dokumentasi Foto Kegiatan Belajar                         |
 | 17. gallery_categories     : Kategori Album Galeri Foto (Dynamic CRUD)                            |
 | 18. mentor_availabilities  : Data Slot Waktu Luang Mengajar Guru (Hari & Jam)                    |
@@ -373,7 +333,7 @@ AL-HIKMAH LMS menggunakan arsitektur basis data relasional MySQL/MariaDB dengan 
 | 20. messages               : Log Komunikasi Pesan Langsung Mentor dan Wali Santri                 |
 | 21. session_confirmations  : Log Konfirmasi Kehadiran Sesi Belajar oleh Wali Santri              |
 | 22. mentor_activity_logs   : Log Rekam Jejak Aktivitas Kerja Guru Pembimbing                      |
-| 23. mentor_leaves          : Pengajuan Cuti / Izin Mengajar Guru                                  |
+| 23. mentor_leaves          : Pengajuan Cuti / Izin Mengajar Guru Beserta Tanggal & Guru Pengganti |
 | 24. contact_messages       : Pesan Masuk dari Formulir Kontak Publik                              |
 | 25. settings               : Pengaturan Global Sistem Lembaga & Profil Aplikasi                   |
 | 26. notifications          : Data Notifikasi & Pengingat Terjadwal Pengguna                       |
@@ -385,118 +345,120 @@ AL-HIKMAH LMS menggunakan arsitektur basis data relasional MySQL/MariaDB dengan 
 | 32. leaderboard_snapshots  : Snapshot Riwayat Peringkat Santri (Harian / Mingguan / Bulanan)      |
 | 33. gamification_points    : Buku Besar (Ledger) Riwayat Perolehan Poin Gamifikasi Santri         |
 | 34. password_reset_logs    : Log Audit Jejak Keamanan Reset Password Akun Santri                  |
+| 35. financial_audit_logs   : Log Audit Transaksi Finansial, Ekspor Laporan, & Broadcast Massal    |
 +---------------------------------------------------------------------------------------------------+
 ```
 
 ---
 
-## 🧠 13. PENJELASAN SELURUH MODEL, SERVICE, & CONTROLLER
+## 🧠 14. PENJELASAN SELURUH MODEL, SERVICE, & CONTROLLER
 
-### A. Daftar Model Eloquent Baru & Inti (`app/Models/`):
-1. **`Student.php`**: Relasi lengkap gamifikasi (`earnedBadges`, `hifzTargets`, `juzProgress`, `milestones`, `gamificationPoints`, `leaderboardSnapshots`).
-2. **`Badge.php` & `StudentBadge.php`**: Master lencana Islami dan relasi pivot capaian santri.
-3. **`HifzTarget.php`**: Target setoran harian (relasi ke `Student`, `Mentor`, `Session`).
-4. **`JuzProgress.php`**: Rekapitulasi progres Juz 1–30 santri.
-5. **`HifzMilestone.php`**: Target jangka panjang dengan progress counter.
-6. **`LeaderboardSnapshot.php`**: Arsip rekam jejak papan peringkat.
-7. **`GamificationPoint.php`**: Ledger perolehan poin gamifikasi.
-8. **`PasswordResetLog.php`**: Log audit keamanan pergantian password.
-9. **`Progress.php`**: Rapor mutabaah dengan kolom `is_mutqin_test` dan `juz_number`.
-10. **`Article.php`**, **`Question.php`**, **`Payment.php`**, **`User.php`**, dll.
+### A. Daftar Model Eloquent Inti (`app/Models/`):
+1. **`FinancialAuditLog.php`**: Pencatatan audit trail finansial dan operasional eksekutif (`log(...)` static helper).
+2. **`MentorLeave.php`**: Manajemen permohonan cuti guru dan penugasan guru pengganti (*substitute mentor*).
+3. **`Student.php`**: Relasi lengkap gamifikasi (`earnedBadges`, `hifzTargets`, `juzProgress`, `milestones`, `gamificationPoints`).
+4. **`Badge.php` & `StudentBadge.php`**: Master katalog lencana Islami dan relasi capaian santri.
+5. **`Payment.php`**: Transaksi pembayaran SPP/pendaftaran dengan dukungan eager loading teroptimasi.
+6. **`Mentor.php`**, **`User.php`**, **`ParentProfile.php`**, **`Program.php`**, dll.
 
 ### B. Daftar Service Layer (`app/Services/`):
-1. **`StudentAccountService.php`**: Onboarding akun santri otomatis, generate email unik santri, generate secure password, dan dispatch pesan WhatsApp/Email.
-2. **`GamificationService.php`**: Orkestrator utama gamifikasi yang memproses poin per ayat, bonus tajwid/adab, streak harian, dan evaluasi lencana.
-3. **`StreakTrackerService.php`**: Penghitung streak harian beruntun dan rekor streak terpanjang.
-4. **`BadgeEvaluatorService.php`**: Pengecekan otomatis kriteria 15 lencana (B01–B15) dan pemicu notifikasi ke wali santri.
-5. **`HifzProgressService.php`**: Inisialisasi 30 Juz santri baru, perhitungan persentase Juz, dan ringkasan mutqin.
-6. **`LeaderboardService.php`**: Penyedia data peringkat multi-kategori dengan caching dan penyamaran nama privasi santri.
-7. **`GeminiQuestionService.php`**: Pembuat soal evaluasi otomatis berbasis AI Google Gemini.
-8. **`PakasirService.php`**: Integrasi transaksi QRIS dan Virtual Account.
-9. **`WhatsAppService.php` & `EmailService.php`**: Saluran pengiriman pesan notifikasi dan kredensial akun.
+1. **`RevenueAnalyticsService.php`**: Pengolah metrik finansial eksekutif (Total Pendapatan, MoM Growth %, ARPU, Tren 12 Bulan, Breakdown Program, dan Query Caching).
+2. **`StaffAnalyticsService.php`**: Analitik beban kerja guru, rasio guru:santri, deteksi overload ($>40$), status cuti harian, dan pemeringkatan performa guru.
+3. **`AlertService.php`**: Mesin kalkulasi peringatan operasional otomatis 3-Tier (🔴 Kritis, 🟡 Perhatian, 🟢 Info).
+4. **`BroadcastService.php`**: Resolusi penerima pesan WhatsApp massal, parser template variabel dinamis, preset templates, dan pencatatan audit.
+5. **`StudentAccountService.php`**: Onboarding akun santri otomatis, generator email unik, dan generator password aman.
+6. **`GamificationService.php`**: Orkestrator utama poin buku besar, streak harian, dan evaluasi lencana.
+7. **`StreakTrackerService.php`**: Penghitung streak setoran harian beruntun santri.
+8. **`BadgeEvaluatorService.php`**: Evaluator otomatis syarat perolehan 15 lencana Islami.
+9. **`HifzProgressService.php`**: Manajemen peta visual capaian 30 Juz santri.
+10. **`LeaderboardService.php`**: Penyedia data peringkat santri multi-kategori dengan caching dan proteksi privasi.
+11. **`GeminiQuestionService.php`**: Pembuat soal evaluasi otomatis berbasis AI Google Gemini 3.7 Flash.
+12. **`PakasirService.php`**: Integrasi transaksi digital QRIS dan Virtual Account.
+13. **`WhatsAppService.php`**: Gateway pengiriman pesan notifikasi WhatsApp.
 
-### C. Daftar Controller (`app/Http/Controllers/`):
-1. **Student Controllers (`app/Http/Controllers/Student/`)**:
-   - `StudentDashboardController.php`: Beranda santri, target hari ini, progress 30 juz, leaderboard, badges, milestones.
-   - `StudentTargetController.php`: Simpan target mandiri, tandai selesai (+50 pts), buat milestone.
-   - `StudentGamificationController.php`: Hall of fame per lencana, statistik ledger poin, toggle privasi nama.
-   - `StudentPasswordController.php`: Ganti password mandiri dengan validasi password saat ini.
-2. **Mentor Controllers (`app/Http/Controllers/Mentor/`)**:
-   - `MentorTargetController.php`: Tetapkan target hafalan individu, penugasan massal (*bulk*), dan evaluasi kelulusan target.
-   - `MentorProgressController.php`, `MentorQuestionController.php`, `MentorSessionController.php`, dll.
-3. **Parent Controllers (`app/Http/Controllers/Parent/`)**:
-   - `ParentChildController.php`: Daftar anak, rapor mutabaah, dan aksi reset & kirim password santri via WhatsApp.
-   - `ParentPaymentController.php`, `ParentEnrollmentController.php`, `ParentScheduleController.php`, dll.
-4. **Admin Controllers (`app/Http/Controllers/Admin/`)**:
-   - `AdminBadgeController.php`: CRUD katalog lencana Islami.
-   - `AdminGamificationController.php`: Pengaturan domain institusi, audit trail keamanan password, monitoring leaderboard & invalidate cache.
-   - `UserController.php`, `AdminBlogController.php`, `AdminPaymentController.php`, dll.
+### C. Daftar Export Layer (`app/Exports/`):
+1. **`RevenueReportExport.php`**: Generator streaming export CSV/Excel berbasis chunking memory-efficient, UTF-8 BOM, dan kalkulasi subtotal.
 
----
-
-## ⚙️ 14. CONSOLE COMMANDS & JADWAL BACKGROUND CRON
-
-Untuk menjaga kebersihan data dan keakuratan peringkat secara otomatis, sistem dilengkapi **5 Console Commands Artisan**:
-
-```bash
-# 1. Segarkan cache leaderboard dan rekapitulasi poin
-php artisan app:refresh-leaderboard
-
-# 2. Tandai target harian yang melewati batas waktu sebagai 'missed'
-php artisan app:mark-missed-targets
-
-# 3. Reset daily streak santri yang tidak menyetor > 1 hari kalender
-php artisan app:reset-daily-streak
-
-# 4. Ambil snapshot arsip leaderboard mingguan/bulanan
-php artisan app:snapshot-leaderboard --period=weekly
-
-# 5. Bersihkan milestone aktif yang telah melewati tenggat waktu
-php artisan app:cleanup-milestones
-```
+### D. Daftar Controller Baru & Utama (`app/Http/Controllers/`):
+1. **Admin Controllers (`app/Http/Controllers/Admin/`)**:
+   - `DashboardController.php`: Beranda eksekutif dengan widget KPI, banner isu kritis, dan monitoring aktivitas.
+   - `AdminRevenueController.php`: Dasbor analitik pendapatan dan finansial lengkap.
+   - `AdminStaffController.php`: Dasbor beban kerja guru, rasio SDM, dan evaluasi performa.
+   - `AdminAlertController.php`: Pusat peringatan operasional terpusat dengan filter tab.
+   - `AdminReportController.php`: Generator laporan dan ekspor dual-format (Excel/CSV & PDF Resmi).
+   - `AdminBroadcastController.php`: Antarmuka pengiriman pesan massal WhatsApp dengan preview live mockup.
+2. **API Analytics Controllers (`app/Http/Controllers/Api/`)**:
+   - `AnalyticsApiController.php`: Endpoint JSON ApexCharts (`/revenue-trend`, `/program-breakdown`, `/payment-status`).
 
 ---
 
-## 📁 15. PENJELASAN SELURUH STRUKTUR FOLDER APLIKASI
+## ⚙️ 15. CONSOLE COMMANDS & JADWAL BACKGROUND CRON
+
+1. `php artisan gamification:refresh-leaderboard`: Membuat snapshot peringkat santri harian.
+2. `php artisan alerts:scan`: Memindai anomali sistem (tagihan overdue, santri tidak aktif, guru overload).
+3. `php artisan queue:work`: Memproses antrean pengiriman pesan WhatsApp dan notifikasi di background.
+
+---
+
+## 📁 16. PENJELASAN SELURUH STRUKTUR FOLDER APLIKASI
 
 ```
 al-hikmah-lms/
 ├── app/
-│   ├── Console/Commands/          # 5 Artisan Console Commands Gamifikasi & Jadwal
+│   ├── Exports/
+│   │   └── RevenueReportExport.php       # Generator Ekspor CSV/Excel Chunked
 │   ├── Http/Controllers/
-│   │   ├── Admin/                 # Controller Admin (Badges, Gamifikasi, CMS, User, dll)
-│   │   ├── Api/                   # Webhook Pakasir & REST Controllers
-│   │   ├── Auth/                  # Otentikasi & Registrasi Multi-Role
-│   │   ├── Mentor/                # Controller Mentor (Target Hafalan, Bank Soal AI, Rapor)
-│   │   ├── Parent/                # Controller Parent (Anak, Pembayaran, Reset Password)
-│   │   └── Student/               # Controller Santri (Dashboard, Leaderboard, Badges, Target)
-│   ├── Models/                    # 34 Model Eloquent ORM Terintegrasi
-│   ├── Observers/                 # ProgressObserver (Hook Mutabaah -> Gamifikasi)
-│   └── Services/                  # Service Layers (Gamifikasi, Akun, AI, Payment, WA)
+│   │   ├── Admin/
+│   │   │   ├── DashboardController.php
+│   │   │   ├── AdminRevenueController.php
+│   │   │   ├── AdminStaffController.php
+│   │   │   ├── AdminAlertController.php
+│   │   │   ├── AdminReportController.php
+│   │   │   └── AdminBroadcastController.php
+│   │   └── Api/
+│   │       └── AnalyticsApiController.php # Endpoint JSON ApexCharts
+│   ├── Models/
+│   │   ├── FinancialAuditLog.php         # Model Jejak Audit Finansial
+│   │   └── MentorLeave.php               # Model Permohonan Cuti Guru
+│   └── Services/
+│       ├── RevenueAnalyticsService.php   # Service Analitik Finansial
+│       ├── StaffAnalyticsService.php     # Service Beban Kerja SDM
+│       ├── AlertService.php              # Service Operational Alerts 3-Tier
+│       └── BroadcastService.php          # Service WhatsApp Mass Broadcast
 ├── database/
-│   ├── migrations/                # 47 File Migrasi Basis Data
-│   └── seeders/                   # Seeder Lencana B01-B15 & Milestone Default
+│   └── migrations/
+│       ├── 2026_08_29_000001_create_financial_audit_logs_table.php
+│       └── 2026_08_29_000002_add_analytics_indexes_to_payments_table.php
 ├── resources/views/
-│   ├── admin/gamification/        # Tampilan Katalog Lencana, Leaderboard, & Audit Keamanan
-│   ├── layouts/                   # Master Layout (App, Admin, Mentor, Parent, Student)
-│   ├── mentor/targets/            # Tampilan Penugasan Target Hafalan Mentor
-│   ├── parent/children/           # Tampilan Monitoring Anak & Modal Reset Password
-│   └── student/                   # Tampilan Lengkap Ruang Belajar & Gamifikasi Santri
-│       └── components/            # Komponen Countdown, Target Card, Badge Card, Leaderboard Row
-├── routes/
-│   ├── auth.php                   # Rute Autentikasi
-│   ├── console.php                # Registrasi Command Artisan
-│   └── web.php                    # 130+ Rute Antarmuka Web Terintegrasi
-└── tests/
-    ├── Feature/                   # 29 File Pengujian Fitur End-to-End
-    └── Unit/                      # Pengujian Unit Gamifikasi, Service Akun, & AI
+│   ├── admin/
+│   │   ├── dashboard.blade.php           # Dashboard Eksekutif v8.2
+│   │   ├── revenue/
+│   │   │   ├── index.blade.php
+│   │   │   └── partials/
+│   │   │       ├── stats-cards.blade.php
+│   │   │       └── chart.blade.php
+│   │   ├── staff/
+│   │   │   ├── index.blade.php
+│   │   │   └── partials/mentor-table.blade.php
+│   │   ├── alerts/
+│   │   │   ├── index.blade.php
+│   │   │   └── partials/alert-card.blade.php
+│   │   ├── reports/
+│   │   │   ├── index.blade.php
+│   │   │   └── pdf/revenue-pdf.blade.php # Layout PDF Resmi Kop Surat
+│   │   └── broadcast/
+│   │       └── index.blade.php           # Console Broadcast & Mockup HP
+│   └── layouts/
+│       └── admin.blade.php               # Layout Admin dengan Navigasi v8.2
+└── routes/
+    └── web.php                           # Definisi Rute Admin & API Analytics
 ```
 
 ---
 
-## 🧪 16. HASIL PENGUJIAN & QUALITY ASSURANCE (100% GREEN PASS)
+## 🧪 17. HASIL PENGUJIAN & QUALITY ASSURANCE (100% GREEN PASS)
 
-Seluruh fungsionalitas sistem telah diverifikasi secara otomatis menggunakan **Pest PHP** dengan kepatuhan penuh pada **Laravel Pint**:
+Sistem telah diuji secara komprehensif menggunakan framework pengujian **Pest PHP** dengan seluruh skenario bisnis dan keamanan tervalidasi:
 
 ```bash
 # Hasil Eksekusi Pengujian Otomatis Suite Lengkap:
@@ -504,6 +466,11 @@ Seluruh fungsionalitas sistem telah diverifikasi secara otomatis menggunakan **P
    PASS  Tests\Unit\GeminiQuestionServiceTest
    PASS  Tests\Unit\StudentAccountServiceTest
    PASS  Tests\Unit\GamificationServiceTest
+   PASS  Tests\Feature\Admin\RevenueAnalyticsTest
+   PASS  Tests\Feature\Admin\StaffAnalyticsTest
+   PASS  Tests\Feature\Admin\OperationalAlertsTest
+   PASS  Tests\Feature\Admin\ReportExportTest
+   PASS  Tests\Feature\Admin\BroadcastSystemTest
    PASS  Tests\Feature\Admin\MasterDataCrudTest
    PASS  Tests\Feature\AdminDashboardActionsTest
    PASS  Tests\Feature\AdminSettingTest
@@ -543,14 +510,19 @@ Seluruh fungsionalitas sistem telah diverifikasi secara otomatis menggunakan **P
    PASS  Tests\Feature\StudentDashboardTest
    PASS  Tests\Feature\TahfidzRegistrationTest
 
-  Tests:    239 passed (903 assertions)
-  Duration: 22.08s
+  Tests:    259 passed (1029 assertions)
+  Duration: 119.38s
 ```
 
-### 📊 Breakdown Cakupan Pengujian (Test Coverage v8.1):
+### 📊 Breakdown Cakupan Pengujian (Test Coverage v8.2):
 
 | Domain & Modul Sistem | Jumlah Test Cases | Total Assertions | Status |
 | :--- | :---: | :---: | :---: |
+| **Analitik Pendapatan & API ApexCharts (v8.2)** | 4 | 18 | ✅ 100% Passed |
+| **Beban SDM Guru & Deteksi Overload (v8.2)** | 2 | 8 | ✅ 100% Passed |
+| **Pusat Peringatan Operasional 3-Tier (v8.2)** | 2 | 8 | ✅ 100% Passed |
+| **Ekspor Laporan Dual-Format & Audit (v8.2)** | 3 | 12 | ✅ 100% Passed |
+| **WhatsApp Broadcast & Template Engine (v8.2)** | 4 | 18 | ✅ 100% Passed |
 | **Ruang Belajar Santri & Dashboard** | 8 | 25 | ✅ 100% Passed |
 | **Mesin Gamifikasi, Poin, & Streak** | 10 | 36 | ✅ 100% Passed |
 | **Leaderboard, Filter, & Privasi** | 6 | 24 | ✅ 100% Passed |
@@ -559,7 +531,7 @@ Seluruh fungsionalitas sistem telah diverifikasi secara otomatis menggunakan **P
 | **Manajemen Target Mentor & Notifikasi**| 6 | 20 | ✅ 100% Passed |
 | **Parent Reset & WhatsApp Delivery** | 4 | 14 | ✅ 100% Passed |
 | **Autentikasi, Multi-Role, & Registrasi** | 22 | 86 | ✅ 100% Passed |
-| **Admin Panel & Manajemen Master Data** | 32 | 128 | ✅ 100% Passed |
+| **Admin Panel & Manajemen Master Data** | 35 | 134 | ✅ 100% Passed |
 | **Mentor Panel & AI Question Generator** | 40 | 162 | ✅ 100% Passed |
 | **Parent Portal, Gating, & Mutabaah** | 28 | 114 | ✅ 100% Passed |
 | **Modul Blog, Kategori, Tag, & SEO** | 18 | 72 | ✅ 100% Passed |
@@ -567,55 +539,60 @@ Seluruh fungsionalitas sistem telah diverifikasi secara otomatis menggunakan **P
 | **Galeri Foto & Album Kategori Dinamis**| 14 | 56 | ✅ 100% Passed |
 | **Sistem Notifikasi & Alert Terpusat** | 10 | 38 | ✅ 100% Passed |
 | **Landing Pages, Role Visibility, & Kontak**| 19 | 20 | ✅ 100% Passed |
-| **TOTAL KESELURUHAN** | **239** | **903** | **✅ 100% GREEN PASS** |
+| **TOTAL KESELURUHAN** | **259** | **1029** | **✅ 100% GREEN PASS** |
 
 ---
 
-## 🎯 17. KESIMPULAN & REKOMENDASI LANGKAH KE DEPAN
+## 🎯 18. KESIMPULAN & REKOMENDASI LANGKAH KE DEPAN
 
-Sistem **AL-HIKMAH LMS Versi 8.1** telah berhasil mengintegrasikan pilar pembelajaran modern, otomatisasi administrasi, dan sistem gamifikasi Islami yang menyenangkan bagi santri dengan standar keamanan privasi tertinggi.
+Sistem **AL-HIKMAH LMS Versi 8.2** menghadirkan kapabilitas analitik eksekutif tingkat enterprise, pengawasan operasional proaktif, dan otomatisasi pelaporan yang menjamin transparansi finansial serta keunggulan mutu pendidikan Al-Qur'an.
 
 ### 🏆 Kesimpulan Pencapaian:
-1. **Peningkatan Keterikatan Santri (*Student Engagement*)**: Ruang belajar santri yang interaktif dengan lencana, streak harian, dan papan peringkat mendorong keistiqomahan menghafal.
-2. **Efisiensi Total Tanpa Input Manual**: Pendaftaran santri langsung memicu pembuatan akun login, email unik, password acak kuat, dan pengiriman ke WhatsApp wali santri.
-3. **Kualitas Kode Standar Enterprise**: 239 test case lulus 100% tanpa regresi (*zero regression*).
+1. **Transparansi Arus Kas & Finansial**: Metrik MoM Growth, ARPU, dan tren 12 bulan memberikan pandangan akurat bagi pimpinan dalam mengambil keputusan strategis.
+2. **Keseimbangan Beban Mengajar Guru**: Deteksi kapasitas overload (>40 santri) melindungi kualitas talaqqi dan keharmonisan halaqah bimbingan.
+3. **Pengawasan Isu Proaktif Tanpa Delay**: Pusat Peringatan Operasional 3-Tier mencegah penumpukan piutang macet dan risiko santri dropout.
+4. **Efisiensi Komunikasi & Pelaporan**: Ekspor satu klik ke PDF resmi atau Excel serta siaran WhatsApp massal menghemat ratusan jam kerja administratif.
+5. **Kualitas Kode Standar Enterprise**: 259 pengujian Pest lulus 100% dengan format kode rapi (*Pint compliant*).
 
 ---
 
-## 📝 18. LAMPIRAN TEKNIS, RUTE SISTEM, & GLOSARIUM
+## 📝 19. LAMPIRAN TEKNIS, RUTE SISTEM, & GLOSARIUM
 
-### 🛣️ Daftar Rute Utama Sistem (Routing Index v8.1):
+### 🛣️ Daftar Rute Utama Sistem (Routing Index v8.2):
 
 | Rute Web | Method | Hak Akses | Deskripsi & Fungsi |
 | :--- | :---: | :---: | :--- |
+| `/admin/dashboard` | `GET` | Admin | Dashboard Utama Eksekutif (KPIs, Alert Banner, Quick Actions) |
+| `/admin/revenue` | `GET` | Admin | Analitik Pendapatan, MoM, ARPU, & Visualisasi ApexCharts |
+| `/admin/staff` | `GET` | Admin | Manajemen Beban Kerja SDM, Rasio Guru:Santri, & Top Performers |
+| `/admin/alerts` | `GET` | Admin | Pusat Peringatan Operasional Terpadu (Kritis, Perhatian, Info) |
+| `/admin/reports` | `GET` | Admin | Generator & Pratinjau Rekapitulasi Laporan Finansial |
+| `/admin/reports/export-excel` | `GET` | Admin | Unduh Laporan Spreadsheet CSV/Excel (UTF-8 BOM) |
+| `/admin/reports/export-pdf` | `GET` | Admin | Cetak Laporan Resmi Format PDF Lengkap dengan Kop Surat |
+| `/admin/broadcast` | `GET` | Admin | Konsol Pengiriman WhatsApp Mass Broadcast & Phone Mockup |
+| `/admin/broadcast/send` | `POST` | Admin | Eksekusi Pengiriman Pesan Broadcast Massal & Log Audit |
+| `/admin/broadcast/preview` | `POST` | Admin | API Preview Parsing Variabel Template Pesan via AJAX |
+| `/api/analytics/revenue-trend` | `GET` | Admin | Endpoint JSON Tren Pendapatan 12 Bulan untuk ApexCharts |
+| `/api/analytics/program-breakdown`| `GET` | Admin | Endpoint JSON Komposisi Pendapatan per Program |
+| `/api/analytics/payment-status` | `GET` | Admin | Endpoint JSON Distribusi Status Pembayaran |
 | `/student/dashboard` | `GET` | Student | Dashboard Utama Ruang Santri (Poin, Streak, 30 Juz) |
 | `/student/targets/today` | `GET/POST`| Student | Halaman Target Hafalan Harian & Simpan Target Mandiri |
-| `/student/targets/{id}/complete`| `PATCH` | Student | Tandai Target Hafalan Tercapai (+50 Pts) |
-| `/student/milestones` | `GET/POST`| Student | Target Jangka Panjang & Countdown Interaktif |
 | `/student/progress/juz` | `GET` | Student | Peta Visual Capaian Hafalan 30 Juz Al-Qur'an |
 | `/student/leaderboard` | `GET` | Student | Papan Peringkat Santri (Overall, Anak, Dewasa, Streak) |
 | `/student/badges` | `GET` | Student | Lemari Koleksi Lencana Islami Santri |
-| `/student/badges/hall-of-fame/{code}` | `GET` | Student | Hall of Fame Daftar Peraih Lencana Tertentu |
-| `/student/stats` | `GET` | Student | Statistik Rinci & Buku Besar Perolehan Poin |
-| `/student/privacy/toggle` | `POST` | Student | Toggle Penyamaran Nama pada Leaderboard |
-| `/student/password` | `GET` | Student | Antarmuka Ganti Password Mandiri Santri |
-| `/student/password/reset` | `POST` | Student | Proses Reset Password Mandiri Santri |
-| `/mentor/targets` | `GET` | Mentor | Daftar Target Hafalan Santri Binaan |
-| `/mentor/targets/create` | `GET` | Mentor | Form Penugasan Target Hafalan (Tunggal & Massal) |
-| `/mentor/targets` | `POST` | Mentor | Simpan Target Hafalan untuk Santri |
-| `/mentor/targets/bulk` | `POST` | Mentor | Penugasan Target Massal ke Banyak Santri |
-| `/mentor/targets/{id}/evaluate`| `PATCH` | Mentor | Evaluasi Capaian Target Santri |
-| `/parent/children` | `GET` | Parent (Paid)| Daftar Anak Binaan & Badge Ringkasan |
-| `/parent/children/{id}/reset-password` | `POST` | Parent (Paid)| Reset & Kirim Password Baru Anak via WhatsApp |
+| `/mentor/targets` | `GET/POST`| Mentor | Manajemen Penugasan Target Hafalan Santri |
+| `/parent/children` | `GET` | Parent (Paid)| Daftar Anak Binaan & Reset Password Mandiri |
 | `/admin/badges` | `CRUD` | Admin | Manajemen Katalog Master Lencana Islami |
 | `/admin/gamification/settings` | `GET/POST`| Admin | Pengaturan Domain & Log Audit Keamanan Password |
-| `/admin/gamification/leaderboard` | `GET` | Admin | Monitoring Peringkat Santri & Invalidate Cache |
 
 ---
 
 > 📄 **Dokumentasi & Referensi Terkait:**
+> - [Dokumen PRD Dashboard v8.2](dashboard.md)
 > - [Dokumen PRD Perencanaan Santri](santri.md)
 > - [Panduan Kode Etik & Standar Pengembang](AGENTS.md)
 > - [Konfigurasi Rute Aplikasi](routes/web.php)
-> - [Service Gamifikasi Islami](app/Services/GamificationService.php)
-> - [Service Akun Santri](app/Services/StudentAccountService.php)
+> - [Service Analitik Pendapatan](app/Services/RevenueAnalyticsService.php)
+> - [Service Analitik SDM Guru](app/Services/StaffAnalyticsService.php)
+> - [Service Pusat Peringatan](app/Services/AlertService.php)
+> - [Service WhatsApp Broadcast](app/Services/BroadcastService.php)

@@ -235,6 +235,32 @@
                     class="admin-nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="bi bi-speedometer2"></i> Dashboard Utama
                 </a>
+                <a href="{{ route('admin.alerts.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.alerts.*') ? 'active' : '' }}">
+                    <i class="bi bi-bell-fill text-warning"></i> Pusat Peringatan
+                </a>
+
+                <div class="admin-nav-section-title mt-2">Analisis & Keuangan</div>
+                <a href="{{ route('admin.revenue.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.revenue.*') ? 'active' : '' }}">
+                    <i class="bi bi-cash-stack text-success"></i> Analitik Pendapatan
+                </a>
+                <a href="{{ route('admin.staff.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.staff.*') ? 'active' : '' }}">
+                    <i class="bi bi-person-badge-fill text-primary"></i> Beban Kerja Guru
+                </a>
+                <a href="{{ route('admin.reports.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+                    <i class="bi bi-file-earmark-spreadsheet text-info"></i> Ekspor Laporan
+                </a>
+                <a href="{{ route('admin.payments.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">
+                    <i class="bi bi-wallet2"></i> Tagihan & SPP Santri
+                </a>
+                <a href="{{ route('admin.broadcast.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.broadcast.*') ? 'active' : '' }}">
+                    <i class="bi bi-whatsapp text-success"></i> WhatsApp Broadcast
+                </a>
 
                 <div class="admin-nav-section-title mt-2">Manajemen Akademik</div>
                 <a href="{{ route('admin.enrollments.index') }}"
@@ -270,14 +296,18 @@
                     <i class="bi bi-tags"></i> Kategori Galeri
                 </a>
 
-                <div class="admin-nav-section-title mt-2">Keuangan & Komunikasi</div>
-                <a href="{{ route('admin.payments.index') }}"
-                    class="admin-nav-item {{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">
-                    <i class="bi bi-wallet2"></i> Tagihan & SPP Santri
+                <div class="admin-nav-section-title mt-2">Gamifikasi & Badges</div>
+                <a href="{{ route('admin.badges.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.badges.*') ? 'active' : '' }}">
+                    <i class="bi bi-award-fill text-warning"></i> Katalog Lencana
                 </a>
-                <a href="{{ route('admin.contacts.index') }}"
-                    class="admin-nav-item {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}">
-                    <i class="bi bi-envelope-paper"></i> Pesan Konsultasi
+                <a href="{{ route('admin.gamification.leaderboard') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.gamification.leaderboard') ? 'active' : '' }}">
+                    <i class="bi bi-trophy-fill text-primary"></i> Leaderboard Santri
+                </a>
+                <a href="{{ route('admin.gamification.settings') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.gamification.settings') ? 'active' : '' }}">
+                    <i class="bi bi-shield-lock-fill text-info"></i> Keamanan & Akun
                 </a>
 
                 <div class="admin-nav-section-title mt-2">Konten & Publikasi</div>
