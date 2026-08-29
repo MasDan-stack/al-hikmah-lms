@@ -12,7 +12,9 @@ class RefreshLeaderboard extends Command
      *
      * @var string
      */
-    protected $signature = 'app:refresh-leaderboard';
+    protected $signature = 'gamification:refresh-leaderboard';
+
+    protected $aliases = ['app:refresh-leaderboard'];
 
     /**
      * The console command description.

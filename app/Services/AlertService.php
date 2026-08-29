@@ -6,6 +6,7 @@ use App\Enums\EnrollmentStatus;
 use App\Models\Enrollment;
 use App\Models\HifzTarget;
 use App\Models\Mentor;
+use App\Models\MentorApplication;
 use App\Models\Payment;
 use App\Models\Student;
 use App\Models\StudentBadge;
@@ -165,6 +166,30 @@ class AlertService
             ];
         }
 
+        // 5. Lamaran Mentor Belum Diproses (> 7 Hari)
+        $unprocessedApplications = MentorApplication::where('status', 'submitted')
+            ->where('submitted_at', '<', now()->subDays(7))
+            ->get();
+
+        if ($unprocessedApplications->isNotEmpty()) {
+            $alerts[] = [
+                'id' => 'crit_unprocessed_applications',
+                'level' => 'critical',
+                'category' => 'hr',
+                'icon' => 'bi-file-person',
+                'title' => 'Lamaran Mentor > 7 Hari Belum Diproses',
+                'description' => "Terdapat {$unprocessedApplications->count()} lamaran mentor baru yang belum ditinjau lebih dari 7 hari.",
+                'count' => $unprocessedApplications->count(),
+                'action_label' => 'Tinjau Lamaran',
+                'action_url' => route('admin.recruitment.applications.index'),
+                'items' => $unprocessedApplications->take(5)->map(fn ($app) => [
+                    'title' => "{$app->full_name} ({$app->application_code})",
+                    'subtitle' => 'Masuk sejak: '.Carbon::parse($app->submitted_at)->diffForHumans(),
+                    'url' => route('admin.recruitment.applications.show', $app->id),
+                ])->toArray(),
+            ];
+        }
+
         return $alerts;
     }
 
@@ -275,6 +300,31 @@ class AlertService
                     'title' => $m->getDisplayName(),
                     'subtitle' => "Spesialisasi: {$m->specialization}",
                     'url' => route('admin.mentors.index'),
+                ])->toArray(),
+            ];
+        }
+
+        // 5. Guru Probation Habis Tempo dalam 14 Hari
+        $probationMentors = Mentor::where('status', 'probation')
+            ->whereNotNull('probation_end_date')
+            ->where('probation_end_date', '<=', today()->addDays(14))
+            ->get();
+
+        if ($probationMentors->isNotEmpty()) {
+            $alerts[] = [
+                'id' => 'warn_probation_ending',
+                'level' => 'warning',
+                'category' => 'hr',
+                'icon' => 'bi-clock-history',
+                'title' => 'Masa Percobaan Guru Hampir Habis',
+                'description' => "Ada {$probationMentors->count()} guru yang masa percobaannya akan berakhir dalam 14 hari ke depan.",
+                'count' => $probationMentors->count(),
+                'action_label' => 'Evaluasi Probation',
+                'action_url' => route('admin.mentors.probation.index'),
+                'items' => $probationMentors->take(5)->map(fn ($m) => [
+                    'title' => $m->getDisplayName(),
+                    'subtitle' => 'Berakhir pada: '.Carbon::parse($m->probation_end_date)->translatedFormat('d F Y'),
+                    'url' => route('admin.mentors.probation.index'),
                 ])->toArray(),
             ];
         }

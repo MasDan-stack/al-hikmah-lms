@@ -41,10 +41,10 @@ class FinancialAuditLog extends Model
      * Helper static untuk mencatat log audit finansial
      */
     public static function log(
-        int $userId,
-        string $action,
-        string $entityType,
-        int $entityId,
+        ?int $userId = null,
+        string $action = '',
+        string $entityType = '',
+        int $entityId = 0,
         ?array $oldValues = null,
         ?array $newValues = null,
         ?string $ipAddress = null

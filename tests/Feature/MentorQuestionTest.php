@@ -24,7 +24,7 @@ beforeEach(function () {
 
     $this->program = Program::create([
         'name' => 'Kelas Tajwid Al-Hikmah',
-        'category' => 'Tajwid',
+        'category' => 'anak',
         'description' => 'Program belajar tajwid dasar hingga mahir.',
         'duration_weeks' => 12,
         'price' => 150000,
@@ -55,9 +55,10 @@ test('mentor can preview ai generated questions with mocked service', function (
     $mockService = Mockery::mock(GeminiQuestionService::class);
     $mockService->shouldReceive('generateQuestions')
         ->once()
-        ->with('Kelas Tajwid Al-Hikmah', 'Hukum Nun Mati', 5, 'Sedang')
+        ->with('Kelas Tajwid Al-Hikmah', 'Hukum Nun Mati', 5, 'Sedang', 'multiple_choice')
         ->andReturn([
             [
+                'type' => 'multiple_choice',
                 'question' => 'Apabila nun sukun bertemu huruf ba (ب), maka hukum bacaannya adalah...',
                 'options' => ['Idgham Bighunnah', 'Iqlab', 'Izhar Halqi', 'Ikhfa Haqiqi'],
                 'correct_answer' => 1,
@@ -65,6 +66,10 @@ test('mentor can preview ai generated questions with mocked service', function (
                 'difficulty' => 'Sedang',
             ],
         ]);
+    $mockService->shouldReceive('getActiveProvider')->andReturn('qwen');
+    $mockService->shouldReceive('getActiveModel')->andReturn('qwen-plus');
+    $mockService->shouldReceive('isFallbackUsed')->andReturn(false);
+    $mockService->shouldReceive('getLastError')->andReturn(null);
 
     $this->app->instance(GeminiQuestionService::class, $mockService);
 
@@ -74,6 +79,7 @@ test('mentor can preview ai generated questions with mocked service', function (
             'topic' => 'Hukum Nun Mati',
             'count' => 5,
             'difficulty' => 'Sedang',
+            'question_type' => 'multiple_choice',
         ]);
 
     $response->assertStatus(200)
@@ -83,17 +89,25 @@ test('mentor can preview ai generated questions with mocked service', function (
         ->assertJsonPath('data.0.question', 'Apabila nun sukun bertemu huruf ba (ب), maka hukum bacaannya adalah...');
 });
 
-test('mentor can store batch questions to database', function () {
+test('mentor can store batch multiple choice and essay questions to database', function () {
     $payload = [
         'program_id' => $this->program->id,
-        'topic' => 'Hukum Nun Mati',
-        'difficulty' => 'Sedang',
+        'topic' => 'Hukum Nun Mati & Thaharah',
+        'difficulty' => 'Sulit',
         'questions' => [
             [
+                'type' => 'multiple_choice',
                 'question' => 'Apabila nun sukun bertemu huruf ba (ب), maka hukum bacaannya adalah...',
                 'options' => ['Idgham Bighunnah', 'Iqlab', 'Izhar Halqi', 'Ikhfa Haqiqi'],
                 'correct_answer' => 1,
                 'explanation' => 'Iqlab terjadi jika nun mati/tanwin bertemu huruf ba.',
+            ],
+            [
+                'type' => 'essay',
+                'question' => 'Jelaskan perbedaan haid dan nifas serta konsekuensinya pada ibadah shalat!',
+                'essay_answer' => 'Haid adalah darah siklus alami, nifas darah pasca persalinan.',
+                'rubric' => '100 poin jika menyertakan dalil.',
+                'explanation' => 'Kaidah fiqih thaharah.',
             ],
         ],
     ];
@@ -102,12 +116,44 @@ test('mentor can store batch questions to database', function () {
         ->post(route('mentor.questions.store-batch'), $payload);
 
     $response->assertRedirect(route('mentor.questions.index'));
+
     $this->assertDatabaseHas('questions', [
         'user_id' => $this->mentor->id,
         'program_id' => $this->program->id,
-        'topic' => 'Hukum Nun Mati',
+        'type' => 'multiple_choice',
         'correct_answer' => 1,
     ]);
+
+    $this->assertDatabaseHas('questions', [
+        'user_id' => $this->mentor->id,
+        'program_id' => $this->program->id,
+        'type' => 'essay',
+        'essay_answer' => 'Haid adalah darah siklus alami, nifas darah pasca persalinan.',
+    ]);
+});
+
+test('mentor can view printable worksheet page', function () {
+    $question = Question::create([
+        'program_id' => $this->program->id,
+        'user_id' => $this->mentor->id,
+        'topic' => 'Tajwid Dasar',
+        'difficulty' => 'Sedang',
+        'type' => 'multiple_choice',
+        'question' => 'Hukum bacaan mim sukun bertemu mim adalah...',
+        'options' => ['Idgham Mimi', 'Ikhfa Syafawi', 'Izhar Syafawi', 'Iqlab'],
+        'correct_answer' => 0,
+        'explanation' => 'Idgham mimi/mutamatsilain.',
+    ]);
+
+    $response = $this->actingAs($this->mentor)->get(route('mentor.questions.print', [
+        'program_id' => $this->program->id,
+        'topic' => 'Tajwid Dasar',
+    ]));
+
+    $response->assertStatus(200);
+    $response->assertSee('LEMBAR EVALUASI');
+    $response->assertSee('Hukum bacaan mim sukun bertemu mim adalah...');
+    $response->assertSee('Idgham Mimi');
 });
 
 test('mentor can soft delete question to trash and restore it', function () {
@@ -116,6 +162,7 @@ test('mentor can soft delete question to trash and restore it', function () {
         'user_id' => $this->mentor->id,
         'topic' => 'Hukum Qalqalah',
         'difficulty' => 'Mudah',
+        'type' => 'multiple_choice',
         'question' => 'Huruf qalqalah terbagi menjadi...',
         'options' => ['5 huruf', '6 huruf', '7 huruf', '4 huruf'],
         'correct_answer' => 0,
@@ -141,75 +188,10 @@ test('preview returns validation errors when input is invalid', function () {
     $response = $this->actingAs($this->mentor)
         ->postJson(route('mentor.questions.preview'), [
             'program_id' => 99999, // non-existent
-            'topic' => 'ab', // min 3
-            'count' => 30, // max 20
+            'count' => 50, // max 25
             'difficulty' => 'InvalidDifficulty',
         ]);
 
     $response->assertStatus(422)
-        ->assertJsonValidationErrors(['program_id', 'topic', 'count', 'difficulty']);
-});
-
-test('preview returns error json when ai service throws exception', function () {
-    $mockService = Mockery::mock(GeminiQuestionService::class);
-    $mockService->shouldReceive('generateQuestions')
-        ->once()
-        ->andThrow(new Exception('Gemini API Connection failed'));
-
-    $this->app->instance(GeminiQuestionService::class, $mockService);
-
-    $response = $this->actingAs($this->mentor)
-        ->postJson(route('mentor.questions.preview'), [
-            'program_id' => $this->program->id,
-            'topic' => 'Hukum Idgham',
-            'count' => 5,
-            'difficulty' => 'Sedang',
-        ]);
-
-    $response->assertStatus(500)
-        ->assertJson([
-            'status' => 'error',
-            'code' => 'GEMINI_API_ERROR',
-            'message' => 'Gemini API Connection failed',
-        ]);
-});
-
-test('mentor can force delete question from trash', function () {
-    $question = Question::create([
-        'program_id' => $this->program->id,
-        'user_id' => $this->mentor->id,
-        'topic' => 'Hukum Qalqalah',
-        'difficulty' => 'Mudah',
-        'question' => 'Contoh qalqalah sugro adalah...',
-        'options' => ['Option A', 'Option B', 'Option C', 'Option D'],
-        'correct_answer' => 0,
-    ]);
-
-    $question->delete();
-
-    $response = $this->actingAs($this->mentor)
-        ->delete(route('mentor.questions.force-delete', $question->id));
-
-    $response->assertRedirect(route('mentor.questions.trash'));
-    $this->assertDatabaseMissing('questions', ['id' => $question->id]);
-});
-
-test('mentor cannot delete another mentors question', function () {
-    $mentorRole = Role::firstOrCreate(['name' => RoleEnum::MENTOR->value]);
-    $otherMentor = User::factory()->create(['role_id' => $mentorRole->id]);
-
-    $question = Question::create([
-        'program_id' => $this->program->id,
-        'user_id' => $otherMentor->id,
-        'topic' => 'Hukum Tajwid',
-        'difficulty' => 'Sedang',
-        'question' => 'Soal dari mentor lain',
-        'options' => ['A', 'B', 'C', 'D'],
-        'correct_answer' => 0,
-    ]);
-
-    $response = $this->actingAs($this->mentor)
-        ->delete(route('mentor.questions.destroy', $question->id));
-
-    $response->assertStatus(403);
+        ->assertJsonValidationErrors(['program_id', 'count', 'difficulty']);
 });

@@ -25,7 +25,7 @@ class MentorQuestionController extends Controller
      */
     public function index(Request $request): View
     {
-        $programs = Program::where('is_active', true)->orderBy('name')->get();
+        $programs = Program::where('is_active', true)->orderBy('sort_order')->orderBy('name')->get();
 
         $query = Question::with('program')
             ->where('user_id', Auth::id())
@@ -35,11 +35,19 @@ class MentorQuestionController extends Controller
             $query->where('program_id', $request->program_id);
         }
 
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        if ($request->filled('difficulty')) {
+            $query->where('difficulty', $request->difficulty);
+        }
+
         if ($request->filled('topic')) {
             $query->where('topic', 'like', '%'.$request->topic.'%');
         }
 
-        $questions = $query->paginate(15);
+        $questions = $query->paginate(15)->withQueryString();
         $trashCount = Question::onlyTrashed()->where('user_id', Auth::id())->count();
 
         return view('mentor.questions.index', compact('questions', 'programs', 'trashCount'));
@@ -50,9 +58,11 @@ class MentorQuestionController extends Controller
      */
     public function create(): View
     {
-        $programs = Program::where('is_active', true)->orderBy('name')->get();
+        $programs = Program::where('is_active', true)->orderBy('sort_order')->orderBy('name')->get();
+        $activeProvider = $this->geminiService->getActiveProvider();
+        $activeModel = $this->geminiService->getActiveModel();
 
-        return view('mentor.questions.generate', compact('programs'));
+        return view('mentor.questions.generate', compact('programs', 'activeProvider', 'activeModel'));
     }
 
     /**
@@ -62,31 +72,44 @@ class MentorQuestionController extends Controller
     {
         $validated = $request->validate([
             'program_id' => 'required|exists:programs,id',
-            'topic' => 'required|string|min:3|max:255',
-            'count' => 'required|integer|min:5|max:20',
+            'topic' => 'nullable|string|max:255',
+            'count' => 'required|integer|min:3|max:25',
             'difficulty' => 'required|in:Mudah,Sedang,Sulit',
+            'question_type' => 'nullable|in:multiple_choice,essay,mixed',
         ]);
 
         $program = Program::findOrFail($validated['program_id']);
+        $questionType = $validated['question_type'] ?? 'multiple_choice';
 
         try {
             $questions = $this->geminiService->generateQuestions(
                 program: $program->name,
-                topic: $validated['topic'],
+                topic: $validated['topic'] ?? null,
                 count: (int) $validated['count'],
-                difficulty: $validated['difficulty']
+                difficulty: $validated['difficulty'],
+                questionType: $questionType
             );
+
+            $activeProvider = method_exists($this->geminiService, 'getActiveProvider') ? $this->geminiService->getActiveProvider() : 'auto';
+            $activeModel = method_exists($this->geminiService, 'getActiveModel') ? $this->geminiService->getActiveModel() : 'standard';
+            $isFallback = method_exists($this->geminiService, 'isFallbackUsed') ? $this->geminiService->isFallbackUsed() : false;
+            $aiError = method_exists($this->geminiService, 'getLastError') ? $this->geminiService->getLastError() : null;
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Berhasil menghasilkan '.count($questions).' butir soal.',
+                'program_name' => $program->name,
+                'active_provider' => $activeProvider,
+                'active_model' => $activeModel,
+                'is_fallback' => $isFallback,
+                'ai_error' => $aiError,
                 'data' => $questions,
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
-                'code' => 'GEMINI_API_ERROR',
+                'code' => 'AI_API_ERROR',
             ], 500);
         }
     }
@@ -101,10 +124,12 @@ class MentorQuestionController extends Controller
             'topic' => 'required|string|max:255',
             'difficulty' => 'required|in:Mudah,Sedang,Sulit',
             'questions' => 'required|array|min:1',
+            'questions.*.type' => 'nullable|in:multiple_choice,essay',
             'questions.*.question' => 'required|string',
-            'questions.*.options' => 'required|array|size:4',
-            'questions.*.options.*' => 'required|string',
-            'questions.*.correct_answer' => 'required|integer|min:0|max:3',
+            'questions.*.options' => 'nullable|array',
+            'questions.*.correct_answer' => 'nullable|integer|min:0|max:3',
+            'questions.*.essay_answer' => 'nullable|string',
+            'questions.*.rubric' => 'nullable|string',
             'questions.*.explanation' => 'nullable|string',
         ]);
 
@@ -115,14 +140,31 @@ class MentorQuestionController extends Controller
             $difficulty = $request->difficulty;
 
             foreach ($request->questions as $item) {
+                $type = $item['type'] ?? 'multiple_choice';
+                $options = null;
+                $correctAnswer = null;
+
+                if ($type === 'multiple_choice') {
+                    $rawOptions = $item['options'] ?? [];
+                    $options = is_array($rawOptions) ? array_values($rawOptions) : [];
+                    while (count($options) < 4) {
+                        $options[] = '-';
+                    }
+                    $options = array_slice($options, 0, 4);
+                    $correctAnswer = isset($item['correct_answer']) ? (int) $item['correct_answer'] : 0;
+                }
+
                 Question::create([
                     'program_id' => $programId,
                     'user_id' => $userId,
                     'topic' => $topic,
                     'difficulty' => $difficulty,
+                    'type' => $type,
                     'question' => $item['question'],
-                    'options' => $item['options'],
-                    'correct_answer' => (int) $item['correct_answer'],
+                    'options' => $options,
+                    'correct_answer' => $correctAnswer,
+                    'essay_answer' => $item['essay_answer'] ?? null,
+                    'rubric' => $item['rubric'] ?? null,
                     'explanation' => $item['explanation'] ?? null,
                     'created_by_ai' => true,
                 ]);
@@ -130,59 +172,139 @@ class MentorQuestionController extends Controller
         });
 
         return redirect()->route('mentor.questions.index')
-            ->with('success', 'Alhamdulillah! '.count($request->questions).' butir soal berhasil disimpan ke Bank Soal.');
+            ->with('success', 'Berhasil menyimpan '.count($request->questions).' butir soal ke Bank Soal Anda!');
     }
 
     /**
-     * Soft Delete Soal ke Tong Sampah
+     * Halaman Cetak Lembar Soal & Kunci Jawaban (Print PDF Sheet)
      */
-    public function destroy(Question $question): RedirectResponse
+    public function print(Request $request): View
     {
-        if ($question->user_id !== Auth::id()) {
-            abort(403, 'Anda tidak memiliki akses untuk menghapus soal ini.');
+        $programId = $request->input('program_id');
+        $topic = $request->input('topic');
+        $type = $request->input('type');
+        $difficulty = $request->input('difficulty');
+        $selectedIds = $request->input('ids');
+
+        $program = null;
+        if ($programId) {
+            $program = Program::find($programId);
         }
 
-        $question->delete();
+        // Jika dikirim langsung dari Preview Workspace (In-Memory array soal)
+        if ($request->has('questions') && is_array($request->input('questions'))) {
+            $rawQuestions = $request->input('questions');
+            $questions = collect($rawQuestions)->unique('question')->map(function ($q) {
+                $qType = $q['type'] ?? 'multiple_choice';
+                $options = $q['options'] ?? ['-', '-', '-', '-'];
+                if (is_array($options)) {
+                    $options = array_values($options);
+                }
+                $corrAns = isset($q['correct_answer']) ? (int) $q['correct_answer'] : 0;
 
-        return redirect()->route('mentor.questions.index')
-            ->with('success', 'Butir soal berhasil dipindahkan ke Tong Sampah.');
+                return (object) [
+                    'question' => $q['question'] ?? '',
+                    'type' => $qType,
+                    'options' => $options,
+                    'correct_answer' => $corrAns,
+                    'essay_answer' => $q['essay_answer'] ?? null,
+                    'rubric' => $q['rubric'] ?? null,
+                    'explanation' => $q['explanation'] ?? null,
+                    'isMultipleChoice' => fn () => $qType === 'multiple_choice',
+                    'isEssay' => fn () => $qType === 'essay',
+                    'correct_option_label' => ['A', 'B', 'C', 'D'][$corrAns] ?? 'A',
+                    'correct_option_text' => $options[$corrAns] ?? '-',
+                ];
+            })->values();
+        } else {
+            // Ambil dari database dengan filter dan proteksi anti-duplikasi
+            $query = Question::with('program')->where('user_id', Auth::id());
+
+            if (is_array($selectedIds) && count($selectedIds) > 0) {
+                $query->whereIn('id', $selectedIds);
+            } else {
+                if ($programId) {
+                    $query->where('program_id', $programId);
+                }
+                if ($topic) {
+                    $query->where('topic', 'like', '%'.$topic.'%');
+                }
+                if ($type) {
+                    $query->where('type', $type);
+                }
+                if ($difficulty) {
+                    $query->where('difficulty', $difficulty);
+                }
+            }
+
+            $questions = $query->orderBy('type')->orderBy('id')->get()->unique('question')->values();
+        }
+
+        return view('mentor.questions.print', [
+            'questions' => $questions,
+            'program' => $program,
+            'topic' => $topic ?: ($questions->first()?->topic ?? 'Evaluasi Pembelajaran Al-Qur\'an'),
+            'difficulty' => $difficulty ?: ($questions->first()?->difficulty ?? 'Sedang'),
+            'includeKey' => $request->boolean('include_key', true),
+        ]);
     }
 
     /**
-     * Halaman Tong Sampah Bank Soal
+     * Halaman Tong Sampah (Soft-deleted)
      */
     public function trash(): View
     {
-        $trashedQuestions = Question::onlyTrashed()
+        $questions = Question::onlyTrashed()
             ->with('program')
             ->where('user_id', Auth::id())
             ->latest('deleted_at')
             ->paginate(15);
 
-        return view('mentor.questions.trash', compact('trashedQuestions'));
+        return view('mentor.questions.trash', compact('questions'));
     }
 
     /**
-     * Pulihkan Soal dari Tong Sampah
+     * Restore Butir Soal dari Tong Sampah
      */
     public function restore(int $id): RedirectResponse
     {
-        $question = Question::onlyTrashed()->where('user_id', Auth::id())->findOrFail($id);
+        $question = Question::onlyTrashed()
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
         $question->restore();
 
         return redirect()->route('mentor.questions.trash')
-            ->with('success', 'Butir soal berhasil dipulihkan ke Bank Soal.');
+            ->with('success', 'Butir soal berhasil dipulihkan ke Bank Soal aktif.');
     }
 
     /**
-     * Hapus Permanen Soal
+     * Hapus Permanen Butir Soal
      */
     public function forceDelete(int $id): RedirectResponse
     {
-        $question = Question::onlyTrashed()->where('user_id', Auth::id())->findOrFail($id);
+        $question = Question::onlyTrashed()
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
         $question->forceDelete();
 
         return redirect()->route('mentor.questions.trash')
-            ->with('success', 'Butir soal berhasil dihapus secara permanen.');
+            ->with('success', 'Butir soal telah dihapus secara permanen.');
+    }
+
+    /**
+     * Pindahkan Soal ke Tong Sampah (Soft Delete)
+     */
+    public function destroy(Question $question): RedirectResponse
+    {
+        if ($question->user_id !== Auth::id()) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
+        $question->delete();
+
+        return redirect()->route('mentor.questions.index')
+            ->with('success', 'Soal berhasil dipindahkan ke Tong Sampah.');
     }
 }

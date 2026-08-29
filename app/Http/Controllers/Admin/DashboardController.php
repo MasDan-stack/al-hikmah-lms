@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mentor;
+use App\Models\MentorApplication;
+use App\Models\MentorProbationTracking;
 use App\Models\Message;
 use App\Models\ParentProfile;
 use App\Models\Payment;
@@ -37,6 +39,12 @@ class DashboardController extends Controller
         $staffSummary = $this->staffService->getStaffSummary();
         $allAlerts = $this->alertService->getAllAlerts();
 
+        // 👨‍🏫 Rekrutmen Guru & Masa Percobaan (v8.3)
+        $pendingApplicationsCount = MentorApplication::whereIn('status', ['submitted', 'document_review'])->count();
+        $totalApplicationsCount = MentorApplication::count();
+        $activeProbationsCount = MentorProbationTracking::where('status', 'active')->count();
+        $recentApplications = MentorApplication::latest()->take(5)->get();
+
         // 📌 Widget Monitor User Terdaftar & Role
         $recentUsers = User::with('role')->latest()->take(5)->get();
 
@@ -65,6 +73,10 @@ class DashboardController extends Controller
             'revenueMetrics',
             'staffSummary',
             'allAlerts',
+            'pendingApplicationsCount',
+            'totalApplicationsCount',
+            'activeProbationsCount',
+            'recentApplications',
             'recentUsers',
             'recentConfirmations',
             'recentPayments',

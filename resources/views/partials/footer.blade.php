@@ -48,11 +48,10 @@
                     <li><a href="{{ route('tahfidz') }}">Tahfidz</a></li>
                     <li><a href="{{ route('program') }}">Adab & Doa Harian</a></li>
                     <li><a href="{{ route('program') }}">Kelas Muslimah</a></li>
-                    <li><a href="{{ route('program') }}">Bahasa Arab</a></li>
                     @guest
-                        <li><a href="{{ route('bergabung') }}">Menjadi Pendamping</a></li>
+                        <li><a href="{{ route('bergabung') }}">Pendaftaran Guru</a></li>
+                        <li><a href="{{ route('mentor.recruitment.status') }}">Cek Status Lamaran</a></li>
                     @endguest
-                </ul>
             </div>
             <div class="col-lg-3 col-md-6">
                 <h6 class="footer-title">Kontak</h6>

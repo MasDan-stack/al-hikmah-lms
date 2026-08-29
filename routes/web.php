@@ -8,6 +8,9 @@ use App\Http\Controllers\Admin\AdminBlogController;
 use App\Http\Controllers\Admin\AdminBlogTagController;
 use App\Http\Controllers\Admin\AdminBroadcastController;
 use App\Http\Controllers\Admin\AdminGamificationController;
+use App\Http\Controllers\Admin\AdminMentorLeaveController;
+use App\Http\Controllers\Admin\AdminProbationController;
+use App\Http\Controllers\Admin\AdminRecruitmentController;
 use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminRevenueController;
 use App\Http\Controllers\Admin\AdminStaffController;
@@ -18,18 +21,20 @@ use App\Http\Controllers\Admin\GalleryCategoryController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\MentorAvailabilityController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
+use App\Http\Controllers\Admin\RecruitmentApiController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Api\AnalyticsApiController;
 use App\Http\Controllers\Api\PakasirWebhookController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\RegisterMentorController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Mentor\AvailabilityController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
+use App\Http\Controllers\Mentor\MentorLeaveController;
 use App\Http\Controllers\Mentor\MentorMessageController;
 use App\Http\Controllers\Mentor\MentorQuestionController;
+use App\Http\Controllers\Mentor\MentorRecruitmentTestController;
 use App\Http\Controllers\Mentor\MentorTargetController;
 use App\Http\Controllers\Mentor\ProgressController as MentorProgressController;
 use App\Http\Controllers\Mentor\ReportController as MentorReportController;
@@ -42,6 +47,7 @@ use App\Http\Controllers\Parent\ParentMessageController;
 use App\Http\Controllers\Parent\ParentPaymentController;
 use App\Http\Controllers\Parent\ParentProfileController;
 use App\Http\Controllers\Parent\ParentScheduleController;
+use App\Http\Controllers\Public\MentorApplicationController;
 use App\Http\Controllers\PublicBlogController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Student\StudentDashboardController;
@@ -92,9 +98,11 @@ Route::get('/biaya', [LandingController::class, 'biaya'])->name('biaya');
 // Pre-Register Khusus Program
 Route::post('/program/pre-register', [RegisteredUserController::class, 'preRegisterProgram'])->name('program.pre-register');
 
-// Halaman Bergabung (Pendaftaran Pendamping / Guru Al-Qur'an)
-Route::get('/bergabung', [RegisterMentorController::class, 'create'])->name('bergabung');
-Route::post('/bergabung', [RegisterMentorController::class, 'store'])->middleware('guest');
+// Halaman Bergabung (Pendaftaran Pendamping / Guru Al-Qur'an) - V8.3
+Route::get('/bergabung', [MentorApplicationController::class, 'create'])->name('bergabung');
+Route::post('/bergabung', [MentorApplicationController::class, 'store'])->name('mentor.recruitment.store');
+Route::get('/cek-status-lamaran', [MentorApplicationController::class, 'status'])->name('mentor.recruitment.status');
+Route::post('/cek-status-lamaran', [MentorApplicationController::class, 'checkStatus'])->name('mentor.recruitment.check-status');
 
 // Halaman Roadmap / Peta Alur Belajar
 Route::get('/roadmap', [LandingController::class, 'roadmap'])->name('roadmap');
@@ -139,9 +147,52 @@ Route::middleware(['auth', 'role:admin'])
             return view('admin.programs.index');
         })->name('programs.index');
 
+        // ==========================================
+        // MANAJEMEN REKRUTMEN MENTOR (V8.3)
+        // ==========================================
+        // Recruitment APIs for ApexCharts
+        Route::get('/api/recruitment/funnel', [RecruitmentApiController::class, 'funnel'])->name('api.recruitment.funnel');
+        Route::get('/api/recruitment/daily-trend', [RecruitmentApiController::class, 'dailyTrend'])->name('api.recruitment.daily-trend');
+
+        Route::prefix('mentors/recruitment')->name('recruitment.')->group(function () {
+            // Applications
+            Route::get('/applications', [AdminRecruitmentController::class, 'applications'])->name('applications.index');
+            Route::get('/applications/export', [AdminRecruitmentController::class, 'exportCsv'])->name('applications.export');
+            Route::get('/applications/{id}', [AdminRecruitmentController::class, 'showApplication'])->name('applications.show');
+            Route::get('/applications/{id}/documents/{documentId}', [AdminRecruitmentController::class, 'downloadDocument'])->name('applications.document');
+            Route::post('/applications/{id}/approve-document', [AdminRecruitmentController::class, 'approveDocument'])->name('applications.approveDocument');
+            Route::post('/applications/{id}/reject', [AdminRecruitmentController::class, 'rejectApplication'])->name('applications.reject');
+            Route::post('/applications/{id}/schedule-interview', [AdminRecruitmentController::class, 'scheduleInterview'])->name('applications.scheduleInterview');
+            Route::post('/applications/{id}/accept', [AdminRecruitmentController::class, 'acceptApplication'])->name('applications.accept');
+
+            // Test Sessions
+            Route::get('/test-sessions', [AdminRecruitmentController::class, 'testSessions'])->name('tests.index');
+            Route::get('/test-sessions/{id}', [AdminRecruitmentController::class, 'showTest'])->name('tests.show');
+            Route::post('/applications/{id}/generate-test', [AdminRecruitmentController::class, 'generateTest'])->name('tests.generate');
+            Route::post('/test-sessions/{id}/evaluate', [AdminRecruitmentController::class, 'evaluateTest'])->name('tests.evaluate');
+        });
+
+        // ==========================================
+        // MANAJEMEN MENTOR & PROBATION
+        // ==========================================
         Route::get('/mentors', function () {
             return view('admin.mentors.index');
         })->name('mentors.index');
+
+        Route::prefix('mentors/probation')->name('mentors.probation.')->group(function () {
+            Route::get('/', [AdminProbationController::class, 'index'])->name('index');
+            Route::get('/{id}', [AdminProbationController::class, 'show'])->name('show');
+            Route::post('/{id}/scores', [AdminProbationController::class, 'updateScores'])->name('updateScores');
+            Route::post('/{id}/complete', [AdminProbationController::class, 'completeProbation'])->name('complete');
+        });
+
+        // Mentor Leave & Substitute Management
+        Route::prefix('mentors/leaves')->name('mentors.leaves.')->group(function () {
+            Route::get('/', [AdminMentorLeaveController::class, 'index'])->name('index');
+            Route::post('/{leave}/approve', [AdminMentorLeaveController::class, 'approve'])->name('approve');
+            Route::post('/{leave}/reject', [AdminMentorLeaveController::class, 'reject'])->name('reject');
+            Route::delete('/{leave}', [AdminMentorLeaveController::class, 'destroy'])->name('destroy');
+        });
 
         Route::get('/students', function () {
             return view('admin.students.index');
@@ -294,6 +345,7 @@ Route::middleware(['auth', 'role:mentor'])
         // Bank Soal & AI Generator Routes
         Route::get('/questions', [MentorQuestionController::class, 'index'])->name('questions.index');
         Route::get('/questions/generate', [MentorQuestionController::class, 'create'])->name('questions.generate');
+        Route::match(['get', 'post'], '/questions/print', [MentorQuestionController::class, 'print'])->name('questions.print');
         Route::post('/questions/generate-preview', [MentorQuestionController::class, 'preview'])
             ->middleware('throttle:10,1')
             ->name('questions.preview');
@@ -302,6 +354,15 @@ Route::middleware(['auth', 'role:mentor'])
         Route::post('/questions/{id}/restore', [MentorQuestionController::class, 'restore'])->name('questions.restore');
         Route::delete('/questions/{id}/force-delete', [MentorQuestionController::class, 'forceDelete'])->name('questions.force-delete');
         Route::delete('/questions/{question}', [MentorQuestionController::class, 'destroy'])->name('questions.destroy');
+
+        // Mentor Leave & Substitute Requests
+        Route::get('/leaves', [MentorLeaveController::class, 'index'])->name('leaves.index');
+        Route::post('/leaves', [MentorLeaveController::class, 'store'])->name('leaves.store');
+        Route::delete('/leaves/{leave}', [MentorLeaveController::class, 'destroy'])->name('leaves.destroy');
+
+        // Portal Rekrutmen & Ujian Tes Calon Guru
+        Route::get('/recruitment/test/{sessionId}', [MentorRecruitmentTestController::class, 'showTest'])->name('recruitment.take-test');
+        Route::post('/recruitment/test/{sessionId}/submit', [MentorRecruitmentTestController::class, 'submitTest'])->name('recruitment.submit-test');
     });
 
 // ==========================================

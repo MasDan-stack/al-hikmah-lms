@@ -262,6 +262,20 @@
                     <i class="bi bi-whatsapp text-success"></i> WhatsApp Broadcast
                 </a>
 
+                <div class="admin-nav-section-title mt-2">Rekrutmen Guru (v8.3)</div>
+                <a href="{{ route('admin.recruitment.applications.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.recruitment.applications.*') ? 'active' : '' }}">
+                    <i class="bi bi-file-earmark-person-fill text-primary"></i> Pelamar Guru Baru
+                </a>
+                <a href="{{ route('admin.recruitment.tests.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.recruitment.tests.*') ? 'active' : '' }}">
+                    <i class="bi bi-robot text-info"></i> Tes & Evaluasi AI
+                </a>
+                <a href="{{ route('admin.mentors.probation.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.mentors.probation.*') ? 'active' : '' }}">
+                    <i class="bi bi-person-workspace text-success"></i> Masa Percobaan (Probation)
+                </a>
+
                 <div class="admin-nav-section-title mt-2">Manajemen Akademik</div>
                 <a href="{{ route('admin.enrollments.index') }}"
                     class="admin-nav-item {{ request()->routeIs('admin.enrollments.index') || request()->routeIs('admin.enrollments.edit') ? 'active' : '' }}">
@@ -282,6 +296,10 @@
                 <a href="{{ route('admin.mentors.availability') }}"
                     class="admin-nav-item {{ request()->routeIs('admin.mentors.availability') ? 'active' : '' }}">
                     <i class="bi bi-calendar-week"></i> Ketersediaan & Alokasi
+                </a>
+                <a href="{{ route('admin.mentors.leaves.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.mentors.leaves.*') ? 'active' : '' }}">
+                    <i class="bi bi-calendar2-x-fill text-warning"></i> Cuti & Guru Pengganti
                 </a>
                 <a href="{{ route('admin.programs.index') }}"
                     class="admin-nav-item {{ request()->routeIs('admin.programs.*') ? 'active' : '' }}">

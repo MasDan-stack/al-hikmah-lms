@@ -100,21 +100,33 @@
                             @endif
                         @endauth
 
-                        {{-- Tampil untuk Guest (Belum Login) --}}
-                        @guest
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{{ route('bergabung') }}">
-                                    <i class="bi bi-person-plus text-primary"></i> Menjadi Pendamping
-                                </a>
-                            </li>
-                        @endguest
                     </ul>
                 </li>
 
-                <!-- 4. Alur Belajar (Roadmap) -->
+                <!-- 4. Rekrutmen Guru (v8.3) -->
+                @guest
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('bergabung*') || request()->routeIs('mentor.recruitment.*') ? 'active' : '' }}"
+                            href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-mortarboard"></i>
+                            <span>Karir Guru</span>
+                        </a>
+                        <ul class="dropdown-menu shadow-sm border-0 rounded-4">
+                            <li>
+                                <a class="dropdown-item {{ request()->routeIs('bergabung') ? 'active' : '' }}" href="{{ route('bergabung') }}">
+                                    <i class="bi bi-person-plus text-primary"></i> Pendaftaran Guru Baru
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item {{ request()->routeIs('mentor.recruitment.status') ? 'active' : '' }}" href="{{ route('mentor.recruitment.status') }}">
+                                    <i class="bi bi-search text-success"></i> Cek Status Lamaran
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endguest
+
+                <!-- 5. Alur Belajar (Roadmap) -->
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('roadmap') ? 'active' : '' }}"
                         href="{{ route('roadmap') }}">
@@ -123,9 +135,9 @@
                     </a>
                 </li>
 
-                <!-- 5. Galeri & FAQ (Dropdown) -->
+                <!-- 6. Galeri & FAQ (Dropdown) -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('faq*') ? 'active' : '' }}" href="#"
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('faq*') || request()->routeIs('galeri*') ? 'active' : '' }}" href="#"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-collection"></i>
                         <span>Galeri & FAQ</span>

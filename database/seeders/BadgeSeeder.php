@@ -163,6 +163,36 @@ class BadgeSeeder extends Seeder
                 'criteria_json' => ['type' => 'mutqin_exam_streak', 'count' => 3],
                 'is_active' => true,
             ],
+            [
+                'code' => 'M01',
+                'name' => 'Mentor Certified',
+                'description' => 'Diberikan saat guru lulus masa percobaan 3 bulan.',
+                'icon' => 'bi-patch-check-fill',
+                'category' => 'achievement',
+                'points_reward' => 500,
+                'criteria_json' => ['type' => 'probation_passed', 'count' => 1],
+                'is_active' => true,
+            ],
+            [
+                'code' => 'M02',
+                'name' => 'Sanad Keeper',
+                'description' => 'Diberikan kepada guru yang memiliki sanad Al-Qur\'an muttashil.',
+                'icon' => 'bi-award-fill',
+                'category' => 'achievement',
+                'points_reward' => 300,
+                'criteria_json' => ['type' => 'sanad_verified', 'count' => 1],
+                'is_active' => true,
+            ],
+            [
+                'code' => 'M03',
+                'name' => 'Master Trainer',
+                'description' => 'Diberikan kepada mentor yang melatih sesama pengajar.',
+                'icon' => 'bi-mortarboard-fill',
+                'category' => 'achievement',
+                'points_reward' => 1000,
+                'criteria_json' => ['type' => 'training_conducted', 'count' => 1],
+                'is_active' => true,
+            ],
         ];
 
         foreach ($badges as $badge) {

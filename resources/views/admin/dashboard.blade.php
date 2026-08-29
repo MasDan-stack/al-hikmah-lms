@@ -16,6 +16,12 @@
         </div>
 
         <div class="d-flex flex-wrap align-items-center gap-2">
+            <a href="{{ route('admin.recruitment.applications.index') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 position-relative">
+                <i class="bi bi-mortarboard-fill me-1"></i>Rekrutmen Guru
+                @if(($pendingApplicationsCount ?? 0) > 0)
+                    <span class="badge bg-danger rounded-pill ms-1">{{ $pendingApplicationsCount }}</span>
+                @endif
+            </a>
             <a href="{{ route('admin.revenue.index') }}" class="btn btn-sm btn-outline-success rounded-pill px-3">
                 <i class="bi bi-graph-up-arrow me-1"></i>Analitik Finansial
             </a>
@@ -338,6 +344,98 @@
         </div>
     </div>
 
+    <!-- Section Widget Rekrutmen Guru & Onboarding (v8.3) -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4" style="background: var(--card-bg); border: 1px solid var(--border-color) !important;">
+                <div class="card-header border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center flex-wrap gap-2" style="background: transparent;">
+                    <div>
+                        <h5 class="fw-bold mb-1" style="color: var(--text-primary);">
+                            <i class="bi bi-mortarboard-fill text-primary me-2"></i>Pusat Rekrutmen Guru & Evaluasi AI (v8.3)
+                        </h5>
+                        <small class="text-muted">Pantau data pelamar baru, tes kompetensi AI, serta masa percobaan calon guru</small>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('admin.recruitment.tests.index') }}" class="btn btn-sm btn-outline-info rounded-pill px-3">
+                            <i class="bi bi-robot me-1"></i> Tes AI
+                        </a>
+                        <a href="{{ route('admin.mentors.probation.index') }}" class="btn btn-sm btn-outline-success rounded-pill px-3">
+                            <i class="bi bi-person-workspace me-1"></i> Masa Probation ({{ $activeProbationsCount ?? 0 }})
+                        </a>
+                        <a href="{{ route('admin.recruitment.applications.index') }}" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold">
+                            Kelola Semua Pelamar ({{ $totalApplicationsCount ?? 0 }}) <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    @if(($recentApplications ?? collect())->isEmpty())
+                        <div class="text-center py-4 text-muted small">
+                            <i class="bi bi-inbox fs-2 d-block text-secondary mb-2"></i>
+                            Belum ada pendaftaran calon guru baru. Link formulir pendaftaran: 
+                            <a href="{{ route('bergabung') }}" target="_blank" class="fw-bold text-primary">{{ route('bergabung') }}</a>
+                        </div>
+                    @else
+                        <div class="table-responsive">
+                            <table class="table align-middle table-hover mb-0 datatable" data-page-length="5">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Kode Registrasi</th>
+                                        <th>Nama Pelamar</th>
+                                        <th>Spesialisasi & Hafalan</th>
+                                        <th>No. WhatsApp</th>
+                                        <th>Status Seleksi</th>
+                                        <th class="text-end no-sort">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($recentApplications as $app)
+                                        <tr>
+                                            <td class="fw-bold text-primary">{{ $app->application_code }}</td>
+                                            <td>
+                                                <div class="fw-bold text-dark">{{ $app->full_name }}</div>
+                                                <small class="text-muted">{{ $app->education }} - {{ $app->institution }}</small>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-light text-dark border">{{ $app->specialization }}</span>
+                                                <small class="d-block text-muted">{{ $app->hifz_total_juz }} Juz | {{ $app->experience_years }} thn pengalaman</small>
+                                            </td>
+                                            <td>
+                                                <a href="https://wa.me/{{ preg_replace('/^0/', '62', preg_replace('/[^0-9]/', '', $app->phone)) }}" target="_blank" class="text-success text-decoration-none fw-semibold">
+                                                    <i class="bi bi-whatsapp me-1"></i>{{ $app->phone }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $stColors = [
+                                                        'submitted' => 'bg-secondary',
+                                                        'document_review' => 'bg-info text-dark',
+                                                        'test_scheduled' => 'bg-warning text-dark',
+                                                        'test_completed' => 'bg-primary',
+                                                        'interview_scheduled' => 'bg-primary',
+                                                        'approved' => 'bg-success',
+                                                        'rejected' => 'bg-danger',
+                                                    ];
+                                                @endphp
+                                                <span class="badge {{ $stColors[$app->status] ?? 'bg-secondary' }} px-3 py-1 rounded-pill">
+                                                    {{ strtoupper(str_replace('_', ' ', $app->status)) }}
+                                                </span>
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="{{ route('admin.recruitment.applications.show', $app->id) }}" class="btn btn-sm btn-primary rounded-pill px-3">
+                                                    <i class="bi bi-eye me-1"></i> Review
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Section Activity & Quick Actions -->
     <div class="row g-4">
         <!-- Aktivitas Terbaru (Livewire) -->
@@ -352,6 +450,12 @@
                     <h5 class="fw-bold mb-3" style="color: var(--text-primary);">Aksi Cepat Admin</h5>
 
                     <div class="d-grid gap-2">
+                        <a href="{{ route('admin.recruitment.applications.index') }}" class="btn btn-primary text-white text-start py-2.5 px-3 mb-1 rounded-pill shadow-sm">
+                            <i class="bi bi-mortarboard-fill me-2 fs-5"></i> Rekrutmen Guru & Tes AI
+                            @if(($pendingApplicationsCount ?? 0) > 0)
+                                <span class="badge bg-danger rounded-pill float-end mt-1">{{ $pendingApplicationsCount }} Baru</span>
+                            @endif
+                        </a>
                         <a href="{{ route('admin.students.index') }}" class="btn btn-daftar text-white text-start py-2.5 px-3 mb-1 rounded-pill">
                             <i class="bi bi-person-plus-fill me-2 fs-5"></i> Kelola & Tambah Santri
                         </a>

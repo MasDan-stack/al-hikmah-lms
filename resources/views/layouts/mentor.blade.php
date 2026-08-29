@@ -224,52 +224,67 @@
                 </a>
             </div>
 
+            @php
+                $currentMentor = auth()->user()?->mentor;
+                $isOfficialMentor = $currentMentor && $currentMentor->is_active && in_array($currentMentor->status, ['active', 'probation']);
+            @endphp
+
             <nav class="admin-sidebar-nav">
-                <div class="admin-nav-section-title">Menu Pendamping</div>
+                <div class="admin-nav-section-title">{{ $isOfficialMentor ? 'Menu Pendamping' : 'Portal Rekrutmen' }}</div>
                 <a href="{{ route('mentor.dashboard') }}"
                     class="admin-nav-item {{ request()->routeIs('mentor.dashboard') ? 'active' : '' }}">
-                    <i class="bi bi-speedometer2"></i> Dashboard Mengajar
-                </a>
-                <a href="{{ route('mentor.sessions.index') }}"
-                    class="admin-nav-item {{ request()->routeIs('mentor.sessions.*') ? 'active' : '' }}">
-                    <i class="bi bi-calendar-check"></i> Jadwal Sesi Mengajar
-                </a>
-                <a href="{{ route('mentor.students.index') }}"
-                    class="admin-nav-item {{ request()->routeIs('mentor.students.index') || request()->routeIs('mentor.students.show') ? 'active' : '' }}">
-                    <i class="bi bi-people"></i> Santri Binaan
-                </a>
-                <a href="{{ route('mentor.students.parents') }}"
-                    class="admin-nav-item {{ request()->routeIs('mentor.students.parents') ? 'active' : '' }}">
-                    <i class="bi bi-person-lines-fill"></i> Data Orang Tua
-                </a>
-                <a href="{{ route('mentor.availability.index') }}"
-                    class="admin-nav-item {{ request()->routeIs('mentor.availability.*') ? 'active' : '' }}">
-                    <i class="bi bi-clock-history"></i> Atur Ketersediaan
+                    <i class="bi {{ $isOfficialMentor ? 'bi-speedometer2' : 'bi-person-check-fill text-primary' }}"></i>
+                    {{ $isOfficialMentor ? 'Dashboard Mengajar' : 'Dashboard Calon Guru' }}
                 </a>
 
-                <div class="admin-nav-section-title mt-2">Evaluasi & Bank Soal AI</div>
-                <a href="{{ route('mentor.questions.index') }}"
-                    class="admin-nav-item {{ request()->routeIs('mentor.questions.*') ? 'active' : '' }}">
-                    <i class="bi bi-question-square-fill"></i> Bank Soal & AI Generator
-                </a>
+                @if($isOfficialMentor)
+                    <a href="{{ route('mentor.sessions.index') }}"
+                        class="admin-nav-item {{ request()->routeIs('mentor.sessions.*') ? 'active' : '' }}">
+                        <i class="bi bi-calendar-check"></i> Jadwal Sesi Mengajar
+                    </a>
+                    <a href="{{ route('mentor.students.index') }}"
+                        class="admin-nav-item {{ request()->routeIs('mentor.students.index') || request()->routeIs('mentor.students.show') ? 'active' : '' }}">
+                        <i class="bi bi-people"></i> Santri Binaan
+                    </a>
+                    <a href="{{ route('mentor.students.parents') }}"
+                        class="admin-nav-item {{ request()->routeIs('mentor.students.parents') ? 'active' : '' }}">
+                        <i class="bi bi-person-lines-fill"></i> Data Orang Tua
+                    </a>
+                    <a href="{{ route('mentor.availability.index') }}"
+                        class="admin-nav-item {{ request()->routeIs('mentor.availability.*') ? 'active' : '' }}">
+                        <i class="bi bi-clock-history"></i> Atur Ketersediaan
+                    </a>
+                    <a href="{{ route('mentor.leaves.index') }}"
+                        class="admin-nav-item {{ request()->routeIs('mentor.leaves.*') ? 'active' : '' }}">
+                        <i class="bi bi-calendar2-x-fill text-warning"></i> Pengajuan Cuti & Pengganti
+                    </a>
 
-                <div class="admin-nav-section-title mt-2">Pencatatan & Laporan</div>
-                <a href="{{ route('mentor.progress.create') }}"
-                    class="admin-nav-item {{ request()->routeIs('mentor.progress.create') ? 'active' : '' }}">
-                    <i class="bi bi-pencil-square"></i> Catat Progres
-                </a>
-                <a href="{{ route('mentor.progress.bulk-create') }}"
-                    class="admin-nav-item {{ request()->routeIs('mentor.progress.bulk*') ? 'active' : '' }}">
-                    <i class="bi bi-layers-fill"></i> Catat Progres Massal
-                </a>
-                <a href="{{ route('mentor.reports.export') }}"
-                    class="admin-nav-item {{ request()->routeIs('mentor.reports.*') ? 'active' : '' }}">
-                    <i class="bi bi-file-earmark-pdf"></i> Laporan Kinerja
-                </a>
-                <a href="{{ route('mentor.messages.index') }}"
-                    class="admin-nav-item {{ request()->routeIs('mentor.messages.*') ? 'active' : '' }}">
-                    <i class="bi bi-chat-dots-fill"></i> Pesan & Diskusi
-                </a>
+                    <div class="admin-nav-section-title mt-2">Evaluasi & Bank Soal AI</div>
+                    <a href="{{ route('mentor.questions.index') }}"
+                        class="admin-nav-item {{ request()->routeIs('mentor.questions.*') ? 'active' : '' }}">
+                        <i class="bi bi-question-square-fill"></i> Bank Soal & AI Generator
+                    </a>
+
+                    <div class="admin-nav-section-title mt-2">Pencatatan & Laporan</div>
+                    <a href="{{ route('mentor.progress.create') }}"
+                        class="admin-nav-item {{ request()->routeIs('mentor.progress.create') ? 'active' : '' }}">
+                        <i class="bi bi-pencil-square"></i> Catat Progres
+                    </a>
+                    <a href="{{ route('mentor.progress.bulk-create') }}"
+                        class="admin-nav-item {{ request()->routeIs('mentor.progress.bulk*') ? 'active' : '' }}">
+                        <i class="bi bi-layers-fill"></i> Catat Progres Massal
+                    </a>
+                    <a href="{{ route('mentor.reports.export') }}"
+                        class="admin-nav-item {{ request()->routeIs('mentor.reports.*') ? 'active' : '' }}">
+                        <i class="bi bi-file-earmark-pdf"></i> Laporan Kinerja
+                    </a>
+                    <a href="{{ route('mentor.messages.index') }}"
+                        class="admin-nav-item {{ request()->routeIs('mentor.messages.*') ? 'active' : '' }}">
+                        <i class="bi bi-chat-dots-fill"></i> Pesan & Diskusi
+                    </a>
+                @endif
+
+                <div class="admin-nav-section-title mt-2">Akun & Umum</div>
                 <a href="{{ route('mentor.profile') }}"
                     class="admin-nav-item {{ request()->routeIs('mentor.profile') ? 'active' : '' }}">
                     <i class="bi bi-person-circle"></i> Profil Saya

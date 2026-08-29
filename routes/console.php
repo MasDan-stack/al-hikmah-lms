@@ -25,3 +25,13 @@ Schedule::call(function () {
             'admin_notes' => 'Otomatis dibatalkan oleh sistem karena wali santri tidak merespon tawaran jadwal lebih dari 7 hari.',
         ]);
 })->daily()->name('expire-stale-enrollments');
+
+// 🔔 Pemindaian Anomali Operasional 3 Kali Sehari (06:00, 12:00, 18:00 WIB)
+Schedule::command('alerts:scan')
+    ->cron('0 6,12,18 * * *')
+    ->name('scan-alerts-3-times-daily');
+
+// 🏆 Refresh Cache Leaderboard Gamifikasi Santri Setiap Tengah Malam (00:00 WIB)
+Schedule::command('gamification:refresh-leaderboard')
+    ->dailyAt('00:00')
+    ->name('refresh-leaderboard-midnight');

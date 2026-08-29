@@ -55,12 +55,35 @@ class BroadcastService
      */
     public function parseTemplate(string $template, array $recipientData): string
     {
+        $parentName = $recipientData['parent_name'] ?? 'Bapak/Ibu';
+        $childName = $recipientData['children_names'] ?? 'Ananda';
+        $programName = $recipientData['program_names'] ?? 'Program Al-Qur\'an';
+        $dateFormatted = now()->translatedFormat('d F Y');
+        $dueDateFormatted = now()->addDays(7)->translatedFormat('d F Y');
+        $amount = '250.000';
+        $paymentUrl = url('/parent/payments');
+        $institution = 'AL-HIKMAH LMS';
+
         $replacements = [
-            '{nama_ortu}' => $recipientData['parent_name'] ?? 'Bapak/Ibu',
-            '{nama_anak}' => $recipientData['children_names'] ?? 'Ananda',
-            '{program}' => $recipientData['program_names'] ?? 'Program Al-Qur\'an',
-            '{tanggal}' => now()->translatedFormat('d F Y'),
-            '{lembaga}' => 'AL-HIKMAH LMS',
+            '{nama_ortu}' => $parentName,
+            '{{nama_ortu}}' => $parentName,
+            '{{name}}' => $parentName,
+            '{nama_anak}' => $childName,
+            '{{nama_anak}}' => $childName,
+            '{{child_name}}' => $childName,
+            '{program}' => $programName,
+            '{{program}}' => $programName,
+            '{tanggal}' => $dateFormatted,
+            '{{tanggal}}' => $dateFormatted,
+            '{{date}}' => $dateFormatted,
+            '{{due_date}}' => $dueDateFormatted,
+            '{due_date}' => $dueDateFormatted,
+            '{{amount}}' => $amount,
+            '{amount}' => $amount,
+            '{{payment_url}}' => $paymentUrl,
+            '{payment_url}' => $paymentUrl,
+            '{lembaga}' => $institution,
+            '{{lembaga}}' => $institution,
         ];
 
         return str_replace(array_keys($replacements), array_values($replacements), $template);
@@ -120,19 +143,19 @@ class BroadcastService
     {
         return [
             [
+                'id' => 'tuition_spp_official',
+                'name' => 'Pengingat Tagihan SPP & Link Pakasir (Resmi)',
+                'template' => "Assalamu'alaikum Warahmatullahi Wabarakatuh, Ayah/Bunda {{name}},\n\nKami menginformasikan bahwa tagihan administrasi bimbingan Al-Qur'an untuk ananda {{child_name}} pada program {{program}} sebesar Rp {{amount}} akan jatuh tempo pada tanggal {{due_date}}.\n\nPembayaran dapat dilakukan secara praktis melalui tautan resmi Pakasir berikut:\n{{payment_url}}\n\nSemoga Allah SWT senantiasa memberkahi ikhtiar kita dalam mendidik putra-putri pecinta Al-Qur'an.\n\nJazakumullahu Khairan Katsiran,\nManajemen Lembaga {{lembaga}}",
+            ],
+            [
                 'id' => 'holiday',
                 'name' => 'Pengumuman Libur / Cuti Bersama',
-                'template' => "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nYth. Bapak/Ibu {nama_ortu},\n\nKami menginformasikan bahwa kegiatan bimbingan {program} untuk ananda {nama_anak} diliburkan sementara pada tanggal {tanggal} dalam rangka libur nasional.\n\nKegiatan pembelajaran akan aktif kembali sesuai jadwal masing-masing. Terima kasih atas kerja sama dan perhatiannya.\n\nWassalamu'alaikum Wr. Wb.\n*{lembaga}*",
+                'template' => "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nYth. Bapak/Ibu {{name}},\n\nKami menginformasikan bahwa kegiatan bimbingan {{program}} untuk ananda {{child_name}} diliburkan sementara pada tanggal {{date}} dalam rangka libur nasional.\n\nKegiatan pembelajaran akan aktif kembali sesuai jadwal masing-masing. Terima kasih atas kerja sama dan perhatiannya.\n\nWassalamu'alaikum Wr. Wb.\n*{{lembaga}}*",
             ],
             [
                 'id' => 'exam',
                 'name' => 'Jadwal Ujian Tasmi\' & Mutqin',
-                'template' => "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nYth. Bapak/Ibu {nama_ortu},\n\nAlhamdulillah, ananda {nama_anak} telah menyelesaikan target materi pada {program}. Ujian evaluasi hafalan (Tasmi' / Mutqin) dijadwalkan pada pekan ini.\n\nMohon bantu membimbing dan mendampingi ananda di rumah agar semakin mutqin dan istiqomah.\n\nWassalamu'alaikum Wr. Wb.\n*{lembaga}*",
-            ],
-            [
-                'id' => 'tuition_reminder',
-                'name' => 'Pengingat Pembayaran SPP Bulanan',
-                'template' => "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nYth. Bapak/Ibu {nama_ortu},\n\nSemoga Bapak/Ibu dan ananda {nama_anak} senantiasa dalam lindungan Allah SWT.\n\nKami menginformasikan tagihan SPP bimbingan {program} untuk periode ini telah terbit. Pembayaran dapat dilakukan dengan mudah via QRIS / Virtual Account di dashboard orang tua.\n\nTerima kasih atas kepercayaannya bersama {lembaga}.\n\nWassalamu'alaikum Wr. Wb.",
+                'template' => "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nYth. Bapak/Ibu {{name}},\n\nAlhamdulillah, ananda {{child_name}} telah menyelesaikan target materi pada {{program}}. Ujian evaluasi hafalan (Tasmi' / Mutqin) dijadwalkan pada pekan ini.\n\nMohon bantu membimbing dan mendampingi ananda di rumah agar semakin mutqin dan istiqomah.\n\nWassalamu'alaikum Wr. Wb.\n*{{lembaga}}*",
             ],
         ];
     }

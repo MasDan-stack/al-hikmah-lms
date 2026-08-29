@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('financial_audit_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('action', 100); // 'update_payment', 'manual_adjustment', 'refund', etc.
             $table->string('entity_type', 50); // 'payment', 'enrollment'
             $table->unsignedBigInteger('entity_id');
@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('ip_address', 45)->nullable();
             $table->timestamp('created_at')->nullable();
 
-            $table->index(['entity_type', 'entity_id'], 'idx_entity');
-            $table->index('created_at', 'idx_created');
+            $table->index(['entity_type', 'entity_id'], 'idx_fal_entity');
+            $table->index('created_at', 'idx_fal_created');
         });
     }
 
