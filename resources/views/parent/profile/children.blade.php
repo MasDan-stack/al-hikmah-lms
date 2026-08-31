@@ -107,17 +107,29 @@
 
             <!-- Tabel Daftar Anak Saat Ini -->
             <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
-                <h5 class="fw-bold text-dark mb-3">Daftar Anak Terhubung</h5>
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                    <h5 class="fw-bold text-dark mb-0">Daftar Anak Terhubung</h5>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 small">
+                        <i class="bi bi-key me-1"></i>Password Default Santri: <strong class="font-monospace">santri123</strong>
+                    </span>
+                </div>
                 @if($children->isEmpty())
                     <div class="text-center py-4 text-muted">Belum ada data anak terdaftar.</div>
                 @else
+                    <div class="alert alert-warning-subtle border border-warning-subtle rounded-3 p-2.5 mb-3 small d-flex align-items-center gap-2">
+                        <i class="bi bi-shield-exclamation text-warning fs-5 flex-shrink-0"></i>
+                        <div>
+                            <strong>Informasi Akses Santri:</strong> Ananda dapat masuk ke LMS melalui halaman login dengan email yang tertera di bawah dan <strong>password default: <code>santri123</code></strong>. Disarankan segera mengganti password default setelah login.
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="table align-middle datatable" id="tableParentChildren">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Nama Santri</th>
-                                    <th>Usia</th>
-                                    <th>Gender</th>
+                                    <th>Nama & Email Santri</th>
+                                    <th>Password Awal</th>
+                                    <th>Usia / Gender</th>
                                     <th>Lokasi</th>
                                     <th>Mentor</th>
                                 </tr>
@@ -125,14 +137,18 @@
                             <tbody>
                                 @foreach($children as $c)
                                     <tr>
-                                        <td class="fw-bold text-primary">
-                                            {{ $c->user?->name ?? $c->full_name }}
+                                        <td>
+                                            <div class="fw-bold text-primary">{{ $c->user?->name ?? $c->full_name }}</div>
                                             @if($c->user?->email)
-                                                <br><small class="text-muted fw-normal"><i class="bi bi-envelope me-1"></i>{{ $c->user->email }}</small>
+                                                <small class="text-muted"><i class="bi bi-envelope me-1"></i><code>{{ $c->user->email }}</code></small>
                                             @endif
                                         </td>
-                                        <td>{{ $c->age }} Thn</td>
-                                        <td>{{ $c->gender === 'L' ? 'Laki-Laki' : 'Perempuan' }}</td>
+                                        <td>
+                                            <span class="badge bg-secondary-subtle text-dark border px-2 py-1 font-monospace" style="font-size: 0.78rem;">santri123</span>
+                                        </td>
+                                        <td>
+                                            {{ $c->age }} Thn ({{ $c->gender === 'L' ? 'L' : 'P' }})
+                                        </td>
                                         <td>{{ $c->location ?? 'Online' }}</td>
                                         <td>{{ $c->mentors->first()?->user?->name ?? 'Belum ditentukan' }}</td>
                                     </tr>

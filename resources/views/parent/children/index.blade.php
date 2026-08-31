@@ -105,6 +105,21 @@
                             </div>
                         </div>
 
+                        <!-- Kredensial Login Santri & Password Default -->
+                        <div class="p-2.5 rounded-3 bg-light border mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="text-muted small" style="font-size: 0.76rem;"><i class="bi bi-envelope me-1"></i>Email Login:</span>
+                                <code class="text-primary fw-bold" style="font-size: 0.78rem;">{{ $child->user?->email }}</code>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="text-muted small" style="font-size: 0.76rem;"><i class="bi bi-key me-1"></i>Password Awal:</span>
+                                <span class="badge bg-secondary-subtle text-dark border px-2 py-0.5 font-monospace" style="font-size: 0.75rem;">santri123</span>
+                            </div>
+                            <small class="text-muted d-block" style="font-size: 0.7rem; line-height: 1.25;">
+                                <i class="bi bi-info-circle text-warning me-1"></i>Disarankan ananda segera mengubah password default setelah login.
+                            </small>
+                        </div>
+
                         <div class="mt-auto d-grid gap-2">
                             <a href="{{ route('parent.children.show', $child->id) }}" class="btn btn-outline-primary rounded-pill fw-bold">
                                 <i class="bi bi-graph-up-arrow me-1"></i> Lihat Progres & Grafik

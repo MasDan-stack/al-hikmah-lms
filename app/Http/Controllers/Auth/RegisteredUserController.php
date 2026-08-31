@@ -11,13 +11,13 @@ use App\Models\Program;
 use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
+use App\Services\StudentAccountService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -161,21 +161,16 @@ class RegisteredUserController extends Controller
                     $levelInfo = ! empty($preRegData['level_tahfidz']) ? ' | Level: '.$preRegData['level_tahfidz'] : '';
                     $notes = 'Program Pilihan: '.($preRegData['program'] ?? '-')."{$targetInfo}{$levelInfo} | Metode: ".($preRegData['metode'] ?? '-');
 
-                    // Unique Student Email Generator
-                    $baseSlug = Str::slug($childName);
-                    $studentEmail = $baseSlug.'.'.Str::random(5).'@alhikmah.com';
-                    while (User::where('email', $studentEmail)->exists()) {
-                        $studentEmail = $baseSlug.'.'.Str::random(5).'@alhikmah.com';
-                    }
-
-                    // Random Secure Student Password Generator
-                    $randomPassword = Str::random(10);
+                    // Clean Student Email & Standard Default Password
+                    $studentAccountService = app(StudentAccountService::class);
+                    $studentEmail = $studentAccountService->generateEmail($childName);
+                    $defaultPassword = StudentAccountService::DEFAULT_PASSWORD;
 
                     $studentRole = Role::firstOrCreate(['name' => RoleEnum::STUDENT->value], ['label' => RoleEnum::STUDENT->label()]);
                     $studentUser = User::create([
                         'name' => $childName,
                         'email' => $studentEmail,
-                        'password' => Hash::make($randomPassword),
+                        'password' => Hash::make($defaultPassword),
                         'role_id' => $studentRole->id,
                     ]);
 

@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\EnrollmentStatus;
 use App\Enums\NotificationType;
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessMentorAllocationJob;
 use App\Models\Enrollment;
 use App\Models\Mentor;
 use App\Models\MentorActivityLog;
 use App\Models\Payment;
+use App\Services\MentorMatchingService;
 use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -62,7 +64,7 @@ class EnrollmentController extends Controller
     /**
      * Form review dan negosiasi jadwal permohonan
      */
-    public function edit(int $id): View
+    public function edit(int $id, MentorMatchingService $matchingService): View
     {
         $enrollment = Enrollment::with(['student.parent.user', 'program', 'mentor'])->findOrFail($id);
 
@@ -72,7 +74,147 @@ class EnrollmentController extends Controller
 
         $days = Enrollment::DAYS;
 
-        return view('admin.enrollments.edit', compact('enrollment', 'mentors', 'days'));
+        // Dapatkan rekomendasi mentor
+        $recommendations = $matchingService->getTopRecommendations($enrollment);
+
+        return view('admin.enrollments.edit', compact('enrollment', 'mentors', 'days', 'recommendations'));
+    }
+
+    /**
+     * Menetapkan mentor berdasarkan rekomendasi Smart Matchmaking
+     */
+    public function assignRecommended(Request $request, int $id): RedirectResponse
+    {
+        $validated = $request->validate([
+            'mentor_id' => ['required', 'exists:mentors,id'],
+            'shadow_mentor_id' => ['nullable', 'exists:mentors,id'],
+            'score' => ['nullable', 'numeric'],
+            'start_date' => ['required', 'date', 'after_or_equal:today'],
+            'score_breakdown' => ['nullable', 'string'],
+        ]);
+
+        $enrollment = Enrollment::with(['student.parent.user', 'program'])->findOrFail($id);
+        $mentor = Mentor::findOrFail($validated['mentor_id']);
+        $score = (float) ($validated['score'] ?? 100.0);
+
+        $scoreBreakdown = $validated['score_breakdown'] ? json_decode($validated['score_breakdown'], true) : [];
+
+        DB::transaction(function () use ($enrollment, $validated, $mentor, $score, $scoreBreakdown) {
+            $enrollment->update([
+                'mentor_id' => $mentor->id,
+                'shadow_mentor_id' => $validated['shadow_mentor_id'] ?? null,
+                'matching_score' => $score,
+                'start_date' => $validated['start_date'],
+                'status' => EnrollmentStatus::CONFIRMED,
+                'confirmed_at' => now(),
+            ]);
+
+            // Dispatch background job untuk mencatat hasil ke matching_logs & kirim notifikasi
+            ProcessMentorAllocationJob::dispatch(
+                $enrollment,
+                $mentor->id,
+                $score,
+                'recommended',
+                $scoreBreakdown,
+                auth()->id()
+            );
+
+            // Menerbitkan invoice pembayaran jika belum ada
+            if (! $enrollment->payment()->exists()) {
+                $programFee = (float) ($enrollment->program_price ?? $enrollment->program?->price ?? 400000);
+                $hasPaidReg = $enrollment->student?->hasPaidRegistrationFee() ?? false;
+                $registrationFee = $hasPaidReg ? 0.00 : (float) site_setting('registration_fee', 150000);
+                $totalAmount = $programFee + $registrationFee;
+
+                Payment::create([
+                    'student_id' => $enrollment->student_id,
+                    'program_id' => $enrollment->program_id,
+                    'enrollment_id' => $enrollment->id,
+                    'program_fee' => $programFee,
+                    'registration_fee' => $registrationFee,
+                    'amount' => $totalAmount,
+                    'payment_purpose' => 'registration',
+                    'due_date' => Carbon::parse($validated['start_date'])->subDay()->toDateString(),
+                    'status' => 'pending',
+                    'invoice_number' => 'INV-'.date('Ymd').'-'.str_pad((string) $enrollment->id, 4, '0', STR_PAD_LEFT),
+                ]);
+            }
+
+            MentorActivityLog::log(
+                $mentor->id,
+                'enrollment_accepted',
+                "Sistem menetapkan pendaftaran #{$enrollment->id} santri {$enrollment->student->getDisplayName()} ke mentor {$mentor->getDisplayName()} (Skor: {$score}%)."
+            );
+
+            if ($enrollment->student?->parent?->user_id) {
+                NotificationService::send(
+                    $enrollment->student->parent->user_id,
+                    'Jadwal Pendaftaran Disetujui!',
+                    "Jadwal belajar program {$enrollment->program->name} untuk {$enrollment->student->getDisplayName()} telah disetujui bersama {$mentor->getDisplayName()}. Silakan lakukan pembayaran tagihan.",
+                    NotificationType::SUCCESS,
+                    route('parent.enrollments.show', $enrollment->id),
+                    'enrollment',
+                    true
+                );
+            }
+        });
+
+        return redirect()->route('admin.enrollments.index')
+            ->with('success', "Santri {$enrollment->student->getDisplayName()} berhasil dialokasikan ke {$mentor->getDisplayName()} (Skor Kecocokan: {$score}%).");
+    }
+
+    /**
+     * Batch Matching & Bulk Allocation untuk multi-pendaftaran
+     */
+    public function bulkAssign(Request $request, MentorMatchingService $matchingService): RedirectResponse
+    {
+        $enrollmentIds = (array) $request->input('enrollment_ids', []);
+        $assignedCount = 0;
+
+        foreach ($enrollmentIds as $id) {
+            $enrollment = Enrollment::with(['student.parent.user', 'program'])->find($id);
+            if (! $enrollment || $enrollment->status === EnrollmentStatus::CONFIRMED) {
+                continue;
+            }
+
+            $topRec = $matchingService->getTopRecommendations($enrollment, 1)->first();
+            if ($topRec) {
+                $mentor = $topRec['mentor'];
+                $score = (float) ($topRec['score'] ?? 100.0);
+
+                DB::transaction(function () use ($enrollment, $mentor, $score, $topRec) {
+                    $enrollment->update([
+                        'mentor_id' => $mentor->id,
+                        'matching_score' => $score,
+                        'start_date' => now()->addDays(3)->toDateString(),
+                        'status' => EnrollmentStatus::CONFIRMED,
+                        'confirmed_at' => now(),
+                    ]);
+
+                    ProcessMentorAllocationJob::dispatch(
+                        $enrollment,
+                        $mentor->id,
+                        $score,
+                        'bulk_assignment',
+                        $topRec['breakdown'] ?? [],
+                        auth()->id()
+                    );
+                });
+
+                $assignedCount++;
+            }
+        }
+
+        return redirect()->route('admin.enrollments.index')
+            ->with('success', "{$assignedCount} santri berhasil dialokasikan secara massal via Smart Matchmaking AI.");
+    }
+
+    /**
+     * Helper: Auto assign jika skor memenuhi syarat (>= 95%)
+     */
+    public function autoAssignIfEligible(Enrollment $enrollment, MentorMatchingService $matchingService): bool
+    {
+        return $matchingService->autoAssignIfEligible($enrollment);
     }
 
     /**

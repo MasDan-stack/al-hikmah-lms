@@ -59,10 +59,11 @@ class MentorQuestionController extends Controller
     public function create(): View
     {
         $programs = Program::where('is_active', true)->orderBy('sort_order')->orderBy('name')->get();
+        $configuredProviders = $this->geminiService->getConfiguredProviders();
         $activeProvider = $this->geminiService->getActiveProvider();
         $activeModel = $this->geminiService->getActiveModel();
 
-        return view('mentor.questions.generate', compact('programs', 'activeProvider', 'activeModel'));
+        return view('mentor.questions.generate', compact('programs', 'configuredProviders', 'activeProvider', 'activeModel'));
     }
 
     /**
@@ -76,10 +77,12 @@ class MentorQuestionController extends Controller
             'count' => 'required|integer|min:3|max:25',
             'difficulty' => 'required|in:Mudah,Sedang,Sulit',
             'question_type' => 'nullable|in:multiple_choice,essay,mixed',
+            'ai_provider' => 'nullable|string|in:auto,gemini,qwen,deepseek,openai,claude',
         ]);
 
         $program = Program::findOrFail($validated['program_id']);
         $questionType = $validated['question_type'] ?? 'multiple_choice';
+        $requestedProvider = $validated['ai_provider'] ?? 'auto';
 
         try {
             $questions = $this->geminiService->generateQuestions(
@@ -87,19 +90,31 @@ class MentorQuestionController extends Controller
                 topic: $validated['topic'] ?? null,
                 count: (int) $validated['count'],
                 difficulty: $validated['difficulty'],
-                questionType: $questionType
+                questionType: $questionType,
+                requestedProvider: $requestedProvider
             );
 
-            $activeProvider = method_exists($this->geminiService, 'getActiveProvider') ? $this->geminiService->getActiveProvider() : 'auto';
-            $activeModel = method_exists($this->geminiService, 'getActiveModel') ? $this->geminiService->getActiveModel() : 'standard';
-            $isFallback = method_exists($this->geminiService, 'isFallbackUsed') ? $this->geminiService->isFallbackUsed() : false;
-            $aiError = method_exists($this->geminiService, 'getLastError') ? $this->geminiService->getLastError() : null;
+            $activeProvider = $this->geminiService->getActiveProvider();
+            $activeModel = $this->geminiService->getActiveModel();
+            $isFallback = $this->geminiService->isFallbackUsed();
+            $aiError = $this->geminiService->getLastError();
+
+            $providerLabels = [
+                'deepseek' => 'DeepSeek AI (Platform DeepSeek)',
+                'qwen' => 'Alibaba Qwen AI (DashScope)',
+                'openai' => 'OpenAI ChatGPT (GPT-4o Mini)',
+                'gemini' => 'Google Gemini AI (Gemini Flash)',
+                'claude' => 'Anthropic Claude (Claude 3.5 Sonnet)',
+                'curated_fallback' => 'Kurikulum Terkurasi Al-Hikmah (Standar Kurikulum)',
+            ];
+            $providerLabel = $providerLabels[$activeProvider] ?? strtoupper($activeProvider);
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Berhasil menghasilkan '.count($questions).' butir soal.',
                 'program_name' => $program->name,
                 'active_provider' => $activeProvider,
+                'provider_label' => $providerLabel,
                 'active_model' => $activeModel,
                 'is_fallback' => $isFallback,
                 'ai_error' => $aiError,

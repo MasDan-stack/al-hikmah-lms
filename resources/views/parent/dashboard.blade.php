@@ -13,6 +13,64 @@
             </div>
         @endif
 
+        @if ($children->isNotEmpty())
+            <!-- Info Akun Login Santri & Password Default -->
+            <div class="card border-0 shadow-sm rounded-4 bg-white mb-4 overflow-hidden">
+                <div class="card-header bg-primary bg-opacity-10 border-0 py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="rounded-circle bg-primary text-white p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                            <i class="bi bi-key-fill fs-6"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0">Informasi Akses & Kredensial Login Santri</h6>
+                            <small class="text-muted">Gunakan email ananda dan password default untuk masuk ke Portal Belajar Santri</small>
+                        </div>
+                    </div>
+                    <span class="badge bg-warning-subtle text-dark border border-warning-subtle rounded-pill px-3 py-1 small fw-semibold">
+                        <i class="bi bi-shield-exclamation me-1 text-warning"></i> Disarankan Segera Ganti Password
+                    </span>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        @foreach ($children as $c)
+                            <div class="col-md-6 col-lg-4">
+                                <div class="p-3 rounded-4 bg-light border h-100 position-relative">
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <div class="user-avatar-badge" style="width: 32px; height: 32px; font-size: 0.75rem; background: var(--primary);">
+                                            {{ strtoupper(substr($c->user?->name ?? $c->full_name, 0, 2)) }}
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark small">{{ $c->user?->name ?? $c->full_name }}</div>
+                                            <span class="badge bg-success-subtle text-success" style="font-size: 0.62rem;">Santri Binaan</span>
+                                        </div>
+                                    </div>
+                                    <div class="small bg-white p-2.5 rounded-3 border mb-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <span class="text-muted" style="font-size: 0.75rem;">Email Login:</span>
+                                            <code class="text-primary fw-bold" style="font-size: 0.75rem;">{{ $c->user?->email }}</code>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="text-muted" style="font-size: 0.75rem;">Password Default:</span>
+                                            <span class="badge bg-secondary-subtle text-dark border px-2 py-1 font-monospace" style="font-size: 0.75rem;">santri123</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-muted" style="font-size: 0.72rem; line-height: 1.3;">
+                                        <i class="bi bi-info-circle text-primary me-1"></i>Ananda dapat login di <code>{{ url('/login') }}</code> dengan email & password di atas.
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="alert alert-warning-subtle border border-warning-subtle rounded-3 p-2.5 mt-3 mb-0 small d-flex align-items-center gap-2">
+                        <i class="bi bi-shield-lock-fill text-warning fs-5 flex-shrink-0"></i>
+                        <div>
+                            <strong>Penting:</strong> Password default di atas (<code>santri123</code>) dapat diubah langsung oleh ananda di Portal Santri, atau orang tua dapat mereset password ananda kapan saja melalui menu <a href="{{ route('parent.children.index') }}" class="fw-bold text-decoration-none">Anak Binaan</a>.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         @if (!$hasPaidProgram)
             @if (!$hasPendingEnrollment)
                 <!-- STATE 1: ONBOARDING (Belum Punya Program) -->
@@ -408,4 +466,6 @@
             </div>
         @endif
     </div>
+
+    @include('parent.partials.feedback-modal')
 @endsection

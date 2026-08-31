@@ -74,6 +74,7 @@ class LeaderboardService
                 'total_ayat' => $totalAyat,
                 'total_juz_mutqin' => $totalMutqin,
                 'badge_count' => $student->earnedBadges->count(),
+                'privacy_leaderboard' => (bool) ($student->privacy_leaderboard ?? false),
                 'is_current_user' => auth()->check() && auth()->user()->id === $student->user_id,
             ]);
 

@@ -56,7 +56,7 @@
         }
 
         .admin-sidebar-brand {
-            padding: 1.25rem 1.5rem;
+            padding: 1.15rem 1.5rem;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -65,7 +65,7 @@
         }
 
         .admin-sidebar-brand img {
-            height: 40px;
+            height: 38px;
             width: auto;
         }
 
@@ -74,42 +74,59 @@
             font-size: 1.15rem;
             color: var(--text-primary);
             letter-spacing: -0.5px;
+            line-height: 1.2;
         }
 
         .admin-sidebar-nav {
-            padding: 1rem 1rem;
+            padding: 1rem 0.85rem;
             flex-grow: 1;
             overflow-y: auto;
             scrollbar-width: thin;
         }
 
+        .admin-sidebar-nav::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .admin-sidebar-nav::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.12);
+            border-radius: 10px;
+        }
+
+        [data-bs-theme="dark"] .admin-sidebar-nav::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
         .admin-nav-section-title {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             text-transform: uppercase;
             font-weight: 700;
             letter-spacing: 0.8px;
             color: var(--text-muted);
-            padding: 12px 14px 6px;
+            padding: 14px 12px 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .admin-nav-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
+            gap: 11px;
+            padding: 9px 13px;
             color: var(--text-secondary);
             font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             border-radius: var(--radius-md);
             text-decoration: none;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             border-left: 3px solid transparent;
         }
 
         .admin-nav-item i {
-            font-size: 1.1rem;
-            width: 22px;
+            font-size: 1.05rem;
+            width: 20px;
             text-align: center;
             color: var(--text-muted);
             transition: color 0.2s ease;
@@ -138,11 +155,10 @@
             transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Top Navbar Header Styling */
         .admin-header {
-            height: 72px;
-            background: var(--glass-bg-strong);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            height: 70px;
+            background: var(--card-bg);
             border-bottom: 1px solid var(--border-color);
             padding: 0 2rem;
             display: flex;
@@ -151,7 +167,193 @@
             position: sticky;
             top: 0;
             z-index: 1020;
-            box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .header-left-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-page-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            line-height: 1.25;
+            margin: 0;
+        }
+
+        .header-page-subtitle {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .header-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-header-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border-radius: 50px;
+            color: var(--primary);
+            background: var(--primary-lighter);
+            border: 1px solid rgba(13, 122, 62, 0.15);
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-header-home:hover {
+            background: var(--primary);
+            color: #ffffff !important;
+            border-color: var(--primary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(13, 122, 62, 0.2);
+        }
+
+        .btn-header-home:hover i {
+            color: #ffffff !important;
+        }
+
+        .user-profile-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 14px 4px 4px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+        }
+
+        .user-profile-toggle:hover,
+        .user-profile-toggle[aria-expanded="true"] {
+            background: var(--card-bg);
+            border-color: var(--primary);
+            box-shadow: 0 4px 16px rgba(13, 122, 62, 0.12);
+        }
+
+        .user-avatar-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, #059669 100%);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.82rem;
+            position: relative;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(13, 122, 62, 0.25);
+        }
+
+        .user-avatar-status {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            background: #10b981;
+            border: 2px solid var(--card-bg);
+            border-radius: 50%;
+        }
+
+        .user-profile-info {
+            text-align: left;
+            line-height: 1.2;
+        }
+
+        .user-profile-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            max-width: 130px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-profile-role-badge {
+            font-size: 0.62rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .dropdown-menu-premium {
+            min-width: 260px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.12);
+            padding: 8px;
+            background: var(--card-bg);
+            margin-top: 8px !important;
+            animation: dropDownFade 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes dropDownFade {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-user-header {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .dropdown-item-premium {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            font-size: 0.86rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-radius: 10px;
+            transition: all 0.15s ease;
+            text-decoration: none;
+        }
+
+        .dropdown-item-premium i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+            color: var(--primary);
+        }
+
+        .dropdown-item-premium:hover {
+            background: var(--primary-lighter);
+            color: var(--primary);
+            font-weight: 600;
+            transform: translateX(2px);
+        }
+
+        .dropdown-item-premium.is-logout {
+            color: #ef4444;
+        }
+
+        .dropdown-item-premium.is-logout i {
+            color: #ef4444;
+        }
+
+        .dropdown-item-premium.is-logout:hover {
+            background: rgba(239, 68, 68, 0.08);
+            color: #dc2626;
         }
 
         .admin-content {
@@ -220,7 +422,12 @@
             <div class="admin-sidebar-brand">
                 <a href="{{ route('mentor.dashboard') }}" class="d-flex align-items-center gap-2 text-decoration-none">
                     <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH Logo">
-                    <div class="admin-sidebar-brand-text">AL<span style="color: var(--primary)">-HIKMAH</span></div>
+                    <div>
+                        <div class="admin-sidebar-brand-text">AL<span style="color: var(--primary)">-HIKMAH</span></div>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0" style="font-size: 0.62rem; font-weight: 600;">
+                            <i class="bi bi-person-workspace me-1"></i>Portal Guru
+                        </span>
+                    </div>
                 </a>
             </div>
 
@@ -230,7 +437,7 @@
             @endphp
 
             <nav class="admin-sidebar-nav">
-                <div class="admin-nav-section-title">{{ $isOfficialMentor ? 'Menu Pendamping' : 'Portal Rekrutmen' }}</div>
+                <div class="admin-nav-section-title"><i class="bi bi-grid-fill me-1"></i> {{ $isOfficialMentor ? 'Menu Pendamping' : 'Portal Rekrutmen' }}</div>
                 <a href="{{ route('mentor.dashboard') }}"
                     class="admin-nav-item {{ request()->routeIs('mentor.dashboard') ? 'active' : '' }}">
                     <i class="bi {{ $isOfficialMentor ? 'bi-speedometer2' : 'bi-person-check-fill text-primary' }}"></i>
@@ -238,6 +445,7 @@
                 </a>
 
                 @if($isOfficialMentor)
+                    <div class="admin-nav-section-title mt-2"><i class="bi bi-calendar-range me-1"></i> Jadwal & Santri</div>
                     <a href="{{ route('mentor.sessions.index') }}"
                         class="admin-nav-item {{ request()->routeIs('mentor.sessions.*') ? 'active' : '' }}">
                         <i class="bi bi-calendar-check"></i> Jadwal Sesi Mengajar
@@ -259,16 +467,20 @@
                         <i class="bi bi-calendar2-x-fill text-warning"></i> Pengajuan Cuti & Pengganti
                     </a>
 
-                    <div class="admin-nav-section-title mt-2">Evaluasi & Bank Soal AI</div>
+                    <div class="admin-nav-section-title mt-2"><i class="bi bi-robot me-1"></i> Evaluasi & Bank Soal AI</div>
                     <a href="{{ route('mentor.questions.index') }}"
                         class="admin-nav-item {{ request()->routeIs('mentor.questions.*') ? 'active' : '' }}">
-                        <i class="bi bi-question-square-fill"></i> Bank Soal & AI Generator
+                        <i class="bi bi-question-square-fill"></i> Bank Soal & Multi-AI
                     </a>
 
-                    <div class="admin-nav-section-title mt-2">Pencatatan & Laporan</div>
+                    <div class="admin-nav-section-title mt-2"><i class="bi bi-journal-text me-1"></i> Pencatatan & Laporan</div>
+                    <a href="{{ route('mentor.performance.index') }}"
+                        class="admin-nav-item {{ request()->routeIs('mentor.performance.*') ? 'active' : '' }}">
+                        <i class="bi bi-graph-up-arrow text-warning"></i> Kinerja Saya & Goals
+                    </a>
                     <a href="{{ route('mentor.progress.create') }}"
                         class="admin-nav-item {{ request()->routeIs('mentor.progress.create') ? 'active' : '' }}">
-                        <i class="bi bi-pencil-square"></i> Catat Progres
+                        <i class="bi bi-pencil-square"></i> Catat Progres Harian
                     </a>
                     <a href="{{ route('mentor.progress.bulk-create') }}"
                         class="admin-nav-item {{ request()->routeIs('mentor.progress.bulk*') ? 'active' : '' }}">
@@ -284,7 +496,7 @@
                     </a>
                 @endif
 
-                <div class="admin-nav-section-title mt-2">Akun & Umum</div>
+                <div class="admin-nav-section-title mt-2"><i class="bi bi-person-gear me-1"></i> Akun & Umum</div>
                 <a href="{{ route('mentor.profile') }}"
                     class="admin-nav-item {{ request()->routeIs('mentor.profile') ? 'active' : '' }}">
                     <i class="bi bi-person-circle"></i> Profil Saya
@@ -312,64 +524,98 @@
                         style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;">
                         <i class="bi bi-list fs-5"></i>
                     </button>
-                    <div>
-                        <h5 class="fw-bold mb-0 text-primary" style="font-size: 1.1rem;">@yield('header', 'Dashboard Guru / Pendamping')</h5>
-                        <small class="text-muted" style="font-size: 0.8rem;">@yield('subheader', 'Semangat membimbing ananda santri AL-HIKMAH')</small>
+                    <div class="header-left-title">
+                        <h5 class="fw-bold mb-0 header-page-title">@yield('header', 'Dashboard Guru / Pendamping')</h5>
+                        <small class="text-muted header-page-subtitle">@yield('subheader', 'Semangat membimbing ananda santri AL-HIKMAH')</small>
                     </div>
                 </div>
 
-                <div class="d-flex align-items-center gap-2 gap-md-3">
+                <div class="header-actions-group">
                     <a href="{{ route('home') }}"
-                        class="btn btn-outline-custom rounded-pill px-3 py-1 btn-sm d-none d-sm-inline-flex align-items-center"
-                        target="_blank">
-                        <i class="bi bi-house-door me-1" style="color: var(--primary);"></i> Beranda
+                        class="btn-header-home d-none d-sm-inline-flex"
+                        target="_blank"
+                        title="Buka Website Publik">
+                        <i class="bi bi-globe"></i>
+                        <span>Lihat Website</span>
                     </a>
+
                     <livewire:notification-bell />
-                    <button type="button" class="theme-toggle-btn" id="themeToggle" title="Ganti Tema"
+
+                    <button type="button" class="theme-toggle-btn" id="themeToggle" title="Ganti Tema (Gelap/Terang)"
                         aria-label="Ganti Tema">
                         <i class="bi bi-moon-fill" id="themeIcon"></i>
                     </button>
 
+                    @php
+                        $user = auth()->user();
+                        $nameParts = explode(' ', trim($user->name ?? 'Mentor'));
+                        $initials = strtoupper(substr($nameParts[0], 0, 1) . (isset($nameParts[1]) ? substr($nameParts[1], 0, 1) : ''));
+                        if (empty($initials)) $initials = 'MT';
+                    @endphp
+
                     <div class="dropdown">
-                        <button
-                            class="btn btn-outline-custom dropdown-toggle d-flex align-items-center gap-2 py-1 px-3 rounded-pill"
-                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle fs-5" style="color: var(--primary);"></i>
-                            <div class="d-none d-md-block text-start">
-                                <div class="fw-semibold small leading-tight" style="color: var(--text-primary);">
-                                    {{ auth()->user()->name ?? 'Ustadz/Ustadzah' }}</div>
+                        <button class="user-profile-toggle dropdown-toggle border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="user-avatar-badge">
+                                {{ $initials }}
+                                <span class="user-avatar-status"></span>
                             </div>
-                            <span class="badge rounded-pill px-2 py-1 small"
-                                style="background: var(--primary-lighter); color: var(--primary);">Mentor</span>
+                            <div class="d-none d-md-block user-profile-info">
+                                <div class="user-profile-name">{{ $user->name ?? 'Ustadz/Ustadzah' }}</div>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill user-profile-role-badge">
+                                    {{ $user->role?->label ?? 'Mentor' }}
+                                </span>
+                            </div>
+                            <i class="bi bi-chevron-down d-none d-md-inline ms-1 text-muted" style="font-size: 0.72rem;"></i>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 border-0 mt-2 p-2"
-                            style="min-width: 220px;">
-                            <li class="px-3 py-2 border-bottom mb-1"
-                                style="border-color: var(--border-color) !important;">
-                                <div class="fw-bold small" style="color: var(--text-primary);">
-                                    {{ auth()->user()->name }}</div>
-                                <div class="text-muted" style="font-size: 0.75rem;">{{ auth()->user()->email }}</div>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-premium shadow-lg">
+                            <li>
+                                <div class="dropdown-user-header">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <div class="user-avatar-badge" style="width: 34px; height: 34px; font-size: 0.8rem;">
+                                            {{ $initials }}
+                                        </div>
+                                        <div class="overflow-hidden">
+                                            <div class="fw-bold text-dark text-truncate small">{{ $user->name }}</div>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.62rem;">
+                                                <i class="bi bi-mortarboard-fill me-1"></i>{{ $user->role?->label ?? 'Guru / Mentor' }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="text-muted text-truncate" style="font-size: 0.72rem; padding-left: 2px;">
+                                        <i class="bi bi-envelope me-1"></i>{{ $user->email }}
+                                    </div>
+                                </div>
                             </li>
                             <li>
-                                <a class="dropdown-item rounded-3 py-2" href="{{ route('mentor.profile') }}">
-                                    <i class="bi bi-person me-2" style="color: var(--primary);"></i> Profil Saya
+                                <a class="dropdown-item dropdown-item-premium" href="{{ route('mentor.dashboard') }}">
+                                    <i class="bi bi-speedometer2"></i> Dashboard Mengajar
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item rounded-3 py-2"
-                                    href="{{ route('mentor.availability.index') }}">
-                                    <i class="bi bi-clock-history me-2" style="color: var(--primary);"></i> Atur
-                                    Ketersediaan
+                                <a class="dropdown-item dropdown-item-premium" href="{{ route('mentor.profile') }}">
+                                    <i class="bi bi-person-circle"></i> Profil Saya
                                 </a>
                             </li>
+                            @if($isOfficialMentor)
+                                <li>
+                                    <a class="dropdown-item dropdown-item-premium" href="{{ route('mentor.availability.index') }}">
+                                        <i class="bi bi-clock-history"></i> Atur Ketersediaan
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item dropdown-item-premium" href="{{ route('mentor.sessions.index') }}">
+                                        <i class="bi bi-calendar-check"></i> Jadwal Sesi Mengajar
+                                    </a>
+                                </li>
+                            @endif
                             <li>
-                                <hr class="dropdown-divider my-1" style="border-color: var(--border-color);">
+                                <hr class="dropdown-divider my-1.5" style="border-color: var(--border-color); opacity: 0.6;">
                             </li>
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button type="submit" class="dropdown-item rounded-3 py-2 text-danger">
-                                        <i class="bi bi-box-arrow-right me-2"></i> Keluar (Logout)
+                                    <button type="submit" class="dropdown-item dropdown-item-premium is-logout w-100 border-0 bg-transparent">
+                                        <i class="bi bi-box-arrow-right"></i> Keluar (Logout)
                                     </button>
                                 </form>
                             </li>

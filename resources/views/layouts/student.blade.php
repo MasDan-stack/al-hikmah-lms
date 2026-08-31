@@ -189,6 +189,98 @@
             50% { transform: scale(1.04); }
         }
 
+        .btn-header-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border-radius: 50px;
+            color: var(--gamify-primary);
+            background: rgba(var(--gamify-primary-rgb), 0.1);
+            border: 1px solid rgba(var(--gamify-primary-rgb), 0.2);
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-header-home:hover {
+            background: var(--gamify-primary);
+            color: #ffffff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(var(--gamify-primary-rgb), 0.25);
+        }
+
+        .theme-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            background: var(--gamify-bg);
+            color: var(--gamify-text);
+            border: 1px solid var(--gamify-border);
+            border-radius: 50%;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            background: rgba(var(--gamify-primary-rgb), 0.1);
+            color: var(--gamify-primary);
+            border-color: var(--gamify-primary);
+            transform: rotate(20deg);
+        }
+
+        .user-profile-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 14px 4px 4px;
+            background: var(--gamify-bg);
+            border: 1px solid var(--gamify-border);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+        }
+
+        .user-profile-toggle:hover,
+        .user-profile-toggle[aria-expanded="true"] {
+            background: var(--gamify-card);
+            border-color: var(--gamify-primary);
+            box-shadow: 0 4px 16px rgba(13, 122, 62, 0.12);
+        }
+
+        .user-avatar-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gamify-primary) 0%, #059669 100%);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.82rem;
+            position: relative;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(13, 122, 62, 0.25);
+        }
+
+        .user-avatar-status {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            background: #10b981;
+            border: 2px solid var(--gamify-card);
+            border-radius: 50%;
+        }
+
         @media (max-width: 991.98px) {
             .student-sidebar {
                 transform: translateX(-100%);
@@ -209,21 +301,21 @@
         <aside class="student-sidebar" id="studentSidebar">
             <div class="student-sidebar-brand">
                 <a href="{{ route('student.dashboard') }}" class="d-flex align-items-center gap-2 text-decoration-none">
-                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                        <i class="bi bi-book-half fs-5"></i>
-                    </div>
+                    <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH Logo" height="36">
                     <div>
                         <div class="fw-bold fs-6 text-success lh-1">AL-HIKMAH</div>
-                        <small class="text-muted" style="font-size: 0.75rem;">Ruang Santri v8.1</small>
+                        <small class="text-muted" style="font-size: 0.72rem; font-weight: 500;">Ruang Santri v8.4</small>
                     </div>
                 </a>
             </div>
 
             <div class="student-sidebar-nav">
-                <div class="text-uppercase text-muted fw-bold px-3 py-2" style="font-size: 0.7rem; letter-spacing: 0.8px;">Navigasi Utama</div>
+                <div class="text-uppercase text-muted fw-bold px-3 py-2" style="font-size: 0.68rem; letter-spacing: 0.8px;">
+                    <i class="bi bi-grid-fill me-1"></i> Navigasi Utama
+                </div>
 
                 <a href="{{ route('student.dashboard') }}" class="student-nav-item {{ request()->routeIs('student.dashboard') ? 'active' : '' }}">
-                    <i class="bi bi-grid-1x2-fill"></i>
+                    <i class="bi bi-speedometer2"></i>
                     <span>Dashboard Belajar</span>
                 </a>
 
@@ -242,7 +334,9 @@
                     <span>Target Milestone</span>
                 </a>
 
-                <div class="text-uppercase text-muted fw-bold px-3 pt-3 pb-2" style="font-size: 0.7rem; letter-spacing: 0.8px;">Motivasi & Prestasi</div>
+                <div class="text-uppercase text-muted fw-bold px-3 pt-3 pb-2" style="font-size: 0.68rem; letter-spacing: 0.8px;">
+                    <i class="bi bi-trophy-fill me-1 text-warning"></i> Motivasi & Prestasi
+                </div>
 
                 <a href="{{ route('student.leaderboard') }}" class="student-nav-item {{ request()->routeIs('student.leaderboard') ? 'active' : '' }}">
                     <i class="bi bi-trophy-fill text-warning"></i>
@@ -259,28 +353,36 @@
                     <span>Poin & Statistik</span>
                 </a>
 
-                <div class="text-uppercase text-muted fw-bold px-3 pt-3 pb-2" style="font-size: 0.7rem; letter-spacing: 0.8px;">Akun & Pengaturan</div>
+                <div class="text-uppercase text-muted fw-bold px-3 pt-3 pb-2" style="font-size: 0.68rem; letter-spacing: 0.8px;">
+                    <i class="bi bi-gear-fill me-1"></i> Akun & Keamanan
+                </div>
 
                 <a href="{{ route('student.password.index') }}" class="student-nav-item {{ request()->routeIs('student.password.index') ? 'active' : '' }}">
                     <i class="bi bi-shield-lock-fill text-secondary"></i>
                     <span>Ganti Password</span>
+                </a>
+
+                <a href="{{ route('home') }}" class="student-nav-item mt-2" target="_blank">
+                    <i class="bi bi-globe"></i>
+                    <span>Buka Halaman Depan</span>
                 </a>
             </div>
 
             <!-- Profile Footer -->
             <div class="p-3 border-top border-secondary-subtle d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2 overflow-hidden">
-                    <div class="rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center fw-bold" style="width: 36px; height: 36px; flex-shrink: 0;">
-                        {{ substr(auth()->user()->name ?? 'S', 0, 1) }}
+                    <div class="rounded-circle text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+                        style="width: 36px; height: 36px; background: linear-gradient(135deg, var(--gamify-primary) 0%, #059669 100%); font-size: 0.85rem;">
+                        {{ strtoupper(substr(auth()->user()->name ?? 'S', 0, 1)) }}
                     </div>
                     <div class="overflow-hidden">
-                        <div class="fw-semibold text-truncate" style="font-size: 0.85rem;">{{ auth()->user()->name ?? 'Santri' }}</div>
-                        <small class="text-muted d-block text-truncate" style="font-size: 0.75rem;">Santri Al-Hikmah</small>
+                        <div class="fw-semibold text-truncate small">{{ auth()->user()->name ?? 'Santri' }}</div>
+                        <small class="text-muted d-block text-truncate" style="font-size: 0.72rem;">Santri Binaan</small>
                     </div>
                 </div>
                 <form action="{{ route('logout') }}" method="POST" class="m-0">
                     @csrf
-                    <button type="submit" class="btn btn-sm btn-outline-danger border-0 p-1" title="Keluar">
+                    <button type="submit" class="btn btn-sm btn-outline-danger border-0 p-1 rounded-3" title="Keluar">
                         <i class="bi bi-box-arrow-right fs-5"></i>
                     </button>
                 </form>
@@ -292,57 +394,133 @@
             <!-- Header -->
             <header class="student-header">
                 <div class="d-flex align-items-center gap-3">
-                    <button class="btn btn-sm btn-light border d-lg-none" id="sidebarToggleBtn">
+                    <button class="btn btn-outline-secondary btn-sm d-lg-none rounded-circle" id="sidebarToggleBtn"
+                        style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;"
+                        aria-label="Toggle Sidebar">
                         <i class="bi bi-list fs-5"></i>
                     </button>
                     <div>
-                        <h5 class="mb-0 fw-bold">@yield('header', 'Ruang Belajar Santri')</h5>
-                        <small class="text-muted">@yield('subheader', 'Semangat muroja\'ah dan menghafal Al-Qur\'an!')</small>
+                        <h5 class="mb-0 fw-bold header-page-title" style="font-size: 1.1rem;">@yield('header', 'Ruang Belajar Santri')</h5>
+                        <small class="text-muted" style="font-size: 0.78rem;">@yield('subheader', 'Semangat muroja\'ah dan menghafal Al-Qur\'an!')</small>
                     </div>
                 </div>
 
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 gap-md-3">
+                    <!-- Quick Home Link -->
+                    <a href="{{ route('home') }}"
+                        class="btn-header-home d-none d-md-inline-flex"
+                        target="_blank"
+                        title="Buka Website Publik">
+                        <i class="bi bi-globe"></i>
+                        <span>Lihat Website</span>
+                    </a>
+
                     @php
                         $activeStudent = auth()->user()->student ?? \App\Models\Student::where('user_id', auth()->id())->first();
+                        $user = auth()->user();
+                        $nameParts = explode(' ', trim($user->name ?? 'Santri'));
+                        $initials = strtoupper(substr($nameParts[0], 0, 1) . (isset($nameParts[1]) ? substr($nameParts[1], 0, 1) : ''));
+                        if (empty($initials)) $initials = 'ST';
                     @endphp
 
                     @if($activeStudent)
-                        <div class="flame-streak d-none d-sm-inline-flex" title="Streak hafalan berturut-turut">
+                        <div class="flame-streak d-none d-sm-inline-flex shadow-sm" title="Streak hafalan berturut-turut">
                             <i class="bi bi-fire"></i>
                             <span>{{ $activeStudent->current_streak ?: 0 }} Hari</span>
                         </div>
 
-                        <div class="points-badge d-none d-sm-inline-flex" title="Total Poin Gamifikasi">
+                        <div class="points-badge d-none d-sm-inline-flex shadow-sm" title="Total Poin Gamifikasi">
                             <i class="bi bi-star-fill"></i>
                             <span>{{ number_format($activeStudent->total_points ?: 0) }} Pts</span>
                         </div>
                     @endif
 
+                    <livewire:notification-bell />
+
                     <!-- Dark Mode Toggle Button -->
-                    <button class="btn btn-sm btn-outline-secondary rounded-circle" id="themeToggleBtn" style="width: 38px; height: 38px;" title="Ganti Tema">
-                        <i class="bi bi-moon-stars" id="themeIcon"></i>
+                    <button type="button" class="theme-toggle-btn shadow-sm" id="themeToggle" title="Ganti Tema (Gelap/Terang)" aria-label="Ganti Tema">
+                        <i class="bi bi-moon-fill" id="themeIcon"></i>
                     </button>
+
+                    <!-- Student User Dropdown -->
+                    <div class="dropdown">
+                        <button class="user-profile-toggle dropdown-toggle border-0 shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="user-avatar-badge">
+                                {{ $initials }}
+                                <span class="user-avatar-status"></span>
+                            </div>
+                            <div class="d-none d-md-block text-start">
+                                <div class="fw-semibold text-dark text-truncate" style="font-size: 0.85rem; max-width: 120px;">{{ $user->name ?? 'Santri' }}</div>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0" style="font-size: 0.62rem;">
+                                    Santri
+                                </span>
+                            </div>
+                            <i class="bi bi-chevron-down d-none d-md-inline ms-1 text-muted" style="font-size: 0.72rem;"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 border-0 mt-2 p-2" style="min-width: 250px;">
+                            <li class="px-3 py-2 border-bottom mb-1">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <div class="user-avatar-badge" style="width: 34px; height: 34px; font-size: 0.8rem;">
+                                        {{ $initials }}
+                                    </div>
+                                    <div class="overflow-hidden">
+                                        <div class="fw-bold text-dark text-truncate small">{{ $user->name }}</div>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.62rem;">
+                                            <i class="bi bi-mortarboard-fill me-1"></i>Santri Binaan
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="text-muted text-truncate ps-1" style="font-size: 0.72rem;">
+                                    <i class="bi bi-envelope me-1"></i>{{ $user->email }}
+                                </div>
+                            </li>
+                            <li>
+                                <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" href="{{ route('student.dashboard') }}">
+                                    <i class="bi bi-speedometer2 text-success fs-6"></i>
+                                    <span class="fw-medium">Dashboard Belajar</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" href="{{ route('student.password.index') }}">
+                                    <i class="bi bi-shield-lock-fill text-warning fs-6"></i>
+                                    <span class="fw-medium">Ganti Password</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider my-1">
+                            </li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}" class="m-0">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item rounded-3 py-2 text-danger d-flex align-items-center gap-2">
+                                        <i class="bi bi-box-arrow-right fs-6"></i>
+                                        <span class="fw-medium">Keluar (Logout)</span>
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </header>
 
             <!-- Alerts -->
             <div class="container-fluid px-4 pt-3">
                 @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
+                    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-3" role="alert">
                         <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 @endif
 
                 @if(session('warning'))
-                    <div class="alert alert-warning alert-dismissible fade show border-0 shadow-sm" role="alert">
+                    <div class="alert alert-warning alert-dismissible fade show border-0 shadow-sm rounded-3" role="alert">
                         <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('warning') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 @endif
 
                 @if($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm" role="alert">
+                    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-3" role="alert">
                         <i class="bi bi-exclamation-circle-fill me-2"></i> Mohon periksa kembali input Anda:
                         <ul class="mb-0 mt-1">
                             @foreach($errors->all() as $error)
@@ -382,7 +560,7 @@
         }
 
         // Dark Mode Switcher
-        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggle = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
 
         function updateThemeIcon(theme) {
@@ -390,7 +568,7 @@
                 if (theme === 'dark') {
                     themeIcon.className = 'bi bi-sun-fill text-warning';
                 } else {
-                    themeIcon.className = 'bi bi-moon-stars';
+                    themeIcon.className = 'bi bi-moon-fill';
                 }
             }
         }
@@ -398,8 +576,8 @@
         const currentTheme = document.documentElement.getAttribute('data-bs-theme') || 'light';
         updateThemeIcon(currentTheme);
 
-        if (themeToggleBtn) {
-            themeToggleBtn.addEventListener('click', () => {
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
                 const active = document.documentElement.getAttribute('data-bs-theme') || 'light';
                 const next = active === 'dark' ? 'light' : 'dark';
                 document.documentElement.setAttribute('data-bs-theme', next);

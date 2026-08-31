@@ -55,7 +55,7 @@ test('mentor can preview ai generated questions with mocked service', function (
     $mockService = Mockery::mock(GeminiQuestionService::class);
     $mockService->shouldReceive('generateQuestions')
         ->once()
-        ->with('Kelas Tajwid Al-Hikmah', 'Hukum Nun Mati', 5, 'Sedang', 'multiple_choice')
+        ->with('Kelas Tajwid Al-Hikmah', 'Hukum Nun Mati', 5, 'Sedang', 'multiple_choice', 'auto')
         ->andReturn([
             [
                 'type' => 'multiple_choice',

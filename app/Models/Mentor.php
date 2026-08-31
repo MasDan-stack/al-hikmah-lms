@@ -17,6 +17,7 @@ class Mentor extends Model
         'user_id',
         'application_id',
         'full_name',
+        'gender',
         'specialization',
         'bio',
         'rating',
@@ -31,6 +32,13 @@ class Mentor extends Model
         'bank_account_number',
         'bank_account_name',
         'emergency_contact',
+        'latitude',
+        'longitude',
+        'specializations',
+        'blocked_programs',
+        'blocked_days',
+        'max_students_per_day',
+        'students_count',
     ];
 
     protected function casts(): array
@@ -42,6 +50,13 @@ class Mentor extends Model
             'default_max_students_per_day' => 'integer',
             'join_date' => 'date',
             'probation_end_date' => 'date',
+            'latitude' => 'float',
+            'longitude' => 'float',
+            'specializations' => 'array',
+            'blocked_programs' => 'array',
+            'blocked_days' => 'array',
+            'max_students_per_day' => 'integer',
+            'students_count' => 'integer',
         ];
     }
 
@@ -82,6 +97,12 @@ class Mentor extends Model
         return $this->hasMany(MentorTraining::class, 'mentor_id');
     }
 
+    public function badges(): BelongsToMany
+    {
+        return $this->belongsToMany(Badge::class, 'mentor_trainings', 'mentor_id', 'badge_id')
+            ->withTimestamps();
+    }
+
     public function leaves(): HasMany
     {
         return $this->hasMany(MentorLeave::class, 'mentor_id');
@@ -90,6 +111,36 @@ class Mentor extends Model
     public function substituteLeaves(): HasMany
     {
         return $this->hasMany(MentorLeave::class, 'substitute_mentor_id');
+    }
+
+    public function performanceSnapshots(): HasMany
+    {
+        return $this->hasMany(MentorPerformanceSnapshot::class, 'mentor_id');
+    }
+
+    public function feedbacks(): HasMany
+    {
+        return $this->hasMany(MentorFeedback::class, 'mentor_id');
+    }
+
+    public function insights(): HasMany
+    {
+        return $this->hasMany(MentorInsight::class, 'mentor_id');
+    }
+
+    public function goals(): HasMany
+    {
+        return $this->hasMany(MentorGoal::class, 'mentor_id');
+    }
+
+    public function selfAssessments(): HasMany
+    {
+        return $this->hasMany(MentorSelfAssessment::class, 'mentor_id');
+    }
+
+    public function incentives(): HasMany
+    {
+        return $this->hasMany(MentorIncentive::class, 'mentor_id');
     }
 
     public function isAvailableOn(string $day): bool

@@ -7,10 +7,10 @@ use App\Models\ParentProfile;
 use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
+use App\Services\StudentAccountService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ParentProfileController extends Controller
@@ -114,16 +114,14 @@ class ParentProfileController extends Controller
             ['label' => \App\Enums\Role::STUDENT->label()]
         );
 
-        $baseSlug = Str::slug($request->full_name);
-        $studentEmail = $baseSlug.'.'.Str::random(5).'@alhikmah.com';
-        while (User::where('email', $studentEmail)->exists()) {
-            $studentEmail = $baseSlug.'.'.Str::random(5).'@alhikmah.com';
-        }
+        $studentAccountService = app(StudentAccountService::class);
+        $studentEmail = $studentAccountService->generateEmail($request->full_name);
+        $defaultPassword = StudentAccountService::DEFAULT_PASSWORD;
 
         $studentUser = User::create([
             'name' => $request->full_name,
             'email' => $studentEmail,
-            'password' => Hash::make(Str::random(10)),
+            'password' => Hash::make($defaultPassword),
             'role_id' => $studentRole->id,
         ]);
 
@@ -137,6 +135,6 @@ class ParentProfileController extends Controller
         ]);
 
         return redirect()->route('parent.profile.children')
-            ->with('success', "Data ananda ({$request->full_name}) berhasil ditambahkan! Anda sekarang dapat memilih program belajar.");
+            ->with('success', "Data ananda ({$request->full_name}) berhasil ditambahkan dengan email login: {$studentEmail} dan password default: {$defaultPassword}. Disarankan segera mengganti password demi keamanan.");
     }
 }

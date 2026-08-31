@@ -41,4 +41,9 @@ class Session extends Model
     {
         return $this->hasOne(SessionConfirmation::class, 'session_id');
     }
+
+    public function feedback()
+    {
+        return $this->hasOne(MentorFeedback::class, 'session_id');
+    }
 }

@@ -25,6 +25,8 @@ class Student extends Model
         'longest_streak',
         'last_setoran_date',
         'privacy_leaderboard',
+        'latitude',
+        'longitude',
     ];
 
     protected $casts = [
@@ -34,6 +36,8 @@ class Student extends Model
         'longest_streak' => 'integer',
         'last_setoran_date' => 'date',
         'privacy_leaderboard' => 'boolean',
+        'latitude' => 'float',
+        'longitude' => 'float',
     ];
 
     public function user(): BelongsTo

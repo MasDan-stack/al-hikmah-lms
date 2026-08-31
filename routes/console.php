@@ -35,3 +35,10 @@ Schedule::command('alerts:scan')
 Schedule::command('gamification:refresh-leaderboard')
     ->dailyAt('00:00')
     ->name('refresh-leaderboard-midnight');
+
+// 📊 Snapshot Bulanan Skor Komposit Kinerja Mentor (Setiap tanggal 1 pukul 00:05 WIB)
+Schedule::command('mentor:snapshot-performance')
+    ->monthlyOn(1, '00:05')
+    ->timezone('Asia/Jakarta')
+    ->withoutOverlapping()
+    ->name('snapshot-mentor-performance-monthly');

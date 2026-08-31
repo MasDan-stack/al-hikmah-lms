@@ -124,7 +124,7 @@
                             @forelse($enrollments as $enrollment)
                                 <tr>
                                     <td>
-                                        <input type="checkbox" name="enrollment_ids[]" value="{{ $enrollment->id }}" class="form-check-input select-item" {{ $enrollment->isWaitingAdmin() && $enrollment->mentor_id ? '' : 'disabled' }}>
+                                        <input type="checkbox" name="enrollment_ids[]" value="{{ $enrollment->id }}" class="form-check-input select-item" {{ $enrollment->isWaitingAdmin() ? '' : 'disabled' }}>
                                     </td>
                                     <td>
                                         <span class="fw-bold d-block">{{ $enrollment->student->getDisplayName() }}</span>
@@ -192,8 +192,11 @@
                 </div>
 
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mt-3">
-                    <div>
-                        <button type="submit" class="btn btn-sm btn-success rounded-pill px-3" onclick="return confirm('Setujui seluruh permohonan terpilih?')">
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="submit" formaction="{{ route('admin.enrollments.bulk-assign') }}" class="btn btn-sm btn-primary-custom rounded-pill px-3 shadow-sm" onclick="return confirm('Alokasikan santri terpilih secara otomatis menggunakan Smart Matchmaking AI?')">
+                            <i class="bi bi-robot me-1"></i> Alokasikan via AI (Batch)
+                        </button>
+                        <button type="submit" formaction="{{ route('admin.enrollments.bulk-accept') }}" class="btn btn-sm btn-success rounded-pill px-3 shadow-sm" onclick="return confirm('Setujui seluruh permohonan terpilih?')">
                             <i class="bi bi-check-all me-1"></i> Setujui Permohonan Terpilih (Batch)
                         </button>
                     </div>

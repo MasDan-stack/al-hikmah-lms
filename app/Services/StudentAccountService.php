@@ -14,6 +14,8 @@ use Illuminate\Support\Str;
 
 class StudentAccountService
 {
+    public const DEFAULT_PASSWORD = 'santri123';
+
     public function __construct(
         protected HifzProgressService $hifzProgressService,
         protected WhatsAppService $whatsAppService,
@@ -22,23 +24,20 @@ class StudentAccountService
 
     /**
      * Menghasilkan email unik dari nama santri
-     * Format: {3hurufdepan}.{namabelakang}@{domain}
+     * Format: {namalengkapbersih}@{domain} (Contoh: "Hikmatul Hasanah" -> hikmatulhasanah@alhikmah.com)
      */
     public function generateEmail(string $name, ?string $domain = null): string
     {
         $domain = $domain ?: (Setting::where('key', 'institution_domain')->value('value') ?: 'alhikmah.com');
         $cleanName = $this->sanitizeName($name);
 
-        $parts = preg_split('/\s+/', trim($cleanName));
-        $firstPart = $parts[0] ?? 'san';
-        $lastPart = count($parts) > 1 ? end($parts) : $firstPart;
-
-        $prefix = Str::lower(substr($firstPart, 0, 3));
-        $suffix = Str::lower($lastPart);
-        $baseUsername = "{$prefix}.{$suffix}";
+        $baseUsername = Str::lower(preg_replace('/[^a-zA-Z0-9]/', '', $cleanName));
+        if (empty($baseUsername)) {
+            $baseUsername = 'santri';
+        }
 
         $email = "{$baseUsername}@{$domain}";
-        $counter = 1;
+        $counter = 2;
 
         while (User::where('email', $email)->exists()) {
             $email = "{$baseUsername}{$counter}@{$domain}";
@@ -107,7 +106,7 @@ class StudentAccountService
         ?string $notes = null
     ): array {
         $email = $this->generateEmail($fullName);
-        $plainPassword = $this->generatePassword(8);
+        $plainPassword = self::DEFAULT_PASSWORD;
 
         $studentRole = Role::firstOrCreate(
             ['name' => RoleEnum::STUDENT->value],

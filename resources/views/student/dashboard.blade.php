@@ -5,6 +5,23 @@
 @section('subheader', 'Mari perkuat hafalan dan raih lencana kemuliaan Al-Qur\'an hari ini.')
 
 @section('content')
+@if(Illuminate\Support\Facades\Hash::check(\App\Services\StudentAccountService::DEFAULT_PASSWORD, auth()->user()->password))
+    <div class="alert alert-warning border-0 rounded-4 shadow-sm p-3 mb-4 d-flex align-items-center justify-content-between flex-wrap gap-3" role="alert">
+        <div class="d-flex align-items-center gap-3">
+            <div class="rounded-circle bg-warning text-white p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
+                <i class="bi bi-shield-lock-fill fs-5"></i>
+            </div>
+            <div>
+                <h6 class="fw-bold mb-1 text-dark">Peringatan Keamanan: Anda Masih Menggunakan Password Default</h6>
+                <p class="small text-muted mb-0">Akun Anda saat ini masih memakai password bawaan (<code>santri123</code>). Demi keamanan data belajar ananda, segera ganti password sekarang.</p>
+            </div>
+        </div>
+        <a href="{{ route('student.password.index') }}" class="btn btn-warning text-dark fw-bold rounded-pill px-4 shadow-sm">
+            <i class="bi bi-key-fill me-1"></i> Ganti Password Sekarang
+        </a>
+    </div>
+@endif
+
 <!-- Row 1: Header Stats & Countdown Widget -->
 <div class="row g-4 mb-4">
     <!-- Stat 1: Total Poin & Streak Card -->

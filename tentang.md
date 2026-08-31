@@ -3,8 +3,8 @@
 > **Dokumen Resmi untuk Manajemen, Pimpinan Lembaga, & Tim Pengembang**  
 > **Nama Sistem:** AL-HIKMAH Learning Management System (LMS)  
 > **Status Aplikasi:** ✅ **100% Selesai, Teruji, & Siap Digunakan (Production Ready)**  
-> **Versi:** 8.3 (Teacher Recruitment, Probation Lifecycle, & Advanced AI Curriculum Generator Edition — End-to-End Mentor Recruitment Funnel with Public Tracker, In-Dashboard Online Competency Exams, Multi-Category Tajwid/Makhraj/Tahsin Tests, 3-Month Probation Management & M01-M03 Badges, Multi-Format AI Question Generator with Multiple Choice & Essay Rubrics for 10 Official Programs, Dynamic Topic Explorer, Zero-Duplicate Curriculum Multi-Bank, and Printable Official A4 Exam Worksheets with PDF Export)  
-> **Tanggal Pembaruan:** 29 Agustus 2026  
+> **Versi:** 8.5 (Mentor Performance Dashboard, Scorecard 360°, AI Prescriptive Coaching, Quick Chips, 1-Click Goal Adoption, Granular Analytics Engine & Smart Matchmaking v2.0 Edition)  
+> **Tanggal Pembaruan:** 31 Agustus 2026  
 
 ---
 
@@ -15,22 +15,29 @@
    - [2.1 Alur Seleksi & Kategori Ujian Kompetensi](#21-alur-seleksi--kategori-ujian-kompetensi)
    - [2.2 Isolasi Hak Akses Dashboard (Gating Lifecycle)](#22-isolasi-hak-akses-dashboard-gating-lifecycle)
    - [2.3 Fitur Manajemen Cuti & Guru Pengganti](#23--fitur-manajemen-cuti--guru-pengganti-mentor-leave--substitute)
-3. [🤖 3. Modul AI Auto-Generate Soal, Bank Soal, & Lembar Ujian PDF (v8.3)](#-3-modul-ai-auto-generate-soal-bank-soal--lembar-ujian-pdf-v83)
+3. [🤖 3. Modul AI Auto-Generate Soal, Bank Soal, & Lembar Ujian PDF (v8.4)](#-3-modul-ai-auto-generate-soal-bank-soal--lembar-ujian-pdf-v84)
    - [3.1 Format Lembar Ujian Siap Cetak A4 & Mockup](#31-format-lembar-ujian-siap-cetak-a4-worksheet--visual-mockup)
-   - [3.2 Arsitektur Universal Multi-Provider AI](#32-universal-multi-provider-ai-architecture-gemini-deepseek-qwen-claude--gpt)
-   - [3.3 Bank Kurikulum Offline Al-Hikmah (Fallback Engine)](#33--bank-kurikulum-offline-al-hikmah-fallback-engine)
+   - [3.2 Arsitektur Universal Multi-Provider AI & UI Selector](#32-universal-multi-provider-ai-architecture--ui-selector-gemini-deepseek-qwen-claude--gpt)
+   - [3.3 Smart Cascade Failover Engine (Zero Downtime)](#33-smart-cascade-failover-engine-zero-downtime)
+   - [3.4 Bank Kurikulum Offline Al-Hikmah (Fallback Engine)](#34--bank-kurikulum-offline-al-hikmah-fallback-engine)
 4. [📊 4. Modul Analitik Eksekutif, Beban Guru, & Pusat Peringatan Operasional](#-4-modul-analitik-eksekutif-beban-guru--pusat-peringatan-operasional)
    - [4.1 KPI Finansial & Kapasitas Guru](#41-kpi-finansial--kapasitas-guru)
    - [4.2 Pusat Peringatan Operasional 3-Tier Alert](#42--pusat-peringatan-operasional-alert-service)
    - [4.3 WhatsApp Mass Broadcast & Variabel Pintar](#43--whatsapp-mass-broadcast)
+   - [4.4 Smart Matchmaking Algorithm & Alokasi Guru Otomatis](#44--smart-matchmaking-algorithm--alokasi-guru-otomatis-mentormatchingservice)
+   - [4.5 Mentor Performance Dashboard, AI Coaching & Granular Analytics (v2.0)](#45--mentor-performance-dashboard-ai-coaching--granular-analytics-v20)
 5. [🎮 5. Modul Ruang Belajar Santri & Gamifikasi Islami Terpadu](#-5-modul-ruang-belajar-santri--gamifikasi-islami-terpadu)
    - [5.1 Mekanisme Perolehan Poin Pembelajaran](#51--mekanisme-perolehan-poin-gamifikasi)
    - [5.2 Daftar 15 Lencana Prestasi Islami (B01–B15)](#52-daftar-15-lencana-prestasi-islami-b01b15)
-6. [🔐 6. Sistem Akun Santri Otomatis & Kebijakan Keamanan Password](#-6-sistem-akun-santri-otomatis--kebijakan-keamanan-password)
+6. [🔐 6. Sistem Akun Santri Otomatis & Kebijakan Keamanan Password (v8.4)](#-6-sistem-akun-santri-otomatis--kebijakan-keamanan-password-v84)
+   - [6.1 Format Email Bersih & Penanganan Duplikasi](#61-format-email-bersih--penanganan-duplikasi)
+   - [6.2 Standar Password Default Santri (`santri123`)](#62-standar-password-default-santri-santri123)
+   - [6.3 Kredensial di Portal Orang Tua & Himbauan Keamanan](#63-kredensial-di-portal-orang-tua--himbauan-keamanan)
+   - [6.4 Banner Peringatan Keamanan di Portal Santri](#64-banner-peringatan-keamanan-di-portal-santri)
 7. [📰 7. Modul Blog & Literasi Edukasi Islami Terpadu](#-7-modul-blog--literasi-edukasi-islami-terpadu)
 8. [🕌 8. Fitur Jadwal Sholat & Kompas Arah Kiblat Real-Time](#-8-fitur-jadwal-sholat--kompas-arah-kiblat-real-time)
 9. [💳 9. Integrasi Payment Gateway Pakasir & Pelacakan Pembayaran Real-Time](#-9-integrasi-payment-gateway-pakasir--pelacakan-pembayaran-real-time)
-10. [📈 10. Standardisasi & Implementasi DataTables di Seluruh Dashboard](#-10-standardisasi--implementasi-datatables-di-seluruh-dashboard)
+10. [📈 10. Standardisasi Navbar, Header, & DataTables Dashboard (v8.4)](#-10-standardisasi-navbar-header--datatables-dashboard-v84)
 11. [🔄 11. Tahapan & Alur Kerja Utama Aplikasi (User Journey & Lifecycle)](#-11-tahapan--alur-kerja-utama-aplikasi-user-journey--lifecycle)
 12. [⭐ 12. Penjelasan Seluruh Fitur Aplikasi (Berdasarkan Hak Akses)](#-12-penjelasan-seluruh-fitur-aplikasi-berdasarkan-hak-akses)
 13. [🔔 13. Sistem Notifikasi & Alert Terpusat (Centralized Alert System)](#-13-sistem-notifikasi--alert-terpusat-centralized-alert-system)
@@ -52,67 +59,51 @@ Platform ini mentransformasikan operasional lembaga bimbingan Al-Qur'an dari sis
 
 ```mermaid
 graph LR
-    A["Wali Santri (Parent)"] -->|"Daftar & Terima Akun Santri"| B["Sistem Otomasi Al-Hikmah"]
-    C["Santri (Student)"] -->|"Login, Setoran, & Raih Badge"| B
+    A["Wali Santri (Parent)"] -->|"Daftar & Akses Kredensial Santri"| B["Sistem Otomasi Al-Hikmah"]
+    C["Santri (Student)"] -->|"Login 'santri123', Ganti Password, & Setoran"| B
     D["Calon Guru (Applicant)"] -->|"Daftar, Ujian AI, & Probation"| B
-    E["Guru Resmi (Mentor)"] -->|"Bimbingan, Target, & Soal AI"| B
+    E["Guru Resmi (Mentor)"] -->|"Pilih Multi-AI, Bimbingan, & Soal PDF"| B
     B -->|"Leaderboard & Rapor Real-Time"| A
     F["Manajemen (Admin)"] -->|"Recruitment, Revenue, & HR Control"| B
 ```
 
 ### 💼 Metrik Bisnis & Dampak Operasional:
 
-| Parameter Kinerja | Sebelum Digitalisasi (Manual) | Dengan AL-HIKMAH LMS (v8.3) | Peningkatan Efisiensi |
+| Parameter Kinerja | Sebelum Digitalisasi (Manual) | Dengan AL-HIKMAH LMS (v8.4) | Peningkatan Efisiensi |
 | :--- | :--- | :--- | :---: |
 | **Proses Rekrutmen Guru** | Kirim berkas fisik, tes manual | Funnel digital: Berkas $\rightarrow$ Ujian AI $\rightarrow$ Wawancara $\rightarrow$ Akun | **85% Lebih Cepat & Terstandar** |
 | **Pelacakan Status Lamaran** | Menghubungi admin berulang kali | Pelacak publik real-time (`/cek-status-lamaran`) | **100% Transparan Mandiri** |
 | **Evaluasi Masa Percobaan (Probation)**| Catatan manual, evaluasi subjektif| Tracking 3 bulan, target capaian, & Badges M01-M03 | **Terstruktur & Objektif** |
-| **Pembuatan Paket Soal & Ujian** | Guru mengetik manual jam-jaman | AI Generator 10 Program + Cetak PDF A4 Siap Pakai | **Selesai dalam < 5 Detik** |
+| **Pembuatan Paket Soal & Ujian** | Guru mengetik manual jam-jaman | Multi-AI Generator (5 Provider) + Cetak PDF A4 Siap Pakai | **Selesai dalam < 3 Detik** |
 | **Format Soal & Penilaian** | Hanya pilihan ganda terbatas | Pilihan Ganda, Essay/Uraian (Rubrik Skor), & Campuran | **Standar Kurikulum Nasional & HOTS** |
+| **Onboarding & Kredensial Santri** | Wali bingung akun & password acak | Email bersih (`nama@alhikmah.com`), Password `santri123`, & Info di Portal Wali | **100% Jelas & Terbimbing** |
+| **Keamanan Akun Santri** | Password default tidak dipantau | Banner peringatan ganti password otomatis di dashboard santri | **Standar Keamanan Tinggi** |
 | **Visibilitas Finansial & Arus Kas** | Rekap manual di spreadsheet | Dashboard real-time, MoM %, ARPU, & Tren 12 Bulan | **100% Otomatis Real-Time** |
 | **Deteksi Overload & Kinerja Guru** | Tidak terdeteksi hingga ada keluhan | Indikator otomatis (Optimal, Sibuk, Overload >40) | **Proaktif & Terukur** |
 | **Komunikasi Massal ke Wali** | Kirim manual satu per satu | WhatsApp Broadcast Massal dengan Variabel Pintar | **95% Lebih Cepat** |
 
-### 📝 Changelog Versi 8.3 (Teacher Recruitment, Probation Lifecycle, & Advanced AI Curriculum Generator):
-- ✅ **Modul Rekrutmen Calon Guru End-to-End**:
-  - Halaman pendaftaran calon guru publik (`/bergabung` / `/mentor/recruitment/register`) dengan validasi berkas PDF/Gambar (CV, Sertifikat Tahfidz/Sanad, KTP, Ijazah).
-  - Halaman pelacak status lamaran publik (`/cek-status-lamaran`) dengan visual stepper dinamis.
-  - Panel Admin Kelola Pelamar (`/admin/mentors/recruitment/applications`) dengan integrasi DataTables interaktif, filter status, preview berkas, dan aksi tahapan seleksi.
-  - Pembuatan Paket Soal Ujian Calon Guru otomatis (15 butir soal terbagi 3 kategori: *Tajwid*, *Makharijul Huruf*, *Tahsin*) tersimpan di bank soal master lembaga.
-  - Sesi Ujian Kompetensi Online berbasis web langsung di Dashboard Calon Guru dengan batas waktu 60 menit dan kalkulasi skor instan.
-  - Proteksi Hak Akses Dashboard (Gating): Calon guru dalam tahap seleksi hanya dapat mengakses modul ujian & status; fitur mengajar inti baru dibuka setelah resmi disetujui.
-  - Tahapan Wawancara & Evaluasi Terpadu sebelum persetujuan akhir.
-- ✅ **Masa Percobaan Guru (Probation Management 3 Bulan)**:
-  - Penerbitan Akun Guru Resmi otomatis dengan penugasan masa percobaan 3 bulan.
-  - Dashboard Monitoring Masa Percobaan (`/admin/mentors/probation`) dengan kalkulasi sisa hari, indikator kehadiran, dan rasio kepuasan santri.
-  - Seeder Lencana Khusus Guru Binaan (*Mentor Badges*):
-    - `M01` (*Pendamping Teladan*)
-    - `M02` (*Hafizh Pembimbing*)
-    - `M03` (*Guru Mumtaz*)
-- ✅ **Universal Multi-Provider AI Engine (Gemini, DeepSeek, Qwen, Claude, & GPT)**:
-  - **Satu Layanan untuk Seluruh Model AI**: Pengelola lembaga dapat berganti model AI hanya dengan mengisi `API_KEY` dan `MODEL` pada berkas `.env`.
-  - **Auto-Detection Cerdas**: Sistem otomatis mendeteksi provider (Google Gemini, DeepSeek, Alibaba Qwen, Anthropic Claude, atau OpenAI) berdasarkan prefix key dan penamaan model tanpa mengubah kode.
-  - **Pelacak Diagnostik Error & Fallback Transparan**: Jika kuota AI habis atau terjadi error API (seperti HTTP 403 / 429), sistem menyajikan banner informatif berisi rincian error server dan solusinya, sekaligus otomatis mengaktifkan Bank Kurikulum Offline Al-Hikmah.
-- ✅ **Revamp AI Question Generator & Bank Soal Mentor (10 Program Resmi)**:
-  - Sinkronisasi 10 Program Belajar terstandar Al-Hikmah:
-    1. *Iqra & Dasar Al-Qur'an* (Bentuk huruf hijaiyah, harakat vokal, tasydid, sukun, 6 huruf pemutus).
-    2. *Tahsin Dasar* (17 Makharijul Huruf, Hukum Nun Sukun/Tanwin, Mim Sukun, Qalqalah).
-    3. *Adab & Doa Harian* (Doa harian makan/tidur/masjid/safar, Birrul Walidain, adab thalabul ilmi).
-    4. *Tahfidz Al-Qur'an* (Sambung ayat Juz 30, Makkiyah/Madaniyah, Asbabun Nuzul, metode 3T).
-    5. *Belajar dari Nol (Dewasa)* (Makhraj dasar, harakat, bacaan praktis Shalat Fardhu).
-    6. *Tahsin Dewasa* (19 Sifatul Huruf, Kaidah Mad Far'i, Waqaf & Ibtida', Ahkamur Raa'at).
-    7. *Kelas Muslimah* (Fiqih Nisa, Haid, Nifas, Istihadhah, Mandi Wajib, Shahabiyah, Adab Hijab).
-    8. *Tahfidz Dewasa* (Surah Al-Mulk, As-Sajdah, Al-Waqi'ah, Mutasyabihat, manajemen muroja'ah).
-    9. *Bahasa Arab Dasar* (Mufrodat perlengkapan belajar, Dhomir Munfashil, Isim Isyarah, Angka 1-10, Percakapan Ta'aruf).
-    10. *Nahwu & Sharaf* (Isim, Fi'il, Huruf, 4 Macam I'rab, Jumlah Ismiyyah/Fi'liyyah, Wazan Tashrif Tsulatsi, Inna/Kaana).
-  - **Inspirasi Topik Cerdas & Dinamis**: Tombol topik inspiratif yang beradaptasi seketika saat program dipilih.
-  - **Mode AI Explorer / Topik Bebas**: Guru dapat mengetik topik khusus apa pun atau membiarkan topik acak tanpa mengalami kegagalan sistem.
-  - **Dukungan Format Soal Lengkap**: Pilihan Ganda (4 Opsi), Soal Essay / Uraian (dengan Kunci Jawaban Ideal & Rubrik Skor), serta Soal Campuran (*Mixed*).
-  - **Tingkat Kesulitan HOTS (Sulit)**: Pertanyaan analitis studi kasus yang stabil tanpa kendala timeout (timeout 30-45s & multi-layer fallback).
-  - **Garansi Kuota & Zero-Duplicate Multi-Bank Engine**: Penyaringan hashing MD5 yang menjamin seluruh butir soal 100% unik dan jumlah soal selalu tepat sesuai yang diminta (e.g. minta 15 soal pasti keluar 15 butir soal unik).
-- ✅ **Lembar Cetak Ujian Resmi A4 / PDF Export (`/mentor/questions/print`)**:
-  - Tampilan siap cetak dengan Kop Resmi Al-Hikmah, identitas santri & nilai, petunjuk pengerjaan, format Pilihan Ganda, garis jawaban tulis tangan untuk Essay, serta Lembar Kunci Jawaban & Rubrik Guru.
-  - Tombol cetak di halaman generator mengirimkan data secara *real-time in-memory* via POST form sehingga langsung mencetak paket soal yang sedang tampil di layar.
+### 📝 Changelog Versi 8.4 (Multi-AI Selector, Smart Matchmaking AI v2.0, Clean Email & Security Warning):
+- ✅ **Smart Matchmaking AI Engine v2.0 (High-Performance & Islamic Context)**:
+  - **Arsitektur Presisi 5 Faktor**: Gender Match (25%), Jarak Geospasial (20%), Kuota Slot Hari (25%), Kesesuaian Spesialisasi (20%), dan Pemerataan Beban (10%).
+  - **Native MySQL Geospatial (`ST_Distance_Sphere`)**: Eliminasi kandidat di luar radius 25 km langsung di level query database tanpa memory bloat.
+  - **In-Memory System Average Load Caching**: Membungkus agregasi beban dalam cache 300 detik untuk respon kilat (< 150 ms).
+  - **Islamic Context Rules Terpadu**: Proteksi *Family Blacklist* (diskualifikasi riwayat komplain wali pada tabel `student_mutation_logs`), *Gamification Badge Boost* (+5% untuk lencana M01/M03 atau rating $\ge 4.9$), dan *Buffer Sholat Penalty* (-15%).
+  - **Interactive Top 3 Cards UI**: Visualisasi kartu medali (🥇 Pilihan Terbaik, 🥈 Shadow Mentor, 🥉 Rekomendasi Ke-3), indikator *Auto-Assign Match* ($\ge 95\%$), serta penguncian *Shadow Mentor* otomatis saat penugasan.
+  - **Asynchronous Queue Jobs (`ProcessMentorAllocationJob`)**: Eksekusi pencatatan audit log `matching_logs` dan pengiriman notifikasi penugasan via background queue.
+  - **Batch Matching & Bulk Allocation**: Kemudahan admin mengalokasikan puluhan santri sekaligus dalam 1-klik (`/admin/enrollments/bulk-assign`).
+- ✅ **Kredensial Santri Standar & Notifikasi Keamanan Terpadu**:
+  - **Pola Email Santri Bersih**: Format otomatis huruf kecil murni tanpa tanda hubung dan karakter acak (`hikmatulhasanah@alhikmah.com`).
+  - **Penanganan Duplikasi Pintar**: Jika terdapat nama yang sama, sistem menambahkan nomor urut bersih (`hikmatulhasanah2@alhikmah.com`, `hikmatulhasanah3@alhikmah.com`).
+  - **Password Default Konsisten**: Ditetapkan sebagai `santri123` (`StudentAccountService::DEFAULT_PASSWORD`) saat akun dibuat via registrasi orang tua maupun form anak baru.
+  - **Widget Kredensial di Portal Orang Tua**: Menampilkan Nama, Email, dan Password Awal ananda pada Dashboard Wali Santri, Halaman Anak Binaan, serta Profil Anak.
+  - **Banner Peringatan Keamanan Santri**: Dashboard santri mendeteksi jika password masih bernilai `santri123` dan menampilkan banner himbauan ganti password dengan direct action button.
+- ✅ **Selector UI Multi-AI & Smart Cascade Failover Engine**:
+  - **Selector UI Interaktif di Panel Mentor**: Guru dapat memilih model AI yang diinginkan (Auto Smart Failover, DeepSeek AI, Alibaba Qwen, Google Gemini, OpenAI GPT, Anthropic Claude).
+  - **Priority Chain Cerdas**: Jika provider pilihan mengalami *rate-limit* / *timeout*, sistem otomatis berpindah ke model alternatif secara berurutan tanpa menghentikan proses pembuatan soal.
+  - **Curated Multi-Bank Fallback**: Perlindungan lapis terakhir menggunakan Bank Kurikulum Al-Hikmah terkurasi 10 program jika seluruh provider eksternal offline.
+- ✅ **Standardisasi Navbar & Header Dashboard**:
+  - Tampilan seragam dan modern untuk Dashboard **Admin**, **Mentor**, dan **Orang Tua** (Avatar inisial, badge role, header left title hierarchy, shortcut tombol, dan Dark Mode toggle).
+- ✅ **100% Suite Test Pass**: Seluruh feature & unit test (termasuk 6 automated test suite Smart Matchmaking) berhasil lolos tanpa hambatan.
 
 ---
 
@@ -236,17 +227,25 @@ Halaman cetak `/mentor/questions/print` menghasilkan dokumen ujian terstandarisa
 +-------------------------------------------------------------------------------------------------------------+
 ```
 
-### 3.2 Universal Multi-Provider AI Architecture (Gemini, DeepSeek, Qwen, Claude, & GPT)
-Layanan AI Al-Hikmah LMS telah mendukung arsitektur **Multi-Provider Universal**. Pengelola lembaga dapat berganti model dan penyedia AI secara instan hanya dengan mengganti API Key / Model pada berkas `.env`:
-- **Google Gemini**: `AI_PROVIDER=gemini` atau model `gemini-1.5-flash`, `gemini-2.0-flash`, `gemini-1.5-pro`.
-- **DeepSeek AI**: `AI_PROVIDER=deepseek` atau model `deepseek-chat`, `deepseek-reasoner` (R1).
-- **Alibaba Qwen**: `AI_PROVIDER=qwen` atau model `qwen-plus`, `qwen-turbo`, `qwen-max`.
-- **Anthropic Claude**: `AI_PROVIDER=claude` atau model `claude-3-5-sonnet-20241022`, `claude-3-5-haiku`.
-- **OpenAI ChatGPT**: `AI_PROVIDER=openai` atau model `gpt-4o-mini`, `gpt-4o`, `o3-mini`.
-- **Auto-Detection Cerdas**: Cukup masukkan `AI_API_KEY` dan `AI_MODEL` (atau `QWEN_API_KEY`, `DEEPSEEK_API_KEY`, `CLAUDE_API_KEY`), sistem otomatis mengenali endpoint dan format payload penyedia tanpa perlu mengubah kode sumber.
-- **Error Tracking & Curated Multi-Bank Fallback**: Jika kuota token AI habis atau terjadi kendala jaringan (seperti HTTP 403 / 429), sistem menyajikan banner diagnostik ramah pengguna dan secara mulus beralih ke bank kurikulum Al-Hikmah spesifik per 10 program sehingga proses pembuatan soal tidak pernah gagal dan konten selalu 100% relevan.
+### 3.2 Universal Multi-Provider AI Architecture & UI Selector (Gemini, DeepSeek, Qwen, Claude, & GPT)
+Layanan AI Al-Hikmah LMS mendukung arsitektur **Multi-Provider Universal** dengan Selector UI interaktif pada panel kerja guru:
+- **Selector Model Interaktif di Panel Mentor**: Guru dapat memilih langsung provider AI yang ingin digunakan:
+  1. ⚡ **Auto Smart Failover (Rekomendasi)**: Sistem otomatis memilih provider aktif tercepat dengan failover otomatis.
+  2. 🟣 **DeepSeek AI** (`deepseek-chat`): Analisis mendalam & penalaran tajwid/nahwu presisi tinggi.
+  3. 🔵 **Alibaba Qwen** (`qwen-plus`): Kecepatan respon tinggi, kaya konteks teks Arab & fiqih.
+  4. 🟢 **Google Gemini** (`gemini-2.0-flash` / `gemini-1.5-flash`): Pemahaman semantik modern & multimodal.
+  5. ⚪ **OpenAI ChatGPT** (`gpt-4o-mini` / `gpt-4o`): Struktur pertanyaan variatif & seimbang.
+  6. 🟠 **Anthropic Claude** (`claude-3-5-sonnet`): Analisis karakter, adab, dan soal analitis HOTS.
+- **Auto-Detection Cerdas**: Cukup masukkan API Key pada `.env` (`GEMINI_API_KEY`, `DEEPSEEK_API_KEY`, `QWEN_API_KEY`, `OPENAI_API_KEY`, `CLAUDE_API_KEY`), sistem otomatis mengenali endpoint dan parameter payload masing-masing provider tanpa konfigurasi rumit.
 
-### 3.3 📚 Bank Kurikulum Offline Al-Hikmah (Fallback Engine)
+### 3.3 🛡️ Smart Cascade Failover Engine (Zero Downtime)
+Untuk menjamin proses pembuatan soal ujian tidak pernah terhenti akibat *rate limit* atau gangguan jaringan:
+- **Priority Chain Cerdas**: Jika provider yang dipilih guru mengalami kendala (HTTP 429 / 403 / timeout), sistem otomatis mencoba provider alternatif secara berurutan:
+  $$\text{Provider Pilihan} \longrightarrow \text{Qwen} \longrightarrow \text{OpenAI} \longrightarrow \text{Gemini} \longrightarrow \text{Claude} \longrightarrow \text{Bank Kurikulum Offline}$$
+- **Curated Multi-Bank Fallback**: Jika seluruh penyedia AI eksternal tidak dapat diakses, sistem secara mulus menyajikan bank kurikulum terkurasi khusus 10 program resmi Al-Hikmah.
+- **Zero Duplicate MD5 Engine**: Menjamin seluruh butir soal yang digenerate 100% unik dan tidak ada soal kembar.
+
+### 3.4 📚 Bank Kurikulum Offline Al-Hikmah (Fallback Engine)
 Jika AI API mengalami kendala (kuota token habis, jaringan offline, atau respon error), sistem otomatis beralih ke bank kurikulum offline yang telah dikurasi ketat oleh asatidzah Al-Hikmah untuk 10 program resmi:
 
 | Program Belajar | Estimasi Bank Soal Offline | Materi & Topik Utama |
@@ -299,21 +298,46 @@ Fitur komunikasi massal terarah untuk menyampaikan pengumuman, pengingat tagihan
 | **Pengiriman Terjadwal** | Pilihan opsi kirim seketika (*instant dispatch*) atau dijadwalkan (*scheduled batch*) |
 | **Laporan Pengiriman** | Pelacakan status pesan (*queued, sent, delivered, failed*) dengan log kegagalan |
 
-**Contoh Template Pengingat Tagihan:**
-```text
-Assalamu'alaikum Warahmatullahi Wabarakatuh, Ayah/Bunda {{name}},
+### 4.4 🧮 Smart Matchmaking Algorithm & Alokasi Guru Otomatis (`MentorMatchingService`)
+Modul ini mengotomatisasi pencocokan santri baru dengan guru pembimbing terbaik secara objektif berbasis arsitektur *high-performance* dan *Islamic context rules*:
+- **Formula Kecocokan Multi-Faktor**:
+  $$\text{Final Score} = \left[ (S_{\text{gender}} \times 25\%) + (S_{\text{location}} \times 20\%) + (S_{\text{slot}} \times 25\%) + (S_{\text{spec}} \times 20\%) + (S_{\text{load}} \times 10\%) \right] + \text{Boost} - \text{Penalty}$$
+- **Optimasi Performa Skalabilitas**:
+  - *Pre-Filtering Database*: Eliminasi guru non-aktif dan di luar kuota hari langsung di level query database sebelum hidrasi model.
+  - *Kalkulasi Geospasial Native (`ST_Distance_Sphere`)*: Perhitungan jarak presisi km langsung dieksekusi oleh MySQL.
+  - *Aggressive Caching (TTL 300s)*: Agregasi rata-rata beban santri disimpan di cache memori, mencegah query berulang dalam loop.
+  - *Asynchronous Queue Jobs*: Pencatatan log audit (`matching_logs`) dan dispatch notifikasi WhatsApp dikirim ke antrean latar belakang (*background workers*).
+  - *Multi-Level Tie-Breaker*: Menjamin konsistensi urutan rekomendasi jika skor sama dengan chaining *Load Ascending* dan *Distance Ascending*.
+- **Fitur Cerdas & Nuansa Islami (Islamic Context)**:
+  - ⚡ **Auto-Assign for High Score ($\ge 95\%$)**: Alokasi otomatis santri ke guru terbaik tanpa intervensi admin untuk tingkat kecocokan mutlak.
+  - 📦 **Batch Matching & Bulk Allocation**: Kemampuan memilih puluhan enrollment sekaligus dan mengalokasikannya serentak dalam 1 klik.
+  - ⏳ **Buffer Waktu Sholat**: Penalti skor otomatis jika jadwal bimbingan berhimpitan ($< 15$ menit) dengan waktu sholat Maghrib/Isya.
+  - 🚫 **Family History Blacklist**: Diskualifikasi mutlak (skor 0) bagi guru yang pernah memiliki riwayat mutasi/komplain dari keluarga/wali santri yang sama.
+  - 🌟 **Gamification Boost**: Bonus skor $+5\%$ untuk guru peraih lencana prestasi (`M01` / `M03`) atau rating $\ge 4.9$.
+  - 🛡️ **Shadow Mentor (Guru Siaga)**: Mengunci kandidat ranking 2 (🥈) sebagai guru pengganti otomatis jika guru utama cuti sakit mendadak.
+  - 🔍 **Explainable AI ("Why Not...?")**: Fitur inspeksi alasan mengapa guru tertentu tidak masuk ke Top 3 rekomendasi.
+- *(Dokumentasi teknis & spesifikasi PRD lengkap dapat dilihat pada [`matchmaking.md`](matchmaking.md)).*
+- ✅ **Status Implementasi (v8.4)**: Selesai 100% diimplementasikan secara *End-to-End* mencakup Migrasi Database, Model Eloquent, Antrean Latar Belakang (`ProcessMentorAllocationJob`), Controller Penugasan, serta integrasi Antarmuka Panel Rekomendasi *Smart Matchmaking* di `admin/enrollments/edit.blade.php`.
 
-Kami menginformasikan bahwa tagihan administrasi bimbingan Al-Qur'an untuk ananda {{child_name}} pada program {{program}} sebesar Rp {{amount}} akan jatuh tempo pada tanggal {{due_date}}.
-
-Pembayaran dapat dilakukan secara praktis melalui tautan resmi Pakasir berikut:
-{{payment_url}}
-
-Semoga Allah SWT senantiasa memberkahi ikhtiar kita dalam mendidik putra-putri pecinta Al-Qur'an.
-
-Jazakumullahu Khairan Katsiran,
-Manajemen Lembaga AL-HIKMAH LMS
-```
-
+### 4.5 📊 Mentor Performance Dashboard, AI Coaching & Granular Analytics (v2.0)
+Modul analitik granular yang mengubah evaluasi kinerja guru dari pasif-deskriptif menjadi **aktif-preskriptif, berkeadilan, dan termotivasi**:
+- **Math Engine Berkeadilan**:
+  - *Program-Based Dynamic Weighting*: Bobot otomatis menyesuaikan spesialisasi (program Bahasa Arab & Belajar dari Nol menaikkan bobot kurikulum/adab dan mengabaikan tajwid 0%).
+  - *Student Handicap Multiplier*: Bonus poin multiplier ($\mu_{\text{handicap}}$) bagi guru yang berhasil membina santri dengan riwayat mutaba'ah rendah atau kebutuhan bimbingan ekstra.
+  - *Bayesian Rating Smoothing*: Mencegah bias jumlah sampel kecil ($C=5, m=4.5$) agar guru dengan 1 ulasan bintang 5 tidak mengalahkan guru dengan 30 ulasan bintang 4.85.
+  - *Penguncian Data & Recalculate Snapshot*: Menjamin audit trail finansial transparan pada pencairan bonus.
+- **AI-Powered Mentor Insights & Coaching (Gemini AI)**:
+  - Generate otomatis *AI Performance Summary*, *Personalized Coaching Action Plan*, dan *Predictive Risk Analytics* (deteksi risiko penurunan performa 1–2 bulan ke depan).
+- **Mentor Self-Service Portal (`/mentor/performance`)**:
+  - *My Performance Scorecard*: Visibilitas mandiri skor komposit, radar chart 5 sumbu, dan posisi persentil lembaga.
+  - *Goal Setting & Tracking (`mentor_goals`)*: Penetapan target capaian bulanan secara mandiri.
+  - *Self-Assessment & Reflection (`mentor_self_assessments`)*: Refleksi kekuatan, kendala, dan inisiatif perbaikan diri.
+- **Enhanced Parent Feedback System**:
+  - *Post-Session Rating Popup*: Trigger modal evaluasi instan setelah sesi berstatus `completed`.
+  - *Granular Multi-Factor Rating*: Rating bintang 1–5 terpisah untuk Komunikasi, Ketepatan Waktu, Metode Mengajar, dan Perkembangan Anak, lengkap dengan opsi anonim dan hak jawab guru (*Feedback Response*).
+- **Incentive & Recognition Engine (`M01–M07`)**:
+  - Kalkulator bonus kinerja otomatis, sertifikat digital PDF dengan QR Code verification, serta ekspansi lencana prestasi guru (`M04` *Retention Champion*, `M05` *Tajwid Master*, `M06` *Parent Favorite*, `M07` *Consistency King*).
+- *(Dokumentasi teknis & spesifikasi PRD lengkap dapat dilihat pada [`mentor.md`](mentor.md)).*
 ---
 
 ## 🎮 5. MODUL RUANG BELAJAR SANTRI & GAMIFIKASI ISLAMI TERPADU
@@ -357,12 +381,31 @@ Menerapkan prinsip **Fastabiqul Khoirot** dengan sistem poin, streak harian, dan
 
 ---
 
-## 🔐 6. SISTEM AKUN SANTRI OTOMATIS & KEBIJAKAN KEAMANAN PASSWORD
+## 🔐 6. SISTEM AKUN SANTRI OTOMATIS & KEBIJAKAN KEAMANAN PASSWORD (v8.4)
 
-- **Pembuatan Akun Instan**: Memicu pembuatan entitas `User` khusus santri saat pendaftaran program selesai.
-- **Pola Email Cerdas**: `{3hurufdepan}.{namabelakang}@{domain_institusi}` (misal: `ahm.fauzi@alhikmahlms.sch.id`).
-- **Generator Password Acak Kuat**: 10–12 karakter campuran alfanumerik dan simbol khusus terenkripsi Bcrypt.
-- **Jejak Audit Keamanan (`password_reset_logs`)**: Mencatat IP address, user-agent, dan nama inisiator setiap terjadi perubahan password.
+Modul ini mengelola siklus pembuatan akun santri, standarisasi format kredensial, transparansi akses di portal orang tua, serta pengawasan keamanan password santri secara terpadu.
+
+### 6.1 Format Email Bersih & Penanganan Duplikasi
+- **Pola Email Santri Bersih**: Format otomatis dibersihkan menjadi huruf kecil murni tanpa tanda hubung dan karakter acak (`hikmatulhasanah@alhikmah.com`).
+- **Penanganan Duplikasi Pintar**: Jika santri dengan nama yang sama didaftarkan, sistem otomatis memberikan akhiran angka berurutan yang rapi (`hikmatulhasanah2@alhikmah.com`, `hikmatulhasanah3@alhikmah.com`).
+- **Implementasi Terpusat**: Dikelola di `App\Services\StudentAccountService::generateEmail()` dan otomatis dipanggil saat registrasi orang tua + anak maupun penambahan data anak baru.
+
+### 6.2 Standar Password Default Santri (`santri123`)
+- **Password Bawaan Konsisten**: Ditetapkan secara baku sebagai `santri123` (`StudentAccountService::DEFAULT_PASSWORD`).
+- **Kemudahan Onboarding**: Orang tua dan santri tidak lagi mengalami kebingungan karena password awal seragam dan mudah diingat untuk akses pertama kali di `/login`.
+
+### 6.3 Kredensial di Portal Orang Tua & Himbauan Keamanan
+- **Dashboard Orang Tua (`/parent/dashboard`)**: Menampilkan widget khusus "Informasi Akses & Kredensial Login Santri" berisi nama anak, email santri, dan password default `santri123`.
+- **Halaman Anak Binaan (`/parent/children`)**: Kartu setiap anak dilengkapi rincian kredensial login dan tombol "Reset & Kirim Password" via WhatsApp/Email.
+- **Profil Data Anak (`/parent/profile/children`)**: Tabel daftar anak memuat kolom Email Login dan badge status password bawaan.
+- **Himbauan Keamanan**: Seluruh antarmuka orang tua menyertakan catatan resmi agar orang tua membimbing ananda mengganti password bawaan setelah login perdana.
+
+### 6.4 Banner Peringatan Keamanan di Portal Santri
+- **Deteksi Otomatis (`/student/dashboard`)**: Sistem secara real-time memeriksa apakah akun santri yang sedang aktif masih menggunakan password bawaan `santri123`.
+- **Banner Peringatan Interaktif**: Jika masih default, dashboard santri menampilkan banner kuning menonjol:
+  > *"⚠️ **Peringatan Keamanan: Anda Masih Menggunakan Password Default (`santri123`)**. Demi keamanan data belajar ananda, segera ganti password sekarang."*
+- **Aksi Cepat (Direct Link)**: Tombol "Ganti Password Sekarang" yang langsung mengarahkan santri ke formulir pembaruan password (`/student/password`).
+- **Jejak Audit Keamanan (`password_reset_logs`)**: Mencatat IP address, user-agent, dan nama inisiator setiap terjadi perubahan password santri.
 
 ---
 
@@ -389,9 +432,18 @@ Menerapkan prinsip **Fastabiqul Khoirot** dengan sistem poin, streak harian, dan
 
 ---
 
-## 📈 10. STANDARDISASI & IMPLEMENTASI DATATABLES DI SELURUH DASHBOARD
+## 📈 10. STANDARDISASI NAVBAR, HEADER, & DATATABLES DASHBOARD (v8.4)
 
-Seluruh tabel data di antarmuka Admin (termasuk Modul Rekrutmen Guru), Mentor, dan Parent menggunakan **DataTables.js** lokal dengan:
+### 10.1 Standardisasi Navbar & Header Dashboard Lintas Role
+Seluruh dashboard peran utama (**Admin**, **Mentor**, dan **Orang Tua**) telah distandarisasi dengan arsitektur UI/UX modern:
+- **Header Left Title Hierarchy**: Judul halaman, rekam jejak rute, dan badge status peran.
+- **Shortcut Aksi Cepat**: Tombol "Lihat Website" untuk preview portal publik tanpa logout.
+- **Profil Dropdown Modern**: Container avatar inisial berwarna tematik (Indigo untuk Admin, Emerald untuk Mentor, Primary untuk Orang Tua), informasi nama, role label, dan aksi logout yang aman.
+- **Dark Mode & Notifikasi**: Integrasi saklar mode gelap (`data-bs-theme="dark"`) dan indikator lonceng notifikasi real-time (`livewire:notification-bell`).
+- **Sidebar Nav Icons**: Penambahan ikon tematik pada setiap section heading navigasi menu.
+
+### 10.2 Implementasi DataTables di Seluruh Dashboard
+Seluruh tabel data di antarmuka Admin (termasuk Rekrutmen Guru & Masa Percobaan), Mentor (Bank Soal), dan Parent (Data Anak) menggunakan **DataTables.js** lokal dengan:
 - Pencarian instan (*instant search filter*).
 - Pengurutan multi-kolom (*multi-column sorting*).
 - Paginasi responsif ($10, 25, 50, 100$ baris).
@@ -442,6 +494,12 @@ sequenceDiagram
 | Dashboard Ruang Santri (Gamifikasi)   |        ❌         |     ❌     |   ✅   |     ❌      |     ❌     |  ✅   |
 | Input Rapor & Presensi Mengajar       |        ❌         |     ❌     |   ❌   |     ❌      |     ✅     |  ✅   |
 | AI Auto-Generate Soal & Cetak PDF     |        ❌         |     ❌     |   ❌   |     ❌      |     ✅     |  ✅   |
+| Dashboard Performa Mentor (Admin View)|        ❌         |     ❌     |   ❌   |     ❌      |     ❌     |  ✅   |
+| Dashboard Performa Pribadi (Self View)|        ❌         |     ❌     |   ❌   |     ❌      |     ✅     |  ✅   |
+| Goal Setting & Self-Assessment        |        ❌         |     ❌     |   ❌   |     ❌      |     ✅     |  ❌   |
+| Submit Feedback Pasca-Sesi            |        ❌         |     ❌     |   ❌   |     ✅      |     ❌     |  ❌   |
+| Recalculate Snapshot (Audit)          |        ❌         |     ❌     |   ❌   |     ❌      |     ❌     |  ✅   |
+| Export Laporan Performa PDF/Excel     |        ❌         |     ❌     |   ❌   |     ❌      |     ❌     |  ✅   |
 | Analitik Finansial & Pendapatan       |        ❌         |     ❌     |   ❌   |     ❌      |     ❌     |  ✅   |
 | Monitoring Beban SDM Guru             |        ❌         |     ❌     |   ❌   |     ❌      |     ❌     |  ✅   |
 | Pusat Peringatan Operasional 3-Tier   |        ❌         |     ❌     |   ❌   |     ❌      |     ❌     |  ✅   |
@@ -506,6 +564,16 @@ AL-HIKMAH LMS menggunakan basis data relasional MySQL/MariaDB dengan **38 Tabel 
 | 36. mentor_applications    : Data Lamaran Calon Guru, Berkas Syarat, & Status Seleksi                 |
 | 37. mentor_tests           : Sesi Ujian Kompetensi Online Calon Guru, Soal AI, Waktu, & Skor          |
 | 38. mentor_probations      : Data Masa Percobaan 3 Bulan Guru, Target Evaluasi, & Status Kelulusan    |
+| 39. matching_logs          : Log Audit Alokasi Guru & Skor Kompatibilitas Smart Matchmaking AI       |
+| 40. student_mutation_logs  : Log Riwayat Mutasi Guru / Komplain Wali Santri (Family Blacklist Engine) |
+| 41. mentor_performance_snapshots: Snapshot Bulanan Skor Komposit & Metrik Kinerja Guru (Bayesian/Dynamic) |
+| 42. mentor_feedback        : Master Ulasan & Rating Bimbingan dari Wali Santri (Overall & Anonim)     |
+| 43. mentor_feedback_ratings: Rincian Rating Multi-Faktor (Komunikasi, Disiplin, Metode, Progres)      |
+| 44. mentor_insights        : Ringkasan AI (Gemini), Rencana Aksi Coaching, & Analisis Risiko Tren      |
+| 45. mentor_goals           : Target Capaian Kinerja Pribadi Guru (Goal Setting & Milestone Tracking)  |
+| 46. mentor_self_assessments: Formulir Evaluasi Diri & Refleksi Bulanan Guru Pembimbing                 |
+| 47. mentor_incentives      : Data Kelayakan Bonus Finansial, Sertifikat Digital QR, & Lencana M01-M07 |
+| 48. learning_session_methods: Log Pelacakan Metode Ajar Per Sesi Bimbingan (Learning Analytics)       |
 +-------------------------------------------------------------------------------------------------------+
 ```
 
@@ -518,29 +586,32 @@ AL-HIKMAH LMS menggunakan basis data relasional MySQL/MariaDB dengan **38 Tabel 
 2. **`MentorTest.php`**: Model sesi ujian calon guru, butir soal JSON, jawaban, dan skor.
 3. **`MentorProbation.php`**: Model pelacakan masa percobaan guru 3 bulan.
 4. **`Question.php`**: Diperbarui dengan kolom `type` (`multiple_choice`, `essay`), `essay_answer`, `rubric`, serta helper methods (`isEssay()`, `isMultipleChoice()`, `type_label`).
-5. **`FinancialAuditLog.php`**, **`MentorLeave.php`**, **`Student.php`**, **`Badge.php`**, **`Payment.php`**.
+5. **`MentorPerformanceSnapshot.php`**, **`MentorFeedback.php`**, **`MentorInsight.php`**, **`MentorGoal.php`**, **`MentorSelfAssessment.php`**, **`MentorIncentive.php`**.
+6. **`FinancialAuditLog.php`**, **`MentorLeave.php`**, **`Student.php`**, **`Badge.php`**, **`Payment.php`**.
 
 ### B. Service Layer Inti:
-1. **`GeminiQuestionService.php`**: Engine Universal Multi-Provider AI (Google Gemini, DeepSeek, Alibaba Qwen, Anthropic Claude, OpenAI ChatGPT) yang switchable via `.env`, dilengkapi deteksi otomatis, sistem pelacak error & banner notifikasi fallback transparan, serta Master Bank Kurikulum terpisah untuk seluruh 10 program resmi Al-Hikmah dengan garansi kuota dan nol duplikasi hashing MD5.
-2. **`MentorRecruitmentService.php`**: Pengelola proses pendaftaran, verifikasi berkas, dan wawancara calon guru.
-3. **`MentorTestService.php`**: Pembuat paket soal ujian kompetensi 3 pilar (Tajwid, Makhraj, Tahsin) dan evaluator skor.
-4. **`MentorProbationService.php`**: Pengawas masa percobaan 3 bulan guru pembimbing dan penganugerahan lencana M01-M03.
-5. **`RevenueAnalyticsService.php`**, **`StaffAnalyticsService.php`**, **`AlertService.php`**, **`BroadcastService.php`**, **`StudentAccountService.php`**, **`GamificationService.php`**, **`PakasirService.php`**, **`WhatsAppService.php`**.
+1. **`MentorPerformanceService.php`**: Engine Skor Komposit Kinerja Guru berkeadilan dengan *Program-Based Dynamic Weighting*, *Student Handicap Multiplier*, dan *Bayesian Rating Smoothing*.
+2. **`MentorInsightsService.php`**: Generator wawasan performa preskriptif berbasis AI (Gemini/GPT), rekomendasi pembinaan personal (*coaching*), dan deteksi dini risiko penurunan performa (*Predictive Analytics*).
+3. **`MentorFeedbackService.php`**: Pengelola ulasan pasca-sesi wali santri, validasi multi-kategori, penanganan mode anonim, dan tanggapan resmi guru.
+4. **`MentorMatchingService.php`**: Engine Smart Matchmaking Alokasi Guru Otomatis berbasis 5 variabel berbobot (Gender 25%, Lokasi Haversine 20%, Kuota Hari 25%, Spesialisasi 20%, Load Balance 10%) dengan integrasi Performance Boost (+10% skor $\ge 90$).
+5. **`GeminiQuestionService.php`**: Engine Universal Multi-Provider AI (Google Gemini, DeepSeek, Alibaba Qwen, Anthropic Claude, OpenAI ChatGPT) yang switchable via `.env`.
+6. **`MentorRecruitmentService.php`**, **`MentorTestService.php`**, **`MentorProbationService.php`**, **`RevenueAnalyticsService.php`**, **`StaffAnalyticsService.php`**, **`AlertService.php`**, **`BroadcastService.php`**, **`StudentAccountService.php`**, **`GamificationService.php`**, **`PakasirService.php`**, **`WhatsAppService.php`**.
 
 ### C. Controller Baru & Pembaruan:
-1. **`MentorQuestionController.php`**: Panel Bank Soal, AJAX generator preview, penyimpanan batch, soft delete/restore/force delete, dan cetak lembar ujian A4 / PDF via POST *real-time*.
-2. **`AdminRecruitmentController.php`**: Manajemen pelamar guru, filter DataTables, verifikasi berkas, penjadwalan ujian & wawancara, persetujuan, dan penerbitan akun.
-3. **`AdminProbationController.php`**: Manajemen evaluasi masa percobaan guru.
-4. **`MentorRecruitmentController.php` (Public)**: Form pendaftaran publik calon guru dan pelacak status lamaran.
-5. **`MentorRecruitmentTestController.php` (Mentor)**: Dashboard pengerjaan ujian kompetensi calon guru online.
+1. **`AdminMentorPerformanceController.php`**: Panel analitik kinerja guru, leaderboard, detail scorecard 360°, recalculate snapshot dengan audit log, dan broadcast rapor WhatsApp.
+2. **`MentorSelfServiceController.php`**: Portal mandiri guru untuk memantau performa, menetapkan target (*goals*), dan mengisi evaluasi diri (*self-assessment*).
+3. **`ParentFeedbackController.php`**: Handler AJAX ulasan pasca-sesi belajar wali santri.
+4. **`MentorQuestionController.php`**: Panel Bank Soal, AJAX generator preview, penyimpanan batch, dan cetak lembar ujian A4 / PDF.
+5. **`AdminRecruitmentController.php`**, **`AdminProbationController.php`**, **`MentorRecruitmentController.php`**, **`MentorRecruitmentTestController.php`**.
 
 ---
 
 ## ⚙️ 16. CONSOLE COMMANDS & JADWAL BACKGROUND CRON
 
-1. `php artisan gamification:refresh-leaderboard`: Snapshot peringkat santri harian.
-2. `php artisan alerts:scan`: Memindai anomali sistem (overdue, dropout, overload).
-3. `php artisan queue:work`: Memproses antrean pesan WhatsApp dan email.
+1. `php artisan mentor:snapshot-performance`: Menghitung skor komposit bulanan, mencetak snapshot terindeks, dan generate AI insights seluruh guru (Tiap tgl 1 pkl 00:05 WIB).
+2. `php artisan gamification:refresh-leaderboard`: Snapshot peringkat santri harian (Pukul 00:00 WIB).
+3. `php artisan alerts:scan`: Memindai anomali sistem (overdue, dropout, overload) (Pukul 06:00, 12:00, 18:00 WIB).
+4. `php artisan queue:work`: Memproses antrean pesan WhatsApp dan email.
 
 ---
 
@@ -551,8 +622,9 @@ al-hikmah-lms/
 ├── app/
 │   ├── Http/Controllers/
 │   │   ├── Admin/
-│   │   │   ├── AdminRecruitmentController.php # Panel Rekrutmen Guru
-│   │   │   ├── AdminProbationController.php   # Panel Masa Percobaan Guru
+│   │   │   ├── AdminMentorPerformanceController.php # Panel Analitik & Kinerja Guru
+│   │   │   ├── AdminRecruitmentController.php       # Panel Rekrutmen Guru
+│   │   │   ├── AdminProbationController.php         # Panel Masa Percobaan Guru
 │   │   │   ├── DashboardController.php
 │   │   │   ├── AdminRevenueController.php
 │   │   │   ├── AdminStaffController.php
@@ -560,56 +632,94 @@ al-hikmah-lms/
 │   │   │   ├── AdminReportController.php
 │   │   │   └── AdminBroadcastController.php
 │   │   ├── Mentor/
-│   │   │   ├── MentorQuestionController.php   # Bank Soal & AI Generator & Cetak
-│   │   │   └── MentorRecruitmentTestController.php # Ujian Online Calon Guru
+│   │   │   ├── MentorSelfServiceController.php      # Portal Mandiri Kinerja Guru & Goals
+│   │   │   ├── MentorQuestionController.php         # Bank Soal & AI Generator & Cetak
+│   │   │   └── MentorRecruitmentTestController.php  # Ujian Online Calon Guru
+│   │   ├── Parent/
+│   │   │   ├── ParentFeedbackController.php         # Handler Feedback Pasca Sesi
+│   │   │   └── ParentProfileController.php
 │   │   └── Public/
-│   │       └── MentorRecruitmentController.php # Pendaftaran & Cek Status Publik
+│   │       └── MentorRecruitmentController.php       # Pendaftaran & Cek Status Publik
 │   ├── Models/
+│   │   ├── MentorPerformanceSnapshot.php            # Snapshot Skor Komposit Bulanan
+│   │   ├── MentorFeedback.php                       # Ulasan Pasca Sesi Wali Santri
+│   │   ├── MentorFeedbackRating.php                 # Rincian Rating 4 Aspek
+│   │   ├── MentorInsight.php                        # AI Summary & Rekomendasi Coaching
+│   │   ├── MentorGoal.php                           # Target Capaian Mandiri Guru
+│   │   ├── MentorSelfAssessment.php                 # Evaluasi Diri Bulanan Guru
+│   │   ├── MentorIncentive.php                      # Insentif Bonus & Lencana M01-M07
 │   │   ├── MentorApplication.php
 │   │   ├── MentorTest.php
 │   │   ├── MentorProbation.php
 │   │   └── Question.php
 │   └── Services/
-│       ├── GeminiQuestionService.php          # Engine Soal AI & Multi-Bank Kurikulum
-│       ├── MentorRecruitmentService.php       # Service Rekrutmen Guru
-│       ├── MentorTestService.php              # Service Ujian Kompetensi
-│       ├── MentorProbationService.php         # Service Masa Percobaan
+│       ├── MentorPerformanceService.php             # Core Math Engine (Bayesian & Dynamic)
+│       ├── MentorInsightsService.php                # AI Coaching & Predictive Trend (Gemini)
+│       ├── MentorFeedbackService.php                # Service Ulasan & Rating Multi-Faktor
+│       ├── MentorMatchingService.php                # Smart Matchmaking AI (+10% Boost)
+│       ├── GeminiQuestionService.php                # Engine Soal AI & Multi-Bank Kurikulum
+│       ├── MentorRecruitmentService.php             # Service Rekrutmen Guru
+│       ├── MentorTestService.php                    # Service Ujian Kompetensi
+│       ├── MentorProbationService.php               # Service Masa Percobaan
 │       ├── RevenueAnalyticsService.php
 │       └── AlertService.php
+├── database/
+│   ├── migrations/
+│   │   └── 2026_09_01_000000_create_mentor_performance_tables.php # Migrasi 7 Tabel Performa
+│   └── seeders/
+│       └── MentorBadgeSeeder.php                    # Seeder Katalog Lencana M01-M07
 ├── resources/views/
 │   ├── admin/
+│   │   ├── performance/
+│   │   │   └── mentor/
+│   │   │       ├── index.blade.php                  # Executive Dashboard & Top 10 Leaderboard
+│   │   │       └── show.blade.php                   # Detail Scorecard 360° & AI Insights
 │   │   └── recruitment/
-│   │       ├── index.blade.php                # DataTables Pelamar Guru
-│   │       ├── show.blade.php                 # Detail, Review Berkas, & Aksi
-│   │       └── probation/index.blade.php      # Monitoring Masa Percobaan
+│   │       ├── index.blade.php                      # DataTables Pelamar Guru
+│   │       ├── show.blade.php                       # Detail, Review Berkas, & Aksi
+│   │       └── probation/index.blade.php            # Monitoring Masa Percobaan
 │   ├── mentor/
+│   │   ├── performance/
+│   │   │   ├── index.blade.php                      # Portal Kinerja Saya (Self-Service)
+│   │   │   ├── goals.blade.php                      # Goal Setting & Milestone Tracker
+│   │   │   └── self-assessment.blade.php            # Form Refleksi & Evaluasi Diri
 │   │   ├── questions/
-│   │   │   ├── index.blade.php                # Bank Soal Mentor
-│   │   │   ├── generate.blade.php             # Form AI Generator & Preview Workspace
-│   │   │   ├── print.blade.php                # Lembar Cetak Ujian A4 & Kunci Guru
-│   │   │   └── trash.blade.php                # Tong Sampah Soal
+│   │   │   ├── index.blade.php                      # Bank Soal Mentor
+│   │   │   ├── generate.blade.php                   # Form AI Generator & Preview Workspace
+│   │   │   ├── print.blade.php                      # Lembar Cetak Ujian A4 & Kunci Guru
+│   │   │   └── trash.blade.php                      # Tong Sampah Soal
 │   │   └── recruitment/
-│   │       └── test.blade.php                 # Antarmuka Ujian Online Calon Guru
+│   │       └── test.blade.php                       # Antarmuka Ujian Online Calon Guru
+│   ├── parent/
+│   │   └── partials/
+│   │       └── feedback-modal.blade.php             # Popup Ulasan Pasca Sesi Bimbingan
 │   └── public/
 │       └── mentor-recruitment/
-│           ├── register.blade.php             # Pendaftaran Calon Guru Publik
-│           └── tracker.blade.php              # Pelacak Status Lamaran Publik
+│           ├── register.blade.php                   # Pendaftaran Calon Guru Publik
+│           └── tracker.blade.php                    # Pelacak Status Lamaran Publik
 └── routes/
-    └── web.php                                # Seluruh Definisi Rute v8.3
+    └── web.php                                      # Seluruh Definisi Rute v8.5
 ```
 
 ---
 
 ## 🧪 18. HASIL PENGUJIAN & QUALITY ASSURANCE (100% GREEN PASS)
 
-Sistem telah diuji secara komprehensif menggunakan framework pengujian **Pest PHP** dengan seluruh skenario bisnis, rekrutmen, pembuatan soal AI, dan cetak PDF tervalidasi:
+Sistem telah diuji secara komprehensif menggunakan framework pengujian **Pest PHP** dengan seluruh skenario bisnis, rekrutmen, pembuatan soal AI, kredensial santri, performa mentor, Bayesian smoothing, dan cetak PDF tervalidasi:
 
 ```bash
-# Hasil Eksekusi Pengujian Otomatis Suite Lengkap v8.3:
+# Hasil Eksekusi Pengujian Otomatis Suite Lengkap v8.5:
    PASS  Tests\Unit\ExampleTest
    PASS  Tests\Unit\GeminiQuestionServiceTest (3 tests)
-   PASS  Tests\Unit\StudentAccountServiceTest
+   PASS  Tests\Unit\StudentAccountServiceTest (7 tests)
    PASS  Tests\Unit\GamificationServiceTest
+   PASS  Tests\Unit\MentorPerformanceServiceTest (6 tests)
+   PASS  Tests\Unit\MentorFeedbackServiceTest (4 tests)
+   PASS  Tests\Unit\MentorInsightsServiceTest (3 tests)
+   PASS  Tests\Feature\Admin\MentorPerformanceDashboardTest (10 tests)
+   PASS  Tests\Feature\Mentor\SelfServicePortalTest (5 tests)
+   PASS  Tests\Feature\Parent\PostSessionFeedbackTest (4 tests)
+   PASS  Tests\Feature\MentorMatchingServiceTest (7 tests)
    PASS  Tests\Feature\MentorRecruitment\AIEvaluationTest (2 tests)
    PASS  Tests\Feature\MentorRecruitment\ProbationTrackingTest (3 tests)
    PASS  Tests\Feature\MentorRecruitment\RecruitmentFlowTest (7 tests)
@@ -630,10 +740,11 @@ Sistem telah diuji secara komprehensif menggunakan framework pengujian **Pest PH
    PASS  Tests\Feature\NotificationAlertSystemTest
    PASS  Tests\Feature\PakasirPaymentGatewayTest
    PASS  Tests\Feature\Parent\ParentDashboardModulesTest
+   PASS  Tests\Feature\ParentChildPasswordTest (4 tests)
    PASS  Tests\Feature\StudentDashboardTest
    ... (Seluruh Fitur Lintas Role)
 
-  Tests:    282 passed (1138 assertions)
+  Tests:    322 passed (1290+ assertions)
   Duration: 100% Green Pass
 ```
 
@@ -641,20 +752,33 @@ Sistem telah diuji secara komprehensif menggunakan framework pengujian **Pest PH
 
 ## 🎯 19. KESIMPULAN & REKOMENDASI LANGKAH KE DEPAN
 
-Sistem **AL-HIKMAH LMS Versi 8.3** menghadirkan standarisasi menyeluruh untuk pembinaan Al-Qur'an modern:
-1. **Funnel Rekrutmen Guru Terintegrasi**: Pendaftaran mandiri, ujian kompetensi online terstandar 3 pilar, dan masa percobaan 3 bulan terukur.
-2. **AI Question Generator Cerdas 10 Program**: Fleksibilitas format soal Pilihan Ganda & Essay berbobot HOTS dengan jaminan nol duplikasi.
-3. **Lembar Ujian PDF Siap Cetak**: Memudahkan guru mengadakan evaluasi berkala di kelas halaqah secara profesional.
-4. **Keamanan & Skalabilitas Enterprise**: Struktur database terindeks, proteksi hak akses ketat, dan 100% lolos pengujian otomatis.
+Sistem **AL-HIKMAH LMS Versi 8.5** menghadirkan standarisasi menyeluruh untuk pembinaan Al-Qur'an modern:
+1. **Mentor Performance & AI Coaching Engine**: Dashboard eksekutif preskriptif, Bayesian rating smoothing, dynamic weighting, self-service portal guru, dan deteksi risiko dini AI.
+2. **Enhanced Parent Feedback**: Ulasan pasca-sesi multi-faktor, tagging sentimen instan (Quick Chips), mode anonim, dan dialog interaktif wali-guru.
+3. **Multi-AI Selector & Smart Cascade Failover**: Kemudahan memilih model AI (Gemini, DeepSeek, Qwen, Claude, GPT) dengan jaminan zero-downtime fallback.
+4. **Smart Matchmaking AI v2.0**: Alokasi guru-santri otomatis berbasis 5 kriteria, performance boost (+10%), dan proteksi kelelahan mengajar (*burnout safety throttle*).
+5. **Kredensial Santri Standar & Keamanan Terpadu**: Email bersih (`hikmatulhasanah@alhikmah.com`), password default `santri123`, transparansi portal wali, dan peringatan keamanan di portal santri.
+6. **Funnel Rekrutmen Guru Terintegrasi**: Pendaftaran mandiri, ujian kompetensi online terstandar 3 pilar, dan masa percobaan 3 bulan terukur.
+7. **Keamanan & Skalabilitas Enterprise**: Struktur database terindeks, proteksi hak akses ketat, dan 100% lolos pengujian otomatis (322+ tests pass).
 
 ---
 
 ## 📝 20. LAMPIRAN TEKNIS, RUTE SISTEM, & GLOSARIUM
 
-### 🛣️ Daftar Rute Utama Sistem (Routing Index v8.3):
+### 🛣️ Daftar Rute Utama Sistem (Routing Index v8.5):
 
 | Rute Web | Method | Hak Akses | Deskripsi & Fungsi |
 | :--- | :---: | :---: | :--- |
+| `/admin/performance/mentors` | `GET` | Admin | Dashboard Analitik Eksekutif Performa Mentor & Top 10 Leaderboard |
+| `/admin/performance/mentors/{id}` | `GET` | Admin | Detail Scorecard 360° Mentor, Radar Chart, AI Insights & Audit Log |
+| `/admin/performance/mentors/{id}/recalculate` | `POST` | Admin | Hitung Ulang Snapshot Performa Mentor dengan Catatan Audit |
+| `/admin/performance/mentors/{id}/send-wa` | `POST` | Admin | Kirim Rapor Performa Bulanan ke Nomor WhatsApp Mentor |
+| `/admin/performance/mentors/export/pdf` | `GET` | Admin | Ekspor Laporan Komparatif Performa Seluruh Guru (Format PDF) |
+| `/admin/performance/mentors/export/excel` | `GET` | Admin | Ekspor Rekapitulasi Data Mentah Performa Guru (Format Spreadsheet) |
+| `/mentor/performance` | `GET` | Mentor | Portal Kinerja Mandiri Guru (*My Performance Scorecard & Percentile*) |
+| `/mentor/performance/goals` | `GET/POST` | Mentor | Manajemen Target Capaian Bulanan Guru (*Goal Setting & Tracker*) |
+| `/mentor/performance/self-assessment` | `GET/POST` | Mentor | Pengisian Formulir Evaluasi Diri & Refleksi Bulanan Guru |
+| `/parent/feedbacks` | `POST` | Parent | Submit Ulasan Pasca Sesi Bimbingan (Rating 4 Aspek & Quick Chips) |
 | `/bergabung` | `GET/POST` | Publik | Formulir Pendaftaran Calon Guru Pendamping Al-Qur'an |
 | `/cek-status-lamaran` | `GET` | Publik | Pelacak Status Lamaran Guru dengan Linimasa Visual |
 | `/admin/mentors/recruitment/applications` | `GET` | Admin | DataTables Daftar Pelamar Calon Guru |
@@ -673,6 +797,9 @@ Sistem **AL-HIKMAH LMS Versi 8.3** menghadirkan standarisasi menyeluruh untuk pe
 | `/admin/staff` | `GET` | Admin | Manajemen Beban Kerja SDM, Rasio Guru:Santri, & Top Performers |
 | `/admin/alerts` | `GET` | Admin | Pusat Peringatan Operasional Terpadu (Kritis, Perhatian, Info) |
 | `/admin/reports` | `GET` | Admin | Generator & Pratinjau Rekapitulasi Laporan Finansial |
+| `/admin/enrollments/{id}/edit` | `GET` | Admin | Halaman Penugasan Santri & Rekomendasi Smart Matchmaking AI |
+| `/admin/enrollments/{id}/assign-recommended` | `POST` | Admin | Eksekusi Alokasi Santri ke Guru Terpilih (1-Click Approve) |
+| `/admin/enrollments/bulk-assign` | `POST` | Admin | Eksekusi Alokasi Batch Santri dengan Smart Matchmaking AI |
 | `/student/dashboard` | `GET` | Student | Dashboard Utama Ruang Santri (Poin, Streak, 30 Juz) |
 | `/parent/children` | `GET` | Parent | Daftar Anak Binaan & Reset Password Mandiri |
 
@@ -680,7 +807,13 @@ Sistem **AL-HIKMAH LMS Versi 8.3** menghadirkan standarisasi menyeluruh untuk pe
 
 > 📄 **Dokumentasi & Referensi Terkait:**
 > - [Panduan Kode Etik & Standar Pengembang](AGENTS.md)
+> - [Service Performa & Skor Komposit Guru](app/Services/MentorPerformanceService.php)
+> - [Service AI Coaching & Insights](app/Services/MentorInsightsService.php)
+> - [Service Feedback & Ulasan Orang Tua](app/Services/MentorFeedbackService.php)
+> - [Service Matchmaking Guru-Santri](app/Services/MentorMatchingService.php)
 > - [Service Generator Soal AI](app/Services/GeminiQuestionService.php)
 > - [Service Rekrutmen Guru](app/Services/MentorRecruitmentService.php)
 > - [Service Ujian Kompetensi](app/Services/MentorTestService.php)
 > - [Service Masa Percobaan](app/Services/MentorProbationService.php)
+
+

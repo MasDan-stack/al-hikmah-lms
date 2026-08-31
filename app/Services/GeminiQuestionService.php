@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Log;
 
 class GeminiQuestionService
 {
-    protected string $provider;
+    protected string $provider = 'auto';
 
-    protected string $apiKey;
+    protected string $apiKey = '';
 
-    protected string $model;
+    protected string $model = 'standard';
 
-    protected ?string $baseUrl;
+    protected ?string $baseUrl = null;
 
     protected int $maxRetries;
 
@@ -26,24 +26,22 @@ class GeminiQuestionService
 
     public function __construct()
     {
+        $this->maxRetries = (int) config('services.ai.max_retries', env('AI_MAX_RETRIES', env('GEMINI_MAX_RETRIES', 2)));
+        $this->timeout = (int) config('services.ai.timeout', env('AI_TIMEOUT', env('GEMINI_TIMEOUT', 45)));
         $this->resolveProviderAndCredentials();
     }
 
     /**
      * Resolusi otomatis provider AI & kredensial berdasarkan konfigurasi .env
      */
-    protected function resolveProviderAndCredentials(): void
+    protected function resolveProviderAndCredentials(?string $preferredProvider = null): void
     {
-        $rawProvider = strtolower(trim((string) config('services.ai.provider', env('AI_PROVIDER', 'auto'))));
+        $rawProvider = strtolower(trim((string) ($preferredProvider ?: config('services.ai.provider', env('AI_PROVIDER', 'auto')))));
 
         $universalApiKey = trim((string) config('services.ai.api_key', env('AI_API_KEY', '')));
         $universalModel = trim((string) config('services.ai.model', env('AI_MODEL', '')));
         $universalBaseUrl = config('services.ai.base_url', env('AI_BASE_URL', null));
 
-        $this->maxRetries = (int) config('services.ai.max_retries', env('AI_MAX_RETRIES', env('GEMINI_MAX_RETRIES', 2)));
-        $this->timeout = (int) config('services.ai.timeout', env('AI_TIMEOUT', env('GEMINI_TIMEOUT', 45)));
-
-        // Provider specific variables
         $geminiKey = trim((string) config('services.ai.gemini.api_key', config('services.gemini.api_key', env('GEMINI_API_KEY', ''))));
         $geminiModel = trim((string) config('services.ai.gemini.model', config('services.gemini.model', env('GEMINI_TEXT_MODEL', 'gemini-1.5-flash'))));
 
@@ -63,7 +61,7 @@ class GeminiQuestionService
         $claudeModel = trim((string) config('services.ai.claude.model', env('CLAUDE_MODEL', 'claude-3-5-sonnet-20241022')));
         $claudeBaseUrl = config('services.ai.claude.base_url', env('CLAUDE_BASE_URL', 'https://api.anthropic.com/v1'));
 
-        // 1. JIKA PROVIDER DI-SET SECARA EKSPLISIT (Bukan 'auto')
+        // 1. JIKA PROVIDER DI-SET SECARA EKSPLISIT
         if (in_array($rawProvider, ['gemini', 'google'])) {
             $this->provider = 'gemini';
             $this->apiKey = $geminiKey ?: $universalApiKey;
@@ -101,25 +99,59 @@ class GeminiQuestionService
             return;
         }
 
-        // 2. JIKA MODE 'auto': DETEKSI BERDASARKAN API KEY YANG DI-ISI OLEH PENGGUNA
-        // Cek apakah ada API key spesifik yang terisi di .env
-        $hasQwen = ! empty($qwenKey);
-        $hasDeepseek = ! empty($deepseekKey);
-        $hasClaude = ! empty($claudeKey);
-        $hasOpenAi = ! empty($openAiKey);
-        $hasGemini = ! empty($geminiKey) && ! str_starts_with($geminiKey, 'AAQ.');
-        $hasUniversal = ! empty($universalApiKey) && ! str_starts_with($universalApiKey, 'AAQ.');
+        // 2. JIKA UNIVERSAL API KEY ATAU MODEL KHUSUS DIKONFIGURASI
+        $activeModel = strtolower($universalModel);
+        if (! empty($universalApiKey) || ! empty($universalModel)) {
+            if (str_contains($activeModel, 'claude') || str_starts_with($universalApiKey, 'sk-ant-')) {
+                if (! empty($claudeKey) || ! empty($universalApiKey)) {
+                    $this->provider = 'claude';
+                    $this->apiKey = $universalApiKey ?: $claudeKey;
+                    $this->model = $universalModel ?: ($claudeModel ?: 'claude-3-5-sonnet-20241022');
+                    $this->baseUrl = $claudeBaseUrl ?: 'https://api.anthropic.com/v1';
 
-        if ($hasQwen && ! $hasDeepseek && ! $hasClaude && ! $hasOpenAi && ! $hasGemini && ! $hasUniversal) {
-            $this->provider = 'qwen';
-            $this->apiKey = $qwenKey;
-            $this->model = $qwenModel ?: 'qwen-plus';
-            $this->baseUrl = $qwenBaseUrl ?: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
+                    return;
+                }
+            } elseif (str_contains($activeModel, 'deepseek')) {
+                if (! empty($deepseekKey) || ! empty($universalApiKey)) {
+                    $this->provider = 'deepseek';
+                    $this->apiKey = $universalApiKey ?: $deepseekKey;
+                    $this->model = $universalModel ?: ($deepseekModel ?: 'deepseek-chat');
+                    $this->baseUrl = $deepseekBaseUrl ?: 'https://api.deepseek.com/v1';
 
-            return;
+                    return;
+                }
+            } elseif (str_contains($activeModel, 'qwen') || str_starts_with($universalApiKey, 'sk-ws-')) {
+                if (! empty($qwenKey) || ! empty($universalApiKey)) {
+                    $this->provider = 'qwen';
+                    $this->apiKey = $universalApiKey ?: $qwenKey;
+                    $this->model = $universalModel ?: ($qwenModel ?: 'qwen-plus');
+                    $this->baseUrl = $qwenBaseUrl ?: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
+
+                    return;
+                }
+            } elseif (str_contains($activeModel, 'gpt') || str_contains($activeModel, 'o1') || str_contains($activeModel, 'o3')) {
+                if (! empty($openAiKey) || ! empty($universalApiKey)) {
+                    $this->provider = 'openai';
+                    $this->apiKey = $universalApiKey ?: $openAiKey;
+                    $this->model = $universalModel ?: ($openAiModel ?: 'gpt-4o-mini');
+                    $this->baseUrl = $openAiBaseUrl ?: 'https://api.openai.com/v1';
+
+                    return;
+                }
+            } elseif (str_starts_with($universalApiKey, 'AIzaSy') || (str_contains($activeModel, 'gemini') && ! empty($activeModel))) {
+                if (! empty($geminiKey) || ! empty($universalApiKey)) {
+                    $this->provider = 'gemini';
+                    $this->apiKey = $universalApiKey ?: $geminiKey;
+                    $this->model = $universalModel ?: ($geminiModel ?: 'gemini-1.5-flash');
+                    $this->baseUrl = null;
+
+                    return;
+                }
+            }
         }
 
-        if ($hasDeepseek && ! $hasQwen && ! $hasClaude && ! $hasOpenAi && ! $hasGemini && ! $hasUniversal) {
+        // 3. JIKA MODE 'auto': Prioritaskan provider yang memiliki API Key valid
+        if (! empty($deepseekKey)) {
             $this->provider = 'deepseek';
             $this->apiKey = $deepseekKey;
             $this->model = $deepseekModel ?: 'deepseek-chat';
@@ -128,16 +160,16 @@ class GeminiQuestionService
             return;
         }
 
-        if ($hasClaude && ! $hasQwen && ! $hasDeepseek && ! $hasOpenAi && ! $hasGemini && ! $hasUniversal) {
-            $this->provider = 'claude';
-            $this->apiKey = $claudeKey;
-            $this->model = $claudeModel ?: 'claude-3-5-sonnet-20241022';
-            $this->baseUrl = $claudeBaseUrl ?: 'https://api.anthropic.com/v1';
+        if (! empty($qwenKey)) {
+            $this->provider = 'qwen';
+            $this->apiKey = $qwenKey;
+            $this->model = $qwenModel ?: 'qwen-plus';
+            $this->baseUrl = $qwenBaseUrl ?: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
 
             return;
         }
 
-        if ($hasOpenAi && ! $hasQwen && ! $hasDeepseek && ! $hasClaude && ! $hasGemini && ! $hasUniversal) {
+        if (! empty($openAiKey)) {
             $this->provider = 'openai';
             $this->apiKey = $openAiKey;
             $this->model = $openAiModel ?: 'gpt-4o-mini';
@@ -146,7 +178,7 @@ class GeminiQuestionService
             return;
         }
 
-        if ($hasGemini && ! $hasQwen && ! $hasDeepseek && ! $hasClaude && ! $hasOpenAi && ! $hasUniversal) {
+        if (! empty($geminiKey)) {
             $this->provider = 'gemini';
             $this->apiKey = $geminiKey;
             $this->model = $geminiModel ?: 'gemini-1.5-flash';
@@ -155,59 +187,96 @@ class GeminiQuestionService
             return;
         }
 
-        // 3. JIKA MENGGUNAKAN AI_API_KEY UNIVERSAL ATAU MODEL TERTENTU
-        $activeKey = $universalApiKey ?: ($qwenKey ?: ($deepseekKey ?: ($claudeKey ?: ($openAiKey ?: $geminiKey))));
-        $activeModel = strtolower($universalModel ?: '');
-
-        if (str_contains($activeModel, 'qwen') || str_starts_with($activeKey, 'sk-ws-')) {
-            $this->provider = 'qwen';
-            $this->apiKey = $qwenKey ?: $activeKey;
-            $this->model = $universalModel ?: ($qwenModel ?: 'qwen-plus');
-            $this->baseUrl = $qwenBaseUrl ?: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
-        } elseif (str_contains($activeModel, 'deepseek')) {
-            $this->provider = 'deepseek';
-            $this->apiKey = $deepseekKey ?: $activeKey;
-            $this->model = $universalModel ?: ($deepseekModel ?: 'deepseek-chat');
-            $this->baseUrl = $deepseekBaseUrl ?: 'https://api.deepseek.com/v1';
-        } elseif (str_contains($activeModel, 'claude') || str_starts_with($activeKey, 'sk-ant-')) {
+        if (! empty($claudeKey)) {
             $this->provider = 'claude';
-            $this->apiKey = $claudeKey ?: $activeKey;
-            $this->model = $universalModel ?: ($claudeModel ?: 'claude-3-5-sonnet-20241022');
+            $this->apiKey = $claudeKey;
+            $this->model = $claudeModel ?: 'claude-3-5-sonnet-20241022';
             $this->baseUrl = $claudeBaseUrl ?: 'https://api.anthropic.com/v1';
-        } elseif (str_contains($activeModel, 'gpt') || str_contains($activeModel, 'o1') || str_contains($activeModel, 'o3')) {
-            $this->provider = 'openai';
-            $this->apiKey = $openAiKey ?: $activeKey;
-            $this->model = $universalModel ?: ($openAiModel ?: 'gpt-4o-mini');
-            $this->baseUrl = $openAiBaseUrl ?: 'https://api.openai.com/v1';
-        } elseif (str_starts_with($activeKey, 'AIzaSy') || str_contains($activeModel, 'gemini')) {
-            $this->provider = 'gemini';
-            $this->apiKey = $geminiKey ?: $activeKey;
-            $this->model = $universalModel ?: ($geminiModel ?: 'gemini-1.5-flash');
-            $this->baseUrl = null;
-        } elseif (! empty($activeKey)) {
-            // Jika ada key sk-..., periksa provider kandidat
-            if ($hasQwen) {
-                $this->provider = 'qwen';
-                $this->apiKey = $qwenKey;
-                $this->model = $qwenModel ?: 'qwen-plus';
-                $this->baseUrl = $qwenBaseUrl ?: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
-            } elseif ($hasDeepseek) {
-                $this->provider = 'deepseek';
-                $this->apiKey = $deepseekKey;
-                $this->model = $deepseekModel ?: 'deepseek-chat';
-                $this->baseUrl = $deepseekBaseUrl ?: 'https://api.deepseek.com/v1';
-            } else {
-                $this->provider = 'openai';
-                $this->apiKey = $activeKey;
-                $this->model = $universalModel ?: 'gpt-4o-mini';
-                $this->baseUrl = $universalBaseUrl ?: 'https://api.openai.com/v1';
-            }
-        } else {
-            $this->provider = 'gemini';
-            $this->apiKey = '';
-            $this->model = 'gemini-1.5-flash';
-            $this->baseUrl = null;
+
+            return;
         }
+
+        $this->provider = 'gemini';
+        $this->apiKey = $universalApiKey;
+        $this->model = $universalModel ?: 'gemini-1.5-flash';
+        $this->baseUrl = $universalBaseUrl;
+    }
+
+    /**
+     * Dapatkan daftar seluruh provider AI yang didukung beserta status ketersediaan API key-nya
+     */
+    public function getConfiguredProviders(): array
+    {
+        $deepseekKey = trim((string) config('services.ai.deepseek.api_key', env('DEEPSEEK_API_KEY', '')));
+        $qwenKey = trim((string) config('services.ai.qwen.api_key', env('QWEN_API_KEY', '')));
+        $geminiKey = trim((string) config('services.ai.gemini.api_key', config('services.gemini.api_key', env('GEMINI_API_KEY', ''))));
+        $openAiKey = trim((string) config('services.ai.openai.api_key', env('OPENAI_API_KEY', '')));
+        $claudeKey = trim((string) config('services.ai.claude.api_key', env('CLAUDE_API_KEY', env('ANTHROPIC_API_KEY', ''))));
+
+        $hasAnyKey = ! empty($deepseekKey) || ! empty($qwenKey) || ! empty($geminiKey) || ! empty($openAiKey) || ! empty($claudeKey);
+
+        return [
+            'auto' => [
+                'id' => 'auto',
+                'name' => 'Auto (Smart Cascade Multi-AI)',
+                'model' => 'DeepSeek ➔ Qwen ➔ OpenAI ➔ Gemini',
+                'is_configured' => $hasAnyKey,
+                'badge' => '⚡ Rekomendasi',
+                'badge_class' => 'bg-warning text-dark',
+                'icon' => 'bi-lightning-charge-fill text-warning',
+                'description' => 'Otomatis memilih AI terbaik dan beralih ke cadangan jika terjadi limit kuota.',
+            ],
+            'deepseek' => [
+                'id' => 'deepseek',
+                'name' => 'DeepSeek AI',
+                'model' => config('services.ai.deepseek.model', env('DEEPSEEK_MODEL', 'deepseek-chat')),
+                'is_configured' => ! empty($deepseekKey),
+                'badge' => 'DeepSeek V3',
+                'badge_class' => 'bg-primary text-white',
+                'icon' => 'bi-cpu-fill text-primary',
+                'description' => 'Penalaran tajwid mendalam, fiqih analitis, & perbandingan kaidah Al-Qur\'an.',
+            ],
+            'qwen' => [
+                'id' => 'qwen',
+                'name' => 'Alibaba Qwen AI',
+                'model' => config('services.ai.qwen.model', env('QWEN_MODEL', 'qwen-plus')),
+                'is_configured' => ! empty($qwenKey),
+                'badge' => 'Qwen Plus',
+                'badge_class' => 'bg-info text-dark',
+                'icon' => 'bi-stars text-info',
+                'description' => 'Sangat unggul dalam tata bahasa Arab (Nahwu-Sharaf) & silabus pendidikan Islam.',
+            ],
+            'gemini' => [
+                'id' => 'gemini',
+                'name' => 'Google Gemini AI',
+                'model' => config('services.ai.gemini.model', config('services.gemini.model', env('GEMINI_TEXT_MODEL', 'gemini-1.5-flash'))),
+                'is_configured' => ! empty($geminiKey),
+                'badge' => 'Gemini Flash',
+                'badge_class' => 'bg-success text-white',
+                'icon' => 'bi-google text-success',
+                'description' => 'Kecepatan inferensi tinggi untuk evaluasi hafalan mufrodat & hukum bacaan.',
+            ],
+            'openai' => [
+                'id' => 'openai',
+                'name' => 'OpenAI ChatGPT',
+                'model' => config('services.ai.openai.model', env('OPENAI_MODEL', 'gpt-4o-mini')),
+                'is_configured' => ! empty($openAiKey),
+                'badge' => 'GPT-4o Mini',
+                'badge_class' => 'bg-dark text-white',
+                'icon' => 'bi-robot text-dark',
+                'description' => 'Struktur pertanyaan variatif dengan pemahaman kontekstual seimbang.',
+            ],
+            'claude' => [
+                'id' => 'claude',
+                'name' => 'Anthropic Claude',
+                'model' => config('services.ai.claude.model', env('CLAUDE_MODEL', 'claude-3-5-sonnet-20241022')),
+                'is_configured' => ! empty($claudeKey),
+                'badge' => 'Claude 3.5',
+                'badge_class' => 'bg-danger text-white',
+                'icon' => 'bi-gem text-danger',
+                'description' => 'Analisis pedagogik adab, karakter santri, & soal HOTS kompleks.',
+            ],
+        ];
     }
 
     /**
@@ -243,7 +312,7 @@ class GeminiQuestionService
     }
 
     /**
-     * Generate soal pilihan ganda, essay, atau campuran menggunakan Multi-Provider AI (Gemini, DeepSeek, Qwen, Claude, GPT)
+     * Generate soal pilihan ganda, essay, atau campuran menggunakan Smart Cascade Multi-Provider AI
      *
      * @throws Exception
      */
@@ -252,7 +321,8 @@ class GeminiQuestionService
         ?string $topic = null,
         int $count = 5,
         string $difficulty = 'Sedang',
-        string $questionType = 'multiple_choice'
+        string $questionType = 'multiple_choice',
+        string $requestedProvider = 'auto'
     ): array {
         $this->lastError = null;
         $this->isFallbackUsed = false;
@@ -262,48 +332,123 @@ class GeminiQuestionService
             $cleanTopic = $this->getDefaultTopicForProgram($program);
         }
 
-        // Jika API Key kosong atau format placeholder yang jelas invalid
-        if (empty($this->apiKey) || str_starts_with($this->apiKey, 'AAQ.')) {
-            $this->isFallbackUsed = true;
-            $this->lastError = 'API Key kosong atau format placeholder belum diisi.';
-
-            return $this->getCuratedFallbackQuestions($program, $cleanTopic, $count, $difficulty, $questionType);
-        }
-
+        // Susun urutan cascade kandidat AI
+        $cascadeChain = $this->buildCascadeChain($requestedProvider);
         $prompt = $this->buildPrompt($program, $cleanTopic, $count, $difficulty, $questionType);
 
-        try {
-            $rawText = match ($this->provider) {
-                'openai', 'deepseek', 'qwen' => $this->callOpenAiCompatibleApi($prompt),
-                'claude' => $this->callClaudeApi($prompt),
-                default => $this->callGeminiApi($prompt),
-            };
+        foreach ($cascadeChain as $candidate) {
+            $candidateProvider = $candidate['provider'];
+            $candidateKey = $candidate['key'];
+            $candidateModel = $candidate['model'];
+            $candidateBaseUrl = $candidate['base_url'];
 
-            if (empty($rawText)) {
-                $this->isFallbackUsed = true;
-                $this->lastError = "Provider AI [{$this->provider}] mengembalikan respon teks kosong.";
-                Log::warning("AI [{$this->provider}] returned empty text, falling back to curated engine.");
-
-                return $this->getCuratedFallbackQuestions($program, $cleanTopic, $count, $difficulty, $questionType);
+            if (empty($candidateKey)) {
+                continue;
             }
 
-            return $this->parseResponse($rawText, $difficulty, $questionType, $program, $cleanTopic, $count);
+            try {
+                $rawText = match ($candidateProvider) {
+                    'openai', 'deepseek', 'qwen' => $this->callOpenAiCompatibleApi($prompt, $candidateProvider, $candidateKey, $candidateModel, $candidateBaseUrl),
+                    'claude' => $this->callClaudeApi($prompt, $candidateKey, $candidateModel, $candidateBaseUrl),
+                    default => $this->callGeminiApi($prompt, $candidateKey, $candidateModel),
+                };
 
-        } catch (Exception $e) {
-            $this->isFallbackUsed = true;
-            $this->lastError = $e->getMessage();
-            Log::warning("Universal AI Service [{$this->provider}] Exception: ".$e->getMessage().', using curated fallback.');
+                if (empty($rawText)) {
+                    Log::warning("AI Provider [{$candidateProvider}] returned empty text, continuing cascade...");
 
-            return $this->getCuratedFallbackQuestions($program, $cleanTopic, $count, $difficulty, $questionType);
+                    continue;
+                }
+
+                $parsed = $this->parseResponse($rawText, $difficulty, $questionType, $program, $cleanTopic, $count, false);
+
+                if (! empty($parsed) && is_array($parsed)) {
+                    $this->provider = $candidateProvider;
+                    $this->model = $candidateModel;
+                    $this->apiKey = $candidateKey;
+                    $this->baseUrl = $candidateBaseUrl;
+                    $this->isFallbackUsed = false;
+                    $this->lastError = null;
+
+                    return $parsed;
+                }
+            } catch (Exception $e) {
+                $this->lastError = "[{$candidateProvider}] ".$e->getMessage();
+                Log::warning("AI Cascade [{$candidateProvider}] Failed: ".$e->getMessage().', falling over to next provider.');
+            }
         }
+
+        // JIKA SELURUH KANDIDAT AI GAGAL ATAU BELUM DIKONFIGURASI, GUNAKAN BANK KURIKULUM TERKURASI
+        $this->isFallbackUsed = true;
+        $this->provider = 'curated_fallback';
+        $this->model = 'Al-Hikmah Standard Curriculum';
+
+        return $this->getCuratedFallbackQuestions($program, $cleanTopic, $count, $difficulty, $questionType);
+    }
+
+    /**
+     * Membangun urutan prioritas Cascade Failover
+     */
+    protected function buildCascadeChain(string $requestedProvider = 'auto'): array
+    {
+        $deepseekKey = trim((string) config('services.ai.deepseek.api_key', env('DEEPSEEK_API_KEY', '')));
+        $deepseekModel = trim((string) config('services.ai.deepseek.model', env('DEEPSEEK_MODEL', 'deepseek-chat')));
+        $deepseekBaseUrl = config('services.ai.deepseek.base_url', env('DEEPSEEK_BASE_URL', 'https://api.deepseek.com/v1'));
+
+        $qwenKey = trim((string) config('services.ai.qwen.api_key', env('QWEN_API_KEY', '')));
+        $qwenModel = trim((string) config('services.ai.qwen.model', env('QWEN_MODEL', 'qwen-plus')));
+        $qwenBaseUrl = config('services.ai.qwen.base_url', env('QWEN_BASE_URL', 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1'));
+
+        $openAiKey = trim((string) config('services.ai.openai.api_key', env('OPENAI_API_KEY', '')));
+        $openAiModel = trim((string) config('services.ai.openai.model', env('OPENAI_MODEL', 'gpt-4o-mini')));
+        $openAiBaseUrl = config('services.ai.openai.base_url', env('OPENAI_BASE_URL', 'https://api.openai.com/v1'));
+
+        $geminiKey = trim((string) config('services.ai.gemini.api_key', config('services.gemini.api_key', env('GEMINI_API_KEY', ''))));
+        $geminiModel = trim((string) config('services.ai.gemini.model', config('services.gemini.model', env('GEMINI_TEXT_MODEL', 'gemini-1.5-flash'))));
+
+        $claudeKey = trim((string) config('services.ai.claude.api_key', env('CLAUDE_API_KEY', env('ANTHROPIC_API_KEY', ''))));
+        $claudeModel = trim((string) config('services.ai.claude.model', env('CLAUDE_MODEL', 'claude-3-5-sonnet-20241022')));
+        $claudeBaseUrl = config('services.ai.claude.base_url', env('CLAUDE_BASE_URL', 'https://api.anthropic.com/v1'));
+
+        $allProviders = [
+            'deepseek' => ['provider' => 'deepseek', 'key' => $deepseekKey, 'model' => $deepseekModel, 'base_url' => $deepseekBaseUrl],
+            'qwen' => ['provider' => 'qwen', 'key' => $qwenKey, 'model' => $qwenModel, 'base_url' => $qwenBaseUrl],
+            'openai' => ['provider' => 'openai', 'key' => $openAiKey, 'model' => $openAiModel, 'base_url' => $openAiBaseUrl],
+            'gemini' => ['provider' => 'gemini', 'key' => $geminiKey, 'model' => $geminiModel, 'base_url' => null],
+            'claude' => ['provider' => 'claude', 'key' => $claudeKey, 'model' => $claudeModel, 'base_url' => $claudeBaseUrl],
+        ];
+
+        $req = strtolower(trim($requestedProvider));
+        if ($req !== 'auto' && isset($allProviders[$req])) {
+            $chain = [$allProviders[$req]];
+            // Sisipkan provider lain sebagai backup jika pilihan utama gagal
+            foreach ($allProviders as $pKey => $pVal) {
+                if ($pKey !== $req && ! empty($pVal['key'])) {
+                    $chain[] = $pVal;
+                }
+            }
+
+            return $chain;
+        }
+
+        // Mode 'auto': Coba seluruh provider yang memiliki API key
+        $chain = [];
+        foreach ($allProviders as $pVal) {
+            if (! empty($pVal['key'])) {
+                $chain[] = $pVal;
+            }
+        }
+
+        return $chain;
     }
 
     /**
      * Panggilan REST API Google Gemini
      */
-    protected function callGeminiApi(string $prompt): string
+    protected function callGeminiApi(string $prompt, ?string $apiKey = null, ?string $model = null): string
     {
-        $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$this->model}:generateContent?key={$this->apiKey}";
+        $key = $apiKey ?: $this->apiKey;
+        $modelName = $model ?: ($this->model ?: 'gemini-1.5-flash');
+        $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$modelName}:generateContent?key={$key}";
 
         $response = Http::withOptions([
             'curl' => [
@@ -343,13 +488,15 @@ class GeminiQuestionService
     /**
      * Panggilan REST API format OpenAI Chat Completions (Dipakai oleh OpenAI GPT, DeepSeek, & Qwen DashScope)
      */
-    protected function callOpenAiCompatibleApi(string $prompt): string
+    protected function callOpenAiCompatibleApi(string $prompt, string $provider = 'openai', ?string $apiKey = null, ?string $model = null, ?string $baseUrl = null): string
     {
-        $baseUrl = rtrim($this->baseUrl ?: 'https://api.openai.com/v1', '/');
-        $endpoint = "{$baseUrl}/chat/completions";
+        $key = $apiKey ?: $this->apiKey;
+        $modelName = $model ?: $this->model;
+        $base = rtrim($baseUrl ?: ($this->baseUrl ?: 'https://api.openai.com/v1'), '/');
+        $endpoint = "{$base}/chat/completions";
 
         $payload = [
-            'model' => $this->model,
+            'model' => $modelName,
             'messages' => [
                 [
                     'role' => 'system',
@@ -364,7 +511,7 @@ class GeminiQuestionService
         ];
 
         // Format JSON mode jika didukung provider
-        if ($this->provider === 'openai' || $this->provider === 'deepseek') {
+        if ($provider === 'openai' || $provider === 'deepseek') {
             $payload['response_format'] = ['type' => 'json_object'];
         }
 
@@ -376,14 +523,14 @@ class GeminiQuestionService
             ->timeout($this->timeout)
             ->retry($this->maxRetries, 1500, throw: false)
             ->withHeaders([
-                'Authorization' => 'Bearer '.$this->apiKey,
+                'Authorization' => 'Bearer '.$key,
                 'Content-Type' => 'application/json',
                 'User-Agent' => 'AlHikmah-LMS/1.0',
             ])
             ->post($endpoint, $payload);
 
         // Jika Qwen international 401/404, coba fallback otomatis ke Qwen domestic endpoint
-        if (! $response->successful() && $this->provider === 'qwen' && str_contains($baseUrl, 'dashscope-intl')) {
+        if (! $response->successful() && $provider === 'qwen' && str_contains($base, 'dashscope-intl')) {
             $fallbackEndpoint = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
             $retryResponse = Http::withOptions([
                 'curl' => [
@@ -392,7 +539,7 @@ class GeminiQuestionService
             ])
                 ->timeout($this->timeout)
                 ->withHeaders([
-                    'Authorization' => 'Bearer '.$this->apiKey,
+                    'Authorization' => 'Bearer '.$key,
                     'Content-Type' => 'application/json',
                     'User-Agent' => 'AlHikmah-LMS/1.0',
                 ])
@@ -406,7 +553,7 @@ class GeminiQuestionService
         }
 
         if (! $response->successful()) {
-            throw new Exception("{$this->provider} API Error (HTTP {$response->status()}): ".($response->json('error.message') ?? $response->body()));
+            throw new Exception("{$provider} API Error (HTTP {$response->status()}): ".($response->json('error.message') ?? $response->body()));
         }
 
         $body = $response->json();
@@ -417,10 +564,12 @@ class GeminiQuestionService
     /**
      * Panggilan REST API Anthropic Claude
      */
-    protected function callClaudeApi(string $prompt): string
+    protected function callClaudeApi(string $prompt, ?string $apiKey = null, ?string $model = null, ?string $baseUrl = null): string
     {
-        $baseUrl = rtrim($this->baseUrl ?: 'https://api.anthropic.com/v1', '/');
-        $endpoint = "{$baseUrl}/messages";
+        $key = $apiKey ?: $this->apiKey;
+        $modelName = $model ?: $this->model;
+        $base = rtrim($baseUrl ?: ($this->baseUrl ?: 'https://api.anthropic.com/v1'), '/');
+        $endpoint = "{$base}/messages";
 
         $response = Http::withOptions([
             'curl' => [
@@ -430,13 +579,13 @@ class GeminiQuestionService
             ->timeout($this->timeout)
             ->retry($this->maxRetries, 1500, throw: false)
             ->withHeaders([
-                'x-api-key' => $this->apiKey,
+                'x-api-key' => $key,
                 'anthropic-version' => '2023-06-01',
                 'Content-Type' => 'application/json',
                 'User-Agent' => 'AlHikmah-LMS/1.0',
             ])
             ->post($endpoint, [
-                'model' => $this->model,
+                'model' => $modelName,
                 'max_tokens' => 8192,
                 'messages' => [
                     [
@@ -522,8 +671,9 @@ EOT;
         string $requestedType = 'multiple_choice',
         string $program = '',
         string $topic = '',
-        ?int $targetCount = null
-    ): array {
+        ?int $targetCount = null,
+        bool $allowFallback = true
+    ): ?array {
         $cleaned = trim($response);
 
         // 1. Ekstrak konten dalam blok ```json ... ``` jika ada
@@ -549,9 +699,9 @@ EOT;
         $decoded = json_decode($cleaned, true);
 
         if (json_last_error() !== JSON_ERROR_NONE || ! is_array($decoded)) {
-            Log::warning('JSON Decode Error on AI response, falling back: '.json_last_error_msg());
+            Log::warning('JSON Decode Error on AI response: '.json_last_error_msg());
 
-            return $this->getCuratedFallbackQuestions($program, $topic, $targetCount ?? 5, $fallbackDifficulty, $requestedType);
+            return $allowFallback ? $this->getCuratedFallbackQuestions($program, $topic, $targetCount ?? 5, $fallbackDifficulty, $requestedType) : null;
         }
 
         $items = [];
@@ -562,7 +712,7 @@ EOT;
         }
 
         if (empty($items)) {
-            return $this->getCuratedFallbackQuestions($program, $topic, $targetCount ?? 5, $fallbackDifficulty, $requestedType);
+            return $allowFallback ? $this->getCuratedFallbackQuestions($program, $topic, $targetCount ?? 5, $fallbackDifficulty, $requestedType) : null;
         }
 
         // Anti-Duplikasi: Saring butir soal unik berdasarkan hash teks pertanyaan
@@ -640,8 +790,12 @@ EOT;
 
         $expectedCount = $targetCount ?? count($uniqueQuestions);
 
-        // Jika jumlah soal unik kurang dari target dan program terdefinisi, lengkapi dari bank kurikulum cadangan tanpa duplikasi
-        if (count($uniqueQuestions) < $expectedCount) {
+        if (empty($uniqueQuestions)) {
+            return $allowFallback ? $this->getCuratedFallbackQuestions($program, $topic, $expectedCount ?: 5, $fallbackDifficulty, $requestedType) : null;
+        }
+
+        // Jika jumlah soal unik kurang dari target dan program terdefinisi, lengkapi dari bank kurikulum cadangan tanpa duplikasi jika allowFallback aktif
+        if (count($uniqueQuestions) < $expectedCount && $allowFallback) {
             $fallbackSet = $this->getCuratedFallbackQuestions($program, $topic, $expectedCount * 2, $fallbackDifficulty, $requestedType);
             foreach ($fallbackSet as $fItem) {
                 $fKey = md5(mb_strtolower(trim($fItem['question'])));

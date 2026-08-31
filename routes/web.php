@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\AdminBlogTagController;
 use App\Http\Controllers\Admin\AdminBroadcastController;
 use App\Http\Controllers\Admin\AdminGamificationController;
 use App\Http\Controllers\Admin\AdminMentorLeaveController;
+use App\Http\Controllers\Admin\AdminMentorPerformanceController;
 use App\Http\Controllers\Admin\AdminProbationController;
 use App\Http\Controllers\Admin\AdminRecruitmentController;
 use App\Http\Controllers\Admin\AdminReportController;
@@ -35,6 +36,7 @@ use App\Http\Controllers\Mentor\MentorLeaveController;
 use App\Http\Controllers\Mentor\MentorMessageController;
 use App\Http\Controllers\Mentor\MentorQuestionController;
 use App\Http\Controllers\Mentor\MentorRecruitmentTestController;
+use App\Http\Controllers\Mentor\MentorSelfServiceController;
 use App\Http\Controllers\Mentor\MentorTargetController;
 use App\Http\Controllers\Mentor\ProgressController as MentorProgressController;
 use App\Http\Controllers\Mentor\ReportController as MentorReportController;
@@ -43,6 +45,7 @@ use App\Http\Controllers\Mentor\StudentController as MentorStudentController;
 use App\Http\Controllers\Parent\EnrollmentController as ParentEnrollmentController;
 use App\Http\Controllers\Parent\ParentChildController;
 use App\Http\Controllers\Parent\ParentDashboardController;
+use App\Http\Controllers\Parent\ParentFeedbackController;
 use App\Http\Controllers\Parent\ParentMessageController;
 use App\Http\Controllers\Parent\ParentPaymentController;
 use App\Http\Controllers\Parent\ParentProfileController;
@@ -225,6 +228,8 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/active-enrollments', [ActiveEnrollmentController::class, 'index'])->name('active-enrollments.index');
         Route::get('/enrollments/{id}/edit', [AdminEnrollmentController::class, 'edit'])->name('enrollments.edit');
         Route::post('/enrollments/{id}/accept', [AdminEnrollmentController::class, 'accept'])->name('enrollments.accept');
+        Route::post('/enrollments/{id}/assign-recommended', [AdminEnrollmentController::class, 'assignRecommended'])->name('enrollments.assign-recommended');
+        Route::post('/enrollments/bulk-assign', [AdminEnrollmentController::class, 'bulkAssign'])->name('enrollments.bulk-assign');
         Route::post('/enrollments/{id}/offer', [AdminEnrollmentController::class, 'offerAlternative'])->name('enrollments.offer');
         Route::post('/enrollments/bulk-accept', [AdminEnrollmentController::class, 'bulkAccept'])->name('enrollments.bulk-accept');
         Route::post('/enrollments/{id}/cancel', [AdminEnrollmentController::class, 'cancel'])->name('enrollments.cancel');
@@ -296,6 +301,15 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/broadcast', [AdminBroadcastController::class, 'index'])->name('broadcast.index');
         Route::post('/broadcast/send', [AdminBroadcastController::class, 'send'])->name('broadcast.send');
         Route::post('/broadcast/preview', [AdminBroadcastController::class, 'preview'])->name('broadcast.preview');
+
+        // Mentor Performance Dashboard, Scorecard 360, & AI Coaching (v2.0)
+        Route::prefix('performance')->name('performance.')->group(function () {
+            Route::get('/mentors', [AdminMentorPerformanceController::class, 'index'])->name('mentors.index');
+            Route::get('/mentors/export-excel', [AdminMentorPerformanceController::class, 'exportExcel'])->name('mentors.export-excel');
+            Route::get('/mentors/{id}', [AdminMentorPerformanceController::class, 'show'])->name('mentors.show');
+            Route::post('/mentors/{id}/recalculate', [AdminMentorPerformanceController::class, 'recalculate'])->name('mentors.recalculate');
+            Route::post('/mentors/{id}/send-wa', [AdminMentorPerformanceController::class, 'sendWhatsAppReport'])->name('mentors.send-wa');
+        });
     });
 
 // ==========================================
@@ -360,6 +374,15 @@ Route::middleware(['auth', 'role:mentor'])
         Route::post('/leaves', [MentorLeaveController::class, 'store'])->name('leaves.store');
         Route::delete('/leaves/{leave}', [MentorLeaveController::class, 'destroy'])->name('leaves.destroy');
 
+        // Mentor Self-Service Performance Portal, Goals & Reflection (v2.0)
+        Route::prefix('performance')->name('performance.')->group(function () {
+            Route::get('/', [MentorSelfServiceController::class, 'myPerformance'])->name('index');
+            Route::get('/goals', [MentorSelfServiceController::class, 'goals'])->name('goals');
+            Route::post('/goals', [MentorSelfServiceController::class, 'storeGoal'])->name('goals.store');
+            Route::get('/self-assessment', [MentorSelfServiceController::class, 'selfAssessment'])->name('self-assessment');
+            Route::post('/self-assessment', [MentorSelfServiceController::class, 'storeSelfAssessment'])->name('self-assessment.store');
+        });
+
         // Portal Rekrutmen & Ujian Tes Calon Guru
         Route::get('/recruitment/test/{sessionId}', [MentorRecruitmentTestController::class, 'showTest'])->name('recruitment.take-test');
         Route::post('/recruitment/test/{sessionId}/submit', [MentorRecruitmentTestController::class, 'submitTest'])->name('recruitment.submit-test');
@@ -374,6 +397,9 @@ Route::middleware(['auth', 'role:parent'])
     ->group(function () {
         // A. Dashboard Utama
         Route::get('/dashboard', [ParentDashboardController::class, 'index'])->name('dashboard');
+
+        // Post-Session Feedback & Quick Chips
+        Route::post('/feedbacks', [ParentFeedbackController::class, 'store'])->name('feedbacks.store');
 
         // D. Modul Pembayaran
         Route::get('/payments', [ParentPaymentController::class, 'index'])->name('payments.index');

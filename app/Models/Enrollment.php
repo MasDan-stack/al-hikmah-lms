@@ -9,6 +9,7 @@ use Database\Factories\EnrollmentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
 
@@ -33,6 +34,8 @@ class Enrollment extends Model
         'confirmed_at',
         'paid_at',
         'start_date',
+        'shadow_mentor_id',
+        'matching_score',
     ];
 
     protected function casts(): array
@@ -45,6 +48,7 @@ class Enrollment extends Model
             'confirmed_at' => 'datetime',
             'paid_at' => 'datetime',
             'start_date' => 'date',
+            'matching_score' => 'float',
         ];
     }
 
@@ -74,9 +78,19 @@ class Enrollment extends Model
         return $this->belongsTo(Mentor::class);
     }
 
+    public function shadowMentor(): BelongsTo
+    {
+        return $this->belongsTo(Mentor::class, 'shadow_mentor_id');
+    }
+
     public function payment(): HasOne
     {
         return $this->hasOne(Payment::class);
+    }
+
+    public function matchingLogs(): HasMany
+    {
+        return $this->hasMany(MatchingLog::class);
     }
 
     // Helper Format Tampilan

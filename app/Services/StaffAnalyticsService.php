@@ -37,10 +37,9 @@ class StaffAnalyticsService
 
         // Mentor Overload (>40 santri)
         $overloadMentorsCount = Mentor::where('is_active', true)
-            ->withCount(['students' => function ($q) {
+            ->whereHas('students', function ($q) {
                 $q->where('mentor_student.is_active', true);
-            }])
-            ->having('students_count', '>', 40)
+            }, '>', 40)
             ->count();
 
         return [

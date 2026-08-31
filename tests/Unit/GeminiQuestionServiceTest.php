@@ -135,6 +135,7 @@ test('multi-provider ai detects providers correctly based on configuration and m
     config([
         'services.ai.provider' => 'auto',
         'services.ai.api_key' => '',
+        'services.ai.model' => '',
         'services.ai.gemini.api_key' => '',
         'services.ai.deepseek.api_key' => '',
         'services.ai.claude.api_key' => '',
@@ -163,8 +164,8 @@ test('curated questions bank returns 100% accurate program-specific topic questi
     // 2. Adab & Doa Harian
     $adabQuestions = $service->generateQuestions('Adab & Doa Harian', 'Doa & Adab Harian', 5, 'Sedang', 'multiple_choice');
     expect($adabQuestions)->toBeArray()->and(count($adabQuestions))->toBe(5);
-    $adabTexts = implode(' ', array_column($adabQuestions, 'question'));
-    expect($adabTexts)->toContain('Doa');
+    $adabTexts = strtolower(implode(' ', array_column($adabQuestions, 'question')));
+    expect($adabTexts)->toContain('doa');
 
     // 3. Tahfidz Al-Qur\'an
     $tahfidzQuestions = $service->generateQuestions('Tahfidz Al-Qur\'an', 'Juz 30', 5, 'Sedang', 'multiple_choice');

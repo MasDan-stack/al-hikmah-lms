@@ -74,6 +74,9 @@
                             </td>
                             <td>
                                 <div class="fw-bold">{{ $entry->student_name }}</div>
+                                @if(!empty($entry->privacy_leaderboard) && !empty($entry->raw_name) && $entry->raw_name !== $entry->student_name)
+                                    <small class="text-muted">Nama Asli: {{ $entry->raw_name }} &bull; </small>
+                                @endif
                                 <small class="text-muted">ID Santri: #{{ $entry->student_id }}</small>
                             </td>
                             <td><strong class="text-warning fs-6">{{ number_format($entry->total_points) }} Pts</strong></td>
@@ -81,10 +84,10 @@
                             <td>{{ number_format($entry->total_ayat) }} Ayat</td>
                             <td><span class="badge bg-success-subtle text-success rounded-pill">{{ $entry->total_juz_mutqin }} Juz</span></td>
                             <td>
-                                @if($entry->privacy_leaderboard)
-                                    <span class="badge bg-secondary-subtle text-secondary rounded-pill">Disamarkan</span>
+                                @if(!empty($entry->privacy_leaderboard))
+                                    <span class="badge bg-secondary-subtle text-secondary rounded-pill"><i class="bi bi-incognito me-1"></i> Disamarkan</span>
                                 @else
-                                    <span class="badge bg-light text-muted border rounded-pill">Publik</span>
+                                    <span class="badge bg-light text-muted border rounded-pill"><i class="bi bi-eye me-1"></i> Publik</span>
                                 @endif
                             </td>
                         </tr>

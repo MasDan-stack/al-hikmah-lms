@@ -25,19 +25,25 @@ class StudentAccountServiceTest extends TestCase
     public function test_email_generation_standard_two_words(): void
     {
         $email = $this->service->generateStudentEmail('Dan Hermawan');
-        $this->assertEquals('dan.hermawan@alhikmah.com', $email);
+        $this->assertEquals('danhermawan@alhikmah.com', $email);
     }
 
     public function test_email_generation_single_word(): void
     {
         $email = $this->service->generateStudentEmail('Fatimah');
-        $this->assertEquals('fat.fatimah@alhikmah.com', $email);
+        $this->assertEquals('fatimah@alhikmah.com', $email);
     }
 
     public function test_email_generation_three_words(): void
     {
         $email = $this->service->generateStudentEmail('Muhammad Dan Hermawan');
-        $this->assertEquals('muh.hermawan@alhikmah.com', $email);
+        $this->assertEquals('muhammaddanhermawan@alhikmah.com', $email);
+    }
+
+    public function test_email_generation_with_special_characters(): void
+    {
+        $email = $this->service->generateStudentEmail('Hikmatul Hasanah, S.Pd');
+        $this->assertEquals('hikmatulhasanahspd@alhikmah.com', $email);
     }
 
     public function test_email_generation_handles_duplicates(): void
@@ -46,21 +52,21 @@ class StudentAccountServiceTest extends TestCase
 
         User::create([
             'name' => 'Dan Hermawan',
-            'email' => 'dan.hermawan@alhikmah.com',
+            'email' => 'danhermawan@alhikmah.com',
             'password' => bcrypt('password123'),
         ]);
 
         $secondEmail = $this->service->generateStudentEmail('Dan Hermawan');
-        $this->assertEquals('dan.hermawan1@alhikmah.com', $secondEmail);
+        $this->assertEquals('danhermawan2@alhikmah.com', $secondEmail);
 
         User::create([
             'name' => 'Dan Hermawan 2',
-            'email' => 'dan.hermawan1@alhikmah.com',
+            'email' => 'danhermawan2@alhikmah.com',
             'password' => bcrypt('password123'),
         ]);
 
         $thirdEmail = $this->service->generateStudentEmail('Dan Hermawan');
-        $this->assertEquals('dan.hermawan2@alhikmah.com', $thirdEmail);
+        $this->assertEquals('danhermawan3@alhikmah.com', $thirdEmail);
     }
 
     public function test_password_generation_length(): void
@@ -111,8 +117,8 @@ class StudentAccountServiceTest extends TestCase
 
         $this->assertNotNull($result['user']);
         $this->assertNotNull($result['student']);
-        $this->assertNotEmpty($result['plain_password']);
-        $this->assertEquals('ahm.fauzan@alhikmah.com', $result['user']->email);
+        $this->assertEquals('santri123', $result['plain_password']);
+        $this->assertEquals('ahmadfauzan@alhikmah.com', $result['user']->email);
         $this->assertEquals(10, $result['student']->age);
 
         // Verify 30 juz initialized
@@ -132,6 +138,6 @@ class StudentAccountServiceTest extends TestCase
         ]);
 
         $email = $this->service->generateStudentEmail('Zaid Abdullah');
-        $this->assertEquals('zai.abdullah@pesantrenalhikmah.sch.id', $email);
+        $this->assertEquals('zaidabdullah@pesantrenalhikmah.sch.id', $email);
     }
 }

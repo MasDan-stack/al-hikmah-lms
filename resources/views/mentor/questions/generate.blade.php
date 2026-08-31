@@ -47,22 +47,59 @@
     </div>
 
     <!-- AI Generator Config Card -->
+    <!-- AI Generator Config Card -->
     <div class="card border-0 shadow-sm rounded-4 mb-4 prayer-box" style="background: var(--card-bg);">
         <div class="card-body p-4">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
                 <h5 class="fw-bold mb-0 text-success"><i class="bi bi-sliders me-2"></i> Konfigurasi Parameter Pembuatan Soal</h5>
-                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 small">
-                    <i class="bi bi-cpu-fill me-1"></i> AI Active: <strong class="text-uppercase">{{ $activeProvider ?? 'AI' }}</strong> ({{ $activeModel ?? 'Standard' }})
+                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 small" id="topActiveBadge">
+                    <i class="bi bi-cpu-fill me-1"></i> Mode: <strong class="text-uppercase">{{ $activeProvider ?? 'AI' }}</strong> ({{ $activeModel ?? 'Standard' }})
                 </span>
             </div>
 
             <form id="aiGenerateForm">
                 @csrf
                 <div class="row g-3">
-                    <!-- 1. Program Belajar Dropdown -->
+                    <!-- 1. Multi-AI Engine Selector -->
+                    <div class="col-12">
+                        <label class="form-label fw-semibold text-secondary small d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-robot text-success me-1"></i> 1. Pilih Engine AI Generator <span class="text-danger">*</span></span>
+                            <span class="text-muted" style="font-size: 0.75rem;">Mendukung Smart Cascade Failover (Zero Downtime)</span>
+                        </label>
+                        <div class="row g-2" id="aiProviderGrid">
+                            @if(isset($configuredProviders) && is_array($configuredProviders))
+                                @foreach($configuredProviders as $key => $prov)
+                                    <div class="col-md-4 col-sm-6">
+                                        <label class="ai-provider-card d-block p-3 rounded-3 border h-100 position-relative cursor-pointer transition-all {{ $key === 'auto' ? 'selected border-success' : '' }}" for="ai_provider_{{ $key }}">
+                                            <div class="d-flex align-items-start gap-2">
+                                                <input class="form-check-input mt-1 flex-shrink-0" type="radio" name="ai_provider" id="ai_provider_{{ $key }}" value="{{ $key }}" {{ $key === 'auto' ? 'checked' : '' }}>
+                                                <div class="flex-grow-1">
+                                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                                        <span class="fw-bold text-dark small"><i class="bi {{ $prov['icon'] ?? 'bi-cpu' }} me-1"></i> {{ $prov['name'] }}</span>
+                                                        <span class="badge {{ $prov['badge_class'] ?? 'bg-secondary' }} rounded-pill" style="font-size: 0.65rem;">{{ $prov['badge'] }}</span>
+                                                    </div>
+                                                    <p class="text-muted mb-1" style="font-size: 0.72rem; line-height: 1.25;">{{ $prov['description'] }}</p>
+                                                    <div class="d-flex align-items-center justify-content-between pt-1 border-top" style="border-color: rgba(0,0,0,0.06) !important;">
+                                                        <small class="font-monospace text-secondary" style="font-size: 0.68rem;">{{ $prov['model'] ?? 'Auto' }}</small>
+                                                        @if($prov['is_configured'])
+                                                            <span class="badge bg-success-subtle text-success border border-success-subtle px-1 py-0 rounded" style="font-size: 0.62rem;"><i class="bi bi-check-circle-fill me-1"></i>Aktif</span>
+                                                        @else
+                                                            <span class="badge bg-light text-muted border px-1 py-0 rounded" style="font-size: 0.62rem;">Kurikulum</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- 2. Program Belajar Dropdown -->
                     <div class="col-md-6">
                         <label class="form-label fw-semibold text-secondary small" for="programSelect">
-                            1. Target Program Belajar <span class="text-danger">*</span>
+                            2. Target Program Belajar <span class="text-danger">*</span>
                         </label>
                         <select name="program_id" id="programSelect" class="form-select rounded-3 py-2" required>
                             <option value="">-- Pilih Program Belajar (10 Program) --</option>
@@ -75,10 +112,10 @@
                         <small class="text-muted d-block mt-1">Inspirasi topik di bawah akan otomatis menyesuaikan dengan program ini.</small>
                     </div>
 
-                    <!-- 2. Tipe Soal (Pilihan Ganda, Essay, Campuran) -->
+                    <!-- 3. Tipe Soal (Pilihan Ganda, Essay, Campuran) -->
                     <div class="col-md-6">
                         <label class="form-label fw-semibold text-secondary small">
-                            2. Format & Tipe Soal <span class="text-danger">*</span>
+                            3. Format & Tipe Soal <span class="text-danger">*</span>
                         </label>
                         <div class="d-flex flex-wrap gap-2 pt-1">
                             <div class="form-check form-check-inline border rounded-3 px-3 py-1 bg-light">
@@ -103,10 +140,10 @@
                         <small class="text-muted d-block mt-1">Pilih format butir soal yang ingin dihasilkan.</small>
                     </div>
 
-                    <!-- 3. Tingkat Kesulitan -->
+                    <!-- 4. Tingkat Kesulitan -->
                     <div class="col-md-6">
                         <label class="form-label fw-semibold text-secondary small">
-                            3. Tingkat Kesulitan <span class="text-danger">*</span>
+                            4. Tingkat Kesulitan <span class="text-danger">*</span>
                         </label>
                         <div class="d-flex gap-3 pt-1">
                             <div class="form-check">
@@ -125,10 +162,10 @@
                         <small class="text-muted d-block mt-1">Pilih tingkat kompleksitas evaluasi pemahaman santri.</small>
                     </div>
 
-                    <!-- 4. Counter Slider Jumlah Soal -->
+                    <!-- 5. Counter Slider Jumlah Soal -->
                     <div class="col-md-6">
                         <label class="form-label fw-semibold text-secondary small d-flex justify-content-between" for="countInput">
-                            <span>4. Jumlah Butir Soal</span>
+                            <span>5. Jumlah Butir Soal</span>
                             <span class="badge bg-success" id="countBadge">5 Soal</span>
                         </label>
                         <input type="range" name="count" id="countInput" class="form-range py-2" min="3" max="25" step="1" value="5">
@@ -141,11 +178,11 @@
                         </div>
                     </div>
 
-                    <!-- 5. Input Topik Materi & Inspirasi Dinamis -->
+                    <!-- 6. Input Topik Materi & Inspirasi Dinamis -->
                     <div class="col-12">
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <label class="form-label fw-semibold text-secondary small mb-0" for="topicInput">
-                                5. Topik, Tema Silabus, atau Ide Pertanyaan Khusus
+                                6. Topik, Tema Silabus, atau Ide Pertanyaan Khusus
                             </label>
                             <button type="button" class="btn btn-sm btn-link text-decoration-none p-0 text-muted small" id="btnClearTopic">
                                 <i class="bi bi-x-circle me-1"></i> Kosongkan (Random AI Mode)
@@ -218,9 +255,14 @@
         <div id="reviewWorkspace" class="d-none">
             <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-3">
                 <div>
-                    <h5 class="fw-bold mb-1 text-dark">
-                        <i class="bi bi-pencil-square me-2 text-success"></i>Tinjau & Sesuaikan Hasil Soal
-                    </h5>
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                        <h5 class="fw-bold mb-0 text-dark">
+                            <i class="bi bi-pencil-square me-2 text-success"></i>Tinjau & Sesuaikan Hasil Soal
+                        </h5>
+                        <span id="aiGeneratedBadge" class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 small">
+                            <i class="bi bi-cpu-fill me-1"></i> <span id="aiGeneratedProviderText">AI Generated</span>
+                        </span>
+                    </div>
                     <p class="text-muted small mb-0">Periksa redaksi pertanyaan, opsi, kunci jawaban, atau rubrik essay sebelum disimpan atau dicetak.</p>
                 </div>
                 <div class="d-flex align-items-center gap-2">
@@ -329,6 +371,25 @@
         background: var(--primary-lighter) !important;
         border-color: var(--primary) !important;
         color: var(--primary) !important;
+    }
+    .ai-provider-card {
+        background: var(--card-bg);
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        border-color: var(--border-color) !important;
+    }
+    .ai-provider-card:hover {
+        border-color: var(--primary) !important;
+        background: rgba(16, 185, 129, 0.04);
+        transform: translateY(-1px);
+    }
+    .ai-provider-card.selected {
+        border-color: var(--primary) !important;
+        background: rgba(16, 185, 129, 0.07);
+        box-shadow: 0 2px 10px rgba(16, 185, 129, 0.15);
+    }
+    .cursor-pointer {
+        cursor: pointer;
     }
 </style>
 @endpush
@@ -505,6 +566,20 @@ document.addEventListener('DOMContentLoaded', function() {
         suggestionPillsList.appendChild(randomBtn);
     }
 
+    // Multi-AI Provider Card Selection Interactivity
+    const aiProviderCards = document.querySelectorAll('.ai-provider-card');
+    const aiProviderRadios = document.querySelectorAll('input[name="ai_provider"]');
+
+    aiProviderRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            aiProviderCards.forEach(card => card.classList.remove('selected', 'border-success'));
+            const parentCard = this.closest('.ai-provider-card');
+            if (parentCard) {
+                parentCard.classList.add('selected', 'border-success');
+            }
+        });
+    });
+
     if (programSelect) {
         programSelect.addEventListener('change', renderProgramTopicSuggestions);
         renderProgramTopicSuggestions();
@@ -520,6 +595,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const count = countInput.value;
         const difficulty = document.querySelector('input[name="difficulty"]:checked').value;
         const questionType = document.querySelector('input[name="question_type"]:checked').value;
+        const aiProvider = document.querySelector('input[name="ai_provider"]:checked') ? document.querySelector('input[name="ai_provider"]:checked').value : 'auto';
 
         if (!programId) {
             showAlert('Pilihan Program Wajib', 'Mohon pilih Program Belajar terlebih dahulu.');
@@ -577,7 +653,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 topic: topic || null,
                 count: parseInt(count),
                 difficulty: difficulty,
-                question_type: questionType
+                question_type: questionType,
+                ai_provider: aiProvider
             })
         })
         .then(async res => {
@@ -595,6 +672,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (response.status === 'success' && Array.isArray(response.data) && response.data.length > 0) {
                 currentGeneratedQuestions = response.data;
+
+                // Update AI Provider badge in Review Workspace
+                const aiBadge = document.getElementById('aiGeneratedBadge');
+                const aiBadgeText = document.getElementById('aiGeneratedProviderText');
+                if (aiBadgeText) {
+                    aiBadgeText.innerHTML = `${escapeHtml(response.provider_label || 'AI')} <span class="opacity-75 ms-1">(${escapeHtml(response.active_model || 'Standard')})</span>`;
+                }
+                if (aiBadge) {
+                    if (response.is_fallback) {
+                        aiBadge.className = 'badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-3 py-1 small';
+                    } else {
+                        aiBadge.className = 'badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 small';
+                    }
+                }
 
                 // Handle Fallback notice banner
                 const fallbackNotice = document.getElementById('aiFallbackNotice');
