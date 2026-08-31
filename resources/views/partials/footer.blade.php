@@ -22,15 +22,19 @@
                 <h6 class="footer-title">Navigasi</h6>
                 <ul class="footer-links">
                     <li><a href="{{ route('home') }}">Beranda</a></li>
+                    <li><a href="{{ route('roadmap') }}">Alur Belajar (Roadmap)</a></li>
                     <li><a href="{{ route('tentang-kami') }}">Tentang Kami</a></li>
                     <li><a href="{{ route('program') }}">Program</a></li>
                     <li><a href="{{ route('metode') }}">Metode Belajar</a></li>
-                    <li><a href="{{ route('home') }}#galeri">Galeri</a></li>
-                    <li><a href="{{ route('home') }}#faq">FAQ</a></li>
-                    @if (auth()->check() && (auth()->user()->isParent() || auth()->user()->isAdmin()))
-                        <li><a href="{{ route('biaya') }}">Biaya</a></li>
-                    @endif
-                    <li><a href="{{ route('home') }}#kontak">Kontak</a></li>
+                    <li><a href="{{ route('faq') }}">Tanya Jawab (FAQ)</a></li>
+                    @auth
+                        @if (auth()->user()->isParent())
+                            <li><a href="{{ route('biaya') }}">Biaya</a></li>
+                        @elseif (auth()->user()->isAdmin())
+                            <li><a href="{{ route('biaya') }}">Biaya (Admin)</a></li>
+                        @endif
+                    @endauth
+                    <li><a href="{{ route('contact') }}">Hubungi Kami</a></li>
                     @guest
                         <li><a href="{{ route('bergabung') }}">Bergabung</a></li>
                     @endguest
@@ -44,11 +48,10 @@
                     <li><a href="{{ route('tahfidz') }}">Tahfidz</a></li>
                     <li><a href="{{ route('program') }}">Adab & Doa Harian</a></li>
                     <li><a href="{{ route('program') }}">Kelas Muslimah</a></li>
-                    <li><a href="{{ route('program') }}">Bahasa Arab</a></li>
                     @guest
-                        <li><a href="{{ route('bergabung') }}">Menjadi Pendamping</a></li>
+                        <li><a href="{{ route('bergabung') }}">Pendaftaran Guru</a></li>
+                        <li><a href="{{ route('mentor.recruitment.status') }}">Cek Status Lamaran</a></li>
                     @endguest
-                </ul>
             </div>
             <div class="col-lg-3 col-md-6">
                 <h6 class="footer-title">Kontak</h6>

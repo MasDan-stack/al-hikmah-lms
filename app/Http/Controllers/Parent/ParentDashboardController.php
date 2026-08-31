@@ -15,7 +15,9 @@ class ParentDashboardController extends Controller
     {
         $user = auth()->user();
         $parent = $user->parentProfile;
-        $parentAddress = $parent?->address;
+        $hasPaidProgram = $user->hasActivePaidProgram();
+        $hasPendingEnrollment = $user->hasPendingInvoiceOrEnrollment();
+        $latestEnrollment = $user->getLatestEnrollment();
 
         $children = $parent
             ? $parent->students()->with(['user', 'mentors.user'])->get()
@@ -23,17 +25,17 @@ class ParentDashboardController extends Controller
 
         $childIds = $children->pluck('id')->toArray();
 
-        // 1. Statistics Cards
+        // 1. Data Statistik (Hanya dihitung jika akun sudah lunas, hemat resource)
         $totalChildrenCount = $children->count();
 
-        $monthSessionsCount = count($childIds) > 0
+        $monthSessionsCount = ($hasPaidProgram && count($childIds) > 0)
             ? Session::whereIn('student_id', $childIds)
                 ->whereMonth('date', now()->month)
                 ->whereYear('date', now()->year)
                 ->count()
             : 0;
 
-        $avgTajwidScore = count($childIds) > 0
+        $avgTajwidScore = ($hasPaidProgram && count($childIds) > 0)
             ? round(Progress::whereIn('student_id', $childIds)->avg('nilai_tajwid') ?? 0, 1)
             : 0;
 
@@ -43,8 +45,8 @@ class ParentDashboardController extends Controller
                 ->count()
             : 0;
 
-        // 2. Latest Children Progress
-        $recentProgresses = count($childIds) > 0
+        // 2. Progres Anak Terbaru
+        $recentProgresses = ($hasPaidProgram && count($childIds) > 0)
             ? Progress::with(['student.user', 'mentor.user'])
                 ->whereIn('student_id', $childIds)
                 ->latest()
@@ -52,8 +54,8 @@ class ParentDashboardController extends Controller
                 ->get()
             : collect();
 
-        // 3. Upcoming Sessions (Next 7 days)
-        $upcomingSessions = count($childIds) > 0
+        // 3. Jadwal Bimbingan Mendatang (7 Hari Ke Depan)
+        $upcomingSessions = ($hasPaidProgram && count($childIds) > 0)
             ? Session::with(['student.user', 'mentor.user'])
                 ->whereIn('student_id', $childIds)
                 ->whereDate('date', '>=', today())
@@ -63,7 +65,7 @@ class ParentDashboardController extends Controller
                 ->get()
             : collect();
 
-        // 4. Notifications & Unread Messages
+        // 4. Pesan Masuk
         $unreadMessagesCount = Message::where('receiver_id', $user->id)
             ->where('is_read', false)
             ->count();
@@ -72,6 +74,9 @@ class ParentDashboardController extends Controller
             'user',
             'parent',
             'children',
+            'hasPaidProgram',
+            'hasPendingEnrollment',
+            'latestEnrollment',
             'totalChildrenCount',
             'monthSessionsCount',
             'avgTajwidScore',

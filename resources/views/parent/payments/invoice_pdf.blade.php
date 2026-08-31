@@ -54,7 +54,7 @@
             <table class="table table-bordered align-middle my-4">
                 <thead class="table-light">
                     <tr>
-                        <th>Deskripsi Pembayaran</th>
+                        <th>Item Pembayaran</th>
                         <th>Metode Pembayaran</th>
                         <th class="text-end">Jumlah</th>
                     </tr>
@@ -62,12 +62,22 @@
                 <tbody>
                     <tr>
                         <td>
-                            <div class="fw-bold">{{ $payment->program?->name ?? 'Biaya SPP & Bimbingan Al-Qur\'an' }}</div>
-                            <small class="text-muted">Status: {{ strtoupper($payment->status) }}</small>
+                            <div class="fw-bold">Paket Belajar: {{ $payment->program?->name ?? 'Program Bimbingan' }}</div>
+                            <small class="text-muted">Bimbingan & Kurikulum Terstruktur</small>
                         </td>
-                        <td>{{ $payment->payment_method ?? 'Midtrans Digital Payment' }}</td>
-                        <td class="text-end fw-bold">Rp {{ number_format($payment->amount, 0, ',', '.') }}</td>
+                        <td>{{ $payment->payment_method ?? 'Pembayaran Digital / QRIS' }}</td>
+                        <td class="text-end fw-bold">Rp {{ number_format($payment->program_fee > 0 ? $payment->program_fee : $payment->amount, 0, ',', '.') }}</td>
                     </tr>
+                    @if($payment->registration_fee > 0)
+                    <tr>
+                        <td>
+                            <div class="fw-bold">Biaya Pendaftaran Santri Baru (1x Sekali Bayar)</div>
+                            <small class="text-muted">Administrasi Pendaftaran & Assessment Santri</small>
+                        </td>
+                        <td>{{ $payment->payment_method ?? 'Pembayaran Digital / QRIS' }}</td>
+                        <td class="text-end fw-bold">Rp {{ number_format($payment->registration_fee, 0, ',', '.') }}</td>
+                    </tr>
+                    @endif
                 </tbody>
                 <tfoot>
                     <tr>
@@ -76,6 +86,7 @@
                     </tr>
                 </tfoot>
             </table>
+
 
             <div class="row mt-5 pt-4 border-top text-center">
                 <div class="col-6">

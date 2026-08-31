@@ -4,266 +4,193 @@
 @section('description', 'Kenali filosofi dan nilai-nilai yang menjadi landasan perjalanan AL-HIKMAH.')
 
 @section('content')
-    <!-- Page Header -->
-    <section class="page-header section-padding"
-        style="padding-top:120px;background:linear-gradient(170deg,var(--bg-primary)0%,var(--primary-lighter)100%)">
-        <div class="container text-center">
-            <div class="section-badge mx-auto" data-reveal>
-                <i class="bi bi-info-circle"></i> Tentang Kami
-            </div>
-            <h1 class="section-title" data-reveal>
-                Mengenal <span class="text-gradient">AL-HIKMAH</span> Lebih Dekat
-            </h1>
-            <p class="section-description mx-auto" data-reveal>
-                Perjalanan kami dalam mendampingi anak dan keluarga untuk mengenal, mencintai, dan menghidupkan nilai-nilai
-                Al-Qur'an.
-            </p>
-        </div>
-    </section>
-
-    <!-- Mengapa AL-HIKMAH Hadir -->
-    <section class="section-padding" aria-label="Mengapa AL-HIKMAH Hadir">
+    <!-- ============================================ -->
+    <!-- 1. ETRAIN BREADCRUMB HEADER -->
+    <!-- ============================================ -->
+    <section class="breadcrumb_bg" aria-label="Header Tentang Kami">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 mb-5 mb-lg-0" data-reveal>
-                    <div class="about-image-wrapper">
-                        <img src="{{ asset('assets/img/2.jpg') }}" alt="Suasana belajar Al-Qur'an" class="about-image"
-                            loading="lazy">
-                        <div class="about-decoration" aria-hidden="true"></div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb_iner_item" data-reveal>
+                        <div class="section-badge mx-auto mb-2"><i class="bi bi-info-circle"></i> Profil Lembaga</div>
+                        <h2>Mengenal <span class="text-gradient">AL-HIKMAH</span> Lebih Dekat</h2>
+                        <p>Perjalanan kami dalam mendampingi anak dan keluarga untuk mengenal, mencintai, dan menghidupkan nilai-nilai Al-Qur'an.</p>
                     </div>
                 </div>
-                <div class="col-lg-6" data-reveal data-reveal-delay="200">
-                    <div class="section-badge"><i class="bi bi-info-circle"></i> Perjalanan Kami</div>
-                    <h2 class="section-title">
-                        Karena Anak-Anak Kita Tidak Hanya Perlu Diajar, Tetapi Juga <span
-                            class="text-gradient">Didampingi.</span>
-                    </h2>
-                    <p class="section-description" style="max-width:100%">
-                        Di tengah kesibukan kehidupan, tidak semua keluarga memiliki kesempatan untuk mendampingi anak
-                        belajar Al-Qur'an secara konsisten.
-                    </p>
-                    <p class="section-description" style="max-width:100%">
-                        Ada yang terkendala waktu.<br>
-                        Ada yang kesulitan menemukan pendamping yang sesuai.<br>
-                        Ada pula yang ingin anaknya belajar dengan suasana yang lebih nyaman dan penuh kasih sayang.
-                    </p>
-                    <p class="section-description" style="max-width:100%">
-                        Dari situlah AL-HIKMAH hadir.<br><br>
-                        Bukan sekadar untuk mengajarkan cara membaca Al-Qur'an, tetapi untuk menemani setiap langkah kecil
-                        dalam perjalanan mengenal dan mencintai Al-Qur'an.
-                    </p>
-                    <p style="font-weight:600;color:var(--primary);margin-top:15px;font-style:italic">
-                        "Karena kami percaya, pendidikan terbaik bukan hanya tentang apa yang diketahui oleh seorang anak,
-                        tetapi tentang kebaikan yang tumbuh dalam dirinya."
-                    </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 2. KISAH KAMI (ETRAIN LEARNING PART) -->
+    <!-- ============================================ -->
+    <section class="learning_part" aria-label="Mengapa AL-HIKMAH Hadir">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0" data-reveal>
+                    <div class="learning_img">
+                        <img src="{{ asset('assets/img/2.jpg') }}" alt="Suasana belajar Al-Qur'an"
+                             onerror="this.src='{{ asset('assets/img/etrain/learning_img.png') }}'">
+                    </div>
+                </div>
+                <div class="col-lg-6" data-reveal data-reveal-delay="150">
+                    <div class="ps-lg-4">
+                        <div class="section-badge mb-2"><i class="bi bi-heart-pulse"></i> Perjalanan Kami</div>
+                        <h2 class="section-title text-start mb-3">
+                            Karena Anak-Anak Kita Tidak Hanya Perlu Diajar, Tetapi Juga <span class="text-gradient">Didampingi.</span>
+                        </h2>
+                        <p class="text-secondary mb-3">
+                            Di tengah kesibukan kehidupan, tidak semua keluarga memiliki kesempatan untuk mendampingi anak belajar Al-Qur'an secara konsisten. Ada yang terkendala waktu, ada yang kesulitan menemukan guru yang cocok, dan ada pula yang ingin suasana belajar lebih hangat dan penuh kasih sayang.
+                        </p>
+                        <p class="text-secondary mb-4">
+                            Dari situlah AL-HIKMAH hadir. Bukan sekadar untuk mengajarkan cara membaca, tetapi untuk menemani setiap langkah kecil dalam perjalanan mencintai Al-Qur'an.
+                        </p>
+                        <div class="p-3 bg-white rounded-4 shadow-sm border-start border-4 border-success mb-4">
+                            <p class="mb-0 fst-italic text-success fw-semibold">
+                                "Pendidikan terbaik bukan hanya tentang apa yang diketahui oleh seorang anak, tetapi tentang kebaikan yang tumbuh dalam dirinya."
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Real-time Statistics Banner (Synced with Master Data Dashboard) -->
-    <section class="section-padding py-5" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark, #09592d) 100%); color: white;">
-        <div class="container text-center">
+    <!-- ============================================ -->
+    <!-- 3. REAL-TIME STATISTIK COUNTER (ETRAIN MEMBER COUNTER) -->
+    <!-- ============================================ -->
+    <section class="member_counter my-0" aria-label="Statistik Lembaga">
+        <div class="container">
             <div class="row g-4 justify-content-center">
                 <div class="col-6 col-md-4" data-reveal>
-                    <div class="p-3">
-                        <div class="display-4 fw-extrabold text-warning mb-1">{{ isset($totalStudents) && $totalStudents > 0 ? $totalStudents : '100+' }}</div>
-                        <div class="fw-semibold text-white-50 text-uppercase small tracking-wider"><i class="bi bi-people-fill me-1"></i> Santri Terdaftar</div>
+                    <div class="single_member_counter">
+                        <span>{{ isset($totalStudents) && $totalStudents > 0 ? $totalStudents : '100+' }}</span>
+                        <h4>Santri Terdaftar</h4>
                     </div>
                 </div>
                 <div class="col-6 col-md-4" data-reveal data-reveal-delay="100">
-                    <div class="p-3">
-                        <div class="display-4 fw-extrabold text-warning mb-1">{{ isset($totalMentors) && $totalMentors > 0 ? $totalMentors : '15+' }}</div>
-                        <div class="fw-semibold text-white-50 text-uppercase small tracking-wider"><i class="bi bi-person-badge-fill me-1"></i> Pendamping Aktif</div>
+                    <div class="single_member_counter">
+                        <span>{{ isset($totalMentors) && $totalMentors > 0 ? $totalMentors : '15+' }}</span>
+                        <h4>Pendamping Aktif</h4>
                     </div>
                 </div>
                 <div class="col-12 col-md-4" data-reveal data-reveal-delay="200">
-                    <div class="p-3">
-                        <div class="display-4 fw-extrabold text-warning mb-1">{{ isset($totalPrograms) && $totalPrograms > 0 ? $totalPrograms : '6' }}</div>
-                        <div class="fw-semibold text-white-50 text-uppercase small tracking-wider"><i class="bi bi-journal-bookmark-fill me-1"></i> Program Belajar</div>
+                    <div class="single_member_counter">
+                        <span>{{ isset($totalPrograms) && $totalPrograms > 0 ? $totalPrograms : '6' }}</span>
+                        <h4>Program Pembelajaran</h4>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Filosofi -->
-    <section id="filosofi" class="section-padding section-alt" aria-label="Filosofi">
+    <!-- ============================================ -->
+    <!-- 4. FILOSOFI KAMI (ETRAIN FEATURE BOXES) -->
+    <!-- ============================================ -->
+    <section id="filosofi" class="feature_part" aria-label="Filosofi Lembaga">
         <div class="container">
-            <div class="row justify-content-center">
+            <div class="row justify-content-center mb-5">
                 <div class="col-lg-8 text-center" data-reveal>
-                    <div class="section-badge mx-auto"><i class="bi bi-lightbulb"></i> Filosofi Kami</div>
-                    <h2 class="section-title">
-                        Apa Arti <span class="text-gradient">AL-HIKMAH</span> bagi Kami?
-                    </h2>
-                    <p class="section-description mx-auto" style="max-width:700px">
-                        Al-Hikmah bukan hanya tentang pengetahuan. Bagi kami, hikmah adalah ketika ilmu yang dipelajari
-                        mampu membimbing seseorang untuk mengenal kebenaran, memperbaiki akhlak, dan menghadirkan kebaikan
-                        dalam kehidupan.
+                    <div class="section-badge mx-auto mb-2"><i class="bi bi-lightbulb"></i> Filosofi Kami</div>
+                    <h2 class="section-title">Apa Arti <span class="text-gradient">AL-HIKMAH</span> bagi Kami?</h2>
+                    <p class="section-description mx-auto">
+                        Al-Hikmah adalah ketika ilmu yang dipelajari mampu membimbing seseorang untuk mengenal kebenaran, memperbaiki akhlak, dan menghadirkan kebaikan dalam kehidupan nyata.
                     </p>
-                    <p class="section-description mx-auto" style="max-width:700px">
-                        Karena itu, kami tidak ingin hanya membantu seseorang menjadi lebih mampu membaca Al-Qur'an. Kami
-                        ingin menemani proses agar ilmu yang dipelajari perlahan menjadi sesuatu yang hidup dalam hati,
-                        tercermin dalam akhlak, dan membawa manfaat bagi sesama.
-                    </p>
-                    <div class="row g-4 mt-4">
-                        <div class="col-md-4" data-reveal data-reveal-delay="100">
-                            <div class="why-card text-center">
-                                <div class="why-icon"><i class="bi bi-book"></i></div>
-                                <h4>Belajar dengan Ilmu</h4>
-                                <p>Setiap huruf dipelajari dengan pemahaman, bukan sekadar pengulangan.</p>
-                            </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4" data-reveal>
+                    <div class="single_feature text-center">
+                        <div class="single_feature_icon mx-auto">
+                            <i class="bi bi-book-half"></i>
                         </div>
-                        <div class="col-md-4" data-reveal data-reveal-delay="200">
-                            <div class="why-card text-center">
-                                <div class="why-icon"><i class="bi bi-person-lines-fill"></i></div>
-                                <h4>Bertumbuh dengan Adab</h4>
-                                <p>Karena ilmu yang baik seharusnya melahirkan akhlak yang baik pula.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4" data-reveal data-reveal-delay="300">
-                            <div class="why-card text-center">
-                                <div class="why-icon"><i class="bi bi-arrow-repeat"></i></div>
-                                <h4>Berjalan dengan Istiqamah</h4>
-                                <p>Langkah kecil yang terus-menerus lebih kami hargai daripada lompatan besar yang sekejap.
-                                </p>
-                            </div>
-                        </div>
+                        <h4>Belajar dengan Ilmu</h4>
+                        <p>Setiap huruf dipelajari dengan pemahaman tajwid dan makhraj yang benar, bukan sekadar hafalan tanpa arti.</p>
                     </div>
-                    <p class="section-description mx-auto mt-4"
-                        style="max-width:700px;font-weight:600;color:var(--primary);font-style:italic">
-                        Belajar dengan ilmu. Bertumbuh dengan adab. Berjalan dengan istiqamah.
-                    </p>
+                </div>
+                <div class="col-md-4" data-reveal data-reveal-delay="100">
+                    <div class="single_feature text-center">
+                        <div class="single_feature_icon mx-auto">
+                            <i class="bi bi-person-lines-fill"></i>
+                        </div>
+                        <h4>Bertumbuh dengan Adab</h4>
+                        <p>Karena ilmu yang berkah selalu diawali dengan adab yang baik terhadap Al-Qur'an, guru, dan orang tua.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-reveal data-reveal-delay="200">
+                    <div class="single_feature text-center">
+                        <div class="single_feature_icon mx-auto">
+                            <i class="bi bi-arrow-repeat"></i>
+                        </div>
+                        <h4>Berjalan dengan Istiqamah</h4>
+                        <p>Langkah kecil yang dilakukan secara konsisten dan sabar jauh lebih bernilai dari lompatan besar yang sekejap.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Nilai-Nilai -->
-    <section id="nilai" class="section-padding" aria-label="Nilai-Nilai Kami">
+    <!-- ============================================ -->
+    <!-- 5. NILAI-NILAI UTAMA AL-HIKMAH -->
+    <!-- ============================================ -->
+    <section id="nilai" class="learning_part bg-white" aria-label="Nilai-Nilai Kami">
         <div class="container">
             <div class="text-center mb-5" data-reveal>
-                <div class="section-badge mx-auto"><i class="bi bi-heart"></i> Nilai yang Kami Pegang</div>
-                <h2 class="section-title">
-                    Belajar Al-Qur'an<br><span class="text-gradient">Dimulai dari Hati</span>
-                </h2>
-                <p class="section-description mx-auto" style="max-width:650px">
-                    Ilmu yang baik seharusnya melahirkan akhlak yang baik. Karena itu, dalam setiap proses belajar, kami
-                    berusaha menjaga nilai-nilai ini.
-                </p>
+                <div class="section-badge mx-auto mb-2"><i class="bi bi-heart"></i> Nilai-Nilai Lembaga</div>
+                <h2 class="section-title">Belajar Al-Qur'an <span class="text-gradient">Dimulai dari Hati</span></h2>
+                <p class="section-description mx-auto">Prinsip dasar yang selalu kami jaga dalam setiap interaksi pembelajaran dengan para santri.</p>
             </div>
+
             <div class="row g-4">
                 <div class="col-lg-4 col-md-6" data-reveal>
-                    <div class="nilai-card">
-                        <div class="nilai-icon"><i class="bi bi-suit-heart"></i></div>
-                        <h4>Ikhlas</h4>
-                        <p>Mengajarkan dan belajar Al-Qur'an sebagai bentuk ibadah dan upaya mendekatkan diri kepada Allah.
-                        </p>
+                    <div class="p-4 bg-light rounded-4 border h-100 transition-hover">
+                        <div class="fs-2 text-success mb-2"><i class="bi bi-suit-heart-fill"></i></div>
+                        <h4 class="fw-bold fs-5">Ikhlas</h4>
+                        <p class="text-secondary small mb-0">Mengajarkan dan belajar Al-Qur'an semata-mata sebagai ibadah dan upaya mendekatkan diri kepada Allah SWT.</p>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6" data-reveal data-reveal-delay="100">
-                    <div class="nilai-card">
-                        <div class="nilai-icon"><i class="bi bi-book"></i></div>
-                        <h4>Adab</h4>
-                        <p>Karena sebelum ilmu menjadi cahaya, hati perlu belajar menghormati ilmu, pendamping, orang tua,
-                            dan sesama.</p>
+                    <div class="p-4 bg-light rounded-4 border h-100 transition-hover">
+                        <div class="fs-2 text-primary mb-2"><i class="bi bi-book"></i></div>
+                        <h4 class="fw-bold fs-5">Adab</h4>
+                        <p class="text-secondary small mb-0">Sebelum ilmu menjadi cahaya, hati perlu dibimbing untuk menghormati ilmu, guru, dan sesama.</p>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6" data-reveal data-reveal-delay="200">
-                    <div class="nilai-card">
-                        <div class="nilai-icon"><i class="bi bi-emoji-smile"></i></div>
-                        <h4>Kasih Sayang</h4>
-                        <p>Kami percaya bahwa anak akan lebih mudah belajar ketika ia merasa aman, dihargai, dan disayangi.
-                        </p>
+                    <div class="p-4 bg-light rounded-4 border h-100 transition-hover">
+                        <div class="fs-2 text-warning mb-2"><i class="bi bi-emoji-smile"></i></div>
+                        <h4 class="fw-bold fs-5">Kasih Sayang</h4>
+                        <p class="text-secondary small mb-0">Anak-anak akan lebih mudah menyerap kebaikan saat mereka merasa aman, dihargai, dan dicintai.</p>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6" data-reveal data-reveal-delay="300">
-                    <div class="nilai-card">
-                        <div class="nilai-icon"><i class="bi bi-shield-check"></i></div>
-                        <h4>Amanah</h4>
-                        <p>Setiap murid adalah titipan yang harus didampingi dengan tanggung jawab dan kesungguhan.</p>
+                    <div class="p-4 bg-light rounded-4 border h-100 transition-hover">
+                        <div class="fs-2 text-info mb-2"><i class="bi bi-shield-check"></i></div>
+                        <h4 class="fw-bold fs-5">Amanah</h4>
+                        <p class="text-secondary small mb-0">Setiap amanah dari orang tua kami jaga dengan penuh rasa tanggung jawab dan keterbukaan.</p>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6" data-reveal data-reveal-delay="400">
-                    <div class="nilai-card">
-                        <div class="nilai-icon"><i class="bi bi-arrow-repeat"></i></div>
-                        <h4>Istiqamah</h4>
-                        <p>Kami tidak mengejar kesempurnaan dalam satu hari. Kami mengajarkan pentingnya terus melangkah,
-                            sedikit demi sedikit.</p>
+                    <div class="p-4 bg-light rounded-4 border h-100 transition-hover">
+                        <div class="fs-2 text-success mb-2"><i class="bi bi-arrow-repeat"></i></div>
+                        <h4 class="fw-bold fs-5">Istiqamah</h4>
+                        <p class="text-secondary small mb-0">Kami mengajarkan pentingnya komitmen melangkah setahap demi setahap dalam memelihara hafalan dan bacaan.</p>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6" data-reveal data-reveal-delay="500">
-                    <div class="nilai-card">
-                        <div class="nilai-icon"><i class="bi bi-person-check"></i></div>
-                        <h4>Keteladanan</h4>
-                        <p>Karena pendidikan tidak hanya terjadi melalui apa yang diajarkan, tetapi juga melalui apa yang
-                            dicontohkan.</p>
+                    <div class="p-4 bg-light rounded-4 border h-100 transition-hover">
+                        <div class="fs-2 text-primary mb-2"><i class="bi bi-person-check-fill"></i></div>
+                        <h4 class="fw-bold fs-5">Keteladanan</h4>
+                        <p class="text-secondary small mb-0">Pendidikan sejati terjadi bukan hanya melalui kata-kata, tetapi lewat akhlak yang dicontohkan.</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Harapan -->
-    <section class="section-padding section-alt" aria-label="Harapan">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-5 mb-5 mb-lg-0" data-reveal>
-                    <div class="about-image-wrapper">
-                        <img src="{{ asset('assets/img/3.jpg') }}" alt="Ilustrasi belajar Al-Qur'an" class="about-image"
-                            loading="lazy">
-                        <p
-                            style="font-size:.75rem;color:var(--text-muted);margin-top:8px;text-align:center;font-style:italic">
-                            suasana belajar</p>
-                    </div>
-                </div>
-                <div class="col-lg-7" data-reveal data-reveal-delay="200">
-                    <div class="section-badge"><i class="bi bi-lightbulb"></i> Harapan Kami</div>
-                    <h2 class="section-title">
-                        Bukan Sekadar Bisa<br><span class="text-gradient">Membaca Al-Qur'an</span>
-                    </h2>
-                    <p class="section-description" style="max-width:100%">
-                        Kami berharap perjalanan belajar bersama AL-HIKMAH dapat menjadi lebih dari sekadar kemampuan
-                        membaca atau menghafal. Kami ingin membantu menumbuhkan:
-                    </p>
-                    <div class="harapan-list mt-4">
-                        <div class="harapan-item">
-                            <div class="harapan-icon"><i class="bi bi-book"></i></div>
-                            <div class="harapan-text">
-                                <h5>Kecintaan kepada Al-Qur'an</h5>
-                                <p>Agar Al-Qur'an menjadi bagian dari kehidupan.</p>
-                            </div>
-                        </div>
-                        <div class="harapan-item">
-                            <div class="harapan-icon"><i class="bi bi-person-lines-fill"></i></div>
-                            <div class="harapan-text">
-                                <h5>Adab yang Baik</h5>
-                                <p>Agar ilmu tercermin dalam sikap dan perilaku.</p>
-                            </div>
-                        </div>
-                        <div class="harapan-item">
-                            <div class="harapan-icon"><i class="bi bi-moon-stars"></i></div>
-                            <div class="harapan-text">
-                                <h5>Kebiasaan Beribadah</h5>
-                                <p>Agar anak terbiasa dengan doa dan nilai-nilai Islam.</p>
-                            </div>
-                        </div>
-                        <div class="harapan-item">
-                            <div class="harapan-icon"><i class="bi bi-heart"></i></div>
-                            <div class="harapan-text">
-                                <h5>Kedekatan dengan Allah</h5>
-                                <p>Agar belajar menjadi jalan mengenal Sang Pencipta.</p>
-                            </div>
-                        </div>
-                        <div class="harapan-item">
-                            <div class="harapan-icon"><i class="bi bi-emoji-smile"></i></div>
-                            <div class="harapan-text">
-                                <h5>Percaya Diri Belajar Agama</h5>
-                                <p>Agar tidak ada rasa malu memulai dari nol.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="text-center mt-5" data-reveal>
+                <a href="{{ route('program') }}" class="btn_1">
+                    <i class="bi bi-journal-bookmark"></i> Lihat Program Belajar
+                </a>
             </div>
         </div>
     </section>

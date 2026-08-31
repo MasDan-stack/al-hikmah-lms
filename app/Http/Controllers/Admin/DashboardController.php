@@ -4,22 +4,49 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mentor;
+use App\Models\MentorApplication;
+use App\Models\MentorProbationTracking;
 use App\Models\Message;
 use App\Models\ParentProfile;
 use App\Models\Payment;
 use App\Models\Session;
 use App\Models\SessionConfirmation;
 use App\Models\Student;
+use App\Models\User;
+use App\Services\AlertService;
+use App\Services\RevenueAnalyticsService;
+use App\Services\StaffAnalyticsService;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    public function __construct(
+        protected RevenueAnalyticsService $revenueService,
+        protected StaffAnalyticsService $staffService,
+        protected AlertService $alertService
+    ) {}
+
     public function index(): View
     {
         $totalStudents = Student::count();
         $totalMentors = Mentor::count();
         $todaySessions = Session::whereDate('date', today())->count();
         $totalParents = ParentProfile::count();
+        $totalUsers = User::count();
+
+        // 📊 Analitik Eksekutif (v8.2)
+        $revenueMetrics = $this->revenueService->getSummaryMetrics();
+        $staffSummary = $this->staffService->getStaffSummary();
+        $allAlerts = $this->alertService->getAllAlerts();
+
+        // 👨‍🏫 Rekrutmen Guru & Masa Percobaan (v8.3)
+        $pendingApplicationsCount = MentorApplication::whereIn('status', ['submitted', 'document_review'])->count();
+        $totalApplicationsCount = MentorApplication::count();
+        $activeProbationsCount = MentorProbationTracking::where('status', 'active')->count();
+        $recentApplications = MentorApplication::latest()->take(5)->get();
+
+        // 📌 Widget Monitor User Terdaftar & Role
+        $recentUsers = User::with('role')->latest()->take(5)->get();
 
         // 📌 Widget Monitor Aktivitas Orang Tua (Parent Monitoring Activity)
         $recentConfirmations = SessionConfirmation::with(['session.student.user', 'parent.user'])
@@ -42,6 +69,15 @@ class DashboardController extends Controller
             'totalMentors',
             'todaySessions',
             'totalParents',
+            'totalUsers',
+            'revenueMetrics',
+            'staffSummary',
+            'allAlerts',
+            'pendingApplicationsCount',
+            'totalApplicationsCount',
+            'activeProbationsCount',
+            'recentApplications',
+            'recentUsers',
             'recentConfirmations',
             'recentPayments',
             'recentParentMessages'

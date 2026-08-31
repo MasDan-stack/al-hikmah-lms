@@ -15,22 +15,43 @@ class Payment extends Model
     protected $fillable = [
         'student_id',
         'program_id',
+        'enrollment_id',
         'amount',
+        'registration_fee',
+        'program_fee',
+        'payment_purpose',
         'invoice_number',
         'status',
         'payment_date',
         'due_date',
         'payment_method',
         'gateway_response',
+        'checkout_url',
+        'qr_content',
+        'pakasir_order_id',
+        'admin_fee',
+        'total_amount',
+        'expired_at',
     ];
 
     protected function casts(): array
     {
         return [
+            'amount' => 'decimal:2',
+            'registration_fee' => 'decimal:2',
+            'program_fee' => 'decimal:2',
+            'admin_fee' => 'decimal:2',
+            'total_amount' => 'decimal:2',
             'payment_date' => 'datetime',
             'due_date' => 'date',
+            'expired_at' => 'datetime',
             'gateway_response' => 'array',
         ];
+    }
+
+    public function hasRegistrationFee(): bool
+    {
+        return (float) $this->registration_fee > 0;
     }
 
     /**
@@ -47,5 +68,10 @@ class Payment extends Model
     public function program(): BelongsTo
     {
         return $this->belongsTo(Program::class);
+    }
+
+    public function enrollment(): BelongsTo
+    {
+        return $this->belongsTo(Enrollment::class);
     }
 }

@@ -1,14 +1,28 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 test('prospective mentor can register via /bergabung and is assigned mentor role', function () {
-    $response = $this->post(route('bergabung'), [
-        'name' => 'Ustadz Ahmad Fulan',
+    Storage::fake('local');
+
+    $response = $this->post(route('mentor.recruitment.store'), [
+        'full_name' => 'Ustadz Ahmad Fulan',
         'email' => 'ahmad.mentor@alhikmah.id',
         'phone' => '081234567890',
+        'birth_date' => '1995-05-15',
+        'gender' => 'male',
+        'address' => 'Jl. Dakwah No. 10',
+        'city' => 'Jakarta Selatan',
+        'education' => 'S1 Pendidikan Agama Islam',
+        'institution' => 'LIPIA Jakarta',
+        'experience_years' => 3,
+        'experience_description' => 'Mengajar tahsin dan tahfidz anak-anak dan dewasa selama 3 tahun.',
         'specialization' => 'Tahsin & Tahfidz Juz 30',
-        'bio' => 'Lulusan LIPIA Jakarta',
+        'sanad_chain' => 'Riwayat Hafs \'an \'Ashim',
+        'hifz_total_juz' => 30,
+        'cv' => UploadedFile::fake()->create('cv.pdf', 200, 'application/pdf'),
         'password' => 'password123',
         'password_confirmation' => 'password123',
     ]);

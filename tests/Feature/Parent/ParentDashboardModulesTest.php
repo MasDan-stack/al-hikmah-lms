@@ -1,24 +1,27 @@
 <?php
 
+use App\Enums\EnrollmentStatus;
+use App\Models\Enrollment;
 use App\Models\Mentor;
 use App\Models\ParentProfile;
 use App\Models\Payment;
+use App\Models\Program;
 use App\Models\Progress;
 use App\Models\Role;
 use App\Models\Session;
 use App\Models\Student;
 use App\Models\User;
-use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->seed(DatabaseSeeder::class);
+    $this->seed(RoleSeeder::class);
 
-    $this->parentRole = Role::where('name', 'parent')->first() ?? Role::create(['name' => 'parent', 'label' => 'Parent']);
-    $this->mentorRole = Role::where('name', 'mentor')->first() ?? Role::create(['name' => 'mentor', 'label' => 'Mentor']);
-    $this->studentRole = Role::where('name', 'student')->first() ?? Role::create(['name' => 'student', 'label' => 'Student']);
+    $this->parentRole = Role::firstOrCreate(['name' => 'parent'], ['label' => 'Parent']);
+    $this->mentorRole = Role::firstOrCreate(['name' => 'mentor'], ['label' => 'Mentor']);
+    $this->studentRole = Role::firstOrCreate(['name' => 'student'], ['label' => 'Student']);
 
     // Setup Parent 1
     $this->parentUser = User::factory()->create([
@@ -55,6 +58,32 @@ beforeEach(function () {
         'user_id' => $this->mentorUser->id,
         'full_name' => 'Ustaz Abdullah',
         'specialization' => 'Tahfidz Al-Qur\'an',
+    ]);
+
+    // Setup Active Program & Paid Payment for State 3 access
+    $this->program = Program::create([
+        'name' => 'Tahsin Reguler',
+        'price' => 500000,
+        'description' => 'Test Program',
+        'is_active' => true,
+    ]);
+
+    $this->enrollment = Enrollment::create([
+        'student_id' => $this->student->id,
+        'program_id' => $this->program->id,
+        'mentor_id' => $this->mentor->id,
+        'status' => EnrollmentStatus::ACTIVE->value,
+        'requested_days' => ['monday', 'thursday'],
+        'learning_method' => 'online',
+    ]);
+
+    Payment::create([
+        'student_id' => $this->student->id,
+        'program_id' => $this->program->id,
+        'enrollment_id' => $this->enrollment->id,
+        'amount' => 500000,
+        'status' => 'paid',
+        'invoice_number' => 'INV-TEST-MODULES',
     ]);
 });
 
@@ -141,7 +170,7 @@ test('modul jadwal bimbingan dan konfirmasi kehadiran berfungsi dengan baik', fu
     ]);
 });
 
-test('modul tagihan dan pembayaran online Midtrans berjalan aman', function () {
+test('modul tagihan dan pembayaran online Pakasir berjalan aman', function () {
     $payment = Payment::create([
         'student_id' => $this->student->id,
         'amount' => 250000,
@@ -155,10 +184,20 @@ test('modul tagihan dan pembayaran online Midtrans berjalan aman', function () {
     $responseShow = $this->actingAs($this->parentUser)->get(route('parent.payments.show', $payment->id));
     $responseShow->assertStatus(200);
 
+    // Inisialisasi pembayaran online via Pakasir
     $responsePay = $this->actingAs($this->parentUser)->post(route('parent.payments.pay', $payment->id), [
-        'payment_method' => 'Midtrans QRIS',
+        'payment_method' => 'qris',
     ]);
-    $responsePay->assertRedirect(route('parent.payments.history'));
+    $responsePay->assertRedirect(route('parent.payments.show', $payment->id));
+
+    // Webhook callback simulasi pembayaran berhasil
+    $responseWebhook = $this->postJson(route('api.webhook.pakasir'), [
+        'order_id' => 'INV-TEST-001',
+        'amount' => 251750,
+        'status' => 'completed',
+        'payment_method' => 'qris',
+    ]);
+    $responseWebhook->assertStatus(200);
 
     $this->assertDatabaseHas('payments', [
         'id' => $payment->id,

@@ -5,11 +5,41 @@
 @section('subheader', 'Daftar ananda yang terdaftar di AL-HIKMAH LMS')
 
 @section('content')
-<div class="container-fluid p-0">
+    <!-- Flash Alert Notification Messages -->
+    @if (session('success'))
+        <div class="alert alert-success border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center justify-content-between p-3" role="alert">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-check-circle-fill fs-5 text-success"></i>
+                <div class="fw-semibold">{{ session('success') }}</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session('warning'))
+        <div class="alert alert-warning border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center justify-content-between p-3" role="alert">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-exclamation-triangle-fill fs-5 text-warning"></i>
+                <div class="fw-semibold">{{ session('warning') }}</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center justify-content-between p-3" role="alert">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-exclamation-triangle-fill fs-5 text-danger"></i>
+                <div class="fw-semibold">{{ session('error') }}</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h4 class="fw-bold text-dark mb-1"><i class="bi bi-people-fill text-primary me-2"></i>Anak Binaan Saya</h4>
-            <p class="text-muted small mb-0">Kelola data anak dan pantau progres pembelajaran Al-Qur'an mereka secara detail.</p>
+            <p class="text-muted small mb-0">Kelola data anak, capaian lencana, akun login santri, dan pantau progres pembelajaran.</p>
         </div>
         <a href="{{ route('parent.profile.children') }}" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
             <i class="bi bi-plus-circle me-1"></i> Tambah Anak Baru
@@ -37,8 +67,27 @@
                                 <i class="bi bi-person-badge"></i>
                             </div>
                             <div>
-                                <h5 class="fw-bold text-dark mb-1">{{ $child->user?->name ?? $child->full_name }}</h5>
+                                <h5 class="fw-bold text-dark mb-0">{{ $child->user?->name ?? $child->full_name }}</h5>
+                                <small class="text-muted d-block mb-1">{{ $child->user?->email }}</small>
                                 <span class="badge bg-success-subtle text-success rounded-pill px-3">Santri Aktif</span>
+                            </div>
+                        </div>
+
+                        <!-- Gamifikasi Mini Badges -->
+                        <div class="p-2 rounded-3 bg-light mb-3 d-flex justify-content-around text-center small">
+                            <div>
+                                <div class="fw-bold text-warning">{{ number_format($child->total_points ?: 0) }}</div>
+                                <small class="text-muted" style="font-size: 0.7rem;">Poin</small>
+                            </div>
+                            <div class="border-start"></div>
+                            <div>
+                                <div class="fw-bold text-danger">{{ $child->current_streak ?: 0 }} Hari</div>
+                                <small class="text-muted" style="font-size: 0.7rem;">Streak</small>
+                            </div>
+                            <div class="border-start"></div>
+                            <div>
+                                <div class="fw-bold text-primary">{{ $child->earnedBadges->count() }}</div>
+                                <small class="text-muted" style="font-size: 0.7rem;">Lencana</small>
                             </div>
                         </div>
 
@@ -48,21 +97,72 @@
                             <div class="mb-1"><i class="bi bi-geo-alt me-2"></i>Lokasi: {{ $child->location ?? 'Online / Home' }}</div>
                             <div>
                                 <i class="bi bi-person-workspace me-2"></i>Mentor: 
-                                @if($child->mentors->isNotEmpty())
-                                    <strong class="text-dark">{{ $child->mentors->first()?->user?->name ?? $child->mentors->first()?->full_name }}</strong>
+                                @if($child->getActiveMentor())
+                                    <strong class="text-dark">Ustadz/ah {{ $child->getActiveMentor()->getDisplayName() }}</strong>
                                 @else
                                     <span class="text-muted">Belum ditentukan</span>
                                 @endif
                             </div>
                         </div>
 
+                        <!-- Kredensial Login Santri & Password Default -->
+                        <div class="p-2.5 rounded-3 bg-light border mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="text-muted small" style="font-size: 0.76rem;"><i class="bi bi-envelope me-1"></i>Email Login:</span>
+                                <code class="text-primary fw-bold" style="font-size: 0.78rem;">{{ $child->user?->email }}</code>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="text-muted small" style="font-size: 0.76rem;"><i class="bi bi-key me-1"></i>Password Awal:</span>
+                                <span class="badge bg-secondary-subtle text-dark border px-2 py-0.5 font-monospace" style="font-size: 0.75rem;">santri123</span>
+                            </div>
+                            <small class="text-muted d-block" style="font-size: 0.7rem; line-height: 1.25;">
+                                <i class="bi bi-info-circle text-warning me-1"></i>Disarankan ananda segera mengubah password default setelah login.
+                            </small>
+                        </div>
+
                         <div class="mt-auto d-grid gap-2">
                             <a href="{{ route('parent.children.show', $child->id) }}" class="btn btn-outline-primary rounded-pill fw-bold">
                                 <i class="bi bi-graph-up-arrow me-1"></i> Lihat Progres & Grafik
                             </a>
+                            <button type="button" class="btn btn-outline-success rounded-pill fw-bold" data-bs-toggle="modal" data-bs-target="#resetPasswordModal_{{ $child->id }}">
+                                <i class="bi bi-whatsapp me-1"></i> Reset & Kirim Password
+                            </button>
                             <a href="{{ route('parent.children.report', $child->id) }}" class="btn btn-outline-dark rounded-pill fw-bold" target="_blank">
                                 <i class="bi bi-file-earmark-pdf me-1"></i> Cetak Laporan PDF
                             </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Konfirmasi Reset Password -->
+                <div class="modal fade" id="resetPasswordModal_{{ $child->id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-header border-0 pb-0">
+                                <h5 class="modal-title fw-bold text-dark">Reset Password Akun Santri</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body text-center py-4">
+                                <div class="rounded-circle bg-success bg-opacity-10 text-success mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                                    <i class="bi bi-shield-lock-fill fs-2"></i>
+                                </div>
+                                <h6 class="fw-bold mb-2">Konfirmasi Buat & Kirim Password Baru?</h6>
+                                <p class="text-muted small px-3">
+                                    Sistem akan membuat password acak baru yang aman untuk akun santri ananda <strong>{{ $child->getDisplayName() }}</strong> (<code>{{ $child->user?->email }}</code>), dan mengirimkannya langsung ke nomor WhatsApp / Email Anda.
+                                </p>
+                                <div class="alert alert-info border-0 rounded-3 py-2 small mb-0">
+                                    <i class="bi bi-info-circle me-1"></i> Sesuai standar keamanan, password lama akan diganti seketika.
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0 pt-0 justify-content-center">
+                                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
+                                <form action="{{ route('parent.children.reset-password', $child->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold">
+                                        <i class="bi bi-send-check me-1"></i> Ya, Reset & Kirim Sekarang
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

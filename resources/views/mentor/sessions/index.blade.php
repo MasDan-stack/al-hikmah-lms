@@ -1,6 +1,6 @@
 @extends('layouts.mentor')
 
-@section('title', 'Jadwal Sesi Belajar')
+@section('title', 'Jadwal Sesi Belajar | Mentor')
 @section('header', 'Jadwal Sesi Belajar')
 @section('subheader', 'Kelola status dan jadwal sesi mengajar santri')
 
@@ -15,7 +15,7 @@
 
     <div class="card border-0 shadow-sm rounded-4 bg-white">
         <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-calendar-event me-2 text-primary"></i>Daftar Sesi Belajar</h5>
+            <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-calendar-event me-2 text-primary"></i>Daftar Sesi Belajar Santri</h5>
             <div class="d-flex gap-2">
                 <a href="{{ route('mentor.sessions.index', ['status' => 'all']) }}" class="btn btn-sm {{ $status === 'all' ? 'btn-primary' : 'btn-outline-primary' }} rounded-pill">Semua</a>
                 <a href="{{ route('mentor.sessions.index', ['status' => 'scheduled']) }}" class="btn btn-sm {{ $status === 'scheduled' ? 'btn-warning' : 'btn-outline-warning' }} rounded-pill">Terjadwal</a>
@@ -30,29 +30,84 @@
                 </div>
             @else
                 <div class="table-responsive">
-                    <table class="table align-middle table-hover">
+                    <table class="table align-middle table-hover datatable" id="tableMentorSessions">
                         <thead class="table-light">
                             <tr>
                                 <th>Tanggal & Waktu</th>
-                                <th>Santri</th>
-                                <th>Metode</th>
+                                <th>Santri & Program</th>
+                                <th>Kontak Wali & Alamat</th>
+                                <th>Metode Belajar</th>
+                                <th>Konfirmasi Wali</th>
                                 <th>Status Sesi</th>
-                                <th>Ubah Status</th>
+                                <th class="no-sort">Ubah Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($sessions as $session)
+                                @php
+                                    $student = $session->student;
+                                    $activeEnrollment = $student?->enrollments?->first();
+                                    $programName = $activeEnrollment?->program?->name ?? $student?->programs?->first()?->name ?? 'Program Al-Hikmah';
+                                    $parentPhone = $student?->getParentPhone();
+                                @endphp
                                 <tr>
                                     <td>
-                                        <div class="fw-bold text-dark">{{ $session->date ? \Carbon\Carbon::parse($session->date)->format('d M Y') : '-' }}</div>
-                                        <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ $session->time }} WIB</small>
+                                        <div class="fw-bold text-dark">{{ $session->date ? \Carbon\Carbon::parse($session->date)->locale('id')->isoFormat('dddd, D MMMM Y') : '-' }}</div>
+                                        <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ date('H:i', strtotime($session->time)) }} WIB</small>
                                     </td>
                                     <td>
-                                        <div class="fw-semibold">{{ $session->student?->user?->name ?? $session->student?->full_name }}</div>
-                                        <small class="text-muted">{{ $session->notes ?? 'Tidak ada catatan tambahan' }}</small>
+                                        <div class="fw-semibold text-dark">{{ $student?->getDisplayName() }}</div>
+                                        <span class="badge bg-primary-subtle text-primary rounded-pill small">{{ $programName }}</span>
                                     </td>
                                     <td>
-                                        <span class="badge bg-info-subtle text-info rounded-pill px-3">{{ ucfirst($session->method) }}</span>
+                                        <div class="small fw-semibold text-secondary">{{ $student?->parent_name }}</div>
+                                        @if($parentPhone)
+                                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', str_starts_with($parentPhone, '0') ? '62'.substr($parentPhone, 1) : $parentPhone) }}" target="_blank" class="btn btn-sm btn-outline-success rounded-pill px-2 py-0 my-1">
+                                                <i class="bi bi-whatsapp me-1"></i> {{ $parentPhone }}
+                                            </a>
+                                        @else
+                                            <small class="text-muted d-block">-</small>
+                                        @endif
+                                        <div class="small text-muted text-truncate" style="max-width: 200px;">{{ $student?->getFullAddress() }}</div>
+                                    </td>
+                                    <td>
+                                        @if($session->method === 'offline')
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2">
+                                                <i class="bi bi-house-door me-1"></i> Offline (Home Visit)
+                                            </span>
+                                        @elseif($session->method === 'online')
+                                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-2">
+                                                <i class="bi bi-camera-video me-1"></i> Online
+                                            </span>
+                                        @else
+                                            <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill px-3 py-2">
+                                                <i class="bi bi-arrow-repeat me-1"></i> Hybrid
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($session->confirmation)
+                                            @if($session->confirmation->status === 'hadir')
+                                                <span class="badge bg-success text-white rounded-pill px-3 py-2">
+                                                    <i class="bi bi-check-circle me-1"></i> Hadir
+                                                </span>
+                                            @elseif($session->confirmation->status === 'izin')
+                                                <span class="badge bg-warning text-dark rounded-pill px-3 py-2" title="{{ $session->confirmation->notes }}">
+                                                    <i class="bi bi-info-circle me-1"></i> Izin
+                                                </span>
+                                            @elseif($session->confirmation->status === 'sakit')
+                                                <span class="badge bg-danger text-white rounded-pill px-3 py-2" title="{{ $session->confirmation->notes }}">
+                                                    <i class="bi bi-heart-pulse me-1"></i> Sakit
+                                                </span>
+                                            @endif
+                                            @if($session->confirmation->notes)
+                                                <small class="d-block text-muted fst-italic mt-1" style="max-width: 160px;">"{{ \Illuminate\Support\Str::limit($session->confirmation->notes, 30) }}"</small>
+                                            @endif
+                                        @else
+                                            <span class="badge bg-light text-secondary rounded-pill border px-3 py-2">
+                                                <i class="bi bi-hourglass-split me-1"></i> Belum Konfirmasi
+                                            </span>
+                                        @endif
                                     </td>
                                     <td>
                                         @if($session->status === 'completed')

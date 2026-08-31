@@ -33,12 +33,18 @@
 
                 <div class="mb-3">
                     <div class="text-muted small fw-bold">WAKTU & TANGGAL:</div>
-                    <div class="fw-bold text-primary">{{ $session->date->format('d F Y') }} (Jam {{ $session->time }})</div>
+                    <div class="fw-bold text-primary">{{ $session->date ? \Carbon\Carbon::parse($session->date)->locale('id')->isoFormat('dddd, D MMMM Y') : '-' }} (Jam {{ date('H:i', strtotime($session->time)) }} WIB)</div>
                 </div>
 
                 <div class="mb-3">
                     <div class="text-muted small fw-bold">METODE BELAJAR:</div>
-                    <span class="badge bg-info-subtle text-info fs-6 rounded-pill px-3 py-1">{{ ucfirst($session->method) }}</span>
+                    @if($session->method === 'offline')
+                        <span class="badge bg-success-subtle text-success fs-6 rounded-pill px-3 py-1 border border-success-subtle"><i class="bi bi-house-door me-1"></i> Offline (Home Visit)</span>
+                    @elseif($session->method === 'online')
+                        <span class="badge bg-primary-subtle text-primary fs-6 rounded-pill px-3 py-1 border border-primary-subtle"><i class="bi bi-camera-video me-1"></i> Online</span>
+                    @else
+                        <span class="badge bg-info-subtle text-info fs-6 rounded-pill px-3 py-1 border border-info-subtle"><i class="bi bi-arrow-repeat me-1"></i> Hybrid</span>
+                    @endif
                 </div>
 
                 <div class="mb-3">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Mentor;
 
+use App\Enums\EnrollmentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\MentorActivityLog;
 use App\Models\Session;
@@ -16,8 +17,15 @@ class SessionController extends Controller
         $mentor = auth()->user()->mentor;
         $status = $request->query('status', 'all');
 
-        $query = Session::with(['student.user'])
-            ->where('mentor_id', $mentor?->id);
+        $query = Session::with([
+            'student.user',
+            'student.parent.user',
+            'student.programs',
+            'confirmation',
+            'student.enrollments' => function ($q) {
+                $q->where('status', EnrollmentStatus::ACTIVE->value)->with('program');
+            },
+        ])->where('mentor_id', $mentor?->id);
 
         if ($status !== 'all') {
             $query->where('status', $status);

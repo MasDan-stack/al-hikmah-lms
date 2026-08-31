@@ -23,7 +23,7 @@
             </div>
         @else
             <div class="table-responsive">
-                <table class="table align-middle table-hover">
+                <table class="table align-middle table-hover datatable" id="tableParentPaymentHistory">
                     <thead class="table-light">
                         <tr>
                             <th>No. Invoice</th>
@@ -32,7 +32,7 @@
                             <th>Program / Item</th>
                             <th>Metode</th>
                             <th>Nominal</th>
-                            <th>Aksi</th>
+                            <th class="no-sort">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,7 +42,7 @@
                                 <td>{{ $p->payment_date ? $p->payment_date->format('d/m/Y H:i') : $p->updated_at->format('d/m/Y') }}</td>
                                 <td class="fw-semibold">{{ $p->student?->user?->name ?? $p->student?->full_name }}</td>
                                 <td>{{ $p->program?->name ?? 'SPP Bimbingan' }}</td>
-                                <td><span class="badge bg-success-subtle text-success rounded-pill">{{ $p->payment_method ?? 'Midtrans' }}</span></td>
+                                <td><span class="badge bg-success-subtle text-success rounded-pill">{{ $p->payment_method ?? 'Pembayaran Digital' }}</span></td>
                                 <td class="fw-bold text-dark">Rp {{ number_format($p->amount, 0, ',', '.') }}</td>
                                 <td>
                                     <a href="{{ route('parent.payments.download', $p->id) }}" class="btn btn-sm btn-outline-dark rounded-pill" target="_blank">

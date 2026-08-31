@@ -37,9 +37,38 @@
                     <span class="fw-semibold text-dark">{{ $student->parent?->user?->name ?? '-' }}</span>
                 </div>
                 <div class="mb-2">
-                    <small class="text-muted d-block">Kontak Darurat</small>
-                    <span class="fw-semibold text-dark">{{ $student->parent?->emergency_phone ?? '-' }}</span>
+                    <small class="text-muted d-block">Kontak & WA Wali</small>
+                    @php $phone = $student->getParentPhone(); @endphp
+                    @if($phone)
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $phone) }}" target="_blank" class="btn btn-sm btn-success rounded-pill px-3 py-1 mt-1">
+                            <i class="bi bi-whatsapp me-1"></i> Hubungi Wali Santri
+                        </a>
+                    @else
+                        <span class="fw-semibold text-dark">-</span>
+                    @endif
                 </div>
+                <div class="mb-2">
+                    <small class="text-muted d-block">Alamat Lengkap (Home Visit / Offline)</small>
+                    <div class="p-2 bg-light rounded-3 small text-dark mt-1">
+                        <i class="bi bi-geo-alt-fill text-danger me-1"></i> {{ $student->getFullAddress() }}
+                    </div>
+                </div>
+
+                @php 
+                    $activeEnrollment = $student->enrollments()->where('status', 'active')->latest()->first(); 
+                @endphp
+                @if($activeEnrollment)
+                <div class="mb-2 pt-2 border-top">
+                    <small class="text-muted d-block">Jadwal Bimbingan Disepakati:</small>
+                    <div class="small fw-semibold text-primary mt-1">
+                        <i class="bi bi-calendar3 me-1"></i> {{ $activeEnrollment->effective_days_label }}
+                    </div>
+                    <div class="small text-secondary">
+                        <i class="bi bi-clock me-1"></i> {{ $activeEnrollment->effective_time_label }}
+                    </div>
+                </div>
+                @endif
+
                 
                 <div class="mt-4">
                     <a href="{{ route('report.download', $student->id) }}" class="btn btn-outline-danger w-100 rounded-pill fw-bold" target="_blank">
@@ -69,7 +98,7 @@
                                 <div class="p-3 mb-3 border rounded-3 bg-light">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <span class="badge bg-primary rounded-pill px-3">{{ ucfirst($prog->kategori) }}</span>
-                                        <small class="text-muted">{{ $prog->created_at->format('d M Y, H:i') }}</small>
+                                        <small class="text-muted"><i class="bi bi-calendar3 me-1"></i>{{ $prog->created_at->locale('id')->isoFormat('dddd, D MMMM Y • HH:mm') }} WIB</small>
                                     </div>
                                     <h6 class="fw-bold text-dark mb-1">
                                         {{ $prog->surah_start ?? 'Surah' }} 

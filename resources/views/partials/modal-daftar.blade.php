@@ -8,11 +8,16 @@
             </div>
             <div class="modal-body p-4">
                 <p class="text-muted mb-4 small">Isi data berikut untuk memulai perjalanan belajar Al-Qur'an Anda bersama AL-HIKMAH.</p>
-                <form id="registrationForm" action="{{ route('register') }}" method="GET">
+                <form id="registrationForm" action="{{ route('register.pre') }}" method="POST">
+                    @csrf
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-secondary small" for="namaLengkap">Nama Lengkap <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="namaLengkap" name="nama" required autocomplete="name" placeholder="Nama Anda...">
+                            <label class="form-label fw-semibold text-secondary small" for="namaLengkap">Nama Orang Tua / Wali <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="namaLengkap" name="nama" required autocomplete="name" placeholder="Nama Anda (Orang Tua)...">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-secondary small" for="namaAnak">Nama Murid / Anak <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="namaAnak" name="nama_anak" required placeholder="Nama lengkap anak...">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-secondary small" for="noWhatsApp">Nomor WhatsApp <span class="text-danger">*</span></label>
@@ -26,6 +31,13 @@
                                 <option>Dewasa (16-30 tahun)</option>
                                 <option>Dewasa (31-50 tahun)</option>
                                 <option>50+ tahun</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-secondary small" for="genderAnak">Jenis Kelamin Anak</label>
+                            <select class="form-select" id="genderAnak" name="gender">
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
                             </select>
                         </div>
                         <div class="col-md-6">
