@@ -19,6 +19,13 @@
     </script>
     <title>@yield('title', 'Ruang Belajar Santri') | AL-HIKMAH LMS</title>
 
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/favicon_io/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/favicon_io/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/img/favicon_io/favicon-16x16.png') }}">
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicon_io/favicon.ico') }}">
+    <link rel="manifest" href="{{ asset('assets/img/favicon_io/site.webmanifest') }}">
+
     <!-- Google Font Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -357,6 +364,11 @@
                     <i class="bi bi-gear-fill me-1"></i> Akun & Keamanan
                 </div>
 
+                <a href="{{ route('student.profile.edit') }}" class="student-nav-item {{ request()->routeIs('student.profile.*') || request()->routeIs('santri.profile') ? 'active' : '' }}">
+                    <i class="bi bi-person-gear text-success"></i>
+                    <span>Profil Belajar</span>
+                </a>
+
                 <a href="{{ route('student.password.index') }}" class="student-nav-item {{ request()->routeIs('student.password.index') ? 'active' : '' }}">
                     <i class="bi bi-shield-lock-fill text-secondary"></i>
                     <span>Ganti Password</span>
@@ -371,9 +383,13 @@
             <!-- Profile Footer -->
             <div class="p-3 border-top border-secondary-subtle d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2 overflow-hidden">
-                    <div class="rounded-circle text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+                    <div class="rounded-circle text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0 overflow-hidden"
                         style="width: 36px; height: 36px; background: linear-gradient(135deg, var(--gamify-primary) 0%, #059669 100%); font-size: 0.85rem;">
-                        {{ strtoupper(substr(auth()->user()->name ?? 'S', 0, 1)) }}
+                        @if(auth()->user()->avatar)
+                            <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" class="w-100 h-100 object-fit-cover rounded-circle">
+                        @else
+                            {{ strtoupper(substr(auth()->user()->name ?? 'S', 0, 1)) }}
+                        @endif
                     </div>
                     <div class="overflow-hidden">
                         <div class="fw-semibold text-truncate small">{{ auth()->user()->name ?? 'Santri' }}</div>
@@ -445,8 +461,12 @@
                     <!-- Student User Dropdown -->
                     <div class="dropdown">
                         <button class="user-profile-toggle dropdown-toggle border-0 shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <div class="user-avatar-badge">
-                                {{ $initials }}
+                            <div class="user-avatar-badge overflow-hidden">
+                                @if($user->avatar)
+                                    <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="w-100 h-100 object-fit-cover rounded-circle">
+                                @else
+                                    {{ $initials }}
+                                @endif
                                 <span class="user-avatar-status"></span>
                             </div>
                             <div class="d-none d-md-block text-start">
@@ -460,8 +480,12 @@
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 border-0 mt-2 p-2" style="min-width: 250px;">
                             <li class="px-3 py-2 border-bottom mb-1">
                                 <div class="d-flex align-items-center gap-2 mb-1">
-                                    <div class="user-avatar-badge" style="width: 34px; height: 34px; font-size: 0.8rem;">
-                                        {{ $initials }}
+                                    <div class="user-avatar-badge overflow-hidden" style="width: 34px; height: 34px; font-size: 0.8rem;">
+                                        @if($user->avatar)
+                                            <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="w-100 h-100 object-fit-cover rounded-circle">
+                                        @else
+                                            {{ $initials }}
+                                        @endif
                                     </div>
                                     <div class="overflow-hidden">
                                         <div class="fw-bold text-dark text-truncate small">{{ $user->name }}</div>
@@ -478,6 +502,12 @@
                                 <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" href="{{ route('student.dashboard') }}">
                                     <i class="bi bi-speedometer2 text-success fs-6"></i>
                                     <span class="fw-medium">Dashboard Belajar</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" href="{{ route('student.profile.edit') }}">
+                                    <i class="bi bi-person-gear text-primary fs-6"></i>
+                                    <span class="fw-medium">Profil Belajar</span>
                                 </a>
                             </li>
                             <li>
@@ -548,6 +578,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- DataTables JS -->
     <script src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/datatables-init.js') }}"></script>
 
     <script>
         // Toggle Sidebar Mobile

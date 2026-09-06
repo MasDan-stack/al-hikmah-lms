@@ -19,6 +19,13 @@
     </script>
     <title>@yield('title', 'Admin Dashboard') | AL-HIKMAH LMS</title>
 
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/favicon_io/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/favicon_io/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/img/favicon_io/favicon-16x16.png') }}">
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicon_io/favicon.ico') }}">
+    <link rel="manifest" href="{{ asset('assets/img/favicon_io/site.webmanifest') }}">
+
     <!-- Google Font Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -448,6 +455,10 @@
                 </a>
 
                 <div class="admin-nav-section-title mt-2"><i class="bi bi-bar-chart-fill me-1"></i> Analisis & Keuangan</div>
+                <a href="{{ route('admin.analytics.predictive.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.analytics.predictive.*') ? 'active' : '' }}">
+                    <i class="bi bi-shield-exclamation text-danger"></i> Predictive Analytics & EWS
+                </a>
                 <a href="{{ route('admin.revenue.index') }}"
                     class="admin-nav-item {{ request()->routeIs('admin.revenue.*') ? 'active' : '' }}">
                     <i class="bi bi-cash-stack text-success"></i> Analitik Pendapatan
@@ -558,6 +569,10 @@
                 </a>
 
                 <div class="admin-nav-section-title mt-2"><i class="bi bi-gear-fill me-1"></i> Sistem & Pengaturan</div>
+                <a href="{{ route('admin.profile.edit') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.profile.*') ? 'active' : '' }}">
+                    <i class="bi bi-person-circle"></i> Profil Administrator
+                </a>
                 <a href="{{ route('admin.users.index') }}"
                     class="admin-nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                     <i class="bi bi-person-gear"></i> Pengguna & Hak Akses
@@ -621,8 +636,12 @@
 
                     <div class="dropdown">
                         <button class="user-profile-toggle dropdown-toggle border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <div class="user-avatar-badge">
-                                {{ $initials }}
+                            <div class="user-avatar-badge overflow-hidden">
+                                @if($user->avatar)
+                                    <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="w-100 h-100 object-fit-cover rounded-circle">
+                                @else
+                                    {{ $initials }}
+                                @endif
                                 <span class="user-avatar-status"></span>
                             </div>
                             <div class="d-none d-md-block user-profile-info">
@@ -637,8 +656,12 @@
                             <li>
                                 <div class="dropdown-user-header">
                                     <div class="d-flex align-items-center gap-2 mb-1">
-                                        <div class="user-avatar-badge" style="width: 34px; height: 34px; font-size: 0.8rem;">
-                                            {{ $initials }}
+                                        <div class="user-avatar-badge overflow-hidden" style="width: 34px; height: 34px; font-size: 0.8rem;">
+                                            @if($user->avatar)
+                                                <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="w-100 h-100 object-fit-cover rounded-circle">
+                                            @else
+                                                {{ $initials }}
+                                            @endif
                                         </div>
                                         <div class="overflow-hidden">
                                             <div class="fw-bold text-dark text-truncate small">{{ $user->name }}</div>
@@ -655,6 +678,11 @@
                             <li>
                                 <a class="dropdown-item dropdown-item-premium" href="{{ route('admin.dashboard') }}">
                                     <i class="bi bi-speedometer2"></i> Dashboard Admin
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item dropdown-item-premium" href="{{ route('admin.profile.edit') }}">
+                                    <i class="bi bi-person-gear"></i> Pengaturan Profil
                                 </a>
                             </li>
                             <li>
