@@ -77,10 +77,13 @@
                                     <span class="input-group-text bg-light border-subtle text-muted rounded-start-pill ps-3">
                                         <i class="bi bi-person-fill"></i>
                                     </span>
+                                    @php
+                                        $selectedStudentId = old('student_id', request('student_id', $children->count() === 1 ? $children->first()->id : null));
+                                    @endphp
                                     <select name="student_id" class="form-select border-subtle rounded-end-pill py-2 @error('student_id') is-invalid @enderror" required>
                                         <option value="">-- Klik untuk memilih anak --</option>
                                         @foreach($children as $child)
-                                            <option value="{{ $child->id }}" {{ old('student_id') == $child->id ? 'selected' : '' }}>
+                                            <option value="{{ $child->id }}" {{ $selectedStudentId == $child->id ? 'selected' : '' }}>
                                                 {{ $child->getDisplayName() }} &nbsp;({{ $child->age }} Tahun • {{ ucfirst($child->gender ?? 'Santri') }})
                                             </option>
                                         @endforeach
@@ -106,9 +109,13 @@
                         </div>
                         <p class="text-muted small mb-3">Tentukan fleksibilitas metode kehadiran guru pembimbing.</p>
 
+                        @php
+                            $defaultMethod = request('method', session('pre_registration.learning_method', 'offline'));
+                            $selectedMethod = old('learning_method', $defaultMethod);
+                        @endphp
                         <div class="row g-3">
                             <div class="col-md-4">
-                                <input type="radio" class="btn-check" name="learning_method" value="offline" id="method_offline" {{ old('learning_method', 'offline') === 'offline' ? 'checked' : '' }}>
+                                <input type="radio" class="btn-check" name="learning_method" value="offline" id="method_offline" {{ $selectedMethod === 'offline' ? 'checked' : '' }}>
                                 <label class="method-tile w-100" for="method_offline">
                                     <div class="method-icon">🏠</div>
                                     <div class="method-title">Offline (Home Visit)</div>
@@ -116,7 +123,7 @@
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <input type="radio" class="btn-check" name="learning_method" value="online" id="method_online" {{ old('learning_method') === 'online' ? 'checked' : '' }}>
+                                <input type="radio" class="btn-check" name="learning_method" value="online" id="method_online" {{ $selectedMethod === 'online' ? 'checked' : '' }}>
                                 <label class="method-tile w-100" for="method_online">
                                     <div class="method-icon">💻</div>
                                     <div class="method-title">Online (Interactive)</div>
@@ -124,7 +131,7 @@
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <input type="radio" class="btn-check" name="learning_method" value="hybrid" id="method_hybrid" {{ old('learning_method') === 'hybrid' ? 'checked' : '' }}>
+                                <input type="radio" class="btn-check" name="learning_method" value="hybrid" id="method_hybrid" {{ $selectedMethod === 'hybrid' ? 'checked' : '' }}>
                                 <label class="method-tile w-100" for="method_hybrid">
                                     <div class="method-icon">🔄</div>
                                     <div class="method-title">Hybrid (Kombinasi)</div>

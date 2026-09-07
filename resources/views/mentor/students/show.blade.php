@@ -47,10 +47,26 @@
                         <span class="fw-semibold text-dark">-</span>
                     @endif
                 </div>
-                <div class="mb-2">
-                    <small class="text-muted d-block">Alamat Lengkap (Home Visit / Offline)</small>
-                    <div class="p-2 bg-light rounded-3 small text-dark mt-1">
-                        <i class="bi bi-geo-alt-fill text-danger me-1"></i> {{ $student->getFullAddress() }}
+                <div class="mb-3">
+                    <small class="text-muted d-block mb-1">Alamat Rumah Santri (Tatap Muka / Offline)</small>
+                    <div class="p-3 bg-light rounded-3 small text-dark border">
+                        <div class="mb-2">
+                            <i class="bi bi-geo-alt-fill text-danger me-1"></i> {{ $student->effective_address }}
+                        </div>
+                        @if($student->maps_link)
+                            <a href="{{ $student->maps_link }}" 
+                               target="_blank" 
+                               rel="noopener noreferrer" 
+                               class="btn btn-success rounded-pill px-3 py-1 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1 mt-1">
+                                <i class="bi bi-pin-map-fill"></i>
+                                <span>🗺️ Buka Rute Peta Lokasi</span>
+                                <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.72rem;"></i>
+                            </a>
+                        @else
+                            <span class="badge bg-secondary-subtle text-secondary rounded-pill px-3 py-1 small">
+                                <i class="bi bi-geo-alt me-1"></i> Titik peta belum ditambahkan wali
+                            </span>
+                        @endif
                     </div>
                 </div>
 

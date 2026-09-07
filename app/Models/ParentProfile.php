@@ -16,6 +16,7 @@ class ParentProfile extends Model
     protected $fillable = [
         'user_id',
         'address',
+        'maps_link',
         'emergency_phone',
     ];
 

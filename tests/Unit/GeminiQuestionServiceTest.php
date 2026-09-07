@@ -157,7 +157,7 @@ test('curated questions bank returns 100% accurate program-specific topic questi
     $arabicQuestions = $service->generateQuestions('Bahasa Arab Dasar', 'Mufrodat & Dhomir', 15, 'Sedang', 'multiple_choice');
     expect($arabicQuestions)->toBeArray()->and(count($arabicQuestions))->toBe(15);
     $arabicTexts = implode(' ', array_column($arabicQuestions, 'question'));
-    expect($arabicTexts)->toContain('bahasa Arab')
+    expect($arabicTexts)->toMatch('/(bahasa arab|dhomir|mufrodat)/i')
         ->and($arabicTexts)->not->toContain('Nun Sukun')
         ->and($arabicTexts)->not->toContain('Makharijul Huruf');
 

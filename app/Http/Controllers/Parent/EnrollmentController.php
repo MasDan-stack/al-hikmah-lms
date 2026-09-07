@@ -148,6 +148,75 @@ class EnrollmentController extends Controller
     }
 
     /**
+     * Form ubah hari & estimasi jam belajar sebelum pembayaran lunas
+     */
+    public function edit(int $id): View|RedirectResponse
+    {
+        $parentProfile = auth()->user()->parentProfile;
+        $studentIds = $parentProfile ? $parentProfile->students()->pluck('id') : collect();
+
+        $enrollment = Enrollment::whereIn('student_id', $studentIds)
+            ->with(['student', 'program', 'payment'])
+            ->findOrFail($id);
+
+        // Kunci jadwal pasca pembayaran lunas atau kelas sudah aktif
+        if ($enrollment->isActive() || $enrollment->payment?->status === 'paid') {
+            return redirect()->route('parent.enrollments.show', $enrollment->id)
+                ->with('error', 'Hari & jam bimbingan tidak dapat diubah karena kelas sudah aktif dan pembayaran telah lunas. Silakan hubungi admin pengelola jika ada kendala.');
+        }
+
+        $availableDays = Enrollment::DAYS;
+
+        return view('parent.enrollments.edit', compact('enrollment', 'availableDays'));
+    }
+
+    /**
+     * Update preferensi hari & jam belajar sebelum pembayaran lunas
+     */
+    public function update(Request $request, int $id): RedirectResponse
+    {
+        $parentProfile = auth()->user()->parentProfile;
+        $studentIds = $parentProfile ? $parentProfile->students()->pluck('id') : collect();
+
+        $enrollment = Enrollment::whereIn('student_id', $studentIds)
+            ->with(['student', 'program', 'payment'])
+            ->findOrFail($id);
+
+        // Kunci jadwal pasca pembayaran lunas atau kelas sudah aktif
+        if ($enrollment->isActive() || $enrollment->payment?->status === 'paid') {
+            return redirect()->route('parent.enrollments.show', $enrollment->id)
+                ->with('error', 'Hari & jam bimbingan tidak dapat diubah karena kelas sudah aktif dan pembayaran telah lunas. Silakan hubungi admin pengelola jika ada kendala.');
+        }
+
+        $validated = $request->validate([
+            'learning_method' => ['nullable', 'in:offline,online,hybrid'],
+            'requested_days' => ['required', 'array', 'min:1'],
+            'requested_days.*' => ['in:monday,tuesday,wednesday,thursday,friday,saturday,sunday'],
+            'requested_time' => ['nullable', 'date_format:H:i'],
+            'parent_notes' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $enrollment->update([
+            'learning_method' => $validated['learning_method'] ?? $enrollment->learning_method,
+            'requested_days' => $validated['requested_days'],
+            'requested_time' => $validated['requested_time'] ?? null,
+            'parent_notes' => $validated['parent_notes'] ?? null,
+        ]);
+
+        // Kirim notifikasi ke Admin
+        NotificationService::notifyAdmins(
+            'Pembaruan Pilihan Hari & Jam oleh Wali Santri',
+            "Wali santri {$enrollment->student->getDisplayName()} telah memperbarui preferensi hari & jam bimbingan program {$enrollment->program->name}.",
+            NotificationType::INFO,
+            route('admin.enrollments.edit', $enrollment->id),
+            'enrollment'
+        );
+
+        return redirect()->route('parent.enrollments.show', $enrollment->id)
+            ->with('success', 'Preferensi hari & jam belajar berhasil diperbarui.');
+    }
+
+    /**
      * Wali Santri menerima penawaran jadwal alternatif dari Admin
      */
     public function acceptOffer(int $id): RedirectResponse

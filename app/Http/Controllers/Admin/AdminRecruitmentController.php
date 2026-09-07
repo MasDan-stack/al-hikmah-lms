@@ -20,11 +20,25 @@ class AdminRecruitmentController extends Controller
     // ==========================================
     // MANAJEMEN LAMARAN (APPLICATIONS)
     // ==========================================
-    public function applications()
+    public function applications(Request $request)
     {
-        $applications = MentorApplication::latest()->get();
+        $statusCounts = [
+            'all' => MentorApplication::count(),
+            'submitted' => MentorApplication::where('status', 'submitted')->count(),
+            'test_scheduled' => MentorApplication::where('status', 'test_scheduled')->count(),
+            'test_completed' => MentorApplication::where('status', 'test_completed')->count(),
+            'interview_scheduled' => MentorApplication::where('status', 'interview_scheduled')->count(),
+            'approved' => MentorApplication::where('status', 'approved')->count(),
+            'rejected' => MentorApplication::where('status', 'rejected')->count(),
+        ];
 
-        return view('admin.recruitment.applications.index', compact('applications'));
+        $currentStatus = $request->query('status');
+
+        $applications = MentorApplication::when($currentStatus && $currentStatus !== 'all', function ($q) use ($currentStatus) {
+            $q->where('status', $currentStatus);
+        })->latest()->get();
+
+        return view('admin.recruitment.applications.index', compact('applications', 'statusCounts', 'currentStatus'));
     }
 
     public function exportCsv(Request $request)
@@ -89,14 +103,14 @@ class AdminRecruitmentController extends Controller
         return Storage::response($document->file_path, $document->file_name);
     }
 
-    public function approveDocument($id)
+    public function approveDocument(Request $request, $id)
     {
         $application = MentorApplication::findOrFail($id);
 
         try {
-            $this->recruitmentService->processDocumentReview($application, true);
+            $this->recruitmentService->approveDocumentAndScheduleTest($application, $request->input('notes'));
 
-            return back()->with('success', 'Dokumen disetujui. Pelamar lanjut ke tahap tes.');
+            return back()->with('success', 'Dokumen disetujui, paket 15 soal kompetensi otomatis digenerate, dan notifikasi WhatsApp telah dikirimkan ke pelamar.');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
@@ -118,11 +132,16 @@ class AdminRecruitmentController extends Controller
 
     public function scheduleInterview(Request $request, $id)
     {
-        $request->validate(['notes' => 'nullable|string']);
+        $request->validate([
+            'interview_scheduled_at' => 'required|date',
+            'interview_type' => 'required|in:online,offline',
+            'interview_meeting_link' => 'nullable|string',
+            'interview_notes' => 'nullable|string',
+        ]);
         $application = MentorApplication::findOrFail($id);
 
         try {
-            $this->recruitmentService->scheduleInterview($application, $request->notes);
+            $this->recruitmentService->scheduleInterview($application, $request->all());
 
             return back()->with('success', 'Pelamar dijadwalkan wawancara.');
         } catch (\Exception $e) {

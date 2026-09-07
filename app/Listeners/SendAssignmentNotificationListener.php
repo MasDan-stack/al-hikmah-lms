@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\StudentAssignedToMentor;
+use App\Models\MentorAvailability;
 use App\Models\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -17,6 +18,8 @@ class SendAssignmentNotificationListener implements ShouldQueue
         $mentor = $event->mentor;
         $student = $event->student;
         $day = $event->day;
+        $dayLabel = MentorAvailability::DAYS[$day] ?? $day;
+        $timeStr = $event->time ? ' Jam '.substr($event->time, 0, 5).' WIB' : '';
 
         // In-App Notification untuk Mentor
         if ($mentor->user_id) {
@@ -24,7 +27,7 @@ class SendAssignmentNotificationListener implements ShouldQueue
                 'user_id' => $mentor->user_id,
                 'type' => 'student_assignment',
                 'title' => 'Santri Baru Dialokasikan',
-                'message' => "Santri {$student->getDisplayName()} telah dialokasikan ke jadwal mengajar Anda (Hari {$day}).",
+                'message' => "Santri {$student->getDisplayName()} telah dialokasikan ke jadwal mengajar Anda (Hari {$dayLabel}{$timeStr}).",
                 'is_read' => false,
             ]);
         }
@@ -35,15 +38,15 @@ class SendAssignmentNotificationListener implements ShouldQueue
                 'user_id' => $student->parent->user_id,
                 'type' => 'student_assignment',
                 'title' => 'Pengampu Belajar Ananda',
-                'message' => "Ananda {$student->getDisplayName()} telah dialokasikan ke Pengajar {$mentor->getDisplayName()} pada hari {$day}.",
+                'message' => "Ananda {$student->getDisplayName()} telah dialokasikan ke Pengajar {$mentor->getDisplayName()} pada hari {$dayLabel}{$timeStr}.",
                 'is_read' => false,
             ]);
         }
 
-        // Opsional: Integrasi WhatsApp Gateway Webhook
+        // Logging
         $parentPhone = $student->parent?->user?->phone ?? $student->parent?->emergency_phone;
         if ($parentPhone) {
-            Log::info("WhatsApp Queue: Mengirim template konfirmasi ke {$parentPhone} untuk santri {$student->full_name}");
+            Log::info("WhatsApp Assignment Notification: Mengirim pesan ke {$parentPhone} untuk santri {$student->getDisplayName()} ({$dayLabel}{$timeStr})");
         }
     }
 }

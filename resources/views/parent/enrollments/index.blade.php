@@ -127,9 +127,20 @@
                                         @endif
                                     </td>
                                     <td class="text-end pe-3">
-                                        <a href="{{ route('parent.enrollments.show', $enrollment->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fw-semibold">
-                                            <i class="bi bi-arrow-right-circle me-1"></i> Detail & Jadwal
-                                        </a>
+                                        <div class="d-flex justify-content-end align-items-center gap-1">
+                                            @if(!$enrollment->isActive() && $enrollment->payment?->status !== 'paid')
+                                                <a href="{{ route('parent.enrollments.edit', $enrollment->id) }}" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 fw-semibold" title="Ubah Hari & Jam (Sebelum Lunas)">
+                                                    <i class="bi bi-pencil-square me-1"></i> Ubah
+                                                </a>
+                                            @else
+                                                <span class="badge bg-light text-muted border border-subtle rounded-pill px-2 py-1 small" title="Jadwal terkunci permanen karena pembayaran telah diselesaikan">
+                                                    <i class="bi bi-lock-fill me-1"></i> Terkunci
+                                                </span>
+                                            @endif
+                                            <a href="{{ route('parent.enrollments.show', $enrollment->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fw-semibold">
+                                                <i class="bi bi-arrow-right-circle me-1"></i> Detail
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

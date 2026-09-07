@@ -452,6 +452,17 @@
                 </a>
 
                 @if($isOfficialMentor)
+                    <a href="{{ route('mentor.orientation.index') }}"
+                        class="admin-nav-item {{ request()->routeIs('mentor.orientation.*') ? 'active' : '' }}">
+                        <i class="bi bi-journal-bookmark-fill text-success"></i>
+                        <span>Panduan Orientasi & SOP</span>
+                        @if($currentMentor && $currentMentor->status === 'probation')
+                            <span class="badge bg-warning text-dark ms-auto" style="font-size: 0.65rem;">Probation</span>
+                        @endif
+                    </a>
+                @endif
+
+                @if($isOfficialMentor)
                     <div class="admin-nav-section-title mt-2"><i class="bi bi-calendar-range me-1"></i> Jadwal & Santri</div>
                     <a href="{{ route('mentor.sessions.index') }}"
                         class="admin-nav-item {{ request()->routeIs('mentor.sessions.*') ? 'active' : '' }}">

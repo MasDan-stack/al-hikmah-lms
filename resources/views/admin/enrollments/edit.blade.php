@@ -23,6 +23,29 @@
                         </div>
                     </div>
 
+                    @if($enrollment->isActive())
+                        <div class="alert alert-success border-0 rounded-4 shadow-sm mb-4 p-4" role="alert">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-circle bg-success text-white p-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                        <i class="bi bi-check-circle-fill fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="fw-bold text-dark mb-1">Pendaftaran Telah Selesai & Status Aktif</h5>
+                                        <p class="text-muted small mb-0">
+                                            Santri <strong>{{ $enrollment->student->getDisplayName() }}</strong> telah resmi aktif belajar program <strong>{{ $enrollment->program->name }}</strong> bersama <strong>{{ $enrollment->mentor?->getDisplayName() ?? 'Guru Pembimbing' }}</strong> sejak <strong>{{ $enrollment->start_date_label }}</strong>. Pembayaran telah lunas.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <a href="{{ route('admin.active-enrollments.index', ['search' => $enrollment->student->getDisplayName()]) }}" class="btn btn-success rounded-pill px-4 shadow-sm">
+                                        <i class="bi bi-eye me-1"></i> Buka Data Santri Aktif
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     @if(session('success'))
                         <div class="alert alert-success border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center justify-content-between p-3" role="alert">
                             <div class="d-flex align-items-center gap-2">
@@ -187,11 +210,17 @@
                                         <input type="hidden" name="mentor_id" value="{{ $m->id }}">
                                         <input type="hidden" name="shadow_mentor_id" value="{{ $shadowMentorId }}">
                                         <input type="hidden" name="score" value="{{ $score }}">
-                                        <input type="hidden" name="start_date" value="{{ $enrollment->start_date?->format('Y-m-d') ?? date('Y-m-d', strtotime('+3 days')) }}">
+                                        <input type="hidden" name="start_date" value="{{ $enrollment->calculateFirstSessionDate()->format('Y-m-d') }}">
                                         <input type="hidden" name="score_breakdown" value="{{ json_encode($b) }}">
-                                        <button type="submit" class="btn {{ $index === 0 ? 'btn-primary' : 'btn-outline-primary' }} w-100 rounded-pill fw-bold py-2 shadow-sm">
-                                            <i class="bi bi-check-circle me-1"></i> Pilih {{ $m->getDisplayName() }}
-                                        </button>
+                                        @if($enrollment->isActive())
+                                            <button type="button" class="btn btn-light border text-muted w-100 rounded-pill fw-bold py-2" disabled>
+                                                <i class="bi bi-lock-fill me-1"></i> Sudah Aktif
+                                            </button>
+                                        @else
+                                            <button type="submit" class="btn {{ $index === 0 ? 'btn-primary' : 'btn-outline-primary' }} w-100 rounded-pill fw-bold py-2 shadow-sm">
+                                                <i class="bi bi-check-circle me-1"></i> Pilih {{ $m->getDisplayName() }}
+                                            </button>
+                                        @endif
                                     </form>
                                 </div>
                             </div>
@@ -234,6 +263,24 @@
                     </div>
                     @endif
                 </div>
+            @else
+            <div class="card border-0 shadow-sm rounded-4 mb-4 border-start border-warning border-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="rounded-circle bg-warning-subtle text-warning p-2 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                            <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold mb-1 text-dark">Tidak Ada Rekomendasi Otomatis yang Memenuhi Syariat / Kuota</h6>
+                            <p class="text-muted small mb-2">
+                                Sistem Smart Matchmaking AI tidak menemukan guru yang memenuhi kriteria syariat (gender/umur) atau ketersediaan kuota slot pada jadwal yang diminta (<strong>{{ $enrollment->requested_days_label }}</strong>).
+                            </p>
+                            <p class="text-muted small mb-0">
+                                <i class="bi bi-info-circle me-1"></i> Admin tetap dapat menugaskan guru secara manual pada <strong>OPSI A</strong> atau mengajukan penawaran jadwal alternatif pada <strong>OPSI B</strong> di bawah.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
             @endif
 
@@ -256,19 +303,34 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label fw-bold small">Pilih Mentor Pembimbing <span class="text-danger">*</span></label>
-                                    <select name="mentor_id" class="form-select" required>
-                                        <option value="">-- Pilih Mentor --</option>
-                                        @foreach($mentors as $mentor)
-                                            <option value="{{ $mentor->id }}" {{ old('mentor_id', $enrollment->mentor_id) == $mentor->id ? 'selected' : '' }}>
-                                                {{ $mentor->getDisplayName() }} (Keahlian: {{ $mentor->specialization ?? '-' }})
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    @if(isset($availableMentorsForOptionA) && $availableMentorsForOptionA->isNotEmpty())
+                                        <select name="mentor_id" class="form-select" required>
+                                            <option value="">-- Pilih Mentor Tersedia --</option>
+                                            @foreach($availableMentorsForOptionA as $mentor)
+                                                <option value="{{ $mentor->id }}" {{ old('mentor_id', $enrollment->mentor_id) == $mentor->id ? 'selected' : '' }}>
+                                                    {{ $mentor->getDisplayName() }} (Keahlian: {{ $mentor->specialization ?? '-' }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <small class="text-muted" style="font-size: 0.72rem;">Hanya menampilkan mentor yang aktif, membuka slot, dan tidak bentrok jadwal di hari & jam ini.</small>
+                                    @else
+                                        <select name="mentor_id" class="form-select bg-light text-muted" disabled>
+                                            <option value="">-- Tidak Ada Mentor Tersedia di Jadwal Ini --</option>
+                                        </select>
+                                        <div class="alert alert-warning py-2.5 px-3 small mt-2 mb-0 border-0 rounded-3 d-flex align-items-start gap-2">
+                                            <i class="bi bi-exclamation-triangle-fill text-warning fs-5 flex-shrink-0"></i>
+                                            <div>
+                                                <strong>Seluruh mentor tidak tersedia / bentrok jadwal</strong> pada hari <strong>{{ $enrollment->requested_days_label }}</strong> jam <strong>{{ $enrollment->requested_time_label }}</strong>.
+                                                <div class="mt-1">Silakan gunakan <strong>OPSI B</strong> di samping untuk mengajukan penawaran jadwal alternatif kepada orang tua santri.</div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label fw-bold small">Tanggal Mulai Belajar <span class="text-danger">*</span></label>
-                                    <input type="date" name="start_date" class="form-control" value="{{ old('start_date', $enrollment->start_date?->format('Y-m-d') ?? date('Y-m-d', strtotime('+3 days'))) }}" required>
+                                    <input type="date" name="start_date" class="form-control" value="{{ old('start_date', $enrollment->calculateFirstSessionDate()->format('Y-m-d')) }}" required {{ $enrollment->isActive() ? 'disabled' : '' }}>
+                                    <small class="text-muted" style="font-size: 0.72rem;">Disesuaikan otomatis dengan hari bimbingan pertama santri ({{ $enrollment->requested_days_label }}).</small>
                                 </div>
 
                                 <div class="mb-3">
@@ -276,9 +338,15 @@
                                     <textarea name="admin_notes" class="form-control" rows="2" placeholder="Catatan untuk orang tua...">{{ old('admin_notes') }}</textarea>
                                 </div>
 
-                                <button type="submit" class="btn btn-success w-100 rounded-pill py-2">
-                                    <i class="bi bi-check-lg me-1"></i> Setujui Jadwal & Terbitkan Invoice
-                                </button>
+                                @if(isset($availableMentorsForOptionA) && $availableMentorsForOptionA->isNotEmpty())
+                                    <button type="submit" class="btn btn-success w-100 rounded-pill py-2 shadow-sm">
+                                        <i class="bi bi-check-lg me-1"></i> Setujui Jadwal & Terbitkan Invoice
+                                    </button>
+                                @else
+                                    <button type="button" class="btn btn-secondary w-100 rounded-pill py-2 opacity-75" disabled title="Tidak dapat menyetujui jadwal karena semua mentor bentrok">
+                                        <i class="bi bi-slash-circle me-1"></i> Jadwal Bentrok (Gunakan OPSI B)
+                                    </button>
+                                @endif
                             </form>
                         </div>
                     </div>

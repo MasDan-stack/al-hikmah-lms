@@ -80,38 +80,55 @@ test('matching algorithm returns top 3 recommended mentors with multi-level tie 
     expect($recommendations[0]['breakdown'])->toHaveKeys(['gender', 'location', 'slot', 'specialization', 'load']);
 });
 
-test('gender match grants 100 for same gender and muslimah class', function () {
-    $femaleStudentUser = User::factory()->create();
+test('gender match follows sharia age and gender guidelines', function () {
     $femaleStudent = Student::create([
-        'user_id' => $femaleStudentUser->id,
+        'user_id' => User::factory()->create()->id,
         'full_name' => 'Santriwati Aisyah',
         'age' => 12,
         'gender' => 'P',
     ]);
 
-    $femaleMentorUser = User::factory()->create();
+    $youngBoyStudent = Student::create([
+        'user_id' => User::factory()->create()->id,
+        'full_name' => 'Santri Cilik Hasan',
+        'age' => 7,
+        'gender' => 'L',
+    ]);
+
+    $olderBoyStudent = Student::create([
+        'user_id' => User::factory()->create()->id,
+        'full_name' => 'Santri Remaja Ali',
+        'age' => 11,
+        'gender' => 'L',
+    ]);
+
     $femaleMentor = Mentor::create([
-        'user_id' => $femaleMentorUser->id,
+        'user_id' => User::factory()->create()->id,
         'full_name' => 'Ustadzah Maryam',
         'gender' => 'P',
         'is_active' => true,
     ]);
 
-    $maleMentorUser = User::factory()->create();
     $maleMentor = Mentor::create([
-        'user_id' => $maleMentorUser->id,
+        'user_id' => User::factory()->create()->id,
         'full_name' => 'Ustadz Ahmad',
         'gender' => 'L',
         'is_active' => true,
     ]);
 
-    $muslimahProgram = (object) ['name' => 'Tahfidz Khusus Muslimah', 'category' => 'muslimah'];
+    $program = (object) ['name' => 'Tahfidz Qur\'an', 'category' => 'tahfidz'];
 
-    $scoreFemale = $this->matchingService->calculateGenderScore($femaleMentor, $femaleStudent, $muslimahProgram);
-    $scoreMale = $this->matchingService->calculateGenderScore($maleMentor, $femaleStudent, $muslimahProgram);
+    // 1. Santri Perempuan -> Wajib Ustazah (100%), Ustadz Diskualifikasi (0%)
+    expect($this->matchingService->calculateGenderScore($femaleMentor, $femaleStudent, $program))->toBe(100.0);
+    expect($this->matchingService->calculateGenderScore($maleMentor, $femaleStudent, $program))->toBe(0.0);
 
-    expect($scoreFemale)->toBe(100.0);
-    expect($scoreMale)->toBe(50.0);
+    // 2. Santri Laki-laki < 10 Tahun -> Wajib Ustazah (100%), Ustadz Diskualifikasi (0%)
+    expect($this->matchingService->calculateGenderScore($femaleMentor, $youngBoyStudent, $program))->toBe(100.0);
+    expect($this->matchingService->calculateGenderScore($maleMentor, $youngBoyStudent, $program))->toBe(0.0);
+
+    // 3. Santri Laki-laki >= 10 Tahun -> Wajib Ustadz (100%), Ustazah Diskualifikasi (0%)
+    expect($this->matchingService->calculateGenderScore($maleMentor, $olderBoyStudent, $program))->toBe(100.0);
+    expect($this->matchingService->calculateGenderScore($femaleMentor, $olderBoyStudent, $program))->toBe(0.0);
 });
 
 test('family blacklist completely disqualifies mentor to zero score', function () {
@@ -174,8 +191,8 @@ test('family blacklist completely disqualifies mentor to zero score', function (
     $recommendations = $this->matchingService->getTopRecommendations($enrollment, 3);
     $blacklistedRec = $recommendations->firstWhere('mentor.id', $mentor->id);
 
-    expect($blacklistedRec['score'])->toBe(0.0);
-    expect($blacklistedRec['breakdown']['disqualified_reason'])->toContain('Riwayat mutasi');
+    expect($blacklistedRec)->toBeNull();
+    expect($this->matchingService->isFamilyBlacklisted($student, $mentor))->toBeTrue();
 });
 
 test('location score handles online 100 percent and offline distance brackets', function () {
@@ -339,4 +356,109 @@ test('explain mentor exclusion returns reasons when mentor is inactive or unsuit
 
     expect($reasons)->toBeArray();
     expect(implode(' ', $reasons))->toContain('tidak aktif');
+});
+
+test('mentor on holiday or off duty receives zero slot score and is excluded', function () {
+    $mentorUser = User::factory()->create();
+    $mentor = Mentor::create([
+        'user_id' => $mentorUser->id,
+        'full_name' => 'Ustadz Hari Bebas',
+        'gender' => 'L',
+        'is_active' => true,
+    ]);
+
+    // Availability set as is_holiday = true
+    MentorAvailability::create([
+        'mentor_id' => $mentor->id,
+        'day' => 'monday',
+        'start_time' => '16:00:00',
+        'end_time' => '18:00:00',
+        'max_students' => 10,
+        'is_available' => true,
+        'is_holiday' => true,
+        'notes' => 'Hari Bebas Kuliah',
+    ]);
+
+    $student = Student::create([
+        'user_id' => User::factory()->create()->id,
+        'full_name' => 'Santri Budi',
+        'age' => 12,
+        'gender' => 'L',
+    ]);
+
+    $slotScore = $this->matchingService->calculateSlotScore($mentor, 'monday', '16:00:00');
+    expect($slotScore)->toBe(0.0);
+});
+
+test('mentor with booked 1-on-1 slot on any requested day is disqualified with zero score', function () {
+    $mentorUser = User::factory()->create();
+    $mentor = Mentor::create([
+        'user_id' => $mentorUser->id,
+        'full_name' => 'Ustazah Fatimah',
+        'gender' => 'P',
+        'is_active' => true,
+        'specializations' => ['tahsin'],
+    ]);
+
+    // Availabilities on Monday and Tuesday
+    MentorAvailability::create([
+        'mentor_id' => $mentor->id,
+        'day' => 'monday',
+        'slot_numbers' => [4],
+        'is_available' => true,
+        'is_holiday' => false,
+    ]);
+
+    MentorAvailability::create([
+        'mentor_id' => $mentor->id,
+        'day' => 'tuesday',
+        'slot_numbers' => [4],
+        'is_available' => true,
+        'is_holiday' => false,
+    ]);
+
+    // Existing active student on Monday slot 4
+    $existingStudent = Student::create([
+        'user_id' => User::factory()->create()->id,
+        'full_name' => 'Santri Lain',
+        'age' => 8,
+        'gender' => 'P',
+    ]);
+
+    $mentor->students()->attach($existingStudent->id, [
+        'day_assigned' => 'monday',
+        'slot_number' => 4,
+        'time_assigned' => '16:30:00',
+        'is_active' => true,
+    ]);
+
+    $newStudent = Student::create([
+        'user_id' => User::factory()->create()->id,
+        'full_name' => 'Santri Baru',
+        'age' => 7,
+        'gender' => 'P',
+    ]);
+
+    $program = Program::create([
+        'name' => 'Iqra & Dasar',
+        'category' => 'tahsin',
+        'price' => 300000,
+        'is_active' => true,
+    ]);
+
+    $enrollment = Enrollment::create([
+        'student_id' => $newStudent->id,
+        'program_id' => $program->id,
+        'requested_days' => ['monday', 'tuesday'],
+        'requested_time' => '16:00:00',
+        'status' => EnrollmentStatus::WAITING_ADMIN,
+    ]);
+
+    $slotScore = $this->matchingService->calculateSlotScore($mentor, 'monday', $enrollment);
+    expect($slotScore)->toBe(0.0);
+
+    $recs = $this->matchingService->getTopRecommendations($enrollment, 3);
+    expect($recs->contains(fn ($item) => $item['mentor']->id === $mentor->id))->toBeFalse();
+    expect($mentor->hasScheduleConflict(['monday', 'tuesday'], '16:00:00', $newStudent->id))->toBeTrue();
+    expect($mentor->isAvailableForSchedule(['monday', 'tuesday'], '16:00:00', $newStudent->id))->toBeFalse();
 });

@@ -77,7 +77,27 @@ class EnrollmentController extends Controller
         // Dapatkan rekomendasi mentor
         $recommendations = $matchingService->getTopRecommendations($enrollment);
 
-        return view('admin.enrollments.edit', compact('enrollment', 'mentors', 'days', 'recommendations'));
+        // Filter mentor yang tersedia tanpa bentrok jadwal khusus untuk OPSI A (Setujui Jadwal Orang Tua)
+        $requestedDays = (array) ($enrollment->requested_days ?: []);
+        if (empty($requestedDays) && $enrollment->day_preference) {
+            $requestedDays = is_array($enrollment->day_preference) ? $enrollment->day_preference : [$enrollment->day_preference];
+        }
+
+        $availableMentorsForOptionA = $mentors->filter(function (Mentor $mentor) use ($enrollment, $requestedDays) {
+            return $mentor->isAvailableForSchedule(
+                $requestedDays,
+                $enrollment->requested_time,
+                $enrollment->student_id
+            );
+        });
+
+        return view('admin.enrollments.edit', compact(
+            'enrollment',
+            'mentors',
+            'days',
+            'recommendations',
+            'availableMentorsForOptionA'
+        ));
     }
 
     /**
@@ -94,17 +114,25 @@ class EnrollmentController extends Controller
         ]);
 
         $enrollment = Enrollment::with(['student.parent.user', 'program'])->findOrFail($id);
+
+        if ($enrollment->isActive()) {
+            return redirect()->route('admin.active-enrollments.index', ['search' => $enrollment->student?->getDisplayName()])
+                ->with('info', "Santri {$enrollment->student?->getDisplayName()} sudah berstatus Aktif dan tagihan telah lunas.");
+        }
+
         $mentor = Mentor::findOrFail($validated['mentor_id']);
         $score = (float) ($validated['score'] ?? 100.0);
-
         $scoreBreakdown = $validated['score_breakdown'] ? json_decode($validated['score_breakdown'], true) : [];
 
-        DB::transaction(function () use ($enrollment, $validated, $mentor, $score, $scoreBreakdown) {
+        $submittedDate = Carbon::parse($validated['start_date']);
+        $actualStartDate = $enrollment->calculateFirstSessionDate($submittedDate)->toDateString();
+
+        DB::transaction(function () use ($enrollment, $validated, $mentor, $score, $scoreBreakdown, $actualStartDate) {
             $enrollment->update([
                 'mentor_id' => $mentor->id,
                 'shadow_mentor_id' => $validated['shadow_mentor_id'] ?? null,
                 'matching_score' => $score,
-                'start_date' => $validated['start_date'],
+                'start_date' => $actualStartDate,
                 'status' => EnrollmentStatus::CONFIRMED,
                 'confirmed_at' => now(),
             ]);
@@ -134,7 +162,7 @@ class EnrollmentController extends Controller
                     'registration_fee' => $registrationFee,
                     'amount' => $totalAmount,
                     'payment_purpose' => 'registration',
-                    'due_date' => Carbon::parse($validated['start_date'])->subDay()->toDateString(),
+                    'due_date' => Carbon::parse($actualStartDate)->subDay()->toDateString(),
                     'status' => 'pending',
                     'invoice_number' => 'INV-'.date('Ymd').'-'.str_pad((string) $enrollment->id, 4, '0', STR_PAD_LEFT),
                 ]);
@@ -182,11 +210,13 @@ class EnrollmentController extends Controller
                 $mentor = $topRec['mentor'];
                 $score = (float) ($topRec['score'] ?? 100.0);
 
-                DB::transaction(function () use ($enrollment, $mentor, $score, $topRec) {
+                $actualStartDate = $enrollment->calculateFirstSessionDate(now()->addDays(3))->toDateString();
+
+                DB::transaction(function () use ($enrollment, $mentor, $score, $topRec, $actualStartDate) {
                     $enrollment->update([
                         'mentor_id' => $mentor->id,
                         'matching_score' => $score,
-                        'start_date' => now()->addDays(3)->toDateString(),
+                        'start_date' => $actualStartDate,
                         'status' => EnrollmentStatus::CONFIRMED,
                         'confirmed_at' => now(),
                     ]);
@@ -229,20 +259,35 @@ class EnrollmentController extends Controller
         ]);
 
         $enrollment = Enrollment::with(['student.parent.user', 'program'])->findOrFail($id);
-        $mentor = Mentor::findOrFail($validated['mentor_id']);
+
+        if ($enrollment->isActive()) {
+            return redirect()->route('admin.active-enrollments.index', ['search' => $enrollment->student?->getDisplayName()])
+                ->with('info', "Santri {$enrollment->student?->getDisplayName()} sudah berstatus Aktif dan tagihan telah lunas.");
+        }
+
+        $mentor = Mentor::with(['availabilities', 'students'])->findOrFail($validated['mentor_id']);
+
+        $requestedDays = (array) ($enrollment->requested_days ?: ['monday']);
+
+        // Verifikasi bentrok jadwal privat 1-on-1 pada hari dan jam yang diminta
+        if ($mentor->hasScheduleConflict($requestedDays, $enrollment->requested_time, $enrollment->student_id)) {
+            return back()->withInput()->with('error', "Mentor {$mentor->getDisplayName()} memiliki jadwal bentrok dengan santri privat (1-on-1) lain pada hari & jam yang diminta. Silakan pilih mentor lain atau ajukan penawaran alternatif pada OPSI B.");
+        }
 
         // Verifikasi kuota mentor pada hari yang diminta
-        $requestedDays = $enrollment->requested_days ?? ['monday'];
         foreach ($requestedDays as $day) {
             if (! $mentor->hasQuotaOnDay($day)) {
                 return back()->withInput()->with('error', "Mentor {$mentor->getDisplayName()} tidak memiliki kuota kosong pada hari ".(Enrollment::DAYS[$day] ?? $day).'. Silakan pilih mentor lain atau tawarkan jadwal alternatif.');
             }
         }
 
-        DB::transaction(function () use ($enrollment, $validated, $mentor) {
+        $submittedDate = Carbon::parse($validated['start_date']);
+        $actualStartDate = $enrollment->calculateFirstSessionDate($submittedDate)->toDateString();
+
+        DB::transaction(function () use ($enrollment, $validated, $mentor, $actualStartDate) {
             $enrollment->update([
                 'mentor_id' => $mentor->id,
-                'start_date' => $validated['start_date'],
+                'start_date' => $actualStartDate,
                 'admin_notes' => $validated['admin_notes'] ?? null,
                 'status' => EnrollmentStatus::CONFIRMED,
                 'confirmed_at' => now(),
@@ -266,7 +311,7 @@ class EnrollmentController extends Controller
                     'registration_fee' => $registrationFee,
                     'amount' => $totalAmount,
                     'payment_purpose' => 'registration',
-                    'due_date' => Carbon::parse($validated['start_date'])->subDay()->toDateString(),
+                    'due_date' => Carbon::parse($actualStartDate)->subDay()->toDateString(),
                     'status' => 'pending',
                     'invoice_number' => 'INV-'.date('Ymd').'-'.str_pad((string) $enrollment->id, 4, '0', STR_PAD_LEFT),
                 ]);

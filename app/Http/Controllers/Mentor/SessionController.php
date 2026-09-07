@@ -31,7 +31,7 @@ class SessionController extends Controller
             $query->where('status', $status);
         }
 
-        $sessions = $query->orderBy('date', 'desc')->orderBy('time', 'asc')->paginate(10);
+        $sessions = $query->orderBy('date', 'desc')->orderBy('time', 'asc')->get();
 
         return view('mentor.sessions.index', compact('sessions', 'status'));
     }

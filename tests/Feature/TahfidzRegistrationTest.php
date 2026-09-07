@@ -66,7 +66,16 @@ class TahfidzRegistrationTest extends TestCase
             'role' => 'parent',
         ]);
 
-        $response->assertRedirect(route('parent.dashboard'));
+        $createdStudent = Student::where('full_name', 'Fatimah Az-Zahra')->first();
+        $this->assertNotNull($createdStudent);
+
+        $tahfidzProgram = Program::where('name', 'like', '%Tahfidz%')->first();
+
+        $response->assertRedirect(route('parent.enrollments.create', [
+            'program_id' => $tahfidzProgram?->id ?? 1,
+            'student_id' => $createdStudent->id,
+            'method' => 'offline',
+        ]));
 
         $this->assertDatabaseHas('users', [
             'email' => 'halimah@gmail.com',

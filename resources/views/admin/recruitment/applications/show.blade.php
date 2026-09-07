@@ -135,8 +135,8 @@
                     @if($application->status === 'submitted')
                         <form action="{{ route('admin.recruitment.applications.approveDocument', $application->id) }}" method="POST" class="mb-2">
                             @csrf
-                            <button type="submit" class="btn btn-success w-100" onclick="return confirm('Verifikasi & setujui dokumen berkas pelamar ini?')">
-                                <i class="bi bi-check-circle me-1"></i>Setujui Berkas (Lanjut ke Tahap Tes)
+                            <button type="submit" class="btn btn-success w-100 fw-bold shadow-sm" onclick="return confirm('Setujui berkas pelamar ini dan langsung generate paket soal tes kompetensi AI?')">
+                                <i class="bi bi-check2-circle me-1"></i>Setujui Berkas & Jadwalkan Tes
                             </button>
                         </form>
                     @endif
@@ -180,11 +180,16 @@
                     @endif
 
                     @if($application->status === 'approved')
-                        <div class="alert alert-success text-center py-2">
+                        <div class="alert alert-success text-center py-2 mb-2">
                             <i class="bi bi-check2-all fs-4 d-block"></i>
                             <strong>Pelamar Telah Diterima</strong>
-                            <p class="small mb-0">Akun Mentor telah aktif dalam masa percobaan.</p>
+                            <p class="small mb-0">Akun Mentor telah aktif dalam masa percobaan (Probation 90 Hari).</p>
                         </div>
+                        @if($application->mentor)
+                            <a href="{{ route('admin.mentors.probation.show', $application->mentor->id) }}" class="btn btn-success w-100 fw-bold rounded-pill shadow-sm mb-2">
+                                <i class="bi bi-speedometer2 me-1"></i> Buka Monitoring Probation Mentor Ini &rarr;
+                            </a>
+                        @endif
                     @endif
 
                     @if(!in_array($application->status, ['rejected', 'approved', 'withdrawn']))
@@ -210,8 +215,23 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Catatan / Link Meeting / Instruksi Wawancara</label>
-                        <textarea name="notes" class="form-control" rows="3" required placeholder="Contoh: Wawancara Online via Zoom pada hari Kamis pukul 10.00 WIB. Link: https://meet.google.com/xyz"></textarea>
+                        <label class="form-label">Tanggal & Waktu Wawancara <span class="text-danger">*</span></label>
+                        <input type="datetime-local" name="interview_scheduled_at" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Jenis Wawancara <span class="text-danger">*</span></label>
+                        <select name="interview_type" class="form-select" required>
+                            <option value="online">Online</option>
+                            <option value="offline">Offline (Tatap Muka)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Link Meeting / Lokasi</label>
+                        <input type="text" name="interview_meeting_link" class="form-control" placeholder="Contoh: https://meet.google.com/xyz atau Alamat Kantor">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Catatan / Instruksi Khusus</label>
+                        <textarea name="interview_notes" class="form-control" rows="2" placeholder="Contoh: Siapkan koneksi stabil dan gunakan pakaian rapi."></textarea>
                     </div>
                     <small class="text-muted">Notifikasi undangan wawancara akan otomatis dikirim ke nomor WhatsApp pelamar.</small>
                 </div>

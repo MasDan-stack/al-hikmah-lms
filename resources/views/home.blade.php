@@ -270,33 +270,82 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- 5. ETRAIN MEMBER COUNTER -->
+    <!-- 5. KOMITMEN & PILAR PEMBELAJARAN (ANTISLOP) -->
     <!-- ============================================ -->
-    <section class="member_counter" aria-label="Statistik Lembaga">
+    <section class="member_counter" aria-label="Pilar Pendampingan AL-HIKMAH">
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-3 col-sm-6" data-reveal>
                     <div class="single_member_counter">
-                        <span>150+</span>
-                        <h4>Santri Aktif</h4>
+                        <div class="mb-2"><i class="bi bi-person-check fs-2 text-warning"></i></div>
+                        <span class="fs-4 fw-bold">Bimbingan 1-on-1</span>
+                        <h4>Fokus Personal Sesuai Karakter Santri</h4>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6" data-reveal data-reveal-delay="100">
                     <div class="single_member_counter">
-                        <span>25+</span>
-                        <h4>Guru &amp; Pendamping</h4>
+                        <div class="mb-2"><i class="bi bi-journal-bookmark fs-2 text-warning"></i></div>
+                        <span class="fs-4 fw-bold">Tahsin & Tajwid</span>
+                        <h4>Penekanan Makharijul Huruf Tartil</h4>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6" data-reveal data-reveal-delay="200">
                     <div class="single_member_counter">
-                        <span>1,200+</span>
-                        <h4>Jam Pembelajaran</h4>
+                        <div class="mb-2"><i class="bi bi-shield-check fs-2 text-warning"></i></div>
+                        <span class="fs-4 fw-bold">Guru Terkurasi</span>
+                        <h4>Hafidz/Hafidzah Berakhlak Mulia</h4>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6" data-reveal data-reveal-delay="300">
                     <div class="single_member_counter">
-                        <span>98%</span>
-                        <h4>Tingkat Kepuasan Wali</h4>
+                        <div class="mb-2"><i class="bi bi-clipboard2-check fs-2 text-warning"></i></div>
+                        <span class="fs-4 fw-bold">Laporan Mutaba'ah</span>
+                        <h4>Evaluasi Sesi Terbuka untuk Wali Santri</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 5.5 ALUR BELAJAR & PENDAFTARAN (WORKFLOW) -->
+    <!-- ============================================ -->
+    <section class="py-5 bg-white border-top border-bottom" aria-label="Alur Pendaftaran dan Belajar">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center" data-reveal>
+                    <div class="section-badge mx-auto mb-2"><i class="bi bi-diagram-3-fill"></i> Langkah Mudah</div>
+                    <h2 class="section-title">Alur Bimbingan <span class="text-gradient">Santri Baru</span></h2>
+                    <p class="section-description mx-auto">Tahapan terstruktur dan transparan demi kenyamanan keluarga serta kesiapan belajar ananda.</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3" data-reveal>
+                    <div class="p-4 rounded-4 bg-light border h-100 position-relative">
+                        <div class="badge bg-primary text-white rounded-circle p-2 mb-3 fs-5" style="width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center;">1</div>
+                        <h5 class="fw-bold mb-2">Pendaftaran Awal</h5>
+                        <p class="small text-secondary mb-0">Isi data calon santri dan tentukan target serta preferensi belajar yang diinginkan keluarga.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3" data-reveal data-reveal-delay="100">
+                    <div class="p-4 rounded-4 bg-light border h-100 position-relative">
+                        <div class="badge bg-success text-white rounded-circle p-2 mb-3 fs-5" style="width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center;">2</div>
+                        <h5 class="fw-bold mb-2">Penempatan (Placement)</h5>
+                        <p class="small text-secondary mb-0">Asesmen kemampuan bacaan santri secara ramah dan sabar untuk menentukan kurikulum awal yang tepat.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3" data-reveal data-reveal-delay="200">
+                    <div class="p-4 rounded-4 bg-light border h-100 position-relative">
+                        <div class="badge bg-primary text-white rounded-circle p-2 mb-3 fs-5" style="width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center;">3</div>
+                        <h5 class="fw-bold mb-2">Jadwal & Bimbingan</h5>
+                        <p class="small text-secondary mb-0">Pilih sesi reguler (Home Visit / Online) dan mulai bimbingan intensif 1-on-1 bersama guru pembimbing.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3" data-reveal data-reveal-delay="300">
+                    <div class="p-4 rounded-4 bg-light border h-100 position-relative">
+                        <div class="badge bg-success text-white rounded-circle p-2 mb-3 fs-5" style="width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center;">4</div>
+                        <h5 class="fw-bold mb-2">Laporan Mutaba'ah</h5>
+                        <p class="small text-secondary mb-0">Wali santri dapat memantau catatan tajwid, hafalan, dan adab santri melalui portal pemantauan.</p>
                     </div>
                 </div>
             </div>

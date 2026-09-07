@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ActiveEnrollmentController;
+use App\Http\Controllers\Admin\AdminAhpRankingController;
 use App\Http\Controllers\Admin\AdminAlertController;
 use App\Http\Controllers\Admin\AdminBadgeController;
 use App\Http\Controllers\Admin\AdminBlogCategoryController;
@@ -8,9 +9,11 @@ use App\Http\Controllers\Admin\AdminBlogController;
 use App\Http\Controllers\Admin\AdminBlogTagController;
 use App\Http\Controllers\Admin\AdminBroadcastController;
 use App\Http\Controllers\Admin\AdminGamificationController;
+use App\Http\Controllers\Admin\AdminInterventionTicketController;
 use App\Http\Controllers\Admin\AdminMentorLeaveController;
 use App\Http\Controllers\Admin\AdminMentorPerformanceController;
 use App\Http\Controllers\Admin\AdminProbationController;
+use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminRecruitmentController;
 use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminRevenueController;
@@ -22,6 +25,7 @@ use App\Http\Controllers\Admin\GalleryCategoryController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\MentorAvailabilityController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
+use App\Http\Controllers\Admin\PredictiveAnalyticsController;
 use App\Http\Controllers\Admin\RecruitmentApiController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -34,6 +38,8 @@ use App\Http\Controllers\Mentor\AvailabilityController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\MentorLeaveController;
 use App\Http\Controllers\Mentor\MentorMessageController;
+use App\Http\Controllers\Mentor\MentorOrientationController;
+use App\Http\Controllers\Mentor\MentorProfileController;
 use App\Http\Controllers\Mentor\MentorQuestionController;
 use App\Http\Controllers\Mentor\MentorRecruitmentTestController;
 use App\Http\Controllers\Mentor\MentorSelfServiceController;
@@ -56,6 +62,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Student\StudentGamificationController;
 use App\Http\Controllers\Student\StudentPasswordController;
+use App\Http\Controllers\Student\StudentProfileController;
 use App\Http\Controllers\Student\StudentTargetController;
 use App\Models\Article;
 use App\Models\Mentor;
@@ -185,8 +192,17 @@ Route::middleware(['auth', 'role:admin'])
         Route::prefix('mentors/probation')->name('mentors.probation.')->group(function () {
             Route::get('/', [AdminProbationController::class, 'index'])->name('index');
             Route::get('/{id}', [AdminProbationController::class, 'show'])->name('show');
+            Route::post('/{id}/sync', [AdminProbationController::class, 'syncLiveMetrics'])->name('sync');
             Route::post('/{id}/scores', [AdminProbationController::class, 'updateScores'])->name('updateScores');
             Route::post('/{id}/complete', [AdminProbationController::class, 'completeProbation'])->name('complete');
+        });
+
+        // 🎫 Tiket Intervensi Komplain Wali Santri
+        Route::prefix('intervention-tickets')->name('tickets.')->group(function () {
+            Route::get('/', [AdminInterventionTicketController::class, 'index'])->name('index');
+            Route::get('/{id}', [AdminInterventionTicketController::class, 'show'])->name('show');
+            Route::post('/{id}/update', [AdminInterventionTicketController::class, 'update'])->name('update');
+            Route::post('/{id}/escalate', [AdminInterventionTicketController::class, 'escalate'])->name('escalate');
         });
 
         // Mentor Leave & Substitute Management
@@ -203,6 +219,11 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
         Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+
+        // Profile Admin
+        Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.edit');
+        Route::post('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
+        Route::post('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password');
 
         Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
         Route::post('/payments', [AdminPaymentController::class, 'store'])->name('payments.store');
@@ -283,11 +304,21 @@ Route::middleware(['auth', 'role:admin'])
         // ==========================================
         // 📊 ANALYTICS & OPERATIONAL INTELLIGENCE (v8.2)
         // ==========================================
+        // Predictive Analytics & Early Warning System (PA-EWS v8.6)
+        Route::prefix('analytics/predictive')->name('analytics.predictive.')->group(function () {
+            Route::get('/', [PredictiveAnalyticsController::class, 'index'])->name('index');
+            Route::post('/recalculate', [PredictiveAnalyticsController::class, 'recalculateAll'])->name('recalculate');
+            Route::get('/export', [PredictiveAnalyticsController::class, 'exportRiskReport'])->name('export');
+            Route::post('/intervention/wa', [PredictiveAnalyticsController::class, 'sendWhatsAppIntervention'])->name('intervention.wa');
+        });
+
         // Revenue Analytics & Breakdown
         Route::get('/revenue', [AdminRevenueController::class, 'index'])->name('revenue.index');
 
         // Staff & HR Workload
         Route::get('/staff', [AdminStaffController::class, 'index'])->name('staff.index');
+        Route::get('/staff/{id}', [AdminStaffController::class, 'show'])->name('staff.show');
+        Route::post('/staff/{id}/verify-bank', [AdminStaffController::class, 'verifyBank'])->name('staff.verify-bank');
 
         // Operational Alerts Center
         Route::get('/alerts', [AdminAlertController::class, 'index'])->name('alerts.index');
@@ -309,6 +340,16 @@ Route::middleware(['auth', 'role:admin'])
             Route::get('/mentors/{id}', [AdminMentorPerformanceController::class, 'show'])->name('mentors.show');
             Route::post('/mentors/{id}/recalculate', [AdminMentorPerformanceController::class, 'recalculate'])->name('mentors.recalculate');
             Route::post('/mentors/{id}/send-wa', [AdminMentorPerformanceController::class, 'sendWhatsAppReport'])->name('mentors.send-wa');
+        });
+
+        // SPK Pemilihan Guru Teladan Berbasis Analytical Hierarchy Process (AHP)
+        Route::prefix('mentors/ahp-ranking')->name('mentors.ahp-ranking.')->group(function () {
+            Route::get('/', [AdminAhpRankingController::class, 'index'])->name('index');
+            Route::post('/matrix', [AdminAhpRankingController::class, 'updateMatrix'])->name('update-matrix');
+            Route::post('/simulate', [AdminAhpRankingController::class, 'simulate'])->name('simulate');
+            Route::post('/notes/{id}', [AdminAhpRankingController::class, 'updateNotes'])->name('update-notes');
+            Route::post('/announce/{month}', [AdminAhpRankingController::class, 'announce'])->name('announce');
+            Route::get('/print-sk/{month}', [AdminAhpRankingController::class, 'printSk'])->name('print-sk');
         });
     });
 
@@ -335,13 +376,19 @@ Route::middleware(['auth', 'role:mentor'])
         Route::get('/students/parents', [MentorStudentController::class, 'parents'])->name('students.parents');
         Route::get('/students/{id}', [MentorStudentController::class, 'show'])->name('students.show');
         Route::get('/availability', [AvailabilityController::class, 'index'])->name('availability.index');
-        Route::post('/availability/update-bulk', [AvailabilityController::class, 'updateBulk'])->name('availability.update-bulk');
+        Route::post('/availability', [AvailabilityController::class, 'store'])->name('availability.store');
+        Route::post('/availability/update-bulk', [AvailabilityController::class, 'store'])->name('availability.update-bulk');
+        Route::post('/availability/import-wa', [AvailabilityController::class, 'importFromWhatsApp'])->name('availability.import-wa');
         Route::get('/progress/create', [MentorProgressController::class, 'create'])->name('progress.create');
         Route::post('/progress', [MentorProgressController::class, 'store'])->name('progress.store');
         Route::get('/progress/bulk', [MentorProgressController::class, 'createBulk'])->name('progress.bulk-create');
         Route::post('/progress/bulk', [MentorProgressController::class, 'storeBulk'])->name('progress.bulk-store');
         Route::get('/reports/export', [MentorReportController::class, 'export'])->name('reports.export');
-        Route::get('/profile', [MentorDashboardController::class, 'profile'])->name('profile');
+        Route::get('/profile', [MentorProfileController::class, 'edit'])->name('profile');
+        Route::get('/profile/edit', [MentorProfileController::class, 'edit'])->name('profile.edit');
+        Route::match(['post', 'put'], '/profile', [MentorProfileController::class, 'update'])->name('profile.update');
+        Route::post('/profile/password', [MentorProfileController::class, 'updatePassword'])->name('profile.password');
+        Route::get('/profile/document/{document}', [MentorProfileController::class, 'downloadDocument'])->name('profile.document.download');
 
         // Target Hafalan Management
         Route::get('/targets', [MentorTargetController::class, 'index'])->name('targets.index');
@@ -386,6 +433,10 @@ Route::middleware(['auth', 'role:mentor'])
         // Portal Rekrutmen & Ujian Tes Calon Guru
         Route::get('/recruitment/test/{sessionId}', [MentorRecruitmentTestController::class, 'showTest'])->name('recruitment.take-test');
         Route::post('/recruitment/test/{sessionId}/submit', [MentorRecruitmentTestController::class, 'submitTest'])->name('recruitment.submit-test');
+
+        // Pusat Orientasi & Panduan Guru Baru (Probation Hub)
+        Route::get('/orientation', [MentorOrientationController::class, 'index'])->name('orientation.index');
+        Route::post('/orientation/complete/{moduleKey}', [MentorOrientationController::class, 'completeModule'])->name('orientation.complete');
     });
 
 // ==========================================
@@ -412,7 +463,7 @@ Route::middleware(['auth', 'role:parent'])
 
         // F. Modul Profil & Pengaturan
         Route::get('/profile', [ParentProfileController::class, 'edit'])->name('profile.edit');
-        Route::post('/profile', [ParentProfileController::class, 'update'])->name('profile.update');
+        Route::match(['post', 'put'], '/profile', [ParentProfileController::class, 'update'])->name('profile.update');
         Route::get('/profile/notifications', [ParentProfileController::class, 'notifications'])->name('profile.notifications');
         Route::post('/profile/notifications', [ParentProfileController::class, 'updateNotifications'])->name('profile.update-notifications');
         Route::post('/profile/password', [ParentProfileController::class, 'updatePassword'])->name('profile.password');
@@ -424,6 +475,8 @@ Route::middleware(['auth', 'role:parent'])
         Route::get('/enrollments/create', [ParentEnrollmentController::class, 'create'])->name('enrollments.create');
         Route::post('/enrollments', [ParentEnrollmentController::class, 'store'])->name('enrollments.store');
         Route::get('/enrollments/{id}', [ParentEnrollmentController::class, 'show'])->name('enrollments.show');
+        Route::get('/enrollments/{id}/edit', [ParentEnrollmentController::class, 'edit'])->name('enrollments.edit');
+        Route::put('/enrollments/{id}', [ParentEnrollmentController::class, 'update'])->name('enrollments.update');
         Route::post('/enrollments/{id}/accept-offer', [ParentEnrollmentController::class, 'acceptOffer'])->name('enrollments.accept-offer');
         Route::post('/enrollments/{id}/reject-offer', [ParentEnrollmentController::class, 'rejectOffer'])->name('enrollments.reject-offer');
 
@@ -483,10 +536,16 @@ Route::middleware(['auth', 'role:student'])
         Route::get('/stats', [StudentGamificationController::class, 'myStats'])->name('stats');
         Route::post('/privacy/toggle', [StudentGamificationController::class, 'togglePrivacy'])->name('privacy.toggle');
 
-        // Password Management
+        // Profile & Password Management
+        Route::get('/profile', [StudentProfileController::class, 'edit'])->name('profile.edit');
+        Route::post('/profile', [StudentProfileController::class, 'update'])->name('profile.update');
+        Route::post('/profile/password', [StudentProfileController::class, 'updatePassword'])->name('profile.password');
         Route::get('/password', [StudentPasswordController::class, 'show'])->name('password.index');
         Route::post('/password/reset', [StudentPasswordController::class, 'reset'])->name('password.reset');
     });
+
+// Alias URL ramah bahasa Indonesia /santri/profile
+Route::middleware(['auth', 'role:student'])->get('/santri/profile', [StudentProfileController::class, 'edit'])->name('santri.profile');
 
 // Dashboard Route (Role Based Redirect)
 Route::get('/dashboard', function () {

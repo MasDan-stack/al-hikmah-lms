@@ -43,7 +43,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->paginate(10)->withQueryString();
+        $users = $query->get();
         $roles = Role::all();
 
         return view('admin.users.index', compact('users', 'roles'));

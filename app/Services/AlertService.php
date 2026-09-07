@@ -7,10 +7,14 @@ use App\Models\Enrollment;
 use App\Models\HifzTarget;
 use App\Models\Mentor;
 use App\Models\MentorApplication;
+use App\Models\MentorFeedback;
+use App\Models\MentorInterventionTicket;
 use App\Models\Payment;
 use App\Models\Student;
 use App\Models\StudentBadge;
+use App\Models\StudentDropoutPrediction;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class AlertService
 {
@@ -190,6 +194,56 @@ class AlertService
             ];
         }
 
+        // 6. 🔮 Santri Kritis Berisiko Dropout (PA-EWS)
+        $criticalPredictions = StudentDropoutPrediction::with('student.user')
+            ->whereDate('prediction_date', $today)
+            ->where('risk_level', 'critical')
+            ->get();
+
+        if ($criticalPredictions->isNotEmpty()) {
+            $alerts[] = [
+                'id' => 'crit_dropout_risk',
+                'level' => 'critical',
+                'category' => 'academic',
+                'icon' => 'bi-shield-exclamation',
+                'title' => "{$criticalPredictions->count()} Santri Kritis Berisiko Dropout",
+                'description' => "Sistem Deteksi Dini mendeteksi {$criticalPredictions->count()} santri dengan akumulasi risiko tinggi yang membutuhkan intervensi segera.",
+                'count' => $criticalPredictions->count(),
+                'action_label' => 'Intervensi WhatsApp 1-Klik',
+                'action_url' => route('admin.analytics.predictive.index'),
+                'items' => $criticalPredictions->take(5)->map(fn ($pred) => [
+                    'title' => ($pred->student?->full_name ?? 'Santri')." (Skor: {$pred->risk_score}%)",
+                    'subtitle' => 'Faktor: '.implode(', ', (array) ($pred->risk_factors ?? [])),
+                    'url' => route('admin.analytics.predictive.index'),
+                ])->toArray(),
+            ];
+        }
+
+        // 7. 🎫 Tiket Intervensi Komplain Wali Santri (Status: Open)
+        $openTickets = MentorInterventionTicket::with(['mentor.user', 'student.user', 'parent'])
+            ->where('status', 'open')
+            ->latest()
+            ->get();
+
+        if ($openTickets->isNotEmpty()) {
+            $alerts[] = [
+                'id' => 'crit_open_intervention_tickets',
+                'level' => 'critical',
+                'category' => 'academic',
+                'icon' => 'bi-ticket-detailed-fill',
+                'title' => "{$openTickets->count()} Tiket Komplain Wali Santri Terbuka",
+                'description' => "Terdapat {$openTickets->count()} komplain ulasan wali santri (rating rendah / ketidakhadiran) yang membutuhkan intervensi koordinator pengajar sebelum terjadi mutasi.",
+                'count' => $openTickets->count(),
+                'action_label' => 'Buka Tiket Intervensi',
+                'action_url' => route('admin.tickets.index'),
+                'items' => $openTickets->take(5)->map(fn ($t) => [
+                    'title' => "#{$t->ticket_number} - ".($t->student?->getDisplayName() ?? 'Santri').' ('.($t->mentor?->getDisplayName() ?? 'Mentor').')',
+                    'subtitle' => 'Kategori: '.$t->getCategoryLabel().' - '.Str::limit($t->parent_comment ?? 'Rating Rendah', 40),
+                    'url' => route('admin.tickets.show', $t->id),
+                ])->toArray(),
+            ];
+        }
+
         return $alerts;
     }
 
@@ -200,6 +254,31 @@ class AlertService
     {
         $alerts = [];
         $today = today();
+
+        // Santri Risiko Tinggi Dropout (PA-EWS)
+        $highRiskPredictions = StudentDropoutPrediction::with('student.user')
+            ->whereDate('prediction_date', $today)
+            ->where('risk_level', 'high')
+            ->get();
+
+        if ($highRiskPredictions->isNotEmpty()) {
+            $alerts[] = [
+                'id' => 'warn_dropout_high',
+                'level' => 'warning',
+                'category' => 'academic',
+                'icon' => 'bi-exclamation-triangle-fill',
+                'title' => "{$highRiskPredictions->count()} Santri Risiko Tinggi Dropout",
+                'description' => "Terdapat {$highRiskPredictions->count()} santri dalam kategori risiko tinggi yang perlu dipantau perkembangannya.",
+                'count' => $highRiskPredictions->count(),
+                'action_label' => 'Pantau Analitik Prediktif',
+                'action_url' => route('admin.analytics.predictive.index'),
+                'items' => $highRiskPredictions->take(5)->map(fn ($pred) => [
+                    'title' => ($pred->student?->full_name ?? 'Santri')." (Skor: {$pred->risk_score}%)",
+                    'subtitle' => 'Faktor: '.implode(', ', (array) ($pred->risk_factors ?? [])),
+                    'url' => route('admin.analytics.predictive.index'),
+                ])->toArray(),
+            ];
+        }
 
         // 1. Tagihan Jatuh Tempo Dekat (7 – 30 hari overdue / jatuh tempo 7 hari ke depan)
         $dueSoonPayments = Payment::where('status', 'pending')
@@ -329,6 +408,32 @@ class AlertService
             ];
         }
 
+        // 6. Feedback Mentor dengan Rating Rendah (<= 3 dalam 7 hari terakhir)
+        $lowRatingFeedbacks = MentorFeedback::with(['mentor.user', 'student.user'])
+            ->where('overall_rating', '<=', 3)
+            ->where('created_at', '>=', now()->subDays(7))
+            ->latest()
+            ->get();
+
+        if ($lowRatingFeedbacks->isNotEmpty()) {
+            $alerts[] = [
+                'id' => 'warn_low_mentor_feedback',
+                'level' => 'warning',
+                'category' => 'academic',
+                'icon' => 'bi-star-half',
+                'title' => 'Feedback Mentor Rendah (⭐ ≤ 3)',
+                'description' => "Terdapat {$lowRatingFeedbacks->count()} ulasan dengan rating ≤ 3 dalam 7 hari terakhir yang membutuhkan evaluasi mutu.",
+                'count' => $lowRatingFeedbacks->count(),
+                'action_label' => 'Periksa Dashboard & Mentor',
+                'action_url' => route('admin.dashboard'),
+                'items' => $lowRatingFeedbacks->take(5)->map(fn ($fb) => [
+                    'title' => ($fb->mentor?->getDisplayName() ?? 'Mentor')." (⭐ {$fb->overall_rating}/5)",
+                    'subtitle' => 'Komentar: '.($fb->comment ? Str::limit($fb->comment, 40) : 'Tidak ada catatan').' ('.$fb->created_at->diffForHumans().')',
+                    'url' => route('admin.dashboard'),
+                ])->toArray(),
+            ];
+        }
+
         return $alerts;
     }
 
@@ -412,6 +517,28 @@ class AlertService
                 'action_label' => 'Lihat Sesi Belajar',
                 'action_url' => route('admin.active-enrollments.index'),
                 'items' => [],
+            ];
+        }
+
+        return $alerts;
+    }
+
+    public function scanPredictiveAlerts(): array
+    {
+        $alerts = [];
+
+        $criticalPredictions = StudentDropoutPrediction::with('student')
+            ->whereDate('prediction_date', today())
+            ->where('risk_level', 'critical')
+            ->get();
+
+        if ($criticalPredictions->count() > 0) {
+            $alerts[] = [
+                'tier' => 'critical',
+                'type' => 'dropout_risk',
+                'title' => "⚠️ {$criticalPredictions->count()} Santri Teridentifikasi Kritis Dropout",
+                'message' => 'Segera lakukan intervensi komunikasi via WhatsApp pada menu Predictive Analytics.',
+                'action_url' => route('admin.analytics.predictive.index'),
             ];
         }
 

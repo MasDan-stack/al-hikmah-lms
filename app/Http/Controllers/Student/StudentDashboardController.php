@@ -58,6 +58,10 @@ class StudentDashboardController extends Controller
         $earnedBadges = $student->earnedBadges()->latest('student_badges.created_at')->take(4)->get();
         $totalBadgesCount = Badge::where('is_active', true)->count();
 
+        // 6. Guru Pembimbing Aktif (Reassurance & Keberlanjutan Belajar)
+        $activeMentor = $student->mentors()->wherePivot('is_active', true)->first()
+            ?? $student->enrollments()->where('status', 'active')->with('mentor.user')->first()?->mentor;
+
         return view('student.dashboard', compact(
             'student',
             'todayTarget',
@@ -66,7 +70,8 @@ class StudentDashboardController extends Controller
             'leaderboard',
             'myRankEntry',
             'earnedBadges',
-            'totalBadgesCount'
+            'totalBadgesCount',
+            'activeMentor'
         ));
     }
 

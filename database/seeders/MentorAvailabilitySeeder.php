@@ -35,6 +35,8 @@ class MentorAvailabilitySeeder extends Seeder
                 $assignedDay = $days[$index % count($days)];
                 $mentor->students()->updateExistingPivot($student->id, [
                     'day_assigned' => $assignedDay,
+                    'slot_number' => MentorAvailability::getSlotNumberFromTime('16:30:00'),
+                    'time_label' => '16:30',
                     'time_assigned' => '16:30:00',
                     'is_active' => true,
                 ]);

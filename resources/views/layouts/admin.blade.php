@@ -467,6 +467,10 @@
                     class="admin-nav-item {{ request()->routeIs('admin.performance.*') ? 'active' : '' }}">
                     <i class="bi bi-award-fill text-warning"></i> Performa & AI Coaching
                 </a>
+                <a href="{{ route('admin.mentors.ahp-ranking.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.mentors.ahp-ranking.*') ? 'active' : '' }}">
+                    <i class="bi bi-trophy-fill text-warning"></i> SPK Guru Teladan (AHP)
+                </a>
                 <a href="{{ route('admin.staff.index') }}"
                     class="admin-nav-item {{ request()->routeIs('admin.staff.*') ? 'active' : '' }}">
                     <i class="bi bi-person-badge-fill text-primary"></i> Beban Kerja Guru

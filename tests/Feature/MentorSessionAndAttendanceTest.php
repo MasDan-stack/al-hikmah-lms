@@ -190,5 +190,9 @@ class MentorSessionAndAttendanceTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Hadir');
         $response->assertSee('Offline');
+        $response->assertSee('Pemberitahuan: Santri Konfirmasi Hadir Hari Ini');
+        $response->assertSee('Santri Siap Belajar');
+        $response->assertSee('Ahmad Santri');
+        $response->assertSee('Mulai Sesi');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Mentor;
 use App\Models\MentorProbationTracking;
 use App\Services\MentorProbationService;
 use Illuminate\Http\Request;
@@ -24,7 +25,27 @@ class AdminProbationController extends Controller
     {
         $probation = MentorProbationTracking::with(['mentor.user'])->findOrFail($id);
 
-        return view('admin.recruitment.probations.show', compact('probation'));
+        $this->probationService->syncTrackingStats($probation);
+
+        $activeMentors = Mentor::with('user')
+            ->where('id', '!=', $probation->mentor_id)
+            ->where('is_active', true)
+            ->get();
+
+        return view('admin.recruitment.probations.show', compact('probation', 'activeMentors'));
+    }
+
+    public function syncLiveMetrics($id)
+    {
+        $probation = MentorProbationTracking::findOrFail($id);
+
+        try {
+            $this->probationService->syncTrackingStats($probation);
+
+            return back()->with('success', 'Data metrik aktual LMS (presensi, rating orang tua, dan sesi) berhasil disinkronkan.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menyinkronkan data LMS: '.$e->getMessage());
+        }
     }
 
     public function updateScores(Request $request, $id)
@@ -59,16 +80,18 @@ class AdminProbationController extends Controller
         $request->validate([
             'decision' => 'nullable|in:passed,extended,terminated',
             'notes' => 'nullable|string',
+            'substitute_mentor_id' => 'nullable|exists:mentors,id',
         ]);
 
         $probation = MentorProbationTracking::findOrFail($id);
         $decision = $request->input('decision', 'passed');
+        $substituteMentorId = $request->filled('substitute_mentor_id') ? (int) $request->input('substitute_mentor_id') : null;
 
         try {
-            $this->probationService->evaluateProbation($probation, $request->notes, $decision);
+            $this->probationService->evaluateProbation($probation, $request->notes, $decision, $substituteMentorId);
             $msg = $decision === 'passed'
                 ? 'Masa percobaan selesai. Mentor dinyatakan Lulus menjadi Guru Tetap dan memperoleh Badge M01.'
-                : ($decision === 'extended' ? 'Masa percobaan mentor berhasil diperpanjang.' : 'Mentor dinyatakan tidak melanjutkan.');
+                : ($decision === 'extended' ? 'Masa percobaan mentor berhasil diperpanjang.' : 'Mentor dinyatakan tidak melanjutkan dan santri berhasil dialihkan.');
 
             return back()->with('success', $msg);
         } catch (\Exception $e) {

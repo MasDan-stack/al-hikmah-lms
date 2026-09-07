@@ -80,36 +80,40 @@ class MentorAccountService
 
             // 2. Buat atau Update Profil Mentor menjadi status probation aktif
             $mentor = $application->mentor ?? Mentor::where('user_id', $user->id)->first();
+            $mentorData = [
+                'application_id' => $application->id,
+                'full_name' => $application->full_name,
+                'birth_date' => $application->birth_date,
+                'gender' => $application->gender === 'female' ? 'P' : 'L',
+                'address' => $application->address,
+                'city' => $application->city,
+                'education' => $application->education,
+                'institution' => $application->institution,
+                'experience_years' => $application->experience_years,
+                'hifz_total_juz' => $application->hifz_total_juz,
+                'specialization' => $application->specialization ?: ($mentor?->specialization ?? 'Tahfidz'),
+                'bio' => $application->experience_description ?? ($mentor?->bio ?? 'Guru Pembimbing Al-Qur\'an'),
+                'sanad_chain' => $application->sanad_chain ?: $mentor?->sanad_chain,
+                'is_active' => true,
+                'status' => 'probation',
+                'join_date' => today(),
+                'probation_end_date' => today()->addMonths(3),
+            ];
 
             if (! $mentor) {
-                $mentor = Mentor::create([
+                $mentor = Mentor::create(array_merge($mentorData, [
                     'user_id' => $user->id,
-                    'application_id' => $application->id,
-                    'full_name' => $application->full_name,
-                    'specialization' => $application->specialization,
-                    'bio' => $application->experience_description ?? 'Guru Pembimbing Al-Qur\'an',
                     'rating' => 5.00,
-                    'is_active' => true,
-                    'join_date' => today(),
-                    'probation_end_date' => today()->addMonths(3),
-                    'status' => 'probation',
-                    'sanad_chain' => $application->sanad_chain,
-                ]);
+                ]));
             } else {
-                $mentor->update([
-                    'application_id' => $application->id,
-                    'is_active' => true,
-                    'status' => 'probation',
-                    'join_date' => today(),
-                    'probation_end_date' => today()->addMonths(3),
-                    'specialization' => $application->specialization ?: $mentor->specialization,
-                ]);
+                $mentor->update($mentorData);
             }
 
             // 3. Inisialisasi Probation Tracking jika belum ada
             $probation = MentorProbationTracking::firstOrCreate(
                 ['mentor_id' => $mentor->id],
                 [
+                    'application_id' => $application->id,
                     'start_date' => today(),
                     'end_date' => today()->addMonths(3),
                     'duration_months' => 3,
@@ -120,9 +124,14 @@ class MentorAccountService
             // 4. Update Status Lamaran
             $application->update([
                 'status' => 'approved',
+                'current_stage' => 5,
                 'approved_by' => auth()->id(),
                 'approved_at' => now(),
             ]);
+
+            if ($application->phone) {
+                $this->sendCredentialsNotification($application, $user->email, $plainPassword ?? 'Gunakan password saat registrasi');
+            }
 
             return [
                 'user' => $user,

@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Enums\EnrollmentStatus;
 use App\Enums\Role as RoleEnum;
 use App\Http\Controllers\Controller;
-use App\Models\Enrollment;
 use App\Models\ParentProfile;
 use App\Models\Program;
 use App\Models\Role;
@@ -36,9 +34,34 @@ class RegisteredUserController extends Controller
             'usia' => 'nullable|string|max:100',
             'gender' => 'nullable|string|in:L,P',
             'lokasi' => 'required|string|max:255',
+            'program_id' => 'nullable|exists:programs,id',
             'program' => 'nullable|string|max:100',
             'metode' => 'nullable|string|max:100',
         ]);
+
+        if (! empty($validated['program_id'])) {
+            $program = Program::find($validated['program_id']);
+            if ($program) {
+                $validated['program'] = $program->name;
+                $validated['program_name'] = $program->name;
+            }
+        } elseif (! empty($validated['program'])) {
+            $matchedProgram = Program::where('name', 'like', "%{$validated['program']}%")->first();
+            if ($matchedProgram) {
+                $validated['program_id'] = $matchedProgram->id;
+                $validated['program'] = $matchedProgram->name;
+                $validated['program_name'] = $matchedProgram->name;
+            }
+        }
+
+        $rawMetode = strtolower($validated['metode'] ?? 'offline');
+        if (str_contains($rawMetode, 'online')) {
+            $validated['learning_method'] = 'online';
+        } elseif (str_contains($rawMetode, 'hybrid')) {
+            $validated['learning_method'] = 'hybrid';
+        } else {
+            $validated['learning_method'] = 'offline';
+        }
 
         session(['pre_registration' => $validated]);
 
@@ -66,6 +89,15 @@ class RegisteredUserController extends Controller
         $validated['program_name'] = $program->name;
         $validated['program_id'] = $program->id;
 
+        $rawMetode = strtolower($validated['metode'] ?? 'offline');
+        if (str_contains($rawMetode, 'online')) {
+            $validated['learning_method'] = 'online';
+        } elseif (str_contains($rawMetode, 'hybrid')) {
+            $validated['learning_method'] = 'hybrid';
+        } else {
+            $validated['learning_method'] = 'offline';
+        }
+
         session(['pre_registration' => $validated]);
 
         return redirect()->route('register')
@@ -89,9 +121,25 @@ class RegisteredUserController extends Controller
             'metode' => 'nullable|string|max:100',
         ]);
 
-        $validated['program'] = "Tahfidz Al-Qur'an";
+        $tahfidzProgram = Program::where('name', 'like', '%Tahfidz%')->first();
+        if ($tahfidzProgram) {
+            $validated['program_id'] = $tahfidzProgram->id;
+            $validated['program'] = $tahfidzProgram->name;
+            $validated['program_name'] = $tahfidzProgram->name;
+        } else {
+            $validated['program'] = "Tahfidz Al-Qur'an";
+        }
         $validated['program_slug'] = 'tahfidz';
         $validated['is_tahfidz'] = true;
+
+        $rawMetode = strtolower($validated['metode'] ?? 'offline');
+        if (str_contains($rawMetode, 'online')) {
+            $validated['learning_method'] = 'online';
+        } elseif (str_contains($rawMetode, 'hybrid')) {
+            $validated['learning_method'] = 'hybrid';
+        } else {
+            $validated['learning_method'] = 'offline';
+        }
 
         session(['pre_registration' => $validated]);
 
@@ -149,12 +197,29 @@ class RegisteredUserController extends Controller
                     'emergency_phone' => $request->phone ?? ($preRegData['whatsapp'] ?? null),
                 ]);
 
+                $createdStudent = null;
+
                 if (! empty($preRegData)) {
                     $childName = $preRegData['nama_anak'] ?? ('Anak dari '.$user->name);
 
                     $age = 10;
-                    if (! empty($preRegData['usia']) && preg_match('/^(\d+)/', $preRegData['usia'], $matches)) {
-                        $age = (int) $matches[1];
+                    if (! empty($preRegData['usia'])) {
+                        $rawUsia = strtolower(trim($preRegData['usia']));
+                        if (is_numeric($rawUsia)) {
+                            $age = (int) $rawUsia;
+                        } elseif (str_contains($rawUsia, 'bawah 10') || str_contains($rawUsia, '< 10') || str_contains($rawUsia, '<10') || str_contains($rawUsia, 'balita') || str_contains($rawUsia, 'paud') || str_contains($rawUsia, 'tk')) {
+                            $age = 7; // Di bawah 10 tahun (Wajib Ustazah jika laki-laki)
+                        } elseif (str_contains($rawUsia, '10-15') || str_contains($rawUsia, '10 - 15')) {
+                            $age = 12; // 10 tahun ke atas
+                        } elseif (str_contains($rawUsia, '16-30') || str_contains($rawUsia, '16 - 30')) {
+                            $age = 22;
+                        } elseif (str_contains($rawUsia, '31-50') || str_contains($rawUsia, '31 - 50')) {
+                            $age = 35;
+                        } elseif (str_contains($rawUsia, '50+')) {
+                            $age = 55;
+                        } elseif (preg_match('/(\d+)/', $rawUsia, $matches)) {
+                            $age = (int) $matches[1];
+                        }
                     }
 
                     $targetInfo = ! empty($preRegData['target_tahfidz']) ? ' | Target: '.$preRegData['target_tahfidz'] : '';
@@ -174,7 +239,7 @@ class RegisteredUserController extends Controller
                         'role_id' => $studentRole->id,
                     ]);
 
-                    $student = Student::create([
+                    $createdStudent = Student::create([
                         'user_id' => $studentUser->id,
                         'parent_id' => $parentProfile->id,
                         'full_name' => $childName,
@@ -183,39 +248,45 @@ class RegisteredUserController extends Controller
                         'location' => $preRegData['lokasi'] ?? null,
                         'notes' => $notes,
                     ]);
+                }
 
-                    // Attach to Program if pre-registered from /biaya, /program or landing Tahfidz
-                    $programId = $preRegData['program_id'] ?? null;
-                    if (! empty($preRegData['is_tahfidz'])) {
-                        $tahfidzProgram = Program::where('name', 'like', '%Tahfidz%')->first();
-                        $programId = $tahfidzProgram?->id ?? $programId;
-                    }
+                // Cek apakah ada program yang dipilih di modal pra-registrasi
+                $targetProgramId = $preRegData['program_id'] ?? null;
+                if (! $targetProgramId && ! empty($preRegData['is_tahfidz'])) {
+                    $tahfidzProgram = Program::where('name', 'like', '%Tahfidz%')->first();
+                    $targetProgramId = $tahfidzProgram?->id;
+                }
+                if (! $targetProgramId && ! empty($preRegData['program'])) {
+                    $matchedProgram = Program::where('name', 'like', "%{$preRegData['program']}%")->first();
+                    $targetProgramId = $matchedProgram?->id;
+                }
 
-                    if ($programId) {
-                        $student->programs()->syncWithoutDetaching([
-                            $programId => [
-                                'status' => 'active',
-                                'enrolled_at' => now(),
-                            ],
-                        ]);
-
-                        // Buat Enrollment jika program_id valid
-                        Enrollment::create([
-                            'parent_id' => $parentProfile->id,
-                            'student_id' => $student->id,
-                            'program_id' => $programId,
-                            'status' => EnrollmentStatus::WAITING_ADMIN->value,
-                            'total_fee' => 0,
-                            'payment_status' => 'unpaid',
-                            'notes' => 'Pendaftaran awal dari form registrasi.',
-                        ]);
+                $learningMethod = $preRegData['learning_method'] ?? null;
+                if (! $learningMethod && ! empty($preRegData['metode'])) {
+                    $raw = strtolower($preRegData['metode']);
+                    if (str_contains($raw, 'online')) {
+                        $learningMethod = 'online';
+                    } elseif (str_contains($raw, 'hybrid')) {
+                        $learningMethod = 'hybrid';
+                    } else {
+                        $learningMethod = 'offline';
                     }
                 }
+                $learningMethod = $learningMethod ?? 'offline';
 
                 session()->forget('pre_registration');
 
                 event(new Registered($user));
                 Auth::login($user);
+
+                // Jika sudah memilih program & anak berhasil didaftarkan, lanjutkan ke Langkah 2 (Pilih Hari & Jam)
+                if ($targetProgramId && $createdStudent) {
+                    return redirect()->route('parent.enrollments.create', [
+                        'program_id' => $targetProgramId,
+                        'student_id' => $createdStudent->id,
+                        'method' => $learningMethod,
+                    ])->with('success', "Pendaftaran akun berhasil! Data ananda {$createdStudent->full_name} telah tersimpan. Silakan tentukan preferensi hari dan jam bimbingan untuk menyelesaikan Langkah 2.");
+                }
 
                 return redirect()->route('parent.dashboard');
             }

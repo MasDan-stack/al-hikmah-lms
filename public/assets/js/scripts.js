@@ -46,6 +46,17 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => {
             html.style.transition = '';
         }, 300);
+
+        // Recalculate DataTables on theme change
+        if (typeof DataTable !== 'undefined') {
+            try {
+                document.querySelectorAll('table.dataTable').forEach(function (tbl) {
+                    if (DataTable.isDataTable(tbl)) {
+                        new DataTable(tbl).columns.adjust().responsive.recalc();
+                    }
+                });
+            } catch (e) {}
+        }
     }
 
     // Check saved theme or system preference
@@ -1004,4 +1015,69 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initialize Prayer Times App on Page Load
     PrayerTimesApp.init();
+
+    // ============================================
+    // DataTables Global Consistency & Responsiveness
+    // ============================================
+    function ensureDataTablesConsistent() {
+        if (typeof DataTable === 'undefined') return;
+
+        // Auto-init any uninitialized .datatable
+        const pendingTables = document.querySelectorAll('table.datatable:not(.dataTable)');
+        if (pendingTables.length > 0 && typeof window.initDataTable === 'function') {
+            pendingTables.forEach(tbl => window.initDataTable(tbl));
+        }
+
+        // Adjust columns for all active DataTables
+        document.querySelectorAll('table.dataTable').forEach(tbl => {
+            try {
+                if (DataTable.isDataTable(tbl)) {
+                    const dt = new DataTable(tbl);
+                    dt.columns.adjust().responsive.recalc();
+                }
+            } catch (e) {}
+        });
+    }
+
+    // Run consistency check after initial load
+    setTimeout(ensureDataTablesConsistent, 150);
 });
+
+// ============================================
+// Global Profile Helpers: Map Tester & Avatar Preview
+// ============================================
+window.testMapLink = function (inputId) {
+    const input = (inputId ? document.getElementById(inputId) : null)
+        || document.getElementById('mapsLinkInput')
+        || document.getElementById('maps_link');
+    if (!input) return;
+    const url = input.value ? input.value.trim() : '';
+    if (!url) {
+        alert('Silakan masukkan link Google Maps atau aplikasi navigasi terlebih dahulu.');
+        return;
+    }
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        alert('Format URL tidak valid. Pastikan diawali dengan https:// atau http://');
+        return;
+    }
+    window.open(url, '_blank');
+};
+
+window.previewAvatar = function (input, previewImgId) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Ukuran berkas foto maksimal adalah 2MB!');
+            input.value = '';
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = document.getElementById(previewImgId || 'avatarPreview');
+            if (img) {
+                img.src = e.target.result;
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+};

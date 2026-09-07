@@ -26,15 +26,15 @@
         <div class="card-body p-4">
             <div class="row g-3 align-items-center justify-content-between">
                 <div class="col-md-8">
-                    <form action="{{ route('admin.users.index') }}" method="GET" class="row g-2">
-                        <div class="col-sm-7">
+                    <form action="{{ route('admin.users.index') }}" method="GET" class="row g-2 align-items-center" id="formFilterUsers">
+                        <div class="col-sm-6">
                             <div class="input-group">
                                 <span class="input-group-text bg-light border-0"><i class="bi bi-search text-muted"></i></span>
-                                <input type="text" name="search" class="form-control bg-light border-0" placeholder="Cari nama, email, atau no. telp..." value="{{ request('search') }}">
+                                <input type="text" id="userSearchInput" name="search" class="form-control bg-light border-0" placeholder="Cari nama, email, atau no. telp..." value="{{ request('search') }}" autocomplete="off">
                             </div>
                         </div>
                         <div class="col-sm-3">
-                            <select name="role" class="form-select bg-light border-0">
+                            <select id="userRoleFilter" name="role" class="form-select bg-light border-0">
                                 <option value="">Semua Role</option>
                                 <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Administrator</option>
                                 <option value="mentor" {{ request('role') == 'mentor' ? 'selected' : '' }}>Mentor / Guru</option>
@@ -42,8 +42,15 @@
                                 <option value="student" {{ request('role') == 'student' ? 'selected' : '' }}>Santri Binaan</option>
                             </select>
                         </div>
-                        <div class="col-sm-2">
-                            <button type="submit" class="btn btn-primary-custom w-100 rounded-3">Filter</button>
+                        <div class="col-sm-3 d-flex gap-2">
+                            <button type="submit" class="btn btn-primary-custom flex-grow-1 rounded-3">
+                                <i class="bi bi-funnel me-1"></i> Filter
+                            </button>
+                            @if(request()->hasAny(['search', 'role']))
+                                <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary rounded-3" title="Reset Filter">
+                                    <i class="bi bi-arrow-counterclockwise"></i>
+                                </a>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -60,7 +67,7 @@
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-body p-3">
             <div class="table-responsive">
-                <table class="table align-middle table-hover mb-0 datatable" id="tableAdminUsers" data-no-paging="true" data-export="true">
+                <table class="table align-middle table-hover mb-0 datatable" id="tableAdminUsers" data-export="true" data-no-search="true" data-page-length="10">
                     <thead class="table-light">
                         <tr>
                             <th class="ps-3">Nama Pengguna</th>
@@ -157,7 +164,7 @@
                 </table>
             </div>
         </div>
-        @if($users->hasPages())
+        @if(method_exists($users, 'hasPages') && $users->hasPages())
             <div class="card-footer bg-white border-0 py-3 px-4">
                 {{ $users->links() }}
             </div>
@@ -264,27 +271,97 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // 1. Modal Edit User Handler
     const editModalEl = document.getElementById('modalEditUser');
-    if (!editModalEl) return;
+    if (editModalEl) {
+        editModalEl.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            if (!button) return;
 
-    editModalEl.addEventListener('show.bs.modal', function (event) {
-        const button = event.relatedTarget;
-        if (!button) return;
+            const action = button.getAttribute('data-action');
+            const name   = button.getAttribute('data-name');
+            const email  = button.getAttribute('data-email');
+            const phone  = button.getAttribute('data-phone');
+            const roleId = button.getAttribute('data-role-id');
 
-        const action = button.getAttribute('data-action');
-        const name   = button.getAttribute('data-name');
-        const email  = button.getAttribute('data-email');
-        const phone  = button.getAttribute('data-phone');
-        const roleId = button.getAttribute('data-role-id');
+            const form = editModalEl.querySelector('#formEditUser');
+            form.action = action;
 
-        const form = editModalEl.querySelector('#formEditUser');
-        form.action = action;
+            editModalEl.querySelector('#editUserName').value = name || '';
+            editModalEl.querySelector('#editUserEmail').value = email || '';
+            editModalEl.querySelector('#editUserPhone').value = phone || '';
+            editModalEl.querySelector('#editUserRoleId').value = roleId || '';
+        });
+    }
 
-        editModalEl.querySelector('#editUserName').value = name || '';
-        editModalEl.querySelector('#editUserEmail').value = email || '';
-        editModalEl.querySelector('#editUserPhone').value = phone || '';
-        editModalEl.querySelector('#editUserRoleId').value = roleId || '';
-    });
+    // 2. Integrasi Live Search & Filter Role dengan DataTables
+    const usersTableEl = document.getElementById('tableAdminUsers');
+    const searchInput = document.getElementById('userSearchInput');
+    const roleSelect = document.getElementById('userRoleFilter');
+    const filterForm = document.getElementById('formFilterUsers');
+
+    function getTableInstance() {
+        if (!usersTableEl) return null;
+        if (typeof DataTable !== 'undefined' && DataTable.isDataTable(usersTableEl)) {
+            return new DataTable(usersTableEl);
+        }
+        return usersTableEl.__dataTable || null;
+    }
+
+    function applyRoleFilter(dt, roleVal) {
+        if (!dt) return;
+        const roleTerm = (roleVal || '').trim().toLowerCase();
+        if (!roleTerm) {
+            dt.column(1).search('').draw();
+            return;
+        }
+
+        const roleKeywords = {
+            'admin': 'Administrator',
+            'mentor': 'Mentor',
+            'parent': 'Orang Tua',
+            'student': 'Santri'
+        };
+
+        const keyword = roleKeywords[roleTerm] || roleTerm;
+        dt.column(1).search(keyword).draw();
+    }
+
+    if (searchInput) {
+        let searchTimer = null;
+        searchInput.addEventListener('input', function () {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                const dt = getTableInstance();
+                if (dt) {
+                    dt.search(this.value.trim()).draw();
+                }
+            }, 120);
+        });
+    }
+
+    if (roleSelect) {
+        roleSelect.addEventListener('change', function () {
+            const dt = getTableInstance();
+            applyRoleFilter(dt, this.value);
+        });
+    }
+
+    if (filterForm) {
+        filterForm.addEventListener('submit', function (e) {
+            const dt = getTableInstance();
+            if (dt) {
+                e.preventDefault();
+                if (searchInput) {
+                    dt.search(searchInput.value.trim());
+                }
+                if (roleSelect) {
+                    applyRoleFilter(dt, roleSelect.value);
+                }
+                dt.draw();
+            }
+        });
+    }
 });
 </script>
 @endpush

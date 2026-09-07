@@ -16,6 +16,7 @@ class Student extends Model
         'user_id',
         'parent_id',
         'full_name',
+        'nickname',
         'age',
         'gender',
         'location',
@@ -27,6 +28,9 @@ class Student extends Model
         'privacy_leaderboard',
         'latitude',
         'longitude',
+        'last_dropout_prediction_at',
+        'dropout_risk_level',
+        'dropout_risk_score',
     ];
 
     protected $casts = [
@@ -38,6 +42,8 @@ class Student extends Model
         'privacy_leaderboard' => 'boolean',
         'latitude' => 'float',
         'longitude' => 'float',
+        'last_dropout_prediction_at' => 'datetime',
+        'dropout_risk_score' => 'float',
     ];
 
     public function user(): BelongsTo
@@ -53,7 +59,7 @@ class Student extends Model
     public function mentors(): BelongsToMany
     {
         return $this->belongsToMany(Mentor::class, 'mentor_student')
-            ->withPivot(['day_assigned', 'time_assigned', 'is_active'])
+            ->withPivot(['day_assigned', 'time_assigned', 'slot_number', 'time_label', 'program_id', 'notes', 'is_active'])
             ->withTimestamps();
     }
 
@@ -119,6 +125,31 @@ class Student extends Model
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);
+    }
+
+    public function mentorFeedbacks()
+    {
+        return $this->hasMany(MentorFeedback::class);
+    }
+
+    public function dropoutPredictions()
+    {
+        return $this->hasMany(StudentDropoutPrediction::class);
+    }
+
+    public function latestDropoutPrediction()
+    {
+        return $this->hasOne(StudentDropoutPrediction::class)->latestOfMany();
+    }
+
+    public function learningVelocities()
+    {
+        return $this->hasMany(StudentLearningVelocity::class);
+    }
+
+    public function latestLearningVelocity()
+    {
+        return $this->hasOne(StudentLearningVelocity::class)->latestOfMany();
     }
 
     public function getDisplayName(): string
@@ -198,5 +229,21 @@ class Student extends Model
         $mentor = $this->getActiveMentor();
 
         return $mentor ? $mentor->getDisplayName() : 'Belum ditentukan';
+    }
+
+    /**
+     * Dapatkan Tautan Peta Lokasi Rumah (Sinkron dari Orang Tua)
+     */
+    public function getMapsLinkAttribute(): ?string
+    {
+        return $this->parent?->maps_link;
+    }
+
+    /**
+     * Dapatkan Alamat Rumah Lengkap (Sinkron dari Orang Tua atau fallback data pendaftaran)
+     */
+    public function getEffectiveAddressAttribute(): string
+    {
+        return $this->parent?->address ?: ($this->getFullAddress() ?: 'Alamat belum diatur oleh wali.');
     }
 }

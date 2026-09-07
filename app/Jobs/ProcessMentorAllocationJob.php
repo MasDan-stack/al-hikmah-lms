@@ -2,11 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Enums\NotificationType;
 use App\Models\Enrollment;
 use App\Models\MatchingLog;
 use App\Models\Mentor;
 use App\Models\MentorActivityLog;
-use App\Notifications\NotificationType;
 use App\Services\NotificationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

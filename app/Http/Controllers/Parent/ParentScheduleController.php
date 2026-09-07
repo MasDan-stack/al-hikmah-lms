@@ -48,14 +48,14 @@ class ParentScheduleController extends Controller
         $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
         $status = $request->query('status', 'all');
 
-        $query = Session::with(['student.user', 'mentor.user'])
+        $query = Session::with(['student.user', 'mentor.user', 'feedback'])
             ->whereIn('student_id', $childIds);
 
         if ($status !== 'all') {
             $query->where('status', $status);
         }
 
-        $sessions = $query->orderBy('date', 'desc')->paginate(10);
+        $sessions = $query->orderBy('date', 'desc')->get();
 
         return view('parent.schedules.list', compact('sessions', 'status'));
     }
@@ -65,7 +65,7 @@ class ParentScheduleController extends Controller
         $parent = auth()->user()->parentProfile;
         $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
 
-        $session = Session::with(['student.user', 'mentor.user'])->findOrFail($id);
+        $session = Session::with(['student.user', 'mentor.user', 'feedback'])->findOrFail($id);
 
         if (! in_array($session->student_id, $childIds)) {
             abort(403, 'Akses sesi anak ditolak.');

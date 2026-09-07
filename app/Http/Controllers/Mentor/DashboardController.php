@@ -6,9 +6,12 @@ use App\Enums\EnrollmentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\MentorActivityLog;
 use App\Models\MentorApplication;
+use App\Models\MentorInterventionTicket;
+use App\Models\MentorProbationTracking;
 use App\Models\Progress;
 use App\Models\Session;
 use App\Models\Student;
+use App\Services\DecisionSupport\AhpRankingService;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -69,12 +72,28 @@ class DashboardController extends Controller
 
         // Today's schedule with confirmation
         $todaySessions = ($mentorId && ! $isRecruitmentMode)
-            ? Session::with(['student.user', 'student.parent.user', 'confirmation'])
+            ? Session::with([
+                'student.user',
+                'student.parent.user',
+                'student.programs',
+                'confirmation',
+                'student.enrollments' => function ($q) {
+                    $q->where('status', EnrollmentStatus::ACTIVE->value)->with('program');
+                },
+            ])
                 ->where('mentor_id', $mentorId)
                 ->whereDate('date', today())
                 ->orderBy('time', 'asc')
                 ->get()
             : collect();
+
+        $attendedTodaySessions = $todaySessions->filter(function ($s) {
+            return $s->confirmation && $s->confirmation->status === 'hadir';
+        });
+
+        $absentTodaySessions = $todaySessions->filter(function ($s) {
+            return $s->confirmation && in_array($s->confirmation->status, ['izin', 'sakit']);
+        });
 
         $recentProgress = ($mentorId && ! $isRecruitmentMode)
             ? Progress::with(['student.user'])
@@ -130,6 +149,23 @@ class DashboardController extends Controller
                 ->take(5)
                 ->get()
             : collect();
+        // Probation Tracking
+        $probationTracking = ($mentorId && $mentor->status === 'probation')
+            ? MentorProbationTracking::where('mentor_id', $mentorId)->where('status', 'active')->first()
+            : null;
+
+        // Catatan Pembinaan Mutu / Intervensi Koordinator
+        $activeIntervention = $mentorId
+            ? MentorInterventionTicket::where('mentor_id', $mentorId)
+                ->whereIn('status', ['open', 'in_progress'])
+                ->latest()
+                ->first()
+            : null;
+
+        // Skor AHP Pribadi & Evaluasi Mutu (Poin D)
+        $ahpPerformance = ($mentorId && ! $isRecruitmentMode)
+            ? app(AhpRankingService::class)->getMentorAhpSummary($mentor)
+            : null;
 
         return view('mentor.dashboard', compact(
             'isRecruitmentMode',
@@ -141,13 +177,18 @@ class DashboardController extends Controller
             'upcomingSessionsCount',
             'avgTajwid',
             'todaySessions',
+            'attendedTodaySessions',
+            'absentTodaySessions',
             'students',
             'recentProgress',
             'chartLabels',
             'chartProgressCounts',
             'chartAvgTajwid',
             'lowProgressStudents',
-            'recentActivities'
+            'recentActivities',
+            'probationTracking',
+            'activeIntervention',
+            'ahpPerformance'
         ));
     }
 

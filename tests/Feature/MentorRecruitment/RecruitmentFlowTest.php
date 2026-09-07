@@ -197,8 +197,8 @@ test('admin can approve document review and progress to test stage', function ()
 
     $this->assertDatabaseHas('mentor_applications', [
         'id' => $application->id,
-        'status' => 'document_review',
-        'current_stage' => 2,
+        'status' => 'test_scheduled',
+        'current_stage' => 3,
     ]);
 });
 

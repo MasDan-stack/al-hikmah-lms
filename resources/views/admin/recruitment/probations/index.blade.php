@@ -46,6 +46,7 @@
                             <th>Tgl Mulai</th>
                             <th>Tgl Berakhir</th>
                             <th>Sisa Waktu</th>
+                            <th>4 Modul Orientasi</th>
                             <th>Rating Wali</th>
                             <th>Presensi</th>
                             <th>Status</th>
@@ -59,11 +60,25 @@
                                 $daysLeft = (int) now()->diffInDays($endDate, false);
                                 $isExpiring = $daysLeft > 0 && $daysLeft <= 14;
                                 $isExpired = $daysLeft <= 0;
+                                $completedMods = $probation->getCompletedModulesCount();
+                                $percentMods = min(100, (int) round(($completedMods / 4) * 100));
+                                $mod1 = $probation->isModuleCompleted('mod1');
+                                $mod2 = $probation->isModuleCompleted('mod2');
+                                $mod3 = $probation->isModuleCompleted('mod3');
+                                $mod4 = $probation->isModuleCompleted('mod4');
                             @endphp
                         <tr>
                             <td class="fw-bold">{{ $loop->iteration }}</td>
                             <td>
-                                <div class="fw-bold text-dark">{{ $probation->mentor?->getDisplayName() ?? 'Mentor' }}</div>
+                                <div class="fw-bold text-dark">
+                                    @if($probation->mentor_id)
+                                        <a href="{{ route('admin.staff.show', $probation->mentor_id) }}" class="text-dark text-decoration-none hover-primary" title="Lihat Detail Profil & Rekening Bank">
+                                            {{ $probation->mentor?->getDisplayName() ?? 'Mentor' }} <i class="bi bi-box-arrow-up-right text-muted ms-1" style="font-size: 0.68rem;"></i>
+                                        </a>
+                                    @else
+                                        {{ $probation->mentor?->getDisplayName() ?? 'Mentor' }}
+                                    @endif
+                                </div>
                                 <small class="text-muted">{{ $probation->mentor?->user?->email ?? '-' }}</small>
                             </td>
                             <td><span class="badge bg-light text-dark border">{{ $probation->mentor?->specialization ?? 'Tahfidz' }}</span></td>
@@ -82,6 +97,28 @@
                                 @else
                                     <span class="text-muted">Selesai</span>
                                 @endif
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-1">
+                                    @if($completedMods === 4)
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-0.5 fw-bold" style="font-size: 0.75rem;">
+                                            <i class="bi bi-patch-check-fill me-1"></i> 4/4 Tuntas
+                                        </span>
+                                    @else
+                                        <span class="badge bg-warning-subtle text-dark border border-warning-subtle rounded-pill px-2.5 py-0.5 fw-bold" style="font-size: 0.75rem;">
+                                            <i class="bi bi-hourglass-split me-1"></i> {{ $completedMods }}/4 Selesai
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="progress rounded-pill mt-1" style="height: 4px; width: 85px;">
+                                    <div class="progress-bar {{ $completedMods === 4 ? 'bg-success' : 'bg-warning' }}" style="width: {{ $percentMods }}%;"></div>
+                                </div>
+                                <div class="d-flex gap-1 mt-1" style="font-size: 0.62rem;">
+                                    <span class="badge {{ $mod1 ? 'bg-success' : 'bg-secondary bg-opacity-25 text-muted' }}" title="Modul 1: SOP Pengajaran">M1</span>
+                                    <span class="badge {{ $mod2 ? 'bg-success' : 'bg-secondary bg-opacity-25 text-muted' }}" title="Modul 2: Tajwid & Mutaba'ah">M2</span>
+                                    <span class="badge {{ $mod3 ? 'bg-success' : 'bg-secondary bg-opacity-25 text-muted' }}" title="Modul 3: Sesi Perdana LMS">M3</span>
+                                    <span class="badge {{ $mod4 ? 'bg-success' : 'bg-secondary bg-opacity-25 text-muted' }}" title="Modul 4: Komunikasi Wali">M4</span>
+                                </div>
                             </td>
                             <td>
                                 <span class="badge bg-warning text-dark">
@@ -106,10 +143,15 @@
                                     <span class="badge bg-secondary px-3 py-1 rounded-pill">{{ $probation->status }}</span>
                                 @endif
                             </td>
-                            <td class="text-end">
+                            <td class="text-end text-nowrap">
                                 <a href="{{ route('admin.mentors.probation.show', $probation->id) }}" class="btn btn-sm btn-primary rounded-pill px-3">
                                     <i class="bi bi-pencil-square me-1"></i> Kelola & Evaluasi
                                 </a>
+                                @if($probation->mentor_id)
+                                    <a href="{{ route('admin.staff.show', $probation->mentor_id) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 ms-1" title="Detail Akun & Berkas Guru">
+                                        <i class="bi bi-person-badge"></i> Profil
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                         @empty

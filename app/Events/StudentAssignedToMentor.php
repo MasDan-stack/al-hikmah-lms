@@ -15,6 +15,7 @@ class StudentAssignedToMentor
     public function __construct(
         public Mentor $mentor,
         public Student $student,
-        public string $day
+        public string $day,
+        public ?string $time = null
     ) {}
 }

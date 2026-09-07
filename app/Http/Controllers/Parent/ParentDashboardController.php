@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Parent;
 
 use App\Http\Controllers\Controller;
+use App\Models\MentorInterventionTicket;
 use App\Models\Message;
 use App\Models\Payment;
 use App\Models\Progress;
@@ -70,6 +71,30 @@ class ParentDashboardController extends Controller
             ->where('is_read', false)
             ->count();
 
+        // 5. Pending Feedback Sessions
+        $pendingFeedbackSessions = ($hasPaidProgram && count($childIds) > 0)
+            ? Session::with(['student.user', 'mentor.user'])
+                ->whereIn('student_id', $childIds)
+                ->where('status', 'completed')
+                ->whereDoesntHave('feedback')
+                ->latest('date')
+                ->take(3)
+                ->get()
+            : collect();
+
+        // 6. Active Intervention Tickets (Transparansi Tindak Lanjut Akademik)
+        $activeInterventionTickets = count($childIds) > 0
+            ? MentorInterventionTicket::with(['mentor.user', 'student.user'])
+                ->where(function ($q) use ($user, $childIds) {
+                    $q->where('parent_id', $user->id)
+                        ->orWhereIn('student_id', $childIds);
+                })
+                ->whereIn('status', ['open', 'in_progress', 'resolved'])
+                ->latest()
+                ->take(3)
+                ->get()
+            : collect();
+
         return view('parent.dashboard', compact(
             'user',
             'parent',
@@ -83,7 +108,9 @@ class ParentDashboardController extends Controller
             'pendingPaymentsCount',
             'recentProgresses',
             'upcomingSessions',
-            'unreadMessagesCount'
+            'unreadMessagesCount',
+            'pendingFeedbackSessions',
+            'activeInterventionTickets'
         ));
     }
 }

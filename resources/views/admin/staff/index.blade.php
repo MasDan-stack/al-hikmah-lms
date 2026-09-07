@@ -239,23 +239,6 @@
             const chart = new ApexCharts(chartElem, chartOptions);
             chart.render();
         }
-
-        // Initialize DataTables if available
-        if (typeof $ !== 'undefined' && $.fn.DataTable) {
-            $('#staffWorkloadTable').DataTable({
-                language: {
-                    search: "Cari Guru:",
-                    lengthMenu: "Tampilkan _MENU_ baris",
-                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ guru",
-                    paginate: {
-                        first: "«",
-                        previous: "‹",
-                        next: "›",
-                        last: "»"
-                    }
-                }
-            });
-        }
     });
 </script>
 @endpush

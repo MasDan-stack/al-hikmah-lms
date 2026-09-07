@@ -15,7 +15,7 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0" id="staffWorkloadTable">
+        <table class="table table-hover align-middle mb-0 datatable" id="staffWorkloadTable">
             <thead class="table-light small text-uppercase text-muted">
                 <tr>
                     <th>Guru Pembimbing</th>
@@ -83,7 +83,10 @@
                                 <span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1">Nonaktif</span>
                             @endif
                         </td>
-                        <td class="text-end">
+                        <td class="text-end text-nowrap">
+                            <a href="{{ route('admin.staff.show', $mentor['id']) }}" class="btn btn-sm btn-outline-info rounded-pill px-2.5 me-1" title="Lihat Profil Lengkap">
+                                <i class="bi bi-person-lines-fill me-1"></i>Profil
+                            </a>
                             <a href="{{ route('admin.mentors.availability') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3" title="Atur Jadwal & Alokasi">
                                 <i class="bi bi-calendar-check me-1"></i>Alokasi
                             </a>

@@ -11,6 +11,7 @@ use App\Services\StudentAccountService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ParentProfileController extends Controller
@@ -31,23 +32,53 @@ class ParentProfileController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,'.$user->id,
+            'phone' => 'nullable|string|max:20',
             'emergency_phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
+            'maps_link' => 'nullable|url|max:500',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ], [
+            'maps_link.url' => 'Format tautan peta tidak valid. Pastikan diawali dengan http:// atau https://',
+            'avatar.max' => 'Ukuran foto profil maksimal adalah 2MB.',
+            'avatar.image' => 'Berkas harus berupa gambar yang valid (JPG, PNG, atau WEBP).',
+            'avatar.mimes' => 'Format foto profil harus JPG, JPEG, PNG, atau WEBP.',
         ]);
+
+        $avatarPath = $user->avatar;
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        $phone = $request->phone ?? $request->emergency_phone;
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $phone,
+            'avatar' => $avatarPath,
         ]);
 
         if ($parent) {
             $parent->update([
-                'emergency_phone' => $request->emergency_phone,
+                'phone' => $phone,
+                'emergency_phone' => $request->emergency_phone ?? $phone,
                 'address' => $request->address,
+                'maps_link' => $request->maps_link,
+            ]);
+        } else {
+            ParentProfile::create([
+                'user_id' => $user->id,
+                'phone' => $phone,
+                'address' => $request->address,
+                'maps_link' => $request->maps_link,
+                'emergency_phone' => $request->emergency_phone ?? $phone,
             ]);
         }
 
-        return redirect()->back()->with('success', 'Profil orang tua berhasil diperbarui!');
+        return redirect()->back()->with('success', 'Profil orang tua dan titik lokasi rumah berhasil diperbarui!');
     }
 
     public function notifications(): View

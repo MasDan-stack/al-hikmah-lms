@@ -265,61 +265,482 @@
         <!-- 🌟 VIEW UTAMA GURU AKTIF & MASA PERCOBAAN (PROBATION) -->
         <!-- ======================================================== -->
 
+        @if(isset($probationTracking))
+            <!-- 🌟 PROBATION PROGRESS TRACKER WIDGET (PRD US 2.2) -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden bg-white border-start border-5 border-warning">
+                <div class="card-header bg-warning-subtle border-0 py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-warning text-dark p-2 d-flex align-items-center justify-content-center shadow-xs" style="width: 42px; height: 42px;">
+                            <i class="bi bi-shield-check fs-5"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <h5 class="fw-bold text-dark mb-0">Hub Pemantauan Masa Percobaan Guru (Probation)</h5>
+                                <span class="badge bg-warning text-dark rounded-pill px-3 py-1 fw-bold">Masa Percobaan 90 Hari</span>
+                            </div>
+                            <small class="text-secondary">Pantau checklist orientasi, target kehadiran, dan rating kepuasan wali santri menuju pengangkatan Guru Tetap.</small>
+                        </div>
+                    </div>
+                    @php
+                        $daysLeft = max(0, (int) today()->diffInDays($probationTracking->end_date, false));
+                        $totalDays = max(1, (int) ($probationTracking->start_date?->diffInDays($probationTracking->end_date) ?? 90));
+                        $daysElapsed = max(0, $totalDays - $daysLeft);
+                        $percentProbation = min(100, round(($daysElapsed / $totalDays) * 100));
+                    @endphp
+                    <div class="text-end">
+                        <div class="fs-5 fw-bold text-dark">
+                            <i class="bi bi-hourglass-split text-warning me-1"></i>{{ $daysLeft }} Hari Tersisa
+                        </div>
+                        <small class="text-muted">dari total {{ $totalDays }} hari masa evaluasi</small>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Progress Sisa Waktu Evaluasi -->
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center small text-muted mb-1">
+                            <span>Waktu Berjalan: <strong>Hari ke-{{ $daysElapsed }}</strong></span>
+                            <span>Tenggat Evaluasi: <strong>{{ $probationTracking->end_date ? \Carbon\Carbon::parse($probationTracking->end_date)->locale('id')->isoFormat('D MMMM Y') : '-' }}</strong></span>
+                        </div>
+                        <div class="progress rounded-pill" style="height: 10px;">
+                            <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ $percentProbation }}%;" aria-valuenow="{{ $percentProbation }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <!-- Kiri: Target Metrik Kinerja -->
+                        <div class="col-lg-6 border-end-lg">
+                            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-speedometer2 text-primary me-2"></i>Pencapaian Target Kinerja (LMS Real-time)</h6>
+                            
+                            <!-- Kehadiran -->
+                            <div class="p-3 bg-light rounded-3 mb-3 border">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <span class="fw-bold text-dark">Tingkat Kehadiran Mengajar</span>
+                                        <small class="text-muted d-block">Target Lembaga: &ge; 90.0%</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="fs-4 fw-bold {{ ($probationTracking->attendance_rate ?? 100) >= 90 ? 'text-success' : 'text-danger' }}">
+                                            {{ number_format($probationTracking->attendance_rate ?? 100, 1) }}%
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="progress rounded-pill" style="height: 8px;">
+                                    <div class="progress-bar {{ ($probationTracking->attendance_rate ?? 100) >= 90 ? 'bg-success' : 'bg-danger' }}" style="width: {{ min(100, $probationTracking->attendance_rate ?? 100) }}%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Rating Wali Santri -->
+                            <div class="p-3 bg-light rounded-3 border">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <span class="fw-bold text-dark">Rating Kepuasan Wali Santri</span>
+                                        <small class="text-muted d-block">Target Lembaga: &ge; 4.50 Bintang</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="fs-4 fw-bold {{ ($probationTracking->average_rating ?? 5.0) >= 4.5 ? 'text-warning' : 'text-danger' }}">
+                                            ⭐ {{ number_format($probationTracking->average_rating ?? 5.0, 2) }}
+                                        </span>
+                                    </div>
+                                </div>
+                                @php
+                                    $ratingPercent = min(100, round((($probationTracking->average_rating ?? 5.0) / 5.0) * 100));
+                                @endphp
+                                <div class="progress rounded-pill" style="height: 8px;">
+                                    <div class="progress-bar bg-warning" style="width: {{ $ratingPercent }}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kanan: Status 4 Modul Orientasi Wajib -->
+                        <div class="col-lg-6">
+                            @php
+                                $mod1Done = $probationTracking->isModuleCompleted('mod1');
+                                $mod2Done = $probationTracking->isModuleCompleted('mod2');
+                                $mod3Done = $probationTracking->isModuleCompleted('mod3');
+                                $mod4Done = $probationTracking->isModuleCompleted('mod4');
+                                $completedMods = $probationTracking->getCompletedModulesCount();
+                            @endphp
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-bold text-dark mb-0"><i class="bi bi-mortarboard-fill text-success me-2"></i>Status 4 Modul Orientasi Wajib</h6>
+                                <span class="badge bg-success-subtle text-success rounded-pill px-3 py-1">
+                                    {{ $completedMods }}/4 Selesai
+                                </span>
+                            </div>
+                            <div class="d-flex flex-column gap-2">
+                                <div class="p-2.5 rounded-3 border d-flex align-items-center justify-content-between {{ $mod1Done ? 'bg-success-subtle border-success-subtle text-success' : 'bg-light text-muted' }}">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi {{ $mod1Done ? 'bi-check-circle-fill text-success' : 'bi-circle text-secondary' }}"></i>
+                                        <span class="small fw-semibold text-dark">Modul 1: Orientasi Lembaga & SOP Pengajaran Al-Hikmah</span>
+                                    </div>
+                                    <span class="badge {{ $mod1Done ? 'bg-success' : 'bg-secondary' }} rounded-pill" style="font-size: 0.7rem;">
+                                        {{ $mod1Done ? 'Tuntas' : 'Wajib' }}
+                                    </span>
+                                </div>
+
+                                <div class="p-2.5 rounded-3 border d-flex align-items-center justify-content-between {{ $mod2Done ? 'bg-success-subtle border-success-subtle text-success' : 'bg-light text-muted' }}">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi {{ $mod2Done ? 'bi-check-circle-fill text-success' : 'bi-circle text-secondary' }}"></i>
+                                        <span class="small fw-semibold text-dark">Modul 2: Standar Mutaba'ah & Penilaian Tajwid Terpadu</span>
+                                    </div>
+                                    <span class="badge {{ $mod2Done ? 'bg-success' : 'bg-secondary' }} rounded-pill" style="font-size: 0.7rem;">
+                                        {{ $mod2Done ? 'Tuntas' : 'Wajib' }}
+                                    </span>
+                                </div>
+
+                                <div class="p-2.5 rounded-3 border d-flex align-items-center justify-content-between {{ $mod3Done ? 'bg-success-subtle border-success-subtle text-success' : 'bg-light text-muted' }}">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi {{ $mod3Done ? 'bi-check-circle-fill text-success' : 'bi-circle text-secondary' }}"></i>
+                                        <span class="small fw-semibold text-dark">Modul 3: Simulasi Praktik Sesi Perdana di LMS</span>
+                                    </div>
+                                    <span class="badge {{ $mod3Done ? 'bg-success' : 'bg-secondary' }} rounded-pill" style="font-size: 0.7rem;">
+                                        {{ $mod3Done ? 'Tuntas' : 'Wajib' }}
+                                    </span>
+                                </div>
+
+                                <div class="p-2.5 rounded-3 border d-flex align-items-center justify-content-between {{ $mod4Done ? 'bg-success-subtle border-success-subtle text-success' : 'bg-light text-muted' }}">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi {{ $mod4Done ? 'bi-check-circle-fill text-success' : 'bi-circle text-secondary' }}"></i>
+                                        <span class="small fw-semibold text-dark">Modul 4: Komunikasi Efektif & Pelaporan ke Wali Santri</span>
+                                    </div>
+                                    <span class="badge {{ $mod4Done ? 'bg-success' : 'bg-secondary' }} rounded-pill" style="font-size: 0.7rem;">
+                                        {{ $mod4Done ? 'Tuntas' : 'Wajib' }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 text-end">
+                                <a href="{{ route('mentor.orientation.index') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold">
+                                    <i class="bi bi-journal-bookmark me-1"></i> Buka Panduan & Materi Orientasi &rarr;
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        @if(isset($activeIntervention) && $activeIntervention)
+            <!-- 📌 ADVISORY GUIDANCE CARD (PEMBINAAN TIM AKADEMIK) -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden border-start border-5 border-info bg-white">
+                <div class="card-header bg-info bg-opacity-10 border-0 py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-info text-dark p-2 d-flex align-items-center justify-content-center shadow-xs" style="width: 42px; height: 42px;">
+                            <i class="bi bi-info-circle-fill fs-5"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <h6 class="fw-bold text-dark mb-0">Catatan Pembinaan & Evaluasi Mutu Akademik</h6>
+                                <span class="badge bg-info text-dark rounded-pill px-3 py-1">Tiket #{{ $activeIntervention->ticket_number }}</span>
+                            </div>
+                            <small class="text-secondary">Arahan peningkatan kualitas bimbingan dari Koordinator Pengajar Al-Hikmah.</small>
+                        </div>
+                    </div>
+                    <span class="badge bg-white text-dark border rounded-pill px-3 py-2">
+                        Fokus: {{ $activeIntervention->getCategoryLabel() }}
+                    </span>
+                </div>
+                <div class="card-body p-4">
+                    <div class="p-3 bg-light rounded-4 mb-2 border-start border-3 border-info">
+                        <div class="small fw-bold text-muted text-uppercase mb-1">Rencana Tindakan Pembinaan (Action Plan):</div>
+                        <p class="mb-0 text-dark small">
+                            {{ $activeIntervention->action_plan ?: 'Koordinator Pengajar sedang berkoordinasi. Harap pastikan kehadiran tepat waktu 5 menit sebelum sesi dan menjaga interaksi positif dengan santri.' }}
+                        </p>
+                    </div>
+                    <small class="text-muted">
+                        <i class="bi bi-shield-check text-success me-1"></i> Catatan ini bersifat pendampingan internal demi kelancaran dakwah Al-Qur'an dan menjaga kepuasan wali santri.
+                    </small>
+                </div>
+            </div>
+        @endif
+
+        @if(isset($ahpPerformance) && $ahpPerformance)
+            <!-- 🏆 WIDGET SKOR PERFORMA AHP & EVALUASI MUTU GURU (POIN D) -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden bg-white border-start border-5 border-primary">
+                <div class="card-header bg-primary bg-opacity-10 border-0 py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-primary text-white p-2 d-flex align-items-center justify-content-center shadow-xs" style="width: 42px; height: 42px;">
+                            <i class="bi bi-award-fill fs-5"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <h6 class="fw-bold text-primary mb-0">Skor Performa Saya & Evaluasi Mutu AHP</h6>
+                                <span class="badge bg-primary text-white rounded-pill px-2.5 py-1" style="font-size: 0.72rem;">
+                                    Periode {{ \Carbon\Carbon::createFromFormat('Y-m', $ahpPerformance['period_month'])->translatedFormat('F Y') }}
+                                </span>
+                                @if($ahpPerformance['rank_position'] <= 3)
+                                    <span class="badge bg-warning text-dark rounded-pill px-2.5 py-1 fw-bold">
+                                        🏆 Peringkat Ke-{{ $ahpPerformance['rank_position'] }} (Podium Juara)
+                                    </span>
+                                @else
+                                    <span class="badge bg-secondary-subtle text-secondary rounded-pill px-2.5 py-1">
+                                        Peringkat Ke-{{ $ahpPerformance['rank_position'] }}
+                                    </span>
+                                @endif
+                            </div>
+                            <small class="text-secondary">Penilaian multi-kriteria 5 dimensi (Disiplin, Pedagogi, Akhlak, Kepuasan Wali, dan Keaktifan) berbasis data riil mengajar.</small>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="fs-4 fw-bold font-monospace text-primary">{{ $ahpPerformance['final_score'] }}</span>
+                        <small class="text-muted">/100 Skor Komposit</small>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-12 col-md-7">
+                            <span class="small fw-semibold text-muted d-block mb-2">Pencapaian 5 Pilar Pedagogis Anda:</span>
+                            <div class="vstack gap-2">
+                                @foreach($ahpPerformance['radar_dimensions'] as $dimName => $dimVal)
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center small mb-1">
+                                        <span class="fw-semibold text-dark">{{ $dimName }}</span>
+                                        <span class="font-monospace text-muted">{{ $dimVal }}/100</span>
+                                    </div>
+                                    <div class="progress rounded-pill" style="height: 6px;">
+                                        <div class="progress-bar bg-success rounded-pill" role="progressbar" style="width: {{ $dimVal }}%"></div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <div class="p-3 bg-light rounded-4 border h-100">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="bi bi-lightbulb-fill text-warning fs-5"></i>
+                                    <h6 class="fw-bold text-dark mb-0 small">Saran Peningkatan Mutu Mengajar</h6>
+                                </div>
+                                <p class="text-muted small mb-0">
+                                    {{ $ahpPerformance['recommendation'] }}
+                                </p>
+                                @if(!empty($ahpPerformance['admin_notes']))
+                                <div class="mt-2 pt-2 border-top">
+                                    <small class="text-primary fw-semibold d-block">Apresiasi Khusus Pimpinan:</small>
+                                    <small class="text-secondary fst-italic">"{{ $ahpPerformance['admin_notes'] }}"</small>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        <!-- 🔔 NOTIFIKASI KEHADIRAN SANTRI HARI INI -->
+        @if(isset($attendedTodaySessions) && $attendedTodaySessions->isNotEmpty())
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden border-start border-4 border-success bg-white">
+                <div class="card-header bg-success-subtle border-0 py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-success text-white p-2 d-flex align-items-center justify-content-center shadow-xs" style="width: 42px; height: 42px;">
+                            <i class="bi bi-bell-fill fs-5"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <h6 class="fw-bold text-success-emphasis mb-0">Pemberitahuan: Santri Konfirmasi Hadir Hari Ini</h6>
+                                <span class="badge bg-success text-white rounded-pill px-2.5 py-1" style="font-size: 0.72rem;">
+                                    <i class="bi bi-check-circle-fill me-1"></i>{{ $attendedTodaySessions->count() }} Santri Siap Belajar
+                                </span>
+                            </div>
+                            <small class="text-secondary">Wali santri telah mengonfirmasi kehadiran untuk jadwal hari ini ({{ today()->locale('id')->isoFormat('dddd, D MMMM Y') }}). Anda dapat langsung memulai sesi tanpa perlu ke menu jadwal.</small>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="{{ route('mentor.sessions.index') }}" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-semibold">
+                            <i class="bi bi-calendar-check me-1"></i>Buka Kalender Sesi
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        @foreach($attendedTodaySessions as $attSession)
+                            @php
+                                $st = $attSession->student;
+                                $progName = $attSession->student?->enrollments?->first()?->program?->name 
+                                    ?? $attSession->student?->programs?->first()?->name 
+                                    ?? 'Program Al-Hikmah';
+                                $parentPhone = $st?->getParentPhone();
+                                $cleanPhone = preg_replace('/[^0-9]/', '', $parentPhone ?? '');
+                                if (str_starts_with($cleanPhone, '0')) {
+                                    $cleanPhone = '62' . substr($cleanPhone, 1);
+                                }
+                            @endphp
+                            <div class="col-lg-6">
+                                <div class="p-3 rounded-4 border bg-light h-100 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="avatar-circle bg-success text-white fw-bold d-flex align-items-center justify-content-center rounded-circle" style="width: 38px; height: 38px;">
+                                                    {{ strtoupper(substr($st?->full_name ?? 'S', 0, 2)) }}
+                                                </div>
+                                                <div>
+                                                    <h6 class="fw-bold text-dark mb-0">{{ $st?->getDisplayName() }}</h6>
+                                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2" style="font-size: 0.68rem;">
+                                                        {{ $progName }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <span class="badge bg-success text-white rounded-pill px-2.5 py-1" style="font-size: 0.72rem;">
+                                                <i class="bi bi-check2-circle me-1"></i>Hadir
+                                            </span>
+                                        </div>
+
+                                        <div class="d-flex flex-wrap align-items-center gap-3 text-muted small my-2 ps-1">
+                                            <span>
+                                                <i class="bi bi-clock-fill text-warning me-1"></i>
+                                                <strong>{{ date('H:i', strtotime($attSession->time)) }} WIB</strong>
+                                            </span>
+                                            <span>
+                                                @if($attSession->method === 'offline')
+                                                    <i class="bi bi-house-door-fill text-success me-1"></i>Offline (Tatap Muka)
+                                                @else
+                                                    <i class="bi bi-camera-video-fill text-primary me-1"></i>Online (Zoom/Meet)
+                                                @endif
+                                            </span>
+                                            <span>
+                                                <i class="bi bi-person-fill text-secondary me-1"></i>{{ $st?->parent_name ?? 'Wali Santri' }}
+                                            </span>
+                                        </div>
+
+                                        @if($attSession->confirmation?->notes)
+                                            <div class="p-2 bg-white rounded-3 small text-muted fst-italic mb-3 border border-success-subtle">
+                                                <i class="bi bi-chat-quote-fill me-1 text-success"></i>"{{ $attSession->confirmation->notes }}"
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <!-- Quick Action Buttons -->
+                                    <div class="d-flex gap-2 flex-wrap pt-2 border-top mt-2">
+                                        @if($attSession->status === 'scheduled')
+                                            <form action="{{ route('mentor.sessions.update-status', $attSession->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <input type="hidden" name="status" value="in_progress">
+                                                <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 shadow-xs">
+                                                    <i class="bi bi-play-fill me-1"></i>Mulai Sesi
+                                                </button>
+                                            </form>
+                                        @elseif($attSession->status === 'in_progress')
+                                            <form action="{{ route('mentor.sessions.update-status', $attSession->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <input type="hidden" name="status" value="completed">
+                                                <button type="submit" class="btn btn-sm btn-success rounded-pill px-3 shadow-xs">
+                                                    <i class="bi bi-check-lg me-1"></i>Tandai Selesai
+                                                </button>
+                                            </form>
+                                        @else
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill py-1.5 px-3">
+                                                <i class="bi bi-check2-all me-1"></i>Sesi Selesai
+                                            </span>
+                                        @endif
+
+                                        <a href="{{ route('mentor.progress.create', ['student_id' => $st?->id]) }}" class="btn btn-sm btn-outline-success rounded-pill px-3">
+                                            <i class="bi bi-pencil-square me-1"></i>Catat Progres
+                                        </a>
+
+                                        @if($parentPhone)
+                                            <a href="https://wa.me/{{ $cleanPhone }}?text=Assalamu'alaikum%20Bapak/Ibu%20wali%20santri%20{{ urlencode($st?->getDisplayName() ?? '') }},%20saya%20konfirmasi%20untuk%20sesi%20mengajar%20hari%20ini." 
+                                               target="_blank" 
+                                               class="btn btn-sm btn-outline-secondary rounded-pill px-3"
+                                               title="Hubungi Wali via WhatsApp">
+                                                <i class="bi bi-whatsapp text-success me-1"></i>WhatsApp
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    @if(isset($absentTodaySessions) && $absentTodaySessions->isNotEmpty())
+                        <div class="mt-3 pt-3 border-top">
+                            <div class="d-flex align-items-center gap-2 text-muted small">
+                                <i class="bi bi-info-circle-fill text-warning fs-6"></i>
+                                <span><strong>Pemberitahuan Izin/Sakit:</strong>
+                                    @foreach($absentTodaySessions as $abSession)
+                                        {{ $abSession->student?->getDisplayName() }} 
+                                        (<span class="text-{{ $abSession->confirmation?->status === 'sakit' ? 'danger' : 'warning' }} fw-semibold">{{ ucfirst($abSession->confirmation?->status) }}</span>{{ $abSession->confirmation?->notes ? ': "'.$abSession->confirmation->notes.'"' : '' }}){{ !$loop->last ? ', ' : '' }}
+                                    @endforeach
+                                </span>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        @elseif(isset($absentTodaySessions) && $absentTodaySessions->isNotEmpty())
+            <div class="card border-0 shadow-sm rounded-4 mb-4 border-start border-4 border-warning bg-warning-subtle">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="bi bi-exclamation-triangle-fill text-warning fs-4"></i>
+                        <div>
+                            <strong class="text-dark small d-block">Pemberitahuan Izin / Sakit Santri Hari Ini:</strong>
+                            <span class="text-secondary small">
+                                @foreach($absentTodaySessions as $abSession)
+                                    {{ $abSession->student?->getDisplayName() }} 
+                                    (<strong class="text-{{ $abSession->confirmation?->status === 'sakit' ? 'danger' : 'warning' }}">{{ ucfirst($abSession->confirmation?->status) }}</strong>{{ $abSession->confirmation?->notes ? ': "'.$abSession->confirmation->notes.'"' : '' }}){{ !$loop->last ? ', ' : '' }}
+                                @endforeach
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <!-- Cards Summary -->
         <div class="row g-3 mb-4">
             <div class="col-sm-6 col-xl-3">
-                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-3 p-3 bg-primary-subtle text-primary fs-3">
+                <div class="lms-stat-card">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <span class="lms-stat-label">Sesi Hari Ini</span>
+                        <div class="lms-stat-icon primary">
                             <i class="bi bi-calendar-event"></i>
                         </div>
-                        <div>
-                            <div class="text-muted small fw-semibold">Sesi Hari Ini</div>
-                            <h3 class="fw-bold mb-0 text-dark">{{ $todaySessionsCount }}</h3>
-                        </div>
                     </div>
+                    <div class="d-flex align-items-baseline justify-content-between mt-2">
+                        <div class="lms-stat-value text-primary">{{ $todaySessionsCount }}</div>
+                        @if(isset($attendedTodaySessions) && $attendedTodaySessions->isNotEmpty())
+                            <span class="lms-badge success">
+                                <i class="bi bi-person-check-fill me-1"></i>{{ $attendedTodaySessions->count() }} Hadir
+                            </span>
+                        @endif
+                    </div>
+                    <div class="small text-muted pt-2 border-top mt-2">Jadwal bimbingan aktif</div>
                 </div>
             </div>
 
             <div class="col-sm-6 col-xl-3">
-                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-3 p-3 bg-success-subtle text-success fs-3">
+                <div class="lms-stat-card">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <span class="lms-stat-label">Santri Binaan</span>
+                        <div class="lms-stat-icon success">
                             <i class="bi bi-people-fill"></i>
                         </div>
-                        <div>
-                            <div class="text-muted small fw-semibold">Santri Binaan</div>
-                            <h3 class="fw-bold mb-0 text-dark">{{ $activeStudentsCount }}</h3>
-                        </div>
                     </div>
+                    <div class="lms-stat-value text-success mt-2">{{ $activeStudentsCount }}</div>
+                    <div class="small text-muted pt-2 border-top mt-2">Santri aktif dalam bimbingan</div>
                 </div>
             </div>
 
             <div class="col-sm-6 col-xl-3">
-                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-3 p-3 bg-warning-subtle text-warning fs-3">
+                <div class="lms-stat-card">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <span class="lms-stat-label">Rata-rata Tajwid</span>
+                        <div class="lms-stat-icon warning">
                             <i class="bi bi-star-fill"></i>
                         </div>
-                        <div>
-                            <div class="text-muted small fw-semibold">Rata-rata Tajwid</div>
-                            <h3 class="fw-bold mb-0 text-dark">{{ $avgTajwid }}</h3>
-                        </div>
                     </div>
+                    <div class="lms-stat-value text-warning mt-2">{{ $avgTajwid }} <span class="fs-6 fw-normal text-muted">/ 100</span></div>
+                    <div class="small text-muted pt-2 border-top mt-2">Mutu bacaan santri binaan</div>
                 </div>
             </div>
 
             <div class="col-sm-6 col-xl-3">
-                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-3 p-3 bg-info-subtle text-info fs-3">
+                <div class="lms-stat-card">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <span class="lms-stat-label">Sesi Mendatang</span>
+                        <div class="lms-stat-icon info">
                             <i class="bi bi-clock-history"></i>
                         </div>
-                        <div>
-                            <div class="text-muted small fw-semibold">Sesi Mendatang</div>
-                            <h3 class="fw-bold mb-0 text-dark">{{ $upcomingSessionsCount }}</h3>
-                        </div>
                     </div>
+                    <div class="lms-stat-value text-info mt-2">{{ $upcomingSessionsCount }}</div>
+                    <div class="small text-muted pt-2 border-top mt-2">Diagendakan pekan ini</div>
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="AL-HIKMAH — Menemani perjalanan anak usia 10–15 tahun untuk mengenal, mencintai, dan menghidupkan nilai-nilai Al-Qur'an dalam kehidupan.">
+        content="AL-HIKMAH: Menemani perjalanan anak usia 10–15 tahun untuk mengenal, mencintai, dan menghidupkan nilai-nilai Al-Qur'an dalam kehidupan.">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>
         (function() {
@@ -44,22 +44,13 @@
 
 <body>
     <!-- Skip to Main Content Link for Keyboard Accessibility -->
-    <a href="#beranda" class="skip-to-main">Langsung ke konten utama</a>
+    <a href="#main-content" class="skip-to-main">Langsung ke konten utama</a>
 
     <noscript>
         <div style="background: #fff3cd; color: #856404; padding: 15px; text-align: center; border-bottom: 3px solid #ffc107;">
             ⚠️ Beberapa fitur website ini memerlukan JavaScript. Silakan aktifkan JavaScript di browser Anda untuk pengalaman terbaik.
         </div>
     </noscript>
-
-    <canvas id="bgCanvas" class="bg-3d-canvas" aria-hidden="true"></canvas>
-
-    <div class="logo-watermark" aria-hidden="true">
-        <div class="watermark-container">
-            <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH">
-            <div class="watermark-text">AL-HIKMAH</div>
-        </div>
-    </div>
 
     <div id="loadingScreen" class="loading-screen">
         <div class="loader-container">
@@ -69,20 +60,11 @@
         </div>
     </div>
 
-    <div class="bg-islamic-animation" aria-hidden="true">
-        <div class="floating-shape shape-1"></div>
-        <div class="floating-shape shape-2"></div>
-        <div class="floating-shape shape-3"></div>
-        <div class="floating-shape shape-4"></div>
-        <div class="floating-shape shape-5"></div>
-        <div class="floating-shape shape-6"></div>
-        <div class="floating-shape shape-7"></div>
-        <div class="floating-shape shape-8"></div>
-    </div>
-
     @include('partials.navbar')
 
-    @yield('content')
+    <main id="main-content">
+        @yield('content')
+    </main>
 
     @include('partials.footer')
 

@@ -7,15 +7,18 @@ use App\Models\Mentor;
 use App\Models\MentorApplication;
 use App\Models\Role;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class MentorRecruitmentService
 {
     public function __construct(
         protected WhatsAppService $whatsAppService,
-        protected MentorAccountService $mentorAccountService
+        protected MentorAccountService $mentorAccountService,
+        protected MentorTestService $mentorTestService
     ) {}
 
     public function submitApplication(array $data): MentorApplication
@@ -66,23 +69,31 @@ class MentorRecruitmentService
 
             // 3. Buat Profil Mentor Awal (Mode Seleksi / Belum Aktif)
             $mentor = Mentor::where('user_id', $user->id)->first();
+            $mentorData = [
+                'application_id' => $application->id,
+                'full_name' => $application->full_name,
+                'birth_date' => $application->birth_date,
+                'gender' => $application->gender === 'female' ? 'P' : 'L',
+                'address' => $application->address,
+                'city' => $application->city,
+                'education' => $application->education,
+                'institution' => $application->institution,
+                'experience_years' => $application->experience_years,
+                'hifz_total_juz' => $application->hifz_total_juz,
+                'specialization' => $application->specialization ?? 'Tahfidz',
+                'sanad_chain' => $application->sanad_chain,
+                'bio' => $application->experience_description ?? 'Calon Guru Pembimbing Al-Qur\'an',
+            ];
+
             if (! $mentor) {
-                $mentor = Mentor::create([
+                $mentor = Mentor::create(array_merge($mentorData, [
                     'user_id' => $user->id,
-                    'application_id' => $application->id,
-                    'full_name' => $application->full_name,
-                    'specialization' => $application->specialization ?? 'Tahfidz',
-                    'bio' => $application->experience_description ?? 'Calon Guru Pembimbing Al-Qur\'an',
                     'rating' => 5.00,
                     'is_active' => false,
                     'status' => 'inactive',
-                    'sanad_chain' => $application->sanad_chain,
-                ]);
+                ]));
             } else {
-                $mentor->update([
-                    'application_id' => $application->id,
-                    'specialization' => $application->specialization ?? $mentor->specialization,
-                ]);
+                $mentor->update($mentorData);
             }
 
             FinancialAuditLog::log(
@@ -129,14 +140,62 @@ class MentorRecruitmentService
         });
     }
 
-    public function scheduleInterview(MentorApplication $application, ?string $notes = null): bool
+    public function approveDocumentAndScheduleTest(MentorApplication $application, ?string $notes = null): bool
     {
         return DB::transaction(function () use ($application, $notes) {
+            $oldStatus = $application->status;
+
+            // Generate test session with 15 questions
+            // MentorTestService::generateTest automatically sets status to 'test_scheduled' and current_stage to 3
+            $this->mentorTestService->generateTest($application, [
+                'count' => 15,
+            ]);
+
+            if ($notes) {
+                $application->update(['admin_notes' => $notes]);
+            }
+
+            FinancialAuditLog::log(
+                userId: auth()->id() ?? $application->user_id,
+                action: 'mentor_document_approved_test_scheduled',
+                entityType: 'mentor_application',
+                entityId: $application->id,
+                oldValues: ['status' => $oldStatus],
+                newValues: ['status' => 'test_scheduled', 'stage' => 3, 'notes' => $notes]
+            );
+
+            // Fail-safe WhatsApp Notification ke Calon Guru
+            if ($application->phone) {
+                try {
+                    $waMessage = "Assalamu'alaikum Wr. Wb. Ustadz/Ustadzah *{$application->full_name}*,\n\n"
+                        ."Alhamdulillah berkas administrasi dan portofolio Anda telah kami verifikasi dan *Disetujui*.\n\n"
+                        ."Sesi tes kompetensi Al-Qur'an dan Pedagogi (15 Soal) telah siap di portal seleksi Anda.\n"
+                        ."Silakan login ke dashboard Anda untuk mulai mengerjakan dalam kurun waktu *2x24 jam*.\n\n"
+                        .'🌐 Link Portal: '.url('/login')."\n\n"
+                        ."Barakallahu fiikum,\n*Panitia Seleksi Guru AL-HIKMAH LMS*";
+
+                    $this->whatsAppService->sendMessage($application->phone, $waMessage);
+                } catch (\Throwable $e) {
+                    Log::warning("WhatsApp test scheduled notification failed: {$e->getMessage()}");
+                }
+            }
+
+            return true;
+        });
+    }
+
+    public function scheduleInterview(MentorApplication $application, array $data): bool
+    {
+        return DB::transaction(function () use ($application, $data) {
             $oldStatus = $application->status;
             $application->update([
                 'status' => 'interview_scheduled',
                 'current_stage' => 4,
-                'admin_notes' => $notes ?? $application->admin_notes,
+                'admin_notes' => $data['interview_notes'] ?? $application->admin_notes,
+                'interview_scheduled_at' => $data['interview_scheduled_at'] ?? null,
+                'interview_meeting_link' => $data['interview_meeting_link'] ?? null,
+                'interview_type' => $data['interview_type'] ?? 'online',
+                'interview_notes' => $data['interview_notes'] ?? null,
             ]);
 
             FinancialAuditLog::log(
@@ -145,8 +204,30 @@ class MentorRecruitmentService
                 entityType: 'mentor_application',
                 entityId: $application->id,
                 oldValues: ['status' => $oldStatus],
-                newValues: ['status' => 'interview_scheduled', 'notes' => $notes]
+                newValues: ['status' => 'interview_scheduled', 'data' => collect($data)->except('_token')->toArray()]
             );
+
+            // Fail-safe WhatsApp Notification Undangan Wawancara
+            if ($application->phone && ! empty($data['interview_scheduled_at'])) {
+                try {
+                    $formattedDate = Carbon::parse($data['interview_scheduled_at'])->locale('id')->isoFormat('dddd, D MMMM Y - HH:mm WIB');
+                    $meetingInfo = ($data['interview_type'] ?? 'online') === 'online'
+                        ? 'Link Pertemuan: '.($data['interview_meeting_link'] ?? 'Akan diinformasikan kembali')
+                        : 'Lokasi: Kantor AL-HIKMAH LMS (Tatap Muka)';
+
+                    $waMessage = "Assalamu'alaikum Wr. Wb. Ustadz/Ustadzah *{$application->full_name}*,\n\n"
+                        ."Alhamdulillah, hasil tes kompetensi Anda memenuhi kualifikasi. Kami mengundang Anda untuk mengikuti sesi *Wawancara & Simulasi Mengajar (Microteaching)*:\n\n"
+                        ."📅 Waktu: {$formattedDate}\n"
+                        .'📍 Tipe: '.strtoupper($data['interview_type'] ?? 'ONLINE')."\n"
+                        ."🔗 {$meetingInfo}\n\n"
+                        ."Mohon konfirmasi kehadiran Anda. Jazakumullah khairan.\n\n"
+                        .'*Tim Rekrutmen AL-HIKMAH LMS*';
+
+                    $this->whatsAppService->sendMessage($application->phone, $waMessage);
+                } catch (\Throwable $e) {
+                    Log::warning("WhatsApp interview notification failed: {$e->getMessage()}");
+                }
+            }
 
             return true;
         });

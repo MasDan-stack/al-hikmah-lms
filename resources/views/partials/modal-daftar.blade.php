@@ -24,13 +24,14 @@
                             <input type="tel" class="form-control" id="noWhatsApp" name="whatsapp" required autocomplete="tel" placeholder="08123456789">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-secondary small" for="usiaPeserta">Usia Peserta</label>
-                            <select class="form-select" id="usiaPeserta" name="usia">
+                            <label class="form-label fw-semibold text-secondary small" for="usiaPeserta">Usia Peserta <span class="text-danger">*</span></label>
+                            <select class="form-select" id="usiaPeserta" name="usia" required>
                                 <option value="">Pilih usia...</option>
-                                <option>10-15 tahun (Anak)</option>
-                                <option>Dewasa (16-30 tahun)</option>
-                                <option>Dewasa (31-50 tahun)</option>
-                                <option>50+ tahun</option>
+                                <option value="Di bawah 10 tahun (4-9 tahun)">Di bawah 10 tahun (Anak-anak / 4-9 tahun)</option>
+                                <option value="10-15 tahun (Anak)">10-15 tahun (Anak / Remaja)</option>
+                                <option value="Dewasa (16-30 tahun)">Dewasa (16-30 tahun)</option>
+                                <option value="Dewasa (31-50 tahun)">Dewasa (31-50 tahun)</option>
+                                <option value="50+ tahun">50+ tahun (Lansia)</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -46,23 +47,22 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-secondary small" for="programPilihan">Program Pilihan</label>
-                            <select class="form-select" id="programPilihan" name="program">
-                                <option value="">Pilih program...</option>
-                                <option>Tahsin</option>
-                                <option>Tahfidz</option>
-                                <option>Belajar dari Nol</option>
-                                <option>Program Anak</option>
-                                <option>Program Dewasa</option>
-                                <option>Bahasa Arab</option>
+                            <select class="form-select" id="programPilihan" name="program_id">
+                                <option value="">Pilih program bimbingan...</option>
+                                @php
+                                    $availableModalPrograms = \App\Models\Program::where('is_active', true)->orderBy('id')->get();
+                                @endphp
+                                @foreach($availableModalPrograms as $prog)
+                                    <option value="{{ $prog->id }}">{{ $prog->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-secondary small" for="metodeBelajar">Metode Belajar</label>
                             <select class="form-select" id="metodeBelajar" name="metode">
-                                <option value="">Pilih metode...</option>
-                                <option>Online</option>
-                                <option>Offline (Home Visit)</option>
-                                <option>Hybrid (Kombinasi)</option>
+                                <option value="offline" selected>Offline (Guru Datang ke Rumah)</option>
+                                <option value="online">Online (Zoom / Meet Interaktif)</option>
+                                <option value="hybrid">Hybrid (Kombinasi Online & Offline)</option>
                             </select>
                         </div>
                     </div>

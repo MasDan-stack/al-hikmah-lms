@@ -101,5 +101,48 @@
             </div>
         </div>
     </div>
+
+    <!-- Tampilkan form ulasan jika sesi sudah selesai dan belum ada ulasan -->
+    @if($session->status === 'completed' && !$session->feedback)
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-warning-subtle text-warning p-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 50px; height: 50px;">
+                            <i class="bi bi-star-fill fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold text-dark mb-1">Beri Nilai Mentor Ananda</h5>
+                            <p class="mb-0 text-muted small">Sesi bimbingan telah selesai. Ulasan Anda sangat berarti bagi evaluasi guru.</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-warning text-dark fw-bold rounded-pill px-4 py-2 shadow-sm d-inline-flex align-items-center gap-2" onclick="openFeedbackModal({{ $session->id }}, {{ $session->mentor_id }}, '{{ addslashes($session->mentor->user->name ?? 'Ustaz/Ustazah') }}')">
+                        <i class="bi bi-pencil-square"></i>
+                        <span>Beri Ulasan Sekarang</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @elseif($session->status === 'completed' && $session->feedback)
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle bg-success-subtle text-success p-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 50px; height: 50px;">
+                        <i class="bi bi-check-circle-fill fs-4"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold text-dark mb-1">Terima Kasih atas Ulasan Anda</h5>
+                        <p class="mb-0 text-muted small">Anda telah memberikan penilaian untuk sesi ini dengan rating {{ $session->feedback->overall_rating }}/5.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 </div>
+
+@include('parent.partials.feedback-modal')
 @endsection

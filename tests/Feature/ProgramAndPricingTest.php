@@ -155,7 +155,16 @@ class ProgramAndPricingTest extends TestCase
             'role' => 'parent',
         ]);
 
-        $response->assertRedirect(route('parent.dashboard'));
+        $createdStudent = Student::where('full_name', 'Ahmad Santri')->first();
+        $this->assertNotNull($createdStudent);
+
+        $program = Program::where('name', 'Tahsin Dasar')->first();
+
+        $response->assertRedirect(route('parent.enrollments.create', [
+            'program_id' => $program->id,
+            'student_id' => $createdStudent->id,
+            'method' => 'online',
+        ]));
 
         $this->assertDatabaseHas('users', [
             'email' => 'bunda.fatimah@example.com',

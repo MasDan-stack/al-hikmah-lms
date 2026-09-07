@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\HifzTarget;
 use App\Models\Mentor;
+use App\Models\MentorAvailability;
 use App\Models\MentorLeave;
 use App\Models\Program;
 use App\Models\Session;
@@ -161,5 +162,47 @@ class StaffAnalyticsService
             'labels' => $labels,
             'series' => $series,
         ];
+    }
+
+    /**
+     * Dapatkan daftar guru yang libur hari ini (baik hari bebas rutin maupun cuti khusus)
+     */
+    public function getOffDutyMentorsToday(): Collection
+    {
+        $today = today();
+        $dayOfWeek = strtolower($today->englishDayOfWeek); // e.g. 'monday'
+
+        // 1. Cuti khusus pada tanggal hari ini
+        $approvedLeaves = MentorLeave::with('mentor.user')
+            ->where('leave_date', $today->toDateString())
+            ->where('status', 'approved')
+            ->get()
+            ->map(function ($leave) {
+                return [
+                    'mentor' => $leave->mentor,
+                    'type' => 'Cuti Khusus',
+                    'reason' => $leave->reason ?? 'Cuti Terencana',
+                    'badge' => 'bg-warning text-dark',
+                ];
+            })->filter(fn ($item) => $item['mentor'] !== null);
+
+        // 2. Hari bebas rutin mingguan yang dipilih mentor
+        $routineHolidays = MentorAvailability::with('mentor.user')
+            ->where('day', $dayOfWeek)
+            ->where('is_holiday', true)
+            ->whereHas('mentor', fn ($q) => $q->where('is_active', true))
+            ->get()
+            ->map(function ($avail) {
+                return [
+                    'mentor' => $avail->mentor,
+                    'type' => 'Hari Bebas Rutin',
+                    'reason' => $avail->notes ?? 'Jadwal Libur Mingguan',
+                    'badge' => 'bg-secondary text-white',
+                ];
+            })->filter(fn ($item) => $item['mentor'] !== null);
+
+        return $approvedLeaves->concat($routineHolidays)
+            ->unique(fn ($item) => $item['mentor']->id)
+            ->values();
     }
 }

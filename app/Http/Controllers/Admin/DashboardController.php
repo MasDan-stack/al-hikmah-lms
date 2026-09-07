@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Mentor;
 use App\Models\MentorApplication;
+use App\Models\MentorFeedback;
+use App\Models\MentorInterventionTicket;
 use App\Models\MentorProbationTracking;
 use App\Models\Message;
 use App\Models\ParentProfile;
@@ -44,6 +46,17 @@ class DashboardController extends Controller
         $totalApplicationsCount = MentorApplication::count();
         $activeProbationsCount = MentorProbationTracking::where('status', 'active')->count();
         $recentApplications = MentorApplication::latest()->take(5)->get();
+        $expiringProbationsCount = MentorProbationTracking::where('status', 'active')
+            ->where('end_date', '<=', today()->addDays(14))
+            ->count();
+        $activeProbationList = MentorProbationTracking::with(['mentor.user'])
+            ->where('status', 'active')
+            ->orderBy('end_date', 'asc')
+            ->take(6)
+            ->get();
+
+        // 📅 Guru Libur / Cuti Hari Ini
+        $offDutyMentors = $this->staffService->getOffDutyMentorsToday();
 
         // 📌 Widget Monitor User Terdaftar & Role
         $recentUsers = User::with('role')->latest()->take(5)->get();
@@ -64,6 +77,18 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        $recentFeedbacks = MentorFeedback::with(['mentor.user', 'student.user', 'parent'])
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $openTicketsCount = MentorInterventionTicket::where('status', 'open')->count();
+        $recentTickets = MentorInterventionTicket::with(['mentor.user', 'student.user', 'parent'])
+            ->whereIn('status', ['open', 'in_progress'])
+            ->latest()
+            ->take(5)
+            ->get();
+
         return view('admin.dashboard', compact(
             'totalStudents',
             'totalMentors',
@@ -76,11 +101,17 @@ class DashboardController extends Controller
             'pendingApplicationsCount',
             'totalApplicationsCount',
             'activeProbationsCount',
+            'activeProbationList',
             'recentApplications',
+            'offDutyMentors',
             'recentUsers',
             'recentConfirmations',
             'recentPayments',
-            'recentParentMessages'
+            'recentParentMessages',
+            'recentFeedbacks',
+            'expiringProbationsCount',
+            'openTicketsCount',
+            'recentTickets'
         ));
     }
 }

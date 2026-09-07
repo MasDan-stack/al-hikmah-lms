@@ -33,13 +33,25 @@ class MentorMatchingService
         $student = $enrollment->student;
         $program = $enrollment->program;
 
-        $rawDay = $enrollment->day_preference ?? 'Senin';
-        if (is_array($rawDay)) {
-            $rawDay = $rawDay[0] ?? 'Senin';
+        $requestedDays = is_array($enrollment->requested_days) ? $enrollment->requested_days : [];
+        if (empty($requestedDays) && $enrollment->day_preference) {
+            $requestedDays = is_array($enrollment->day_preference) ? $enrollment->day_preference : [$enrollment->day_preference];
         }
-        $dayKey = self::normalizeDay((string) $rawDay);
-        $dayLabel = MentorAvailability::DAYS[$dayKey] ?? $rawDay;
-        $daysList = array_unique([$dayKey, $dayLabel, (string) $rawDay]);
+        if (empty($requestedDays)) {
+            $requestedDays = ['Senin'];
+        }
+
+        $normalizedRequestedDays = [];
+        foreach ($requestedDays as $rd) {
+            $key = self::normalizeDay((string) $rd);
+            $normalizedRequestedDays[] = $key;
+            if (isset(MentorAvailability::DAYS[$key])) {
+                $normalizedRequestedDays[] = MentorAvailability::DAYS[$key];
+            }
+            $normalizedRequestedDays[] = (string) $rd;
+        }
+        $daysList = array_unique($normalizedRequestedDays);
+        $dayKey = self::normalizeDay((string) $requestedDays[0]);
 
         $method = strtolower((string) ($enrollment->learning_method ?? 'online'));
         $studentLat = $student?->latitude;
@@ -94,6 +106,12 @@ class MentorMatchingService
             if ($this->isFamilyBlacklisted($student, $mentor)) {
                 $totalScore = 0.0;
                 $breakdown['disqualified_reason'] = 'Riwayat mutasi/komplain pada keluarga santri sebelumnya.';
+            } elseif ($breakdown['gender'] === 0.0) {
+                $totalScore = 0.0;
+                $breakdown['disqualified_reason'] = 'Gender mentor tidak sesuai dengan aturan umur/gender santri.';
+            } elseif ($breakdown['slot'] === 0.0) {
+                $totalScore = 0.0;
+                $breakdown['disqualified_reason'] = 'Mentor libur, tidak membuka slot jam yang diminta, atau jadwal bentrok dengan santri privat lain (1-on-1).';
             } else {
                 $totalScore = ($breakdown['gender'] * self::WEIGHT_GENDER) +
                               ($breakdown['location'] * self::WEIGHT_LOCATION) +
@@ -123,19 +141,20 @@ class MentorMatchingService
         });
 
         // 5. Multi-Level Tie-Breaker Sorting (Score Desc -> Load Asc -> Distance Asc -> Rating Desc)
-        return $scored->sort(function ($a, $b) {
-            if ($a['score'] !== $b['score']) {
-                return $b['score'] <=> $a['score']; // Level 1: Score Descending
-            }
-            if ($a['active_load'] !== $b['active_load']) {
-                return $a['active_load'] <=> $b['active_load']; // Level 2: Load Ascending
-            }
-            if ($a['distance_km'] !== $b['distance_km']) {
-                return $a['distance_km'] <=> $b['distance_km']; // Level 3: Distance Ascending
-            }
+        return $scored->filter(fn ($item) => $item['score'] > 0.0)
+            ->sort(function ($a, $b) {
+                if ($a['score'] !== $b['score']) {
+                    return $b['score'] <=> $a['score']; // Level 1: Score Descending
+                }
+                if ($a['active_load'] !== $b['active_load']) {
+                    return $a['active_load'] <=> $b['active_load']; // Level 2: Load Ascending
+                }
+                if ($a['distance_km'] !== $b['distance_km']) {
+                    return $a['distance_km'] <=> $b['distance_km']; // Level 3: Distance Ascending
+                }
 
-            return $b['rating'] <=> $a['rating']; // Level 4: Rating Descending
-        })->take($limit)->values();
+                return $b['rating'] <=> $a['rating']; // Level 4: Rating Descending
+            })->take($limit)->values();
     }
 
     /**
@@ -152,7 +171,7 @@ class MentorMatchingService
     ): array {
         $genderScore = $this->calculateGenderScore($mentor, $student, $program);
         $locationScore = $this->calculateLocationScore($mentor, $student, $method);
-        $slotScore = $this->calculateSlotScore($mentor, $day);
+        $slotScore = $this->calculateSlotScore($mentor, $day, $enrollment);
         $specScore = $this->calculateSpecializationScore($mentor, $program);
         $loadScore = $this->calculateLoadScore($mentor, $avgLoad);
 
@@ -208,19 +227,41 @@ class MentorMatchingService
     public function calculateGenderScore(Mentor $mentor, Student $student, $program = null): float
     {
         $category = strtolower($program->category ?? $program->name ?? '');
-        $mentorGender = strtoupper($mentor->user?->gender ?? $mentor->gender ?? 'L');
+        $mentorName = strtolower($mentor->getDisplayName());
+
+        if (str_contains($mentorName, 'ustazah') || str_contains($mentorName, 'ustadzah')) {
+            $mentorGender = 'P';
+        } elseif (str_contains($mentorName, 'ustadz') || str_contains($mentorName, 'ustaz')) {
+            $mentorGender = 'L';
+        } else {
+            $mentorGender = strtoupper($mentor->gender ?? $mentor->user?->gender ?? 'L');
+        }
+
         $studentGender = strtoupper($student->gender ?? 'L');
+        $studentAge = (int) ($student->age ?? 0);
 
+        // 1. Program khusus Muslimah: Wajib mentor perempuan (Ustazah)
         if (str_contains($category, 'muslimah')) {
-            return $mentorGender === 'P' ? 100.0 : 50.0;
+            return $mentorGender === 'P' ? 100.0 : 0.0;
         }
 
-        if ($studentGender === $mentorGender) {
-            return 100.0;
+        // 2. Santri Perempuan: Wajib mentor perempuan (Ustazah)
+        if ($studentGender === 'P') {
+            return $mentorGender === 'P' ? 100.0 : 0.0;
         }
 
-        // Santri anak-anak (<= 10 tahun) lintas gender tetap memperoleh toleransi 50%
-        return ($student->age <= 10) ? 50.0 : 40.0;
+        // 3. Santri Laki-laki: Aturan Berbasis Umur 10 Tahun
+        if ($studentGender === 'L') {
+            if ($studentAge < 10) {
+                // Laki-laki di bawah 10 tahun: WAJIB mentor perempuan (Ustazah)
+                return $mentorGender === 'P' ? 100.0 : 0.0;
+            } else {
+                // Laki-laki 10 tahun ke atas (>= 10 th): WAJIB mentor laki-laki (Ustadz)
+                return $mentorGender === 'L' ? 100.0 : 0.0;
+            }
+        }
+
+        return 0.0;
     }
 
     public function calculateLocationScore(Mentor $mentor, Student $student, string $method = 'online'): float
@@ -252,31 +293,84 @@ class MentorMatchingService
         return 40.0;
     }
 
-    public function calculateSlotScore(Mentor $mentor, string $day): float
+    public function calculateSlotScore(Mentor $mentor, string $day, Enrollment|string|null $enrollmentOrTime = null): float
     {
-        $dayKey = self::normalizeDay($day);
-        $dayLabel = MentorAvailability::DAYS[$dayKey] ?? $day;
+        $enrollment = $enrollmentOrTime instanceof Enrollment ? $enrollmentOrTime : null;
+        $requestedTime = $enrollment ? $enrollment->requested_time : (is_string($enrollmentOrTime) ? $enrollmentOrTime : null);
 
-        $availability = $mentor->availabilities->first(function ($av) use ($dayKey, $dayLabel, $day) {
-            return in_array($av->day, [$dayKey, $dayLabel, $day]) && $av->is_available;
-        });
-
-        $maxSlots = $availability?->max_students ?? $mentor->max_students_per_day ?? $mentor->default_max_students_per_day ?? 5;
-
-        $currentAssigned = $mentor->students->where('pivot.is_active', true)->filter(function ($st) use ($dayKey, $dayLabel, $day) {
-            $assignedDay = $st->pivot->day_assigned ?? '';
-
-            return in_array($assignedDay, [$dayKey, $dayLabel, $day]);
-        })->count();
-
-        // Jika tidak ada pembagian spesifik per hari pada pivot, hitung proporsi beban aktif
-        if ($currentAssigned === 0) {
-            $currentAssigned = (int) round($mentor->students->where('pivot.is_active', true)->count() / 5);
+        // Kumpulkan seluruh hari yang perlu dicek (bisa multi-hari jika dari Enrollment)
+        $daysToCheck = [];
+        if ($enrollment && ! empty($enrollment->requested_days)) {
+            $daysToCheck = (array) $enrollment->requested_days;
+        } elseif ($enrollment && $enrollment->day_preference) {
+            $daysToCheck = is_array($enrollment->day_preference) ? $enrollment->day_preference : [$enrollment->day_preference];
+        } else {
+            $daysToCheck = [$day];
         }
 
-        $remaining = max(0, $maxSlots - $currentAssigned);
+        $scores = [];
 
-        return round(($remaining / max(1, $maxSlots)) * 100.0, 1);
+        foreach ($daysToCheck as $d) {
+            $dayKey = self::normalizeDay((string) $d);
+            $dayLabel = MentorAvailability::DAYS[$dayKey] ?? $d;
+
+            $availability = $mentor->availabilities->first(function ($av) use ($dayKey, $dayLabel, $d) {
+                return in_array($av->day, [$dayKey, $dayLabel, $d])
+                    && $av->is_available;
+            });
+
+            if (! $availability || $availability->is_holiday) {
+                return 0.0;
+            }
+
+            // Cek bentrok slot 1-on-1 jika terdapat jam spesifik yang diminta santri
+            if ($requestedTime) {
+                $reqSlot = MentorAvailability::getSlotNumberFromTime($requestedTime);
+
+                // Cek apakah mentor membuka slot jam tersebut
+                if (! $availability->hasSlot($reqSlot)) {
+                    return 0.0; // Mentor tidak membuka slot jam yang diminta
+                }
+
+                // Sistem 1-on-1: Cek apakah mentor sudah memiliki santri bimbingan di slot & hari tersebut
+                $isSlotBooked = $mentor->students->where('pivot.is_active', true)->contains(function ($st) use ($dayKey, $dayLabel, $d, $reqSlot, $enrollment) {
+                    if ($enrollment && $st->id === $enrollment->student_id) {
+                        return false;
+                    }
+
+                    $assignedDay = self::normalizeDay((string) ($st->pivot->day_assigned ?? ''));
+                    $assignedSlot = $st->pivot->slot_number;
+                    if ($assignedSlot === null && ! empty($st->pivot->time_assigned)) {
+                        $assignedSlot = MentorAvailability::getSlotNumberFromTime($st->pivot->time_assigned);
+                    }
+
+                    return in_array($assignedDay, [$dayKey, strtolower($dayLabel), strtolower((string) $d)], true)
+                        && (int) $assignedSlot === (int) $reqSlot;
+                });
+
+                if ($isSlotBooked) {
+                    return 0.0; // Bentrok jadwal privat 1-on-1: Slot sudah terisi santri lain
+                }
+            }
+
+            $maxSlots = $availability->max_students ?? $mentor->max_students_per_day ?? $mentor->default_max_students_per_day ?? 5;
+
+            $currentAssigned = $mentor->students->where('pivot.is_active', true)->filter(function ($st) use ($dayKey, $dayLabel, $d) {
+                $assignedDay = self::normalizeDay((string) ($st->pivot->day_assigned ?? ''));
+
+                return in_array($assignedDay, [$dayKey, strtolower($dayLabel), strtolower((string) $d)], true);
+            })->count();
+
+            // Jika tidak ada pembagian spesifik per hari pada pivot, hitung proporsi beban aktif
+            if ($currentAssigned === 0) {
+                $currentAssigned = (int) round($mentor->students->where('pivot.is_active', true)->count() / 5);
+            }
+
+            $remaining = max(0, $maxSlots - $currentAssigned);
+            $scores[] = round(($remaining / max(1, $maxSlots)) * 100.0, 1);
+        }
+
+        return empty($scores) ? 0.0 : min($scores);
     }
 
     public function calculateSpecializationScore(Mentor $mentor, $program): float
@@ -388,17 +482,41 @@ class MentorMatchingService
             $reasons[] = 'Status mentor sedang tidak aktif / cuti.';
         }
 
-        $dayKey = self::normalizeDay((string) ($enrollment->day_preference ?? 'Senin'));
+        $requestedDays = is_array($enrollment->requested_days) ? $enrollment->requested_days : [];
+        if (empty($requestedDays) && $enrollment->day_preference) {
+            $requestedDays = is_array($enrollment->day_preference) ? $enrollment->day_preference : [$enrollment->day_preference];
+        }
+        $dayName = ! empty($requestedDays) ? ($enrollment->requested_days_label ?? $requestedDays[0]) : 'Senin';
+        $dayKey = self::normalizeDay((string) ($requestedDays[0] ?? 'Senin'));
+
+        if ($mentor->hasScheduleConflict($requestedDays, $enrollment->requested_time, $enrollment->student_id)) {
+            $reasons[] = "Jadwal mentor bentrok dengan santri privat (1-on-1) lain pada hari & jam yang diminta ({$dayName} jam {$enrollment->requested_time_label}).";
+        }
+
         if (! $mentor->hasQuotaOnDay($dayKey)) {
-            $reasons[] = "Kuota hari {$enrollment->day_preference} telah penuh.";
+            $reasons[] = "Kuota hari {$dayName} telah penuh atau mentor libur.";
         }
 
         if (($mentor->distance_km ?? 0) > 20 && strtolower($enrollment->learning_method ?? '') === 'offline') {
             $reasons[] = "Jarak lokasi ({$mentor->distance_km} km) melebihi batas ideal Home Visit.";
         }
 
-        if ($this->isFamilyBlacklisted($enrollment->student, $mentor)) {
-            $reasons[] = 'Terdapat riwayat mutasi/komplain pada keluarga santri ini sebelumnya.';
+        $student = $enrollment->student;
+        if ($student) {
+            $genderScore = $this->calculateGenderScore($mentor, $student, $enrollment->program);
+            if ($genderScore === 0.0) {
+                $studentGender = strtoupper($student->gender ?? 'L');
+                $studentAge = (int) ($student->age ?? 0);
+                if ($studentGender === 'L' && $studentAge < 10) {
+                    $reasons[] = 'Santri laki-laki < 10 tahun wajib dibimbing oleh Ustazah (perempuan).';
+                } elseif ($studentGender === 'L' && $studentAge >= 10) {
+                    $reasons[] = 'Santri laki-laki >= 10 tahun wajib dibimbing oleh Ustadz (laki-laki).';
+                } elseif ($studentGender === 'P') {
+                    $reasons[] = 'Santri perempuan wajib dibimbing oleh Ustazah (perempuan).';
+                } else {
+                    $reasons[] = 'Gender mentor tidak sesuai kriteria santri.';
+                }
+            }
         }
 
         return $reasons ?: ['Skor total kalah kompetitif dibandingkan kandidat Top 3.'];

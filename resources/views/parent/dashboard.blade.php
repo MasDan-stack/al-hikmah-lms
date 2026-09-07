@@ -279,61 +279,194 @@
             @endif
         @else
             <!-- STATE 3: AKTIF (Sudah Lunas) -->
-            <!-- 1️⃣ Kartu Statistik Utama -->
-            <div class="row g-3 mb-4">
-                <div class="col-sm-6 col-xl-3">
-                    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-3 p-3 bg-primary-subtle text-primary fs-3">
-                                <i class="bi bi-people-fill"></i>
+            <!-- Alert Khusus: Konfirmasi Kehadiran Belajar Santri -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden" style="background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);">
+                <div class="card-body p-4 text-white">
+                    <div class="d-flex align-items-start gap-3 flex-column flex-md-row justify-content-between">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="rounded-circle bg-white text-primary p-3 d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 50px; height: 50px;">
+                                <i class="bi bi-calendar-check-fill fs-4"></i>
                             </div>
                             <div>
-                                <div class="text-muted small fw-semibold">Jumlah Anak Binaan</div>
-                                <h3 class="fw-bold mb-0 text-dark">{{ $totalChildrenCount }}</h3>
+                                <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                                    <h5 class="fw-bold mb-0 text-white">Pengingat Penting: Konfirmasi Kehadiran Belajar Ananda</h5>
+                                    <span class="badge bg-warning text-dark rounded-pill px-3 py-1 small fw-semibold">
+                                        <i class="bi bi-bell-fill me-1"></i> Wajib Setiap Sesi
+                                    </span>
+                                </div>
+                                <p class="mb-0 text-white-50 small" style="max-width: 780px; line-height: 1.5;">
+                                    Bismillah Ayah/Bunda, demi kelancaran bimbingan Al-Qur'an dan kedisiplinan belajar ananda, mohon pastikan untuk selalu melakukan <strong>Konfirmasi Kehadiran (Hadir / Izin / Sakit)</strong> pada setiap sesi bimbingan terjadwal. Konfirmasi Anda sangat membantu ustadz/ustazah dalam mempersiapkan materi serta mencatat riwayat presensi ananda.
+                                </p>
                             </div>
+                        </div>
+                        <div class="mt-2 mt-md-0 flex-shrink-0 align-self-md-center">
+                            <a href="{{ route('parent.schedules.index') }}" class="btn btn-light text-primary fw-bold rounded-pill px-4 py-2 shadow-sm d-inline-flex align-items-center gap-2">
+                                <i class="bi bi-calendar3"></i>
+                                <span>Konfirmasi Sekarang</span>
+                            </a>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-sm-6 col-xl-3">
-                    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+            @if(isset($pendingFeedbackSessions) && $pendingFeedbackSessions->isNotEmpty())
+            <!-- Alert Khusus: Rating & Feedback (PRD US 3.1) -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden border-start border-4 border-warning bg-white">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-3 p-3 bg-success-subtle text-success fs-3">
-                                <i class="bi bi-calendar-check-fill"></i>
-                            </div>
-                            <div>
-                                <div class="text-muted small fw-semibold">Sesi Bulan Ini</div>
-                                <h3 class="fw-bold mb-0 text-dark">{{ $monthSessionsCount }}</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-6 col-xl-3">
-                    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-3 p-3 bg-warning-subtle text-warning fs-3">
+                            <div class="rounded-circle bg-warning-subtle text-warning p-3 fs-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 52px; height: 52px;">
                                 <i class="bi bi-star-fill"></i>
                             </div>
                             <div>
-                                <div class="text-muted small fw-semibold">Rata-rata Tajwid Anak</div>
-                                <h3 class="fw-bold mb-0 text-dark">{{ $avgTajwidScore }}</h3>
+                                <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                                    <h5 class="fw-bold text-dark mb-0">⭐ Sesi Bimbingan Menunggu Ulasan Ayah / Bunda</h5>
+                                    <span class="badge bg-warning-subtle text-dark border border-warning-subtle rounded-pill px-3 py-1 small fw-bold">
+                                        {{ $pendingFeedbackSessions->count() }} Sesi Menunggu Review
+                                    </span>
+                                </div>
+                                <p class="text-muted small mb-0" style="max-width: 780px;">
+                                    Ananda telah menyelesaikan sesi belajar terbaru. Mohon kesediaan waktu 30 detik untuk memberikan penilaian bagi Guru Pembimbing demi peningkatan kualitas pembelajaran:
+                                </p>
                             </div>
                         </div>
+                    </div>
+                    
+                    <div class="row g-3">
+                        @foreach($pendingFeedbackSessions as $pSession)
+                            <div class="col-md-6 col-lg-4">
+                                <div class="p-3 rounded-4 border bg-light d-flex justify-content-between align-items-center h-100 shadow-2xs">
+                                    <div class="me-2">
+                                        <div class="fw-bold text-dark text-truncate" style="max-width: 170px;">
+                                            {{ $pSession->student?->user?->name ?? $pSession->student?->full_name ?? 'Ananda' }}
+                                        </div>
+                                        <small class="text-muted d-block">
+                                            <i class="bi bi-person me-1"></i>{{ $pSession->mentor?->getDisplayName() ?? 'Ustaz/Ustazah' }}
+                                        </small>
+                                        <small class="text-secondary font-monospace" style="font-size: 0.72rem;">
+                                            <i class="bi bi-calendar-event me-1"></i>{{ $pSession->date ? \Carbon\Carbon::parse($pSession->date)->locale('id')->isoFormat('D MMM Y') : '' }}
+                                        </small>
+                                    </div>
+                                    <button type="button" class="btn btn-warning btn-sm rounded-pill px-3 fw-bold text-dark shadow-xs flex-shrink-0"
+                                        onclick="openFeedbackModal('{{ $pSession->id }}', '{{ $pSession->mentor_id }}', '{{ addslashes($pSession->mentor?->getDisplayName() ?? 'Ustaz/Ustazah') }}')">
+                                        ⭐ Beri Nilai
+                                    </button>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            @if(isset($activeInterventionTickets) && $activeInterventionTickets->isNotEmpty())
+            <!-- Kartu Transparansi Tindak Lanjut Keluhan / Tiket Intervensi -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4" style="background: linear-gradient(135deg, rgba(255, 243, 205, 0.5) 0%, rgba(255, 255, 255, 1) 100%); border-left: 5px solid #ffc107 !important;">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle bg-warning text-dark p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px;">
+                                <i class="bi bi-shield-check fs-4"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark">Status Tindak Lanjut Masukan Sesi Bimbingan</h6>
+                                <p class="text-muted small mb-0">Komitmen mutu Al-Hikmah: Setiap masukan dan kendala sesi Anda langsung dikoordinasikan oleh Tim Koordinator Akademik.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        @foreach($activeInterventionTickets as $tick)
+                            <div class="col-md-6 col-lg-4">
+                                <div class="p-3 rounded-4 bg-white border shadow-2xs h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace" style="font-size: 0.72rem;">#{{ $tick->ticket_number }}</span>
+                                        @if($tick->status === 'resolved')
+                                            <span class="badge bg-success-subtle text-success rounded-pill px-2" style="font-size: 0.7rem;">
+                                                <i class="bi bi-check-circle me-1"></i> Selesai Ditangani
+                                            </span>
+                                        @elseif($tick->status === 'escalated_to_mutation')
+                                            <span class="badge bg-dark text-white rounded-pill px-2" style="font-size: 0.7rem;">
+                                                <i class="bi bi-arrow-left-right me-1"></i> Proses Pengalihan Guru
+                                            </span>
+                                        @else
+                                            <span class="badge bg-warning-subtle text-dark border border-warning-subtle rounded-pill px-2" style="font-size: 0.7rem;">
+                                                <i class="bi bi-hourglass-split me-1"></i> Sedang Ditindaklanjuti
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div class="fw-bold text-dark small mb-1">{{ $tick->student?->getDisplayName() ?? 'Ananda' }} &bull; {{ $tick->mentor?->getDisplayName() ?? 'Guru' }}</div>
+                                    <div class="small text-muted mb-2" style="font-size: 0.78rem;">
+                                        Kategori: <strong class="text-dark">{{ $tick->getCategoryLabel() }}</strong>
+                                    </div>
+                                    @if($tick->resolution_notes)
+                                        <div class="p-2 bg-light rounded-3 small text-secondary" style="font-size: 0.75rem;">
+                                            <strong>Solusi Tim:</strong> {{ \Illuminate\Support\Str::limit($tick->resolution_notes, 75) }}
+                                        </div>
+                                    @else
+                                        <div class="p-2 bg-light rounded-3 small text-muted" style="font-size: 0.75rem;">
+                                            <i class="bi bi-info-circle me-1 text-primary"></i> Koordinator sedang berkoordinasi dengan pengajar untuk evaluasi dan perbaikan sesi mendatang.
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            <!-- 1️⃣ Kartu Statistik Utama -->
+            <div class="row g-3 mb-4">
+                <div class="col-sm-6 col-xl-3">
+                    <div class="lms-stat-card">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lms-stat-label">Anak Binaan</span>
+                            <div class="lms-stat-icon primary">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                        </div>
+                        <div class="lms-stat-value text-primary mt-2">{{ $totalChildrenCount }} <span class="fs-6 fw-normal text-muted">Santri</span></div>
+                        <div class="small text-muted pt-2 border-top mt-2">Terdaftar di sistem</div>
                     </div>
                 </div>
 
                 <div class="col-sm-6 col-xl-3">
-                    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-3 p-3 bg-danger-subtle text-danger fs-3">
-                                <i class="bi bi-wallet2"></i>
-                            </div>
-                            <div>
-                                <div class="text-muted small fw-semibold">Tagihan Pending</div>
-                                <h3 class="fw-bold mb-0 text-dark">{{ $pendingPaymentsCount }}</h3>
+                    <div class="lms-stat-card">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lms-stat-label">Sesi Bulan Ini</span>
+                            <div class="lms-stat-icon success">
+                                <i class="bi bi-calendar-check-fill"></i>
                             </div>
                         </div>
+                        <div class="lms-stat-value text-success mt-2">{{ $monthSessionsCount }} <span class="fs-6 fw-normal text-muted">Sesi</span></div>
+                        <div class="small text-muted pt-2 border-top mt-2">Bimbingan terlaksana</div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="lms-stat-card">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lms-stat-label">Rata-rata Tajwid</span>
+                            <div class="lms-stat-icon warning">
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                        </div>
+                        <div class="lms-stat-value text-warning mt-2">{{ $avgTajwidScore }} <span class="fs-6 fw-normal text-muted">/ 100</span></div>
+                        <div class="small text-muted pt-2 border-top mt-2">Capaian mutu bacaan</div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="lms-stat-card">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="lms-stat-label">Tagihan Berjalan</span>
+                            <div class="lms-stat-icon {{ $pendingPaymentsCount > 0 ? 'danger' : 'info' }}">
+                                <i class="bi bi-wallet2"></i>
+                            </div>
+                        </div>
+                        <div class="lms-stat-value {{ $pendingPaymentsCount > 0 ? 'text-danger' : 'text-primary' }} mt-2">{{ $pendingPaymentsCount }} <span class="fs-6 fw-normal text-muted">Invoice</span></div>
+                        <div class="small text-muted pt-2 border-top mt-2">{{ $pendingPaymentsCount > 0 ? 'Menunggu pembayaran' : 'Seluruh tagihan lunas' }}</div>
                     </div>
                 </div>
             </div>

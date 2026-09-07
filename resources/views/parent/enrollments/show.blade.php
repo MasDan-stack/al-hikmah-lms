@@ -95,14 +95,21 @@
                 <!-- Kolom Request Parent -->
                 <div class="col-lg-6">
                     <div class="schedule-spec-card">
-                        <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom border-subtle">
-                            <span class="badge bg-success-subtle text-success p-2 rounded-circle">
-                                <i class="bi bi-person-check-fill fs-5"></i>
-                            </span>
-                            <div>
-                                <h6 class="fw-bold text-heading mb-0">Permohonan Jadwal dari Anda</h6>
-                                <small class="text-muted">Preferensi yang Anda ajukan saat mendaftar</small>
+                        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-subtle flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-success-subtle text-success p-2 rounded-circle">
+                                    <i class="bi bi-person-check-fill fs-5"></i>
+                                </span>
+                                <div>
+                                    <h6 class="fw-bold text-heading mb-0">Permohonan Jadwal dari Anda</h6>
+                                    <small class="text-muted">Preferensi yang Anda ajukan saat mendaftar</small>
+                                </div>
                             </div>
+                            @if(!$enrollment->isActive() && $enrollment->payment?->status !== 'paid')
+                                <a href="{{ route('parent.enrollments.edit', $enrollment->id) }}" class="btn btn-sm btn-outline-warning rounded-pill px-3 py-1 fw-semibold">
+                                    <i class="bi bi-pencil-square me-1"></i> Ubah Hari/Jam
+                                </a>
+                            @endif
                         </div>
 
                         <div class="d-flex flex-column gap-3">
@@ -139,6 +146,22 @@
                                     <span class="text-heading small">{{ $enrollment->parent_notes ?? '-' }}</span>
                                 </div>
                             </div>
+
+                            @if($enrollment->isActive() || $enrollment->payment?->status === 'paid')
+                                <div class="alert alert-light border border-subtle rounded-3 p-2 d-flex align-items-center gap-2 mt-2 mb-0">
+                                    <i class="bi bi-lock-fill text-muted fs-5"></i>
+                                    <div class="small text-muted" style="font-size: 0.75rem;">
+                                        <strong>Jadwal Terkunci:</strong> Pembayaran telah lunas & kelas aktif. Perubahan hari/jam hanya dapat dilakukan melalui pengelola lembaga.
+                                    </div>
+                                </div>
+                            @else
+                                <div class="alert alert-warning-subtle text-dark border-0 rounded-3 p-2 d-flex align-items-center gap-2 mt-2 mb-0" style="font-size: 0.75rem;">
+                                    <i class="bi bi-info-circle-fill text-warning fs-5"></i>
+                                    <div>
+                                        Hari & jam bimbingan masih dapat diubah sebelum Anda menyelesaikan pembayaran.
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

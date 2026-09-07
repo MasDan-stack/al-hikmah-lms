@@ -226,6 +226,11 @@ class ParentPaymentController extends Controller
             abort(403, 'Akses invoice ditolak.');
         }
 
+        if ($payment->status !== 'paid') {
+            return redirect()->route('parent.payments.show', $payment->id)
+                ->with('warning', 'Invoice resmi (kuitansi pelunasan) hanya dapat diunduh setelah pembayaran berhasil diselesaikan.');
+        }
+
         return view('parent.payments.invoice_pdf', compact('payment', 'parent'));
     }
 }

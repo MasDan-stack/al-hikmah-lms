@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Mentors\AssignStudentAction;
-use App\Enums\EnrollmentStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AssignStudentRequest;
 use App\Models\Mentor;
 use App\Models\MentorActivityLog;
 use App\Models\MentorAvailability;
+use App\Models\Program;
 use App\Models\Student;
+use App\Services\MentorAvailabilityService;
+use App\Services\MentorMatchingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,89 +20,157 @@ use Illuminate\View\View;
 
 class MentorAvailabilityController extends Controller
 {
+    public function __construct(
+        protected MentorAvailabilityService $availabilityService
+    ) {}
+
     /**
-     * Tampilan Matriks Ketersediaan 7 Hari - Single Aggregated Query (0 N+1).
+     * Tampilan Matriks Ketersediaan 7 Hari Berbasis Angka Slot (0-6).
      */
     public function index(Request $request): View
     {
-        // 1. Eager load mentor & ketersediaannya
-        $mentors = Mentor::with(['user', 'availabilities'])
-            ->where('is_active', true)
-            ->get();
+        $search = $request->query('search');
+        $filterDay = $request->query('day');
+        $filterSlot = $request->query('slot');
+        $filterProgramId = $request->query('program_id');
 
-        // 2. Ambil rekap total santri aktif dalam 1 QUERY TUNGGAL (GROUP BY)
-        $activeCounts = DB::table('mentor_student')
-            ->select('mentor_id', 'day_assigned', DB::raw('count(*) as total_students'))
-            ->where('is_active', true)
-            ->groupBy('mentor_id', 'day_assigned')
+        $mentors = $this->availabilityService->getAllAvailabilities([
+            'search' => $search,
+            'day' => $filterDay,
+            'slot' => $filterSlot,
+        ]);
+
+        // Ambil data santri aktif teralokasi per [mentor_id][day_assigned][slot_number]
+        $assignedRows = DB::table('mentor_student')
+            ->join('students', 'students.id', '=', 'mentor_student.student_id')
+            ->leftJoin('programs', 'programs.id', '=', 'mentor_student.program_id')
+            ->select(
+                'mentor_student.mentor_id',
+                'mentor_student.day_assigned',
+                'mentor_student.slot_number',
+                'mentor_student.time_label',
+                'students.id as student_id',
+                'students.full_name as student_name',
+                'programs.name as program_name'
+            )
+            ->where('mentor_student.is_active', true)
             ->get()
-            ->groupBy('mentor_id');
+            ->groupBy(['mentor_id', 'day_assigned']);
 
-        $unassignedStudents = Student::whereDoesntHave('mentors', function ($q) {
-            $q->where('mentor_student.is_active', true);
-        })->whereDoesntHave('enrollments', function ($q) {
-            $q->whereIn('status', [
-                EnrollmentStatus::CONFIRMED->value,
-                EnrollmentStatus::ACTIVE->value,
-            ])->whereNotNull('mentor_id');
-        })->get();
+        $unassignedStudents = $this->availabilityService->getUnassignedStudents();
 
         $days = MentorAvailability::DAYS_ORDER;
         $dayLabels = MentorAvailability::DAYS;
+        $slotMap = MentorAvailability::SLOT_MAP;
+        $programs = Program::where('is_active', true)->get();
 
-        $availabilityData = [];
+        $allSlotNumbers = [0, 1, 2, 3, 4, 5, 6];
+
+        // Bangun struktur matriks dan deteksi guru yang belum mengisi jadwal
+        $matrix = [];
+        $unfilledMentors = collect();
+
         foreach ($mentors as $mentor) {
-            $row = [];
-            $mentorCounts = $activeCounts->get($mentor->id)?->keyBy('day_assigned');
+            $schedule = [];
+            $totalMentorActiveSlots = 0;
 
-            foreach ($days as $day) {
-                $availability = $mentor->availabilities->firstWhere('day', $day);
-                $studentCount = $mentorCounts?->get($day)?->total_students ?? 0;
+            foreach ($days as $dayKey) {
+                $avail = $mentor->availabilities->firstWhere('day', $dayKey);
+                $slotNumbers = $avail?->slot_numbers ?? [];
+                $totalMentorActiveSlots += count($slotNumbers);
+                $maxQuota = 1; // Sistem bimbingan privat 1-on-1: 1 slot = 1 santri
+                $dayAssigned = $assignedRows->get($mentor->id)?->get($dayKey) ?? collect();
 
-                $maxStudents = $availability?->max_students ?? $mentor->default_max_students_per_day ?? 5;
-                $isAvailable = $availability ? $availability->isAvailable() : true;
+                // Slot yang diisi/dibuka mengajar
+                $slotsData = [];
+                foreach ($slotNumbers as $slotNum) {
+                    if (isset($slotMap[$slotNum])) {
+                        $studentsInSlot = $dayAssigned->where('slot_number', $slotNum);
+                        $count = $studentsInSlot->count();
+                        $isFull = $count >= 1;
+                        $isAlmostFull = false;
 
-                $row[$day] = [
-                    'availability' => $availability,
-                    'student_count' => $studentCount,
-                    'max_students' => $maxStudents,
-                    'is_available' => $isAvailable,
-                    'has_quota' => $isAvailable && ($studentCount < $maxStudents),
+                        $slotsData[$slotNum] = [
+                            'slot' => $slotNum,
+                            'time' => $slotMap[$slotNum]['time'],
+                            'badge' => $slotMap[$slotNum]['badge'],
+                            'count' => $count,
+                            'max' => 1,
+                            'is_full' => $isFull,
+                            'is_almost_full' => $isAlmostFull,
+                            'students' => $studentsInSlot->values(),
+                        ];
+                    }
+                }
+
+                // Sisa slot yang KOSONG / TIDAK DIBUKA MENGAJAR di hari tersebut
+                $emptySlotNumbers = array_values(array_diff($allSlotNumbers, $slotNumbers));
+                $emptySlotsData = [];
+                foreach ($emptySlotNumbers as $eNum) {
+                    if (isset($slotMap[$eNum])) {
+                        $emptySlotsData[$eNum] = $slotMap[$eNum];
+                    }
+                }
+
+                // Tentukan status ketersediaan di hari ini
+                $statusType = 'filled';
+                if ($avail === null) {
+                    $statusType = 'unfilled'; // Belum pernah diatur sama sekali
+                } elseif (empty($slotsData)) {
+                    $statusType = 'empty'; // Dikosongkan / Libur semua
+                }
+
+                $schedule[$dayKey] = [
+                    'availability' => $avail,
+                    'status_type' => $statusType,
+                    'is_available' => ! empty($slotsData),
+                    'slots' => $slotsData,
+                    'empty_slots' => $emptySlotsData,
+                    'empty_slot_numbers' => $emptySlotNumbers,
+                    'total_students' => $dayAssigned->count(),
                 ];
             }
 
-            $availabilityData[$mentor->id] = [
+            if ($totalMentorActiveSlots === 0) {
+                $unfilledMentors->push($mentor);
+            }
+
+            $matrix[$mentor->id] = [
                 'mentor' => $mentor,
-                'schedule' => $row,
+                'schedule' => $schedule,
+                'total_active_slots' => $totalMentorActiveSlots,
             ];
         }
 
         return view('admin.mentors.availability', compact(
-            'availabilityData',
+            'matrix',
+            'unfilledMentors',
             'unassignedStudents',
             'days',
-            'dayLabels'
+            'dayLabels',
+            'slotMap',
+            'programs',
+            'filterDay',
+            'filterSlot',
+            'filterProgramId',
+            'search'
         ));
     }
 
     /**
-     * Delegasikan alokasi santri ke Action Service terproteksi locking & Form Request.
+     * Eksekusi alokasi santri ke mentor pada slot jam tertentu.
      */
-    public function assignStudent(AssignStudentRequest $request, AssignStudentAction $action): RedirectResponse
+    public function assignStudent(AssignStudentRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-
         try {
-            $action->execute(
-                (int) $validated['mentor_id'],
-                (int) $validated['student_id'],
-                $validated['day']
-            );
+            $this->availabilityService->assignStudent($request->validated());
 
             return redirect()->route('admin.mentors.availability')
-                ->with('success', 'Santri berhasil dialokasikan dengan aman ke mentor.');
+                ->with('success', '✅ Santri berhasil dialokasikan ke jadwal mentor!');
         } catch (ValidationException $e) {
-            return back()->with('error', collect($e->errors())->flatten()->first());
+            return back()->with('error', collect($e->errors())->flatten()->first())->withInput();
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal alokasi: '.$e->getMessage())->withInput();
         }
     }
 
@@ -132,52 +201,59 @@ class MentorAvailabilityController extends Controller
     }
 
     /**
-     * API JSON filter mentor tersedia per hari - Dioptimasi Bebas N+1 Query.
+     * API AJAX untuk mencari mentor yang membuka slot tertentu dan masih punya kuota.
      */
     public function getAvailableMentors(Request $request): JsonResponse
     {
         $day = $request->query('day');
-        if (! $day || ! in_array($day, MentorAvailability::DAYS_ORDER, true)) {
-            return response()->json(['error' => 'Hari tidak valid'], 400);
+        $slot = $request->query('slot');
+        $studentId = $request->query('student_id');
+
+        if (! $day || $slot === null || ! is_numeric($slot)) {
+            return response()->json(['error' => 'Parameter hari dan angka slot (0-6) wajib diisi.'], 400);
         }
 
-        // 1. Ambil seluruh mentor aktif beserta ketersediaan di hari terkait (1 query)
-        $mentors = Mentor::with(['user', 'availabilities' => function ($q) use ($day) {
-            $q->where('day', $day);
-        }])->where('is_active', true)->get();
+        $slotNum = (int) $slot;
+        $mentors = $this->availabilityService->getAvailableMentors($day, $slotNum);
 
-        // 2. Hitung jumlah santri aktif untuk hari tersebut dalam 1 query
-        $studentCounts = DB::table('mentor_student')
+        // Filter berdasarkan aturan gender & umur jika student_id disertakan
+        if ($studentId) {
+            $student = Student::find($studentId);
+            if ($student) {
+                $matchingService = app(MentorMatchingService::class);
+                $mentors = $mentors->filter(function ($m) use ($student, $matchingService) {
+                    return $matchingService->calculateGenderScore($m, $student) > 0.0;
+                })->values();
+            }
+        }
+
+        // Ambil kuota santri per mentor di slot ini
+        $dayKey = MentorAvailability::INDONESIAN_TO_ENGLISH[strtolower($day)] ?? strtolower($day);
+        $counts = DB::table('mentor_student')
             ->select('mentor_id', DB::raw('count(*) as total'))
-            ->where('day_assigned', $day)
+            ->where('day_assigned', $dayKey)
+            ->where('slot_number', $slotNum)
             ->where('is_active', true)
             ->groupBy('mentor_id')
             ->pluck('total', 'mentor_id');
 
-        // 3. Filter kuota secara in-memory (0 query DB tambahan)
-        $availableMentors = $mentors->filter(function ($mentor) use ($studentCounts) {
-            $availability = $mentor->availabilities->first();
-            $isAvailable = $availability ? $availability->isAvailable() : true;
-
-            if (! $isAvailable) {
-                return false;
-            }
-
-            $maxStudents = $availability?->max_students ?? $mentor->default_max_students_per_day ?? 5;
-            $currentCount = $studentCounts[$mentor->id] ?? 0;
-
-            return $currentCount < $maxStudents;
-        })->values();
-
         return response()->json([
-            'day' => $day,
-            'mentors' => $availableMentors->map(fn ($m) => [
-                'id' => $m->id,
-                'name' => $m->getDisplayName(),
-                'specialization' => $m->specialization,
-                'student_count' => $studentCounts[$m->id] ?? 0,
-                'max_students' => $m->availabilities->first()?->max_students ?? $m->default_max_students_per_day ?? 5,
-            ]),
+            'day' => $dayKey,
+            'slot' => $slotNum,
+            'time' => MentorAvailability::SLOT_MAP[$slotNum]['time'] ?? '08:00',
+            'mentors' => $mentors->map(function ($m) use ($counts) {
+                $current = $counts[$m->id] ?? 0;
+
+                return [
+                    'id' => $m->id,
+                    'name' => $m->getDisplayName(),
+                    'gender' => $m->gender ?? $m->user?->gender ?? 'L',
+                    'specialization' => $m->specialization ?? 'Al-Qur\'an',
+                    'current' => $current,
+                    'max' => 1,
+                    'remaining' => max(0, 1 - $current),
+                ];
+            }),
         ]);
     }
 }

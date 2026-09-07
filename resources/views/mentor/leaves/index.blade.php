@@ -127,7 +127,7 @@
                 </div>
             @else
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0" id="tableMentorLeaves">
+                    <table class="table table-hover align-middle mb-0 datatable" id="tableMentorLeaves">
                         <thead class="table-light">
                             <tr>
                                 <th style="width: 50px;">#</th>
@@ -180,27 +180,23 @@
                                     <td>
                                         @if($leave->substituteMentor)
                                             <div class="d-flex align-items-center gap-2">
-                                                <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 0.8rem;">
-                                                    {{ strtoupper(substr($leave->substituteMentor->getDisplayName(), 0, 2)) }}
-                                                </div>
+                                                <i class="bi bi-person-check-fill text-success"></i>
                                                 <div>
-                                                    <div class="fw-bold text-dark small">{{ $leave->substituteMentor->getDisplayName() }}</div>
-                                                    <div class="text-muted" style="font-size: 0.75rem;">{{ $leave->substituteMentor->specialization ?? 'Pendamping Al-Qur\'an' }}</div>
+                                                    <div class="fw-semibold text-dark small">{{ $leave->substituteMentor->getDisplayName() }}</div>
+                                                    <small class="text-muted">{{ $leave->substituteMentor->phone ?? '' }}</small>
                                                 </div>
                                             </div>
-                                        @elseif($leave->status === 'approved')
-                                            <span class="text-muted small fst-italic">Tanpa Pengganti (Sesi Disesuaikan)</span>
                                         @else
-                                            <span class="text-muted small fst-italic">-</span>
+                                            <span class="text-muted fst-italic small">Belum Ditugaskan</span>
                                         @endif
                                     </td>
                                     <td class="text-center">
                                         @if($leave->status === 'pending')
-                                            <form method="POST" action="{{ route('mentor.leaves.destroy', $leave->id) }}" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pengajuan cuti tanggal {{ $leave->leave_date->format('d M Y') }}?');">
+                                            <form action="{{ route('mentor.leaves.destroy', $leave->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan permohonan cuti ini?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3" title="Batalkan Permohonan">
-                                                    <i class="bi bi-trash3 me-1"></i> Batal
+                                                    <i class="bi bi-trash3 me-1"></i> Batalkan
                                                 </button>
                                             </form>
                                         @else
@@ -217,42 +213,32 @@
     </div>
 </div>
 
-<!-- Modal Form Ajukan Cuti -->
+<!-- Modal Ajukan Cuti Guru -->
 <div class="modal fade" id="modalAjukanCuti" tabindex="-1" aria-labelledby="modalAjukanCutiLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-content border-0 shadow-lg rounded-4">
             <div class="modal-header border-0 pb-0">
                 <h5 class="modal-title fw-bold text-dark" id="modalAjukanCutiLabel">
-                    <i class="bi bi-calendar2-plus-fill text-primary me-2"></i>Form Permohonan Cuti Mengajar
+                    <i class="bi bi-calendar-plus text-primary me-2"></i>Formulir Permohonan Cuti Guru
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="{{ route('mentor.leaves.store') }}">
+            <form action="{{ route('mentor.leaves.store') }}" method="POST">
                 @csrf
-                <div class="modal-body p-4">
-                    <div class="alert alert-info rounded-3 small mb-3 border-0">
-                        <i class="bi bi-info-circle-fill me-1"></i> Pengajuan cuti akan ditinjau oleh Admin Lembaga. Admin akan mengatur guru pengganti jika diperlukan agar santri binaan tetap terlaksana pembelajarannya.
-                    </div>
-
+                <div class="modal-body py-4">
                     <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-secondary small" for="start_date">
-                                Tanggal Mulai Cuti <span class="text-danger">*</span>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold text-secondary small" for="leave_date">
+                                Tanggal Cuti / Berhalangan <span class="text-danger">*</span>
                             </label>
-                            <input type="date" name="start_date" id="start_date" class="form-control rounded-3" value="{{ old('start_date', now()->format('Y-m-d')) }}" min="{{ now()->format('Y-m-d') }}" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-secondary small" for="end_date">
-                                Tanggal Selesai (Opsional)
-                            </label>
-                            <input type="date" name="end_date" id="end_date" class="form-control rounded-3" value="{{ old('end_date') }}" min="{{ now()->format('Y-m-d') }}">
-                            <small class="text-muted" style="font-size: 0.75rem;">Kosongkan jika cuti hanya 1 hari.</small>
+                            <input type="date" name="leave_date" id="leave_date" class="form-control rounded-3" value="{{ old('leave_date', now()->addDay()->format('Y-m-d')) }}" min="{{ now()->format('Y-m-d') }}" required>
+                            <div class="form-text text-muted small">Pilihlah tanggal di mana Anda berhalangan hadir mengajar.</div>
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold text-secondary small" for="reason">
                                 Alasan Permohonan Cuti <span class="text-danger">*</span>
                             </label>
-                            <textarea name="reason" id="reason" rows="3" class="form-control rounded-3" placeholder="Contoh: Keperluan keluarga mendesak / Sakit / Melaksanakan ibadah..." required>{{ old('reason') }}</textarea>
+                            <textarea name="reason" id="reason" rows="3" class="form-control rounded-3" placeholder="Contoh: Keperluan keluarga mendesak / Sakit..." required>{{ old('reason') }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -267,27 +253,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        if (typeof $ !== 'undefined' && $.fn.DataTable) {
-            $('#tableMentorLeaves').DataTable({
-                pageLength: 10,
-                language: {
-                    search: "Cari riwayat:",
-                    lengthMenu: "Tampilkan _MENU_ baris",
-                    info: "Menampilkan _START_ s/d _END_ dari _TOTAL_ cuti",
-                    paginate: {
-                        first: "«",
-                        previous: "‹",
-                        next: "›",
-                        last: "»"
-                    },
-                    emptyTable: "Tidak ada data cuti yang cocok."
-                }
-            });
-        }
-    });
-</script>
-@endpush

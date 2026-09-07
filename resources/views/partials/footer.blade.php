@@ -74,7 +74,7 @@
                 </p>
             </div>
             <div class="col-md-6 text-center text-md-end">
-                <p class="footer-copyright">© {{ date('Y') }} {{ site_setting('site_name', 'AL-HIKMAH') }} —
+                <p class="footer-copyright">© {{ date('Y') }} {{ site_setting('site_name', 'AL-HIKMAH') }} &middot;
                     {{ site_setting('site_tagline', 'Menemani Generasi Qur\'ani Indonesia') }}</p>
             </div>
         </div>

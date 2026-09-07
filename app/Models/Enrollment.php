@@ -151,9 +151,59 @@ class Enrollment extends Model
 
     public function getStartDateLabelAttribute(): string
     {
-        return $this->start_date
-            ? $this->start_date->translatedFormat('l, d F Y')
-            : 'Menunggu penetapan';
+        if (! $this->start_date) {
+            return 'Menunggu penetapan';
+        }
+
+        $firstSession = $this->calculateFirstSessionDate(Carbon::parse($this->start_date));
+
+        return $firstSession->translatedFormat('l, d F Y');
+    }
+
+    /**
+     * Hitung tanggal sesi belajar pertama yang valid sesuai jadwal hari yang disepakati/diminta.
+     */
+    public function calculateFirstSessionDate(?Carbon $fromDate = null): Carbon
+    {
+        $baseDate = $fromDate ? $fromDate->copy() : ($this->start_date ? Carbon::parse($this->start_date) : Carbon::today()->addDays(3));
+
+        $days = ! empty($this->offered_days) ? $this->offered_days : $this->requested_days;
+        if (empty($days) || ! is_array($days)) {
+            return $baseDate;
+        }
+
+        $dayMap = [
+            'sunday' => Carbon::SUNDAY,
+            'monday' => Carbon::MONDAY,
+            'tuesday' => Carbon::TUESDAY,
+            'wednesday' => Carbon::WEDNESDAY,
+            'thursday' => Carbon::THURSDAY,
+            'friday' => Carbon::FRIDAY,
+            'saturday' => Carbon::SATURDAY,
+        ];
+
+        $candidateDates = [];
+        foreach ($days as $dayName) {
+            $cleanDay = strtolower(trim((string) $dayName));
+            if (! isset($dayMap[$cleanDay])) {
+                continue;
+            }
+
+            $carbonDay = $dayMap[$cleanDay];
+            $current = $baseDate->copy();
+            if ($current->dayOfWeek !== $carbonDay) {
+                $current->next($carbonDay);
+            }
+            $candidateDates[] = $current;
+        }
+
+        if (empty($candidateDates)) {
+            return $baseDate;
+        }
+
+        usort($candidateDates, fn ($a, $b) => $a->timestamp <=> $b->timestamp);
+
+        return $candidateDates[0];
     }
 
     /**
@@ -258,22 +308,58 @@ class Enrollment extends Model
 
         $days = ! empty($this->offered_days) ? $this->offered_days : ($this->requested_days ?? ['monday']);
         $timeAssigned = $this->offered_time ?? $this->requested_time ?? '16:00:00';
+        $slotNumber = MentorAvailability::getSlotNumberFromTime($timeAssigned);
+        $timeLabel = MentorAvailability::SLOT_MAP[$slotNumber]['time'] ?? substr($timeAssigned, 0, 5);
 
         if (is_array($days)) {
             foreach ($days as $day) {
+                $dayKey = MentorAvailability::INDONESIAN_TO_ENGLISH[strtolower($day)] ?? strtolower($day);
+
+                // 1. Sinkronkan ke tabel pivot mentor_student
                 DB::table('mentor_student')->updateOrInsert(
                     [
                         'mentor_id' => $this->mentor_id,
                         'student_id' => $this->student_id,
-                        'day_assigned' => $day,
+                        'day_assigned' => $dayKey,
                     ],
                     [
+                        'program_id' => $this->program_id,
+                        'slot_number' => $slotNumber,
+                        'time_label' => $timeLabel,
                         'time_assigned' => $timeAssigned,
                         'is_active' => $isActive,
                         'updated_at' => now(),
                         'created_at' => now(),
                     ]
                 );
+
+                // 2. OTOMATIS AKTIFKAN & TAMBAHKAN slot ini ke mentor_availabilities
+                $avail = MentorAvailability::firstOrCreate(
+                    [
+                        'mentor_id' => $this->mentor_id,
+                        'day' => $dayKey,
+                    ],
+                    [
+                        'slot_numbers' => [$slotNumber],
+                        'max_students' => 5,
+                        'is_available' => true,
+                        'is_holiday' => false,
+                    ]
+                );
+
+                $currentSlots = $avail->slot_numbers ?? [];
+                if (! is_array($currentSlots)) {
+                    $currentSlots = [];
+                }
+                if (! in_array($slotNumber, $currentSlots, true)) {
+                    $currentSlots[] = $slotNumber;
+                    sort($currentSlots);
+                    $avail->update([
+                        'slot_numbers' => array_values(array_unique($currentSlots)),
+                        'is_available' => true,
+                        'is_holiday' => false,
+                    ]);
+                }
             }
         }
     }

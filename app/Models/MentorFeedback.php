@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class MentorFeedback extends Model
 {
@@ -56,5 +57,10 @@ class MentorFeedback extends Model
     public function ratings(): HasMany
     {
         return $this->hasMany(MentorFeedbackRating::class, 'feedback_id');
+    }
+
+    public function interventionTicket(): HasOne
+    {
+        return $this->hasOne(MentorInterventionTicket::class, 'feedback_id');
     }
 }

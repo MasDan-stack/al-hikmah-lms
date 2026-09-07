@@ -42,3 +42,17 @@ Schedule::command('mentor:snapshot-performance')
     ->timezone('Asia/Jakarta')
     ->withoutOverlapping()
     ->name('snapshot-mentor-performance-monthly');
+
+// 🔮 Predictive Analytics Snapshot Harian (Setiap pukul 01:00 WIB)
+Schedule::command('analytics:snapshot-predictive')
+    ->dailyAt('01:00')
+    ->timezone('Asia/Jakarta')
+    ->withoutOverlapping()
+    ->name('snapshot-predictive-analytics');
+
+// ⏰ Sinkronisasi Harian Metrik Masa Percobaan Guru & Peringatan Evaluasi H-14 (Setiap pukul 00:00 WIB)
+Schedule::command('probation:daily-sync --notify')
+    ->dailyAt('00:00')
+    ->timezone('Asia/Jakarta')
+    ->withoutOverlapping()
+    ->name('sync-daily-mentor-probation');

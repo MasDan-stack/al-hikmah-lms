@@ -2,7 +2,9 @@
 
 namespace App\Actions\Mentors;
 
+use App\Enums\EnrollmentStatus;
 use App\Events\StudentAssignedToMentor;
+use App\Models\Enrollment;
 use App\Models\Mentor;
 use App\Models\MentorAvailability;
 use App\Models\Student;
@@ -14,9 +16,9 @@ class AssignStudentAction
     /**
      * Eksekusi alokasi santri dengan jaminan atomic concurrency & pessimistic locking.
      */
-    public function execute(int $mentorId, int $studentId, string $day): void
+    public function execute(int $mentorId, int $studentId, string $day, ?string $time = null): void
     {
-        DB::transaction(function () use ($mentorId, $studentId, $day) {
+        DB::transaction(function () use ($mentorId, $studentId, $day, $time) {
             // 1. Lock row mentor sebagai single source of truth untuk concurrency
             $mentor = Mentor::where('id', $mentorId)->lockForUpdate()->firstOrFail();
             $student = Student::findOrFail($studentId);
@@ -69,16 +71,38 @@ class AssignStudentAction
                 ]);
             }
 
+            $timeFormatted = $time ? (strlen($time) === 5 ? $time.':00' : $time) : null;
+
             // 5. Attach via Eloquent Relation
             $mentor->students()->attach($student->id, [
                 'day_assigned' => $day,
+                'time_assigned' => $timeFormatted,
                 'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
 
-            // 6. Dispatch Domain Event untuk proses asynchronous di background
-            event(new StudentAssignedToMentor($mentor, $student, $day));
+            // 6. Sinkronisasi permohonan enrollment santri jika ada
+            $waitingEnrollment = Enrollment::where('student_id', $student->id)
+                ->whereIn('status', [
+                    EnrollmentStatus::WAITING_ADMIN->value,
+                    EnrollmentStatus::WAITING_PARENT->value,
+                    EnrollmentStatus::CONFIRMED->value,
+                ])
+                ->whereNull('mentor_id')
+                ->latest()
+                ->first();
+
+            if ($waitingEnrollment) {
+                $waitingEnrollment->update([
+                    'mentor_id' => $mentor->id,
+                    'offered_days' => [$day],
+                    'offered_time' => $timeFormatted ? substr($timeFormatted, 0, 5) : null,
+                ]);
+            }
+
+            // 7. Dispatch Domain Event untuk proses asynchronous di background
+            event(new StudentAssignedToMentor($mentor, $student, $day, $timeFormatted));
         });
     }
 }

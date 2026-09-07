@@ -113,7 +113,7 @@
                 </div>
             @else
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0" id="tableAdminLeaves">
+                    <table class="table table-hover align-middle mb-0 datatable" id="tableAdminLeaves">
                         <thead class="table-light">
                             <tr>
                                 <th style="width: 50px;">#</th>
@@ -320,27 +320,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        if (typeof $ !== 'undefined' && $.fn.DataTable) {
-            $('#tableAdminLeaves').DataTable({
-                pageLength: 10,
-                language: {
-                    search: "Cari permohonan:",
-                    lengthMenu: "Tampilkan _MENU_ baris",
-                    info: "Menampilkan _START_ s/d _END_ dari _TOTAL_ permohonan",
-                    paginate: {
-                        first: "«",
-                        previous: "‹",
-                        next: "›",
-                        last: "»"
-                    },
-                    emptyTable: "Tidak ada data cuti yang sesuai."
-                }
-            });
-        }
-    });
-</script>
-@endpush

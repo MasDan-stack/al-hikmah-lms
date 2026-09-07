@@ -14,10 +14,21 @@ class AssignStudentRequest extends FormRequest
 
     public function rules(): array
     {
+        $allowedDays = array_unique(array_merge(
+            MentorAvailability::DAYS_ORDER,
+            array_keys(MentorAvailability::INDONESIAN_TO_ENGLISH)
+        ));
+
         return [
             'student_id' => ['required', 'integer', 'exists:students,id'],
             'mentor_id' => ['required', 'integer', 'exists:mentors,id'],
-            'day' => ['required', 'string', 'in:'.implode(',', MentorAvailability::DAYS_ORDER)],
+            'day' => ['required', 'string', 'in:'.implode(',', $allowedDays)],
+            'slot_number' => ['nullable', 'integer', 'between:0,6'],
+            'slot' => ['nullable', 'integer', 'between:0,6'],
+            'program_id' => ['nullable', 'integer', 'exists:programs,id'],
+            'notes' => ['nullable', 'string', 'max:255'],
+            'time' => ['nullable', 'string'],
+            'time_assigned' => ['nullable', 'string'],
         ];
     }
 
@@ -30,6 +41,7 @@ class AssignStudentRequest extends FormRequest
             'mentor_id.exists' => 'Data mentor tidak valid.',
             'day.required' => 'Hari belajar wajib dipilih.',
             'day.in' => 'Pilihan hari tidak valid.',
+            'slot_number.between' => 'Pilihan angka slot harus antara 0 s/d 6.',
         ];
     }
 }

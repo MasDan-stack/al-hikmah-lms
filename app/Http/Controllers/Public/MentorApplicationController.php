@@ -79,10 +79,25 @@ class MentorApplicationController extends Controller
             'phone' => 'required|string',
         ]);
 
-        $application = MentorApplication::where('phone', $request->phone)->first();
+        $query = trim($request->phone);
+        $cleanDigits = preg_replace('/[^0-9]/', '', $query);
+        $phoneVariations = array_filter([$query, $cleanDigits]);
+
+        if (! empty($cleanDigits)) {
+            if (str_starts_with($cleanDigits, '62')) {
+                $phoneVariations[] = '0'.substr($cleanDigits, 2);
+            } elseif (str_starts_with($cleanDigits, '0')) {
+                $phoneVariations[] = '62'.substr($cleanDigits, 1);
+            }
+        }
+
+        $application = MentorApplication::query()
+            ->where('application_code', strtoupper($query))
+            ->orWhereIn('phone', array_unique($phoneVariations))
+            ->first();
 
         if (! $application) {
-            return back()->with('error', 'Data pelamar tidak ditemukan dengan nomor WhatsApp tersebut.');
+            return back()->withInput()->with('error', 'Data pelamar tidak ditemukan. Pastikan nomor WhatsApp atau Kode Registrasi sudah sesuai dengan yang didaftarkan.');
         }
 
         return view('public.mentor-recruitment.status-tracker', compact('application'));

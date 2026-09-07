@@ -4,9 +4,28 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Monitoring Masa Percobaan: {{ $probation->mentor->getDisplayName() }}</h1>
-        <a href="{{ route('admin.mentors.probation.index') }}" class="btn btn-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i>Kembali</a>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+            <h1 class="h3 mb-1 text-gray-800 fw-bold">Monitoring Masa Percobaan: {{ $probation->mentor->getDisplayName() }}</h1>
+            <small class="text-muted">
+                <i class="bi bi-clock-history me-1"></i> Terakhir Disinkronkan: 
+                <strong>{{ $probation->last_synced_at ? \Carbon\Carbon::parse($probation->last_synced_at)->locale('id')->isoFormat('D MMM Y, HH:mm') : 'Saat Halaman Dibuka' }}</strong>
+            </small>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ route('admin.staff.show', $probation->mentor_id) }}" class="btn btn-outline-info btn-sm rounded-pill px-3 shadow-xs">
+                <i class="bi bi-person-badge me-1"></i> Detail Akun Guru
+            </a>
+            <form action="{{ route('admin.mentors.probation.sync', $probation->id) }}" method="POST" class="d-inline">
+                @csrf
+                <button type="submit" class="btn btn-primary btn-sm rounded-pill px-3 fw-bold shadow-xs">
+                    <i class="bi bi-arrow-repeat me-1"></i> 🔄 Sinkronkan Data Aktual LMS
+                </button>
+            </form>
+            <a href="{{ route('admin.mentors.probation.index') }}" class="btn btn-secondary btn-sm rounded-pill px-3 shadow-xs">
+                <i class="bi bi-arrow-left me-1"></i> Kembali
+            </a>
+        </div>
     </div>
 
     @if(session('success'))
@@ -139,6 +158,9 @@
                         @if($probation->final_evaluation_date)
                             <tr><th>Tgl Keputusan</th><td>{{ Carbon\Carbon::parse($probation->final_evaluation_date)->format('d M Y') }}</td></tr>
                         @endif
+                        <tr><th colspan="2" class="bg-light text-center py-2">Statistik Kinerja</th></tr>
+                        <tr><th>Total Sesi Mengajar</th><td>{{ $probation->total_sessions_conducted ?? 0 }} Sesi</td></tr>
+                        <tr><th>Total Santri Aktif</th><td>{{ $probation->active_students_assigned ?? 0 }} Santri</td></tr>
                     </table>
 
                     @if($probation->final_notes)
@@ -174,12 +196,34 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label font-weight-bold">Pilih Keputusan Akhir</label>
-                        <select name="decision" class="form-select" required>
+                        <select name="decision" id="decisionSelect" class="form-select" required>
                             <option value="passed">🟢 Lulus Menjadi Guru Tetap (Diberi Badge M01 - Mentor Certified)</option>
                             <option value="extended">🟡 Perpanjang Masa Percobaan (1 Bulan Tambahan)</option>
                             <option value="terminated">🔴 Diberhentikan / Tidak Diangkat</option>
                         </select>
                     </div>
+
+                    <div id="handoverWizardSection" class="border rounded-3 p-3 bg-light border-warning mb-3" style="display: none;">
+                        <div class="d-flex align-items-center mb-2 text-warning">
+                            <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
+                            <strong class="text-dark">Hand-over Wizard: Alihkan Santri Bimbingan</strong>
+                        </div>
+                        <p class="small text-muted mb-2">
+                            Mentor ini memiliki santri bimbingan aktif (<strong>{{ $probation->active_students_assigned ?? 0 }} Santri</strong>). Pilih guru pengganti agar bimbingan santri otomatis dialihkan dan KBM tidak terputus.
+                        </p>
+                        <label class="form-label font-weight-bold small">Pilih Guru Pengganti (Substitute Mentor)</label>
+                        <select name="substitute_mentor_id" id="substitute_mentor_id" class="form-select form-select-sm">
+                            <option value="">-- Pilih Guru Pengganti (Opsional/Sesuai Alokasi) --</option>
+                            @foreach($activeMentors ?? [] as $actMentor)
+                                @if($actMentor->id !== $probation->mentor_id)
+                                    <option value="{{ $actMentor->id }}">
+                                        {{ $actMentor->getDisplayName() ?? $actMentor->user?->name }} ({{ $actMentor->specialization ?? 'Guru Pembimbing' }})
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="mb-3">
                         <label class="form-label">Catatan & Rekomendasi HR</label>
                         <textarea name="notes" class="form-control" rows="3" placeholder="Masukkan pertimbangan evaluasi akhir..."></textarea>
@@ -193,4 +237,22 @@
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const decisionSelect = document.getElementById('decisionSelect');
+    const handoverSection = document.getElementById('handoverWizardSection');
+    const activeStudentsCount = {{ (int) ($probation->active_students_assigned ?? 0) }};
+
+    if (decisionSelect && handoverSection) {
+        decisionSelect.addEventListener('change', function () {
+            if (this.value === 'terminated' && activeStudentsCount > 0) {
+                handoverSection.style.display = 'block';
+            } else {
+                handoverSection.style.display = 'none';
+            }
+        });
+    }
+});
+</script>
 @endsection

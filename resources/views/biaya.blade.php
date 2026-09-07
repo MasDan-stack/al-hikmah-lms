@@ -229,10 +229,11 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold text-secondary small" for="modalUsia">Rentang Usia</label>
                                 <select class="form-select" id="modalUsia" name="usia">
-                                    <option value="10-15 tahun (Anak)" selected>10-15 tahun (Anak)</option>
+                                    <option value="Di bawah 10 tahun (4-9 tahun)">Di bawah 10 tahun (Anak-anak / 4-9 tahun)</option>
+                                    <option value="10-15 tahun (Anak)" selected>10-15 tahun (Anak / Remaja)</option>
                                     <option value="Dewasa (16-30 tahun)">Dewasa (16-30 tahun)</option>
                                     <option value="Dewasa (31-50 tahun)">Dewasa (31-50 tahun)</option>
-                                    <option value="50+ tahun">50+ tahun</option>
+                                    <option value="50+ tahun">50+ tahun (Lansia)</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
