@@ -111,6 +111,20 @@ graph LR
 | **Pembuatan Paket Ujian Santri** | Guru mengetik manual berjam-jam | Multi-AI Generator (5 Provider) + Cetak PDF A4 Siap Pakai | **Selesai dalam $< 3$ Detik** |
 | **Konsistensi UI DataTables** | jQuery error, pagination bertabrakan | DataTables universal berbasis lokal `public/assets/DataTables` | **100% Responsif & Cepat** |
 
+### 1.5 Konsolidasi Dokumen Rekayasa & PRD ke dalam Single Source of Truth
+
+Seluruh dokumen rekayasa awal (*Product Requirements Documents / Issue Trackers*) yang sebelumnya digunakan sebagai cetak biru teknis telah **100% tuntas diimplementasikan, diverifikasi melalui unit/feature tests, dan disatukan secara komprehensif ke dalam dokumen `tentang.md` ini**:
+
+| Dokumen PRD Awal | Cakupan Fitur Utama | Status Implementasi | Rujukan Bab di `tentang.md` |
+| :--- | :--- | :---: | :--- |
+| **`issue.md`** | Revitalisasi Rekrutmen ATS 7-Tahap, Live Probation Hub, Orientasi 4 Pilar, dan Rating Evaluasi Sesi Orang Tua | ✅ **Selesai 100%** | [Bab 2](#-2-modul-rekrutmen-ujian-kompetensi--masa-percobaan-guru) & [Bab 7](#-7-modul-portal-wali-santri--penguncian-jadwal-pasca-bayar) |
+| **`issue_profile.md`** | Portal Detail Profil Guru Admin (`/admin/staff/{id}`), Masking & Verifikasi Rekening Bank, Dokumen CV/Sanad, Hand-Over Wizard | ✅ **Selesai 100%** | [Bab 2.7](#27-detail-profil-lengkap-guru-adminstaffid-verifikasi-rekening-bank--student-hand-over-wizard) |
+| **`matching.md`** | Smart Matchmaking AI v3.0, Integrasi Google Calendar, Smart Load Balancing (Burnout Protection), Cosine Similarity Gaya Belajar | ✅ **Selesai 100%** | [Bab 5](#-5-modul-smart-matchmaking-v30-external-calendar-sync--dynamic-load-balancing) |
+| **`profile.md`** | Manajemen Profil Multi-Role (Parent, Student, Mentor, Admin), Single Source of Location Truth, Inheritance Titik Peta Navigasi | ✅ **Selesai 100%** | [Bab 20](#-20-modul-manajemen-profil-multi-role--sinkronisasi-lokasi-terpusat) |
+| **`warning.md`** | Predictive Analytics & Early Warning System (PA-EWS), Model Dropout Risk, Learning Velocity, Revenue Forecast, 1-Click WA Intervention | ✅ **Selesai 100%** | [Bab 6](#-6-predictive-analytics--early-warning-system-pa-ews) |
+
+Dengan tuntasnya seluruh fase pengujian dan adopsi produksi, berkas PRD kerja tersebut telah dihapus secara bersih dari repositori untuk menjaga kerapian struktur basis kode (*clean repository hygiene*), di mana `tentang.md` menjadi satu-satunya dokumen panduan arsitektur resmi (*single source of truth*) AL-HIKMAH LMS.
+
 ---
 
 ## 🎓 2. MODUL REKRUTMEN, UJIAN KOMPETENSI, & MASA PERCOBAAN GURU
