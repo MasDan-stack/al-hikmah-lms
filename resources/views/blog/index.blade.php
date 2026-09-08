@@ -1,6 +1,7 @@
 @extends('layouts.landing')
 
 @section('title', isset($category) ? "Blog - Kategori {$category->name} | AL-HIKMAH" : (isset($tag) ? "Blog - Tag #{$tag->name} | AL-HIKMAH" : "Blog & Artikel Edukasi Islami | AL-HIKMAH LMS"))
+@section('meta_description', 'Artikel dan panduan edukasi belajar Al-Qur\'an, tips mendampingi anak mengaji, metode Tahsin dan Tahfidz di AL-HIKMAH LMS.')
 
 @section('content')
 <!-- ============================================ -->

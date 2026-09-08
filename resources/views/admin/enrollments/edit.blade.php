@@ -191,6 +191,10 @@
                                             <span>Beban Mengajar:</span>
                                             <strong class="text-dark">{{ $b['load'] ?? 0 }}% ({{ $rec['active_load'] ?? $m->students_count }} santri)</strong>
                                         </div>
+                                        <div class="d-flex justify-content-between py-1 border-bottom">
+                                            <span>Pedagogy (Gaya Belajar):</span>
+                                            <strong class="text-dark">{{ $b['pedagogy'] ?? 0 }}%</strong>
+                                        </div>
                                         @if(!empty($b['gamification_boost']))
                                             <div class="d-flex justify-content-between py-1 text-success fw-semibold">
                                                 <span>Lencana Teladan:</span>

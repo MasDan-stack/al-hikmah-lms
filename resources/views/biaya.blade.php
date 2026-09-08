@@ -1,11 +1,11 @@
 @extends('layouts.landing')
 
 @section('title', 'Biaya Pendampingan Belajar | AL-HIKMAH')
-@section('description', 'Biaya dan Paket Belajar AL-HIKMAH — Informasi transparan tentang pilihan pendampingan belajar Al-Qur\'an.')
+@section('description', 'Biaya dan Paket Belajar AL-HIKMAH: Informasi transparan tentang pilihan pendampingan belajar Al-Qur\'an.')
 
 @section('content')
     <!-- ============================================ -->
-    <!-- 1. ETRAIN BREADCRUMB HEADER -->
+    <!-- 1. BREADCRUMB HEADER -->
     <!-- ============================================ -->
     <section class="breadcrumb_bg" aria-label="Header Biaya Belajar">
         <div class="container">
@@ -21,22 +21,58 @@
         </div>
     </section>
 
-    <!-- Biaya Pendaftaran -->
+    <!-- ============================================ -->
+    <!-- 2. BIAYA PENDAFTARAN & ASSESSMENT AWAL -->
+    <!-- ============================================ -->
     <section class="section-padding pb-0" aria-label="Biaya Pendaftaran">
         <div class="container">
-            <div class="row justify-content-center mb-4">
-                <div class="col-lg-8" data-reveal>
-                    <div class="biaya-card">
-                        <div class="biaya-card-left">
-                            <div class="biaya-icon-wrapper"><i class="bi bi-file-earmark-check"></i></div>
-                            <div class="biaya-info"><span class="biaya-label">Biaya Pendaftaran</span>
-                                <div class="biaya-harga">Rp <span class="biaya-angka">{{ number_format($registrationFee, 0, ',', '.') }}</span></div>
-                                <span class="biaya-catatan">✔ Satu kali pembayaran untuk administrasi & assessment awal</span>
+            <div class="row justify-content-center">
+                <div class="col-lg-10" data-reveal>
+                    <div class="biaya-reg-box hover-lift">
+                        <div class="row align-items-center g-4">
+                            <div class="col-md-7">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <div class="p-3 rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center flex-shrink-0" style="width: 52px; height: 52px;">
+                                        <i class="bi bi-clipboard2-check-fill fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <div class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-0 mb-1" style="font-size: 0.72rem;">
+                                            Biaya Registrasi Awal
+                                        </div>
+                                        <h4 class="fw-bold mb-0" style="color: var(--text-primary);">Administrasi &amp; Assessment Santri</h4>
+                                    </div>
+                                </div>
+                                <div class="row g-2 small text-secondary">
+                                    <div class="col-sm-6 d-flex align-items-center gap-2">
+                                        <i class="bi bi-check2-circle text-success fs-6"></i>
+                                        <span>Assessment makhraj &amp; tajwid</span>
+                                    </div>
+                                    <div class="col-sm-6 d-flex align-items-center gap-2">
+                                        <i class="bi bi-check2-circle text-success fs-6"></i>
+                                        <span>Penyusunan kurikulum personal</span>
+                                    </div>
+                                    <div class="col-sm-6 d-flex align-items-center gap-2">
+                                        <i class="bi bi-check2-circle text-success fs-6"></i>
+                                        <span>Akun LMS murid &amp; orang tua</span>
+                                    </div>
+                                    <div class="col-sm-6 d-flex align-items-center gap-2">
+                                        <i class="bi bi-check2-circle text-success fs-6"></i>
+                                        <span>Penyesuaian jadwal guru privat</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="biaya-card-right">
-                            <span class="biaya-badge">Sekali Bayar</span>
-                            <small class="biaya-subnote">*Belum termasuk paket belajar program</small>
+
+                            <div class="col-md-5 text-md-end border-start-md ps-md-4">
+                                <span class="badge bg-warning text-dark px-3 py-1 rounded-pill small fw-semibold mb-2">
+                                    Sekali Bayar di Awal
+                                </span>
+                                <div class="fs-2 fw-bold text-success mb-1">
+                                    Rp {{ number_format($registrationFee, 0, ',', '.') }}
+                                </div>
+                                <small class="text-muted d-block" style="font-size: 0.78rem;">
+                                    *Hanya dibayarkan satu kali saat santri pertama kali terdaftar di AL-HIKMAH.
+                                </small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -44,99 +80,123 @@
         </div>
     </section>
 
-    <!-- Daftar Paket Investasi Belajar Per Program -->
+    <!-- ============================================ -->
+    <!-- 3. DAFTAR PAKET INVESTASI BELAJAR PER PROGRAM -->
+    <!-- ============================================ -->
     <section class="section-padding" aria-label="Paket Belajar">
         <div class="container">
-            <div class="program-section-title text-center mb-4">
-                <i class="bi bi-journal-bookmark text-success me-2"></i>Daftar Pilihan Program & Investasi Belajar
+            <div class="text-center mb-5" data-reveal>
+                <div class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill small mb-2">
+                    <i class="bi bi-journal-bookmark me-1"></i> Paket Bimbingan Intensif
+                </div>
+                <h3 class="fw-bold" style="color: var(--text-primary);">Daftar Pilihan Program &amp; Investasi Belajar</h3>
+                <p class="text-secondary mx-auto" style="max-width: 640px;">
+                    Investasi sudah mencakup seluruh sesi bimbingan, lembar mutabaah harian, serta evaluasi kemajuan berkala.
+                </p>
             </div>
-                     <div class="row g-4 justify-content-center">
+
+            <div class="row g-4 justify-content-center">
                 @foreach($programs as $index => $program)
                     @php
                         $parentEnrollment = isset($parentEnrollments) ? $parentEnrollments->firstWhere('program_id', $program->id) : null;
                     @endphp
                     <div class="col-lg-4 col-md-6" data-reveal data-reveal-delay="{{ ($index % 3) * 100 }}">
-                        <div class="paket-card {{ $program->is_popular ? 'paket-popular' : '' }} {{ $parentEnrollment ? 'border-2 border-success shadow' : '' }} h-100 d-flex flex-column justify-content-between">
+                        <div class="paket-card-v2 {{ $program->is_popular ? 'is-popular' : '' }} {{ $parentEnrollment ? 'border-success shadow' : '' }}">
                             @if($parentEnrollment)
-                                <div class="paket-popular-ribbon" style="background: linear-gradient(135deg, #0d7a3e 0%, #198754 100%);">
+                                <div class="paket-ribbon-v2" style="background: linear-gradient(135deg, #0d7a3e 0%, #15803d 100%);">
                                     <span>✔ Terdaftar</span>
                                 </div>
                             @elseif($program->is_popular)
-                                <div class="paket-popular-ribbon"><span>⭐ Paling Diminati</span></div>
-                            @endif
-                            <div>
-                                <div class="paket-card-header">
-                                    <span class="paket-name">{{ $program->name }}</span>
-                                    <span class="paket-badge {{ $program->is_popular ? 'popular' : '' }}">{{ $program->duration_weeks }} Minggu</span>
+                                <div class="paket-ribbon-v2">
+                                    <span>⭐ Paling Diminati</span>
                                 </div>
-                                <div class="paket-card-body">
-                                    @if($parentEnrollment)
-                                        @if($parentEnrollment->isWaitingAdmin())
-                                            <div class="alert alert-warning border-0 py-2 px-3 mb-3 rounded-3 text-start small">
-                                                <div class="d-flex align-items-center gap-2 fw-bold text-dark mb-1">
-                                                    <i class="bi bi-hourglass-split text-warning"></i> Status: Sedang Direview
-                                                </div>
-                                                <div class="text-secondary" style="font-size: 0.8rem;">
-                                                    Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
-                                                    Lembaga sedang mereview jadwal &amp; ketersediaan guru.
-                                                </div>
-                                            </div>
-                                        @elseif($parentEnrollment->isWaitingParent())
-                                            <div class="alert alert-info border-0 py-2 px-3 mb-3 rounded-3 text-start small">
-                                                <div class="d-flex align-items-center gap-2 fw-bold text-info-emphasis mb-1">
-                                                    <i class="bi bi-chat-dots-fill text-info"></i> Status: Menunggu Respon Anda
-                                                </div>
-                                                <div class="text-secondary" style="font-size: 0.8rem;">
-                                                    Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
-                                                    Ada tawaran alternatif jadwal dari lembaga.
-                                                </div>
-                                            </div>
-                                        @elseif($parentEnrollment->isConfirmed())
-                                            <div class="alert alert-primary border-0 py-2 px-3 mb-3 rounded-3 text-start small">
-                                                <div class="d-flex align-items-center gap-2 fw-bold text-primary-emphasis mb-1">
-                                                    <i class="bi bi-check-circle-fill text-primary"></i> Status: Jadwal Deal (Siap Bayar)
-                                                </div>
-                                                <div class="text-secondary" style="font-size: 0.8rem;">
-                                                    Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
-                                                    Guru: <strong>{{ $parentEnrollment->mentor?->getDisplayName() ?? 'Ditentukan Lembaga' }}</strong>
-                                                </div>
-                                            </div>
-                                        @elseif($parentEnrollment->isActive())
-                                            <div class="alert alert-success border-0 py-2 px-3 mb-3 rounded-3 text-start small">
-                                                <div class="d-flex align-items-center gap-2 fw-bold text-success mb-1">
-                                                    <i class="bi bi-award-fill text-success"></i> Status: Bimbingan Aktif Berjalan
-                                                </div>
-                                                <div class="text-secondary" style="font-size: 0.8rem;">
-                                                    Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
-                                                    Guru: <strong>{{ $parentEnrollment->mentor?->getDisplayName() ?? 'Guru Aktif' }}</strong>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    @endif
+                            @endif
 
-                                    <div class="paket-price">
-                                        <span class="price-amount">{{ $program->formatted_price }}</span>
-                                        <span class="price-period">/ paket</span>
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 small fw-semibold">
+                                        {{ $program->level }}
+                                    </span>
+                                    <span class="badge bg-body-secondary text-secondary rounded-pill px-3 py-1 small">
+                                        <i class="bi bi-calendar-check me-1"></i>{{ $program->duration_weeks }} Minggu Terstruktur
+                                    </span>
+                                </div>
+
+                                <h4 class="fw-bold mb-3" style="color: var(--text-primary);">{{ $program->name }}</h4>
+
+                                @if($parentEnrollment)
+                                    @if($parentEnrollment->isWaitingAdmin())
+                                        <div class="alert alert-warning border-0 py-2 px-3 mb-3 rounded-3 text-start small">
+                                            <div class="d-flex align-items-center gap-2 fw-bold text-dark mb-1">
+                                                <i class="bi bi-hourglass-split text-warning"></i> Status: Sedang Direview
+                                            </div>
+                                            <div class="text-secondary" style="font-size: 0.8rem;">
+                                                Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
+                                                Lembaga sedang mereview jadwal &amp; ketersediaan guru.
+                                            </div>
+                                        </div>
+                                    @elseif($parentEnrollment->isWaitingParent())
+                                        <div class="alert alert-info border-0 py-2 px-3 mb-3 rounded-3 text-start small">
+                                            <div class="d-flex align-items-center gap-2 fw-bold text-info-emphasis mb-1">
+                                                <i class="bi bi-chat-dots-fill text-info"></i> Status: Menunggu Respon Anda
+                                            </div>
+                                            <div class="text-secondary" style="font-size: 0.8rem;">
+                                                Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
+                                                Ada tawaran alternatif jadwal dari lembaga.
+                                            </div>
+                                        </div>
+                                    @elseif($parentEnrollment->isConfirmed())
+                                        <div class="alert alert-primary border-0 py-2 px-3 mb-3 rounded-3 text-start small">
+                                            <div class="d-flex align-items-center gap-2 fw-bold text-primary-emphasis mb-1">
+                                                <i class="bi bi-check-circle-fill text-primary"></i> Status: Jadwal Deal (Siap Bayar)
+                                            </div>
+                                            <div class="text-secondary" style="font-size: 0.8rem;">
+                                                Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
+                                                Guru: <strong>{{ $parentEnrollment->mentor?->getDisplayName() ?? 'Ditentukan Lembaga' }}</strong>
+                                            </div>
+                                        </div>
+                                    @elseif($parentEnrollment->isActive())
+                                        <div class="alert alert-success border-0 py-2 px-3 mb-3 rounded-3 text-start small">
+                                            <div class="d-flex align-items-center gap-2 fw-bold text-success mb-1">
+                                                <i class="bi bi-award-fill text-success"></i> Status: Bimbingan Aktif Berjalan
+                                            </div>
+                                            <div class="text-secondary" style="font-size: 0.8rem;">
+                                                Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
+                                                Guru: <strong>{{ $parentEnrollment->mentor?->getDisplayName() ?? 'Guru Aktif' }}</strong>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endif
+
+                                <div class="mb-4 pb-3 border-bottom">
+                                    <div class="d-flex align-items-baseline gap-1">
+                                        <span class="fs-2 fw-bold text-success">{{ $program->formatted_price }}</span>
+                                        <span class="text-muted small">/ paket</span>
                                     </div>
-                                    <div class="paket-detail">
-                                        <span class="detail-label">Tingkat / Target</span>
-                                        <span class="detail-value fw-bold text-success">{{ $program->level }}</span>
+                                    <small class="text-muted" style="font-size: 0.8rem;">Investasi bimbingan privat terarah</small>
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="metode-check-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <span>Model Privat Intensif (1 Guru 1 Santri)</span>
                                     </div>
-                                    <div class="paket-detail">
-                                        <span class="detail-label">Durasi Pembelajaran</span>
-                                        <span class="detail-value">{{ $program->duration_weeks }} Minggu Terstruktur</span>
+                                    <div class="metode-check-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <span>Durasi belajar {{ $program->duration_weeks }} minggu terstruktur</span>
                                     </div>
-                                    <div class="paket-detail">
-                                        <span class="detail-label">Model Bimbingan</span>
-                                        <span class="detail-value">Private Intensif (1:1)</span>
+                                    <div class="metode-check-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <span>Modul materi &amp; lembar mutabaah hafalan</span>
                                     </div>
-                                    <div class="paket-detail">
-                                        <span class="detail-label">Fasilitas</span>
-                                        <span class="detail-value">Modul &amp; Rapor Berkala</span>
+                                    <div class="metode-check-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <span>Laporan evaluasi tajwid berkala ke orang tua</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="px-3 pb-3 mt-3">
+
+                            <div class="pt-2">
                                 @auth
                                     @if(auth()->user()->isParent())
                                         @if($parentEnrollment)
@@ -189,8 +249,149 @@
                 @endforeach
             </div>
 
-            <div class="text-center mt-5">
-                <p class="text-muted fst-italic">"Tidak ada paksaan dalam memilih program. Tim kami siap membantu mencocokkan program sesuai hasil assessment ananda."</p>
+            <div class="text-center mt-4">
+                <p class="text-muted small fst-italic">
+                    "Setiap santri memiliki kecepatan belajar yang berbeda. Tim pendamping kami siap membantu mencocokkan program berdasarkan hasil assessment awal ananda."
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 4. FASILITAS & JAMINAN LAYANAN BELAJAR -->
+    <!-- ============================================ -->
+    <section class="section-padding bg-body-tertiary" aria-label="Jaminan Layanan">
+        <div class="container">
+            <div class="text-center mb-5" data-reveal>
+                <div class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill small mb-2">
+                    <i class="bi bi-shield-check me-1"></i> Komitmen Layanan
+                </div>
+                <h3 class="fw-bold" style="color: var(--text-primary);">Fasilitas &amp; Jaminan Kualitas Pendampingan</h3>
+                <p class="text-secondary mx-auto" style="max-width: 620px;">
+                    Kami berkomitmen memberikan kenyamanan terbaik untuk orang tua dan anak dalam setiap sesi bimbingan.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3" data-reveal>
+                    <div class="guarantee-card hover-lift">
+                        <div class="guarantee-icon">
+                            <i class="bi bi-arrow-repeat"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2" style="color: var(--text-primary);">Garansi Kesesuaian Guru</h5>
+                        <p class="text-secondary small mb-0">
+                            Bila ananda merasa kurang nyaman dengan pendekatan guru dalam 2 pertemuan pertama, orang tua dapat mengajukan pergantian tanpa biaya tambahan.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3" data-reveal data-reveal-delay="100">
+                    <div class="guarantee-card hover-lift">
+                        <div class="guarantee-icon">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2" style="color: var(--text-primary);">Sesi Pengganti Syar'i</h5>
+                        <p class="text-secondary small mb-0">
+                            Santri yang berhalangan hadir karena sakit atau agenda penting dapat mengajukan jadwal pengganti dengan konfirmasi minimal 6 jam sebelum sesi.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3" data-reveal data-reveal-delay="200">
+                    <div class="guarantee-card hover-lift">
+                        <div class="guarantee-icon">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2" style="color: var(--text-primary);">Rapor Mutabaah Berkala</h5>
+                        <p class="text-secondary small mb-0">
+                            Setiap pertemuan dicatat dalam sistem LMS kami, meliputi capaian halaman, catatan makhraj, serta rekomendasi murajaah di rumah.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3" data-reveal data-reveal-delay="300">
+                    <div class="guarantee-card hover-lift">
+                        <div class="guarantee-icon">
+                            <i class="bi bi-cash-coin"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2" style="color: var(--text-primary);">Tanpa Biaya Tersembunyi</h5>
+                        <p class="text-secondary small mb-0">
+                            Nominal paket investasi belajar bersifat tetap dan transparan, sudah mencakup seluruh bahan ajar digital dan sertifikat tamat program.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 5. TANYA JAWAB SEPUTAR INVESTASI (FAQ BIAYA) -->
+    <!-- ============================================ -->
+    <section class="section-padding" aria-label="Tanya Jawab Biaya">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="text-center mb-5" data-reveal>
+                        <div class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-1 rounded-pill small mb-2">
+                            <i class="bi bi-question-circle-fill me-1"></i> FAQ Investasi
+                        </div>
+                        <h3 class="fw-bold" style="color: var(--text-primary);">Pertanyaan Umum Seputar Biaya</h3>
+                    </div>
+
+                    <div class="accordion accordion-flush" id="accordionFaqBiaya" data-reveal>
+                        <div class="accordion-item mb-3 rounded-3 border overflow-hidden">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqBiaya1" aria-expanded="false">
+                                    Apakah ada diskon khusus untuk pendaftaran kakak beradik (2 santri atau lebih)?
+                                </button>
+                            </h2>
+                            <div id="faqBiaya1" class="accordion-collapse collapse" data-bs-parent="#accordionFaqBiaya">
+                                <div class="accordion-body text-secondary small">
+                                    Ya, kami menyediakan penyesuaian khusus bagi keluarga yang mendaftarkan lebih dari satu anak dalam satu sesi kunjungan (Home Visit) atau jadwal online berturutan. Silakan hubungi admin kami untuk rekomendasi paket keluarga.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3 rounded-3 border overflow-hidden">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqBiaya2" aria-expanded="false">
+                                    Bagaimana alur pembayaran paket belajar?
+                                </button>
+                            </h2>
+                            <div id="faqBiaya2" class="accordion-collapse collapse" data-bs-parent="#accordionFaqBiaya">
+                                <div class="accordion-body text-secondary small">
+                                    Setelah pemilihan program dan verifikasi jadwal oleh admin disetujui, orang tua dapat melakukan pembayaran resmi melalui transfer bank atau dompet digital yang terintegrasi aman di dalam dasbor LMS Al-Hikmah.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3 rounded-3 border overflow-hidden">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqBiaya3" aria-expanded="false">
+                                    Bagaimana jika santri berhalangan hadir pada salah satu sesi pertemuan?
+                                </button>
+                            </h2>
+                            <div id="faqBiaya3" class="accordion-collapse collapse" data-bs-parent="#accordionFaqBiaya">
+                                <div class="accordion-body text-secondary small">
+                                    Sesi belajar tidak akan hangus apabila orang tua memberitahukan kepada guru privat atau admin minimal 6 jam sebelum jadwal dimulai. Sesi pengganti akan dijadwalkan bersama di hari lain yang disepakati.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item rounded-3 border overflow-hidden">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqBiaya4" aria-expanded="false">
+                                    Apakah guru home visit membawa sarana belajar sendiri?
+                                </button>
+                            </h2>
+                            <div id="faqBiaya4" class="accordion-collapse collapse" data-bs-parent="#accordionFaqBiaya">
+                                <div class="accordion-body text-secondary small">
+                                    Guru kami membawa panduan kurikulum, lembar target mutabaah fisik, dan alat bantu makhraj. Orang tua cukup menyediakan mushaf Al-Qur'an / Iqra milik ananda serta ruangan yang tenang untuk proses bimbingan.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -252,7 +453,7 @@
                                 <select class="form-select" id="modalMetode" name="metode">
                                     <option value="Online (Zoom / Meet)" selected>Online (Tatap Maya Interaktif)</option>
                                     <option value="Offline (Guru Datang ke Rumah)">Offline (Guru Datang ke Rumah)</option>
-                                    <option value="Hybrid (Kombinasi)">Hybrid (Kombinasi Online & Offline)</option>
+                                    <option value="Hybrid (Kombinasi)">Hybrid (Kombinasi Online &amp; Offline)</option>
                                 </select>
                             </div>
                         </div>
@@ -279,7 +480,6 @@
             if (!modalEl) return;
 
             modalEl.addEventListener('show.bs.modal', function (event) {
-                // Tombol yang memicu modal (Bootstrap 5 relatedTarget)
                 const button = event.relatedTarget;
                 if (!button) return;
 
@@ -287,7 +487,6 @@
                 const programName  = button.getAttribute('data-program-name');
                 const programPrice = button.getAttribute('data-program-price');
 
-                // Set input hidden & label
                 const inputId = modalEl.querySelector('#inputModalProgramId');
                 const labelEl = modalEl.querySelector('#labelSelectedProgram');
 
@@ -298,3 +497,4 @@
     </script>
     @endpush
 @endsection
+

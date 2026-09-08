@@ -1,7 +1,7 @@
 @extends('layouts.landing')
 
 @section('title', 'Program Tahfidz | AL-HIKMAH')
-@section('description', 'Program Tahfidz AL-HIKMAH — Pendampingan menghafal Al-Qur\'an dengan setoran rutin, murajaah, dan target yang disesuaikan.')
+@section('description', 'Program Tahfidz AL-HIKMAH: Pendampingan menghafal Al-Qur\'an dengan setoran rutin, murajaah, dan target yang disesuaikan.')
 
 @section('content')
     <!-- ============================================ -->
@@ -131,7 +131,7 @@
             <div class="cta-content" data-reveal>
                 <div class="cta-icon"><i class="bi bi-bookmark-star-fill"></i></div>
                 <h2 class="display-6 fw-bold mb-3 text-white">Mulai Perjalanan <span class="text-warning">Menghafal Al-Qur'an</span></h2>
-                <p class="lead text-white-50 max-w-700 mx-auto mb-4">Dari satu ayat, satu halaman, hingga satu juz — setiap langkah ikhtiar adalah kebaikan abadi.</p>
+                <p class="lead text-white-50 max-w-700 mx-auto mb-4">Dari satu ayat, satu halaman, hingga satu juz, setiap langkah ikhtiar adalah kebaikan abadi.</p>
                 @auth
                     @if(auth()->user()->isParent())
                         <button type="button" class="btn_1 bg-warning text-dark border-0 fw-bold shadow" data-bs-toggle="modal" data-bs-target="#tahfidzLoggedInModal" style="background-image: none !important; background-color: #ffc107 !important; color: #1a1a2e !important;">

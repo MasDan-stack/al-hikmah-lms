@@ -81,7 +81,7 @@
                         @for ($i = 1; $i <= 6; $i++)
                             <div class="col-md-6 col-lg-4" data-reveal data-reveal-delay="{{ ($i - 1) * 100 }}">
                                 <div
-                                    class="card h-100 border-0 shadow-sm rounded-4 p-4 position-relative card-hover-up bg-white">
+                                    class="card h-100 border-0 shadow-sm rounded-4 p-4 position-relative card-hover-up">
                                     <div class="d-flex align-items-center gap-3 mb-3">
                                         <div class="rounded-circle bg-success text-white fw-bold d-flex align-items-center justify-content-center shadow-sm"
                                             style="width: 46px; height: 46px; font-size: 1.2rem; flex-shrink:0;">
@@ -271,7 +271,7 @@
                     <div class="row g-4">
                         @for ($i = 1; $i <= 6; $i++)
                             <div class="col-md-6 col-lg-4" data-reveal data-reveal-delay="{{ ($i - 1) * 100 }}">
-                                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 p-4">
                                     <div class="d-flex align-items-center gap-3 mb-3">
                                         <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center shadow-sm"
                                             style="width: 46px; height: 46px; font-size: 1.2rem; flex-shrink:0;">
@@ -411,7 +411,7 @@
                             @endphp
                             <div class="col-md-6 col-lg-4" data-reveal data-reveal-delay="{{ ($i - 1) * 100 }}">
                                 <div
-                                    class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white border-top border-4 border-{{ $color }}">
+                                    class="card h-100 border-0 shadow-sm rounded-4 p-4 border-top border-4 border-{{ $color }}">
                                     <div class="d-flex align-items-center gap-3 mb-3">
                                         <div class="rounded-circle bg-{{ $color }} text-white fw-bold d-flex align-items-center justify-content-center shadow-sm"
                                             style="width: 46px; height: 46px; font-size: 1.2rem; flex-shrink:0;">

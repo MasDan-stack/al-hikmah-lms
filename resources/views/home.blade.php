@@ -1,6 +1,7 @@
 @extends('layouts.landing')
 
 @section('title', 'AL-HIKMAH | Menemani Perjalanan Belajar Al-Qur\'an')
+@section('meta_description', 'LMS Al-Hikmah: Platform bimbingan dan pembelajaran Al-Qur\'an privat dan kelompok dengan metode personal, jadwal fleksibel, dan guru terpercaya.')
 
 @section('content')
     <!-- ============================================ -->
@@ -611,7 +612,7 @@
                     @auth
                         Lanjutkan aktivitas pembelajaran Al-Qur'an dan pantau perkembangan mutaba'ah hari ini.
                     @else
-                        Dari satu huruf, satu ayat, satu doa — perjalanan besar menuju generasi Qur'ani dimulai bersama AL-HIKMAH.
+                        Dari satu huruf, satu ayat, satu doa, perjalanan besar menuju generasi Qur'ani dimulai bersama AL-HIKMAH.
                     @endauth
                 </p>
                 <div class="d-flex justify-content-center flex-wrap gap-3 mt-4">

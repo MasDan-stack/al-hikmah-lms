@@ -31,76 +31,6 @@
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.1.1/index.min.css" rel="stylesheet">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
-    <style>
-        .auth-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 1rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .auth-card {
-            width: 100%;
-            max-width: 440px;
-            background: var(--glass-bg-strong);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-xl);
-            padding: 2.5rem 2rem;
-            position: relative;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            animation: authFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes authFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .auth-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .auth-logo {
-            height: 64px;
-            width: auto;
-            margin-bottom: 1rem;
-        }
-
-        .auth-title {
-            font-weight: 800;
-            color: var(--text-primary);
-            letter-spacing: -0.5px;
-            margin-bottom: 0.25rem;
-            font-size: 1.5rem;
-        }
-
-        .auth-subtitle {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .auth-theme-toggle {
-            position: absolute;
-            top: 1.25rem;
-            right: 1.25rem;
-        }
-    </style>
-
     @stack('styles')
 </head>
 
@@ -114,33 +44,76 @@
         </div>
     </div>
 
-    <div class="bg-islamic-animation" aria-hidden="true">
-        <div class="floating-shape shape-1"></div>
-        <div class="floating-shape shape-2"></div>
-        <div class="floating-shape shape-3"></div>
-        <div class="floating-shape shape-4"></div>
-        <div class="floating-shape shape-5"></div>
-        <div class="floating-shape shape-6"></div>
-    </div>
+    <div class="auth-split-wrapper">
+        <div class="auth-split-card">
+            <!-- Left Side: Form Content -->
+            <div class="auth-form-side">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <a href="{{ route('home') }}" class="text-decoration-none text-muted small d-inline-flex align-items-center gap-1">
+                        <i class="bi bi-arrow-left"></i>
+                        <span>Kembali ke Beranda</span>
+                    </a>
+                    <button type="button" class="theme-toggle-btn shadow-sm" id="themeToggle" title="Ganti Tema (Gelap/Terang)" aria-label="Ganti Tema">
+                        <i class="bi bi-moon-fill" id="themeIcon"></i>
+                    </button>
+                </div>
 
-    <div class="auth-container">
-        <div class="auth-card">
-            <div class="auth-theme-toggle">
-                <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle dark mode">
-                    <i class="bi bi-moon-fill" id="themeIcon"></i>
-                </button>
+                <div class="text-center mb-4">
+                    <a href="{{ route('home') }}" class="d-inline-block mb-2">
+                        <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH Logo" height="54" class="brand-logo">
+                    </a>
+                    <h2 class="fw-bold mb-1" style="color: var(--text-primary); letter-spacing: -0.5px;">AL<span style="color: var(--primary);">-HIKMAH</span></h2>
+                    <p class="text-muted small mb-0">@yield('subtitle', 'Platform Bimbingan Belajar Al-Qur\'an Privat & Tahfidz')</p>
+                </div>
+
+                @yield('auth-content')
+                @yield('content')
             </div>
 
-            <div class="auth-header">
-                <a href="{{ route('home') }}">
-                    <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH Logo" class="auth-logo">
-                </a>
-                <h3 class="auth-title">AL<span style="color: var(--primary)">-HIKMAH</span></h3>
-                <p class="auth-subtitle">@yield('subtitle', 'Platform Manajemen Belajar Al-Qur\'an')</p>
-            </div>
+            <!-- Right Side: Visual & Brand Showcase -->
+            <div class="auth-image-side" style="background-image: url('{{ asset('assets/img/auth-bg.jpg') }}');">
+                <div class="auth-image-overlay"></div>
+                <div class="auth-image-content">
+                    <div>
+                        <div class="badge bg-white text-success px-3 py-2 rounded-pill fw-semibold mb-3 shadow-sm" style="font-size: 0.78rem;">
+                            <i class="bi bi-stars me-1 text-warning"></i> Platform Bimbingan Al-Qur'an
+                        </div>
+                        <h3 class="fw-bold text-white mb-2" style="letter-spacing: -0.5px;">Menemani Buah Hati Mencintai Al-Qur'an</h3>
+                        <p class="text-white-50 small mb-0">Pendekatan personal, hangat, dan beradab untuk membentuk generasi pembelajar Al-Qur'an yang mutqin.</p>
+                    </div>
 
-            @yield('auth-content')
-            @yield('content')
+                    <!-- Hadith Quote Box -->
+                    <div class="auth-quote-card my-4">
+                        <i class="bi bi-quote fs-2 text-white-50 d-block mb-1"></i>
+                        <p class="small text-white fst-italic mb-2 lh-base">
+                            "Sebaik-baik kalian adalah orang yang mempelajari Al-Qur'an dan mengajarkannya."
+                        </p>
+                        <span class="d-block small text-white-50 fw-semibold" style="font-size: 0.75rem;">
+                            Hadits Riwayat Al-Bukhari No. 5027
+                        </span>
+                    </div>
+
+                    <!-- 4 Pillars Benefits -->
+                    <div>
+                        <div class="auth-benefit-item">
+                            <span class="auth-benefit-icon"><i class="bi bi-check2"></i></span>
+                            <span>Bimbingan Privat 1-on-1 Intensif &amp; Terarah</span>
+                        </div>
+                        <div class="auth-benefit-item">
+                            <span class="auth-benefit-icon"><i class="bi bi-check2"></i></span>
+                            <span>Guru Al-Qur'an Teruji, Beradab, &amp; Bersanad</span>
+                        </div>
+                        <div class="auth-benefit-item">
+                            <span class="auth-benefit-icon"><i class="bi bi-check2"></i></span>
+                            <span>Mutaba'ah Harian &amp; Laporan Belajar Digital</span>
+                        </div>
+                        <div class="auth-benefit-item mb-0">
+                            <span class="auth-benefit-icon"><i class="bi bi-check2"></i></span>
+                            <span>Jadwal Fleksibel Sesuai Kebutuhan Keluarga</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

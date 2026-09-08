@@ -35,6 +35,11 @@ return [
         ],
     ],
 
+    'google' => [
+        'calendar_client_id' => env('GOOGLE_CALENDAR_CLIENT_ID', ''),
+        'calendar_client_secret' => env('GOOGLE_CALENDAR_CLIENT_SECRET', ''),
+    ],
+
     'pakasir' => [
         'api_key' => env('PAKASIR_API_KEY', 'wakGifjocg8pjIxFjMQXXJcNjvjkGQd1'),
         'project_slug' => env('PAKASIR_PROJECT_SLUG', 'al-hikmah'),

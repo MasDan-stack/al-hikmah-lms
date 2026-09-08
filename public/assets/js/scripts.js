@@ -165,10 +165,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (current) {
             navLinks.forEach(function (link) {
                 const href = link.getAttribute('href') || '';
-                if (href.includes('#')) {
+                if (href.startsWith('#') || href.startsWith(window.location.pathname + '#')) {
                     if (href === '#' + current || href.endsWith('#' + current)) {
                         link.classList.add('active');
-                    } else if (href.startsWith('#')) {
+                    } else {
                         link.classList.remove('active');
                     }
                 }
@@ -177,6 +177,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
         activeTicking = false;
     }
+
+    // Keyboard accessibility: Close mobile navigation on Escape
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            const navCollapse = document.getElementById('navbarNav');
+            if (navCollapse && navCollapse.classList.contains('show') && typeof bootstrap !== 'undefined') {
+                const bsCollapse = bootstrap.Collapse.getInstance(navCollapse) || new bootstrap.Collapse(navCollapse, { toggle: false });
+                bsCollapse.hide();
+            }
+        }
+    });
+
+    // Password Visibility Toggle Listener
+    document.addEventListener('click', function (e) {
+        const toggleBtn = e.target.closest('.btn-password-toggle');
+        if (toggleBtn) {
+            e.preventDefault();
+            const group = toggleBtn.closest('.input-group');
+            if (group) {
+                const input = group.querySelector('input');
+                const icon = toggleBtn.querySelector('i');
+                if (input) {
+                    const isPwd = input.type === 'password';
+                    input.type = isPwd ? 'text' : 'password';
+                    toggleBtn.setAttribute('aria-label', isPwd ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
+                    if (icon) {
+                        icon.className = isPwd ? 'bi bi-eye-slash' : 'bi bi-eye';
+                    }
+                }
+            }
+        }
+    });
 
     window.addEventListener('scroll', function () {
         if (!activeTicking) {

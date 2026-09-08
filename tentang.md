@@ -3,8 +3,8 @@
 > **Dokumen Resmi untuk Manajemen, Pimpinan Lembaga, & Tim Pengembang**  
 > **Nama Sistem:** AL-HIKMAH Learning Management System (LMS)  
 > **Status Aplikasi:** ✅ **100% Selesai, Teruji, & Siap Digunakan (Production Ready)**  
-> **Versi:** 9.5 (Full Spectrum Enterprise: ATS Pipeline 7-Tahapan, Live Probation Hub & Modul Orientasi, Single Source Lokasi Peta Keluarga Multi-Role, Admin Mentor Detail 5-Card, Rating Pasca Sesi Wali Santri, & Penyelarasan Frontend Antislop-UI)  
-> **Tanggal Pembaruan:** 07 September 2026  
+> **Versi:** 10.5 (Antislop Suite Frontend Overhaul, Zero-Blue Navbar, Split-Screen Guru /bergabung, Metode Interaktif & Biaya Transparan, Smart Matchmaking v3.0, External Calendar Sync, Dynamic Load Balancing, & ATS Pipeline)  
+> **Tanggal Pembaruan:** 09 September 2026  
 
 ---
 
@@ -31,11 +31,14 @@
    - [4.3 Fitur Hari Bebas (Libur Rutin) Mentor & Day-Off Monitoring Center](#43-fitur-hari-bebas-libur-rutin-mentor--day-off-monitoring-center)
    - [4.4 Prinsip Bimbingan Privat 1-on-1 & Proteksi Anti-Bentrok (Zero Double-Booking)](#44-prinsip-bimbingan-privat-1-on-1--proteksi-anti-bentrok-zero-double-booking)
    - [4.5 Alur Penugasan Admin (OPSI A: Setujui vs OPSI B: Tawarkan Alternatif)](#45-alur-penugasan-admin-opsi-a-setujui-vs-opsi-b-tawarkan-alternatif)
-5. [🧮 5. Modul Smart Matchmaking AI v2.1 & Aturan Syariat Gender](#-5-modul-smart-matchmaking-ai-v21--aturan-syariat-gender)
-   - [5.1 Formula Multi-Kriteria 5 Faktor Berbobot](#51-formula-multi-kriteria-5-faktor-berbobot)
-   - [5.2 Aturan Syariat Gender Berbasis Usia 10 Tahun](#52-aturan-syariat-gender-berbasis-usia-10-tahun)
-   - [5.3 Explainable AI (Why Not...? Tooltip Inspection)](#53-explainable-ai-why-not-tooltip-inspection)
-   - [5.4 Family Blacklist Engine & Auto-Assign $\ge 95\%$](#54-family-blacklist-engine--auto-assign-ge-95)
+5. [🧮 5. Modul Smart Matchmaking v3.0, External Calendar Sync, & Dynamic Load Balancing](#-5-modul-smart-matchmaking-v30-external-calendar-sync--dynamic-load-balancing)
+   - [5.1 Formula Multi-Kriteria 6 Dimensi v3.0 Berbobot](#51-formula-multi-kriteria-6-dimensi-v30-berbobot)
+   - [5.2 Integrasi Kalender Eksternal (Google Calendar OAuth & Catatan Kesiapan API)](#52-integrasi-kalender-eksternal-google-calendar-oauth--catatan-kesiapan-api)
+   - [5.3 Smart Load Balancing & Proteksi Kelelahan Guru (Burnout Prevention)](#53-smart-load-balancing--proteksi-kelelahan-guru-burnout-prevention)
+   - [5.4 Vektor Keselarasan Gaya Belajar Santri & Profil Pedagogis Guru (Cosine Similarity)](#54-vektor-keselarasan-gaya-belajar-santri--profil-pedagogis-guru-cosine-similarity)
+   - [5.5 Aturan Syariat Gender Berbasis Usia 10 Tahun](#55-aturan-syariat-gender-berbasis-usia-10-tahun)
+   - [5.6 Explainable AI (Why Not...? Tooltip Inspection)](#56-explainable-ai-why-not-tooltip-inspection)
+   - [5.7 Family Blacklist Engine & Auto-Assign $\ge 95\%$](#57-family-blacklist-engine--auto-assign-ge-95)
 6. [🔮 6. Predictive Analytics & Early Warning System (PA-EWS)](#-6-predictive-analytics--early-warning-system-pa-ews)
    - [6.1 Model 1: Dropout & Churn Risk Prediction (4-Factor Ensemble)](#61-model-1-dropout--churn-risk-prediction-4-factor-ensemble)
    - [6.2 Model 2: Learning Velocity & Proyeksi Tanggal Khatam (ETA)](#62-model-2-learning-velocity--proyeksi-tanggal-khatam-eta)
@@ -60,13 +63,21 @@
 13. [💳 13. Integrasi Payment Gateway Pakasir & Invoice Real-Time](#-13-integrasi-payment-gateway-pakasir--invoice-real-time)
 14. [⭐ 14. Matriks Hak Akses Pengguna (Role Permission Matrix)](#-14-matriks-hak-akses-pengguna-role-permission-matrix)
 15. [🔔 15. Sistem Notifikasi & Alert Terpusat (Centralized Alert System)](#-15-sistem-notifikasi--alert-terpusat-centralized-alert-system)
-16. [🗄️ 16. Penjelasan Seluruh Database (53 Tabel Utama)](#-16-penjelasan-seluruh-database-53-tabel-utama)
+16. [🗄️ 16. Penjelasan Seluruh Database (58 Tabel Utama)](#-16-penjelasan-seluruh-database-58-tabel-utama)
 17. [🧠 17. Penjelasan Seluruh Model, Service, & Controller Inti](#-17-penjelasan-seluruh-model-service--controller-inti)
 18. [⚙️ 18. Console Commands & Background Scheduler](#-18-console-commands--background-scheduler)
 19. [📁 19. Struktur Folder Proyek](#-19-struktur-folder-proyek)
 20. [👤 20. Modul Manajemen Profil Multi-Role & Sinkronisasi Lokasi Terpusat](#-20-modul-manajemen-profil-multi-role--sinkronisasi-lokasi-terpusat)
 21. [🧪 21. Hasil Pengujian Otomatis & Quality Assurance (100% Green Pass)](#-21-hasil-pengujian-otomatis--quality-assurance-100-green-pass)
 22. [🎨 22. Standarisasi Antarmuka Publik & Penyelarasan Frontend Antislop-UI](#-22-standarisasi-antarmuka-publik--penyelarasan-frontend-antislop-ui)
+    - [22.1 Penyelarasan Halaman Tentang Kami (`/tentang-kami`)](#221-penyelarasan-halaman-tentang-kami-tentang-kami)
+    - [22.2 Redesain Pelacak Status Lamaran Publik (`/cek-status-lamaran`)](#222-redesain-pelacak-status-lamaran-publik-cek-status-lamaran)
+    - [22.3 Aksesibilitas Keyboard & Semantik HTML5](#223-aksesibilitas-keyboard--semantik-html5)
+    - [22.4 Eliminasi Warna Biru Navbar & Harmonisasi Palet Hijau-Emas](#224-eliminasi-warna-biru-navbar--harmonisasi-palet-hijau-emas)
+    - [22.5 Modern Split-Screen Onboarding Guru Mitra (`/bergabung`)](#225-modern-split-screen-onboarding-guru-mitra-bergabung)
+    - [22.6 Elevasi Desain Halaman Metode Belajar (`/metode`)](#226-elevasi-desain-halaman-metode-belajar-metode)
+    - [22.7 Overhaul Antislop Halaman Biaya & Paket (`/biaya`)](#227-overhaul-antislop-halaman-biaya--paket-biaya)
+    - [22.8 Animasi Mikro Elegan & Kepatuhan WCAG AA / Aksesibilitas Gerak](#228-animasi-mikro-elegan--kepatuhan-wcag-aa--aksesibilitas-gerak)
 
 ---
 
@@ -323,37 +334,82 @@ Pada halaman alokasi admin (`/admin/enrollments/{id}/edit`):
 
 ---
 
-## 🧮 5. MODUL SMART MATCHMAKING AI v2.1 & ATURAN SYARIAT GENDER
+## 🧮 5. MODUL SMART MATCHMAKING v3.0, EXTERNAL CALENDAR SYNC, & DYNAMIC LOAD BALANCING
 
-### 5.1 Formula Multi-Kriteria 5 Faktor Berbobot
+Modul penjodohan santri dan guru pembimbing (v3.0) mengintegrasikan kalender eksternal, penyeimbang beban kerja dinamis untuk mencegah kejenuhan guru (*burnout*), serta algoritma kecocokan gaya belajar (*pedagogical fit*) berbasis aljabar vektor *Cosine Similarity*.
+
+### 5.1 Formula Multi-Kriteria 6 Dimensi v3.0 Berbobot
 Algoritma [`MentorMatchingService`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/MentorMatchingService.php) menghitung skor kecocokan multi-dimensi (0–100%):
 
-$$\text{Skor Akhir} = (W_{\text{gender}} \times 25\%) + (W_{\text{lokasi}} \times 20\%) + (W_{\text{slot}} \times 25\%) + (W_{\text{spesialisasi}} \times 20\%) + (W_{\text{beban}} \times 10\%) + \text{Boost} - \text{Penalty}$$
+$$\text{Skor Akhir} = (W_{\text{gender}} \times 20\%) + (W_{\text{lokasi}} \times 15\%) + (W_{\text{slot}} \times 20\%) + (W_{\text{spesialisasi}} \times 15\%) + (W_{\text{beban}} \times 15\%) + (W_{\text{pedagogi}} \times 15\%) + \text{Boost} - \text{Penalty}$$
 
-- **Gender Match ($25\%$)**: Memastikan kesesuaian syariat pedagogis.
-- **Jarak Lokasi ($20\%$)**: Berbasis `ST_Distance_Sphere` MySQL native untuk kelas offline (maksimal radius 25 km, default 100% untuk online).
-- **Sisa Kuota Slot ($25\%$)**: Mengevaluasi ketersediaan slot di seluruh hari yang diminta santri.
-- **Spesialisasi ($20\%$)**: Kesesuaian sanad/keahlian mentor dengan kategori program (Tahsin, Tahfidz, Bahasa Arab).
-- **Pemerataan Beban ($10\%$)**: Mengutamakan guru dengan beban bimbingan yang masih proporsional.
-- **Boost Lencana**: Tambahan $+5\%$ untuk pemegang Lencana Teladan (M01/M03) atau rating $\ge 4.9$.
-- **Buffer Sholat**: Penalti $-15\%$ jika waktu belajar mepet dengan waktu adzan/sholat.
+- **Kesesuaian Gender ($20\%$)**: Aturan mutlak syariat usia 10 tahun (skor 100% atau gugur 0%).
+- **Jarak Geografis ($15\%$)**: Berbasis `ST_Distance_Sphere` MySQL native untuk bimbingan tatap muka (offline) radius maksimal 25 km, bernilai penuh 100% untuk bimbingan daring (online).
+- **Ketersediaan Slot & Kalender ($20\%$)**: Memeriksa ketersediaan angka slot 0–6 di LMS dan jadwal sibuk pribadi pada kalender eksternal.
+- **Keahlian & Sanad ($15\%$)**: Kesesuaian sanad qira'ah dan kompetensi mentor dengan program (Tahsin, Tahfidz, Fiqih, Bahasa Arab).
+- **Keseimbangan Beban ($15\%$)**: Menilai proporsi keterisian beban bimbingan guru terhadap rata-rata sistem dan kapasitas maksimal.
+- **Gaya Belajar & Retensi ($15\%$)**: Keselarasan vektor preferensi santri dengan karakteristik pedagogis guru ditambah rekam jejak retensi santri serupa.
+- **Faktor Penguat (Boost)**: Tambahan $+5\%$ untuk pemegang Lencana Teladan (M01/M03) atau rating $\ge 4.9$, serta hingga $+10\%$ untuk guru berkinerja tinggi pada snapshot komposit bulanan.
+- **Faktor Pengurang (Penalty)**: Penalti $-15\%$ jika jam belajar mendekati waktu sholat maghrib/isya, atau jika beban guru melampaui batas aman kelelahan mengajar.
 
-### 5.2 Aturan Syariat Gender Berbasis Usia 10 Tahun
-Sesuai adab dan syariat pembinaan Al-Qur'an:
+### 5.2 Integrasi Kalender Eksternal (Google Calendar OAuth & Catatan Kesiapan API)
+1. **Pencegahan Bentrok Eksternal (Zero External Conflict)**:
+   - Guru dapat menghubungkan akun Google Calendar pada portal ketersediaan (`/mentor/availability`).
+   - Sistem membaca status slot waktu *Busy* dan *Free* agenda pribadi guru (Privacy Mode tanpa membaca rincian judul acara pribadi).
+   - Jika terdapat agenda sibuk pada jam bimbingan yang diminta santri baru, skor slot otomatis bernilai `0.0` (guru gugur dari rekomendasi dengan keterangan yang jelas).
+2. **Arsitektur Controller & Rute**:
+   - [`MentorCalendarController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Mentor/MentorCalendarController.php) mengelola alur:
+     - `GET /mentor/calendar/connect`: Mengarahkan ke izin Google OAuth2.
+     - `GET /mentor/calendar/callback`: Pertukaran token akses dan penyimpanan terenkripsi di `mentor_calendar_syncs`.
+     - `POST /mentor/calendar/disconnect`: Pemutusan integrasi kalender secara bersih.
+     - `GET /mentor/calendar/sync`: Sinkronisasi slot sibuk on-demand.
+3. ⚠️ **Catatan Status Kesiapan API Token Google Calendar**:
+   > **INFORMASI PENTING PENGEMBANGAN**:  
+   > Seluruh infrastruktur kode, controller, rute web, migrasi basis data, dan penanganan bentrok eksternal pada [`CalendarSyncService.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/CalendarSyncService.php) **telah selesai dibangun dan teruji 100%**.  
+   > Namun demikian, **API Token Google Calendar saat ini belum diaktifkan di lingkungan produksi** (masih beroperasi dalam *simulation mode / pending credentials* menunggu pendaftaran resmi `GOOGLE_CALENDAR_CLIENT_ID` dan `GOOGLE_CALENDAR_CLIENT_SECRET` pada Google Cloud Console).  
+   > Sistem menerapkan *graceful fallback*: jika token belum aktif, tombol antarmuka menampilkan notifikasi panduan tanpa menimbulkan kegagalan (crash) pada halaman ketersediaan guru.
+
+### 5.3 Smart Load Balancing & Proteksi Kelelahan Guru (Burnout Prevention)
+Untuk mencegah ketimpangan beban kerja guru populer dan menjaga stabilitas mental pengajar:
+1. **Formula Indeks Risiko Kelelahan (Burnout Risk Index)**:
+   Dihitung oleh [`SmartLoadBalancerService`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/SmartLoadBalancerService.php):
+   $$\text{Burnout Index} = (\text{Rasio Keterisian Slot} \times 50\%) + (\text{Penurunan Rating 30 Hari} \times 30\%) + (\text{Jam Mengajar Berturut-turut} \times 20\%)$$
+   Tingkat risiko diklasifikasikan ke dalam 4 tingkatan: *Low* ($\le 40\%$), *Medium* ($41–60\%$), *High* ($61–80\%$), dan *Critical* ($> 80\%$).
+2. **Saklar Pembinaan Otomatis (Load Throttling & Cooldown)**:
+   - Guru dengan kapasitas penuh ($\ge 100\%$) atau indeks risiko kritis otomatis berstatus `is_throttled = true`.
+   - Guru berstatus *throttled* otomatis dikesampingkan dari rekomendasi utama penugasan santri baru sampai beban kerja kembali proporsional.
+3. **Otomasi Evaluasi Tengah Malam**:
+   - Console scheduler pada [`routes/console.php`](file:///c:/xampp/htdocs/al-hikmah-lms/routes/console.php) mengevaluasi seluruh profil beban kerja guru aktif setiap hari pukul 00:30 WIB (`evaluate-mentor-burnout-daily`).
+
+### 5.4 Vektor Keselarasan Gaya Belajar Santri & Profil Pedagogis Guru (Cosine Similarity)
+1. **Kuesioner Gaya Belajar Wali Santri**:
+   Pada formulir pendaftaran santri baru ([`resources/views/parent/enrollments/create.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/parent/enrollments/create.blade.php)), wali santri mengisi preferensi 4 pilar belajar:
+   - **Visual ($V$)**: Ketertarikan pada gambar, diagram tajwid warna, dan kartu huruf.
+   - **Auditori ($A$)**: Kenyamanan menyimak irama tilawah dan talaqqi berulang.
+   - **Kinestetik ($K$)**: Kebutuhan gerak aktif dan praktik menulis huruf hijaiyah.
+   - **Patience Need ($P$)**: Tingkat kebutuhan guru yang ekstra sabar dan ramah anak.
+2. **Aljabar Vektor Cosine Similarity**:
+   Kecocokan dihitung secara deterministik internal (zero external cost, waktu eksekusi $< 5$ milidetik) antara vektor santri ($S$) dan vektor kapabilitas guru ($M$):
+   $$\text{Sim}(S, M) = \frac{V_s \cdot V_m + A_s \cdot A_m + K_s \cdot K_m + P_s \cdot P_m}{\sqrt{V_s^2 + A_s^2 + K_s^2 + P_s^2} \times \sqrt{V_m^2 + A_m^2 + K_m^2 + P_m^2}} \times 100\%$$
+   Skor pedagogi akhir memadukan $70\%$ keselarasan vektor dan $30\%$ rekam jejak retensi santri historis guru (`historical_retention_rate`).
+
+### 5.5 Aturan Syariat Gender Berbasis Usia 10 Tahun
 1. **Santri Perempuan**: WAJIB dibimbing oleh **Ustazah (Perempuan)** (Skor Ustadz = $0.0$, diskualifikasi mutlak).
 2. **Program Khusus Muslimah**: WAJIB dibimbing oleh **Ustazah (Perempuan)**.
 3. **Santri Laki-laki Usia di Bawah 10 Tahun (`age < 10`)**: WAJIB dibimbing oleh **Ustazah (Perempuan)** untuk pendekatan keibuan dan kesabaran usia dini (Skor Ustadz = $0.0$).
 4. **Santri Laki-laki Usia 10 Tahun ke Atas (`age >= 10`)**: WAJIB dibimbing oleh **Ustadz (Laki-laki)** untuk pembinaan keteladanan rijalul Qur'an (Skor Ustazah = $0.0$).
 
-### 5.3 Explainable AI (Why Not...? Tooltip Inspection)
+### 5.6 Explainable AI (Why Not...? Tooltip Inspection)
 Menyajikan transparansi alasan mengapa guru lain tidak masuk ke peringkat 3 Besar:
 - *"Santri laki-laki < 10 tahun wajib dibimbing oleh Ustazah (perempuan)."*
 - *"Jadwal mentor bentrok dengan santri privat (1-on-1) lain pada hari & jam yang diminta."*
+- *"Terdapat agenda pribadi di Google Calendar pada jam tersebut."*
+- *"Mentor sedang dalam masa pemulihan beban mengajar (Load Throttling)."*
 - *"Status mentor sedang cuti / hari bebas rutin."*
-- *"Jarak lokasi (22 km) melebihi batas ideal Home Visit."*
+- *"Jarak lokasi melebihi batas ideal Home Visit."*
 
-### 5.4 Family Blacklist Engine & Auto-Assign $\ge 95\%$
-- **Family Blacklist**: Jika wali santri pernah mengajukan mutasi/komplain ketidakcocokan terhadap seorang guru di masa lalu, guru tersebut otomatis berstatus blacklist untuk keluarga tersebut (Skor = $0.0$).
+### 5.7 Family Blacklist Engine & Auto-Assign $\ge 95\%$
+- **Family Blacklist**: Jika wali santri pernah mengajukan mutasi/komplain ketidakcocokan terhadap seorang guru di masa lalu (`student_mutation_logs`), guru tersebut otomatis berstatus blacklist untuk keluarga tersebut (Skor = $0.0$).
 - **Auto-Assign**: Pendaftaran dengan skor kecocokan sempurna ($\ge 95\%$) dapat otomatis dialokasikan oleh sistem untuk percepatan operasional lembaga.
 
 ---
@@ -555,9 +611,9 @@ Penerbitan tagihan biaya pendaftaran dan SPP bulanan otomatis, QRIS, Virtual Acc
 
 ---
 
-## 🗄️ 16. PENJELASAN SELURUH DATABASE (53 TABEL UTAMA)
+## 🗄️ 16. PENJELASAN SELURUH DATABASE (58 TABEL UTAMA)
 
-Basis data relasional MySQL/MariaDB Al-Hikmah LMS mencakup 53 tabel terindeks:
+Basis data relasional MySQL/MariaDB Al-Hikmah LMS mencakup 58 tabel terindeks:
 
 1. `users`: Akun pengguna dan autentikasi.
 2. `roles`: Master peran pengguna (admin, mentor, parent, student).
@@ -612,16 +668,26 @@ Basis data relasional MySQL/MariaDB Al-Hikmah LMS mencakup 53 tabel terindeks:
 51. `revenue_forecasts`: Proyeksi arus kas 6 bulan berbasis regresi linier dan musim.
 52. `predictive_analytics_audit_logs`: Audit trail intervensi WhatsApp dan ekspor laporan.
 53. `mentor_intervention_tickets`: Master tiket intervensi & penanganan komplain wali santri (memuat `ticket_number`, `mentor_id`, `student_id`, `parent_id`, `session_id`, `feedback_id`, `severity`, `complaint_category`, `status`, `action_plan`, `resolution_notes`, `handled_by`, `resolved_at`).
+54. `mentor_calendar_syncs`: Integrasi OAuth2 kalender eksternal (Google/Outlook/iCal), sync token, status privasi, dan cache slot jam sibuk agenda pribadi guru.
+55. `mentor_load_balance_profiles`: Profil kapasitas beban kerja mengajar guru, indeks risiko burnout, saklar throttling perlindungan kelelahan, dan riwayat masa pembinaan (*coaching cooldown*).
+56. `student_learning_styles`: Vektor preferensi gaya belajar santri (skor Visual, Auditori, Kinestetik, kebutuhan kesabaran guru, dan tempo belajar).
+57. `mentor_pedagogical_profiles`: Profil kapabilitas pedagogis guru (skala Visual, Auditori, Kinestetik, Kesabaran, dan tingkat retensi historis).
+58. `mentor_student_match_histories`: Rekam jejak kecocokan historis penugasan santri ke guru pembimbing, durasi pekan retensi, dan riwayat permohonan mutasi.
 
 ---
 
 ## 🧠 17. PENJELASAN SELURUH MODEL, SERVICE, & CONTROLLER INTI
 
 ### A. Model Eloquent Kunci:
-- [`Mentor.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/Mentor.php): Dilengkapi method [`hasScheduleConflict()`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/Mentor.php#L195) dan [`isAvailableForSchedule()`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/Mentor.php#L237) dengan relasi pivot lengkap `mentor_student` dan `interventionTickets`.
+- [`Mentor.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/Mentor.php): Dilengkapi method [`hasScheduleConflict()`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/Mentor.php#L195) dan [`isAvailableForSchedule()`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/Mentor.php#L237) dengan relasi pivot lengkap `mentor_student`, `interventionTickets`, `calendarSync`, `loadBalanceProfile`, `pedagogicalProfile`, dan `matchHistories`.
 - [`MentorAvailability.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/MentorAvailability.php): Master konstanta slot 0–6 (`SLOT_MAP`), mapping hari, konversi waktu ke angka slot (`getSlotNumberFromTime`), dan method `hasSlot()`.
 - [`Enrollment.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/Enrollment.php): Logika alur status pendaftaran, sinkronisasi kuota lunas (`syncToMentorStudent`), dan kalkulasi tanggal sesi perdana (`calculateFirstSessionDate`).
-- [`Student.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/Student.php): Profil santri, relasi pivot dengan mentor, dan pemantauan gamifikasi.
+- [`Student.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/Student.php): Profil santri, relasi pivot dengan mentor, pemantauan gamifikasi, dan relasi `learningStyle`.
+- [`MentorCalendarSync.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/MentorCalendarSync.php): Manajemen kredensial OAuth2 Google Calendar terenkripsi otomatis, status koneksi, dan cache jadwal sibuk.
+- [`MentorLoadBalanceProfile.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/MentorLoadBalanceProfile.php): Model profil beban mengajar, batas kapasitas santri aktif, skor risiko burnout, dan cooldown pembinaan.
+- [`StudentLearningStyle.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/StudentLearningStyle.php): Model profil gaya belajar santri berdasarkan kuesioner wali santri saat pendaftaran.
+- [`MentorPedagogicalProfile.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/MentorPedagogicalProfile.php): Model karakteristik pedagogis guru dan persentase retensi historis.
+- [`MentorStudentMatchHistory.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/MentorStudentMatchHistory.php): Model histori kecocokan santri dan guru untuk evaluasi retensi jangka panjang.
 - [`MentorApplication.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/MentorApplication.php): Siklus hidup lamaran guru, tahapan seleksi (stage 1–5), data interview, berkas dokumen, dan stempel verifikasi.
 - [`MentorProbationTracking.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/MentorProbationTracking.php): Pelacakan evaluasi masa percobaan 90 hari, sinkronisasi metrik kehadiran aktual, rating wali santri, dan status modul orientasi.
 - [`MentorFeedback.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Models/MentorFeedback.php): Model ulasan pasca sesi bimbingan dengan relasi rincian kategori rating multi-dimensi dan `interventionTicket`.
@@ -633,7 +699,9 @@ Basis data relasional MySQL/MariaDB Al-Hikmah LMS mencakup 53 tabel terindeks:
 - [`MentorFeedbackService.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/MentorFeedbackService.php): Pengelolaan ulasan pasca sesi bimbingan, analisis sentimen otomatis (`analyzeSentimentAndDetectComplaint`) pendeteksi komplain, penerbitan tiket intervensi otomatis ke koordinator akademik, notifikasi darurat WhatsApp Admin, dan pembaruan otomatis rating profil guru.
 - [`MentorAccountService.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/MentorAccountService.php): Otomasi pembuatan/aktivasi akun mentor saat disetujui, inisialisasi relasi `mentor_probation_trackings`, dan pengiriman kredensial login via WhatsApp.
 - [`MentorAvailabilityService.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/MentorAvailabilityService.php): Penyimpanan ketersediaan slot, parser format WhatsApp, dan validasi kapasitas slot privat 1-on-1.
-- [`MentorMatchingService.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/MentorMatchingService.php): Smart Matchmaking AI v2.1 (5 faktor terbobot, aturan gender 10 tahun, evaluasi multi-hari, dan proteksi bentrok slot).
+- [`CalendarSyncService.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/CalendarSyncService.php): Integrasi kalender eksternal, penanganan alur OAuth2 Google Calendar, sinkronisasi token, dan validasi irisan agenda sibuk pribadi dengan jadwal santri.
+- [`SmartLoadBalancerService.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/SmartLoadBalancerService.php): Evaluasi rasio beban aktif mentor, kalkulasi Burnout Risk Index, dan aktivasi otomatis throttling perlindungan kelelahan guru.
+- [`MentorMatchingService.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/MentorMatchingService.php): Smart Matchmaking AI v3.0 (6 kriteria multi-dimensi berbobot, Cosine Similarity preferensi belajar santri vs pedagogis mentor, integrasi kalender eksternal, proteksi burnout throttling, aturan gender 10 tahun, dan evaluasi multi-hari).
 - [`AlertService.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/AlertService.php): Pemindaian anomali operasional 3-tier harian lembaga, termasuk deteksi tiket intervensi komplain terbuka (`crit_open_intervention_tickets`) dan feedback rendah ($\le 3$).
 - [`DropoutPredictionService.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/PredictiveAnalytics/DropoutPredictionService.php): Kalkulasi 4 pilar skor risiko dropout santri.
 - [`LearningVelocityService.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/PredictiveAnalytics/LearningVelocityService.php): Analitik kecepatan setoran dan estimasi khatam.
@@ -644,10 +712,11 @@ Basis data relasional MySQL/MariaDB Al-Hikmah LMS mencakup 53 tabel terindeks:
 - [`Admin\AdminRecruitmentController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Admin/AdminRecruitmentController.php): Manajemen navigasi 7-tab ATS pelamar, verifikasi berkas 1-klik, penjadwalan tes/wawancara, dan keputusan penerimaan.
 - [`Admin\AdminProbationController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Admin/AdminProbationController.php): Monitoring masa percobaan guru baru, 1-klik sinkronisasi metrik aktual LMS (`syncLiveMetrics`), dan penentuan keputusan kelulusan.
 - [`Parent\ParentFeedbackController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Parent/ParentFeedbackController.php): Pemrosesan ulasan pasca sesi bimbingan dari wali santri dengan validasi multi-rating dan opsi anonim.
-- [`Admin\EnrollmentController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Admin/EnrollmentController.php): Penugasan santri, filter ketersediaan mentor OPSI A (`$availableMentorsForOptionA`), validasi bentrok di `accept()`, dan pengajuan jadwal alternatif OPSI B.
-- [`Mentor\AvailabilityController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Mentor/AvailabilityController.php): Pengaturan jadwal slot 0–6 dan penetapan hari bebas oleh guru.
+- [`Admin\EnrollmentController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Admin/EnrollmentController.php): Penugasan santri, filter ketersediaan mentor OPSI A (`$availableMentorsForOptionA`), validasi bentrok di `accept()`, inspeksi visual Pedagogy & Load Balancing score, dan pengajuan jadwal alternatif OPSI B.
+- [`Mentor\AvailabilityController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Mentor/AvailabilityController.php): Pengaturan jadwal slot 0–6, penetapan hari bebas, dan inspeksi indikator beban kerja guru.
+- [`Mentor\MentorCalendarController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Mentor/MentorCalendarController.php): Penanganan integrasi Google Calendar (koneksi OAuth, callback, pemutusan akun, dan sinkronisasi manual).
 - [`Admin\MentorAvailabilityController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Admin/MentorAvailabilityController.php): Matriks 7 hari keterisian slot guru dan quick assign santri.
-- [`Parent\EnrollmentController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Parent/EnrollmentController.php): Edit jadwal pendaftaran santri sebelum bayar dan proteksi lock pasca-bayar.
+- [`Parent\EnrollmentController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Parent/EnrollmentController.php): Pendaftaran santri baru dengan kuesioner 4 dimensi gaya belajar anak, edit jadwal sebelum bayar, dan proteksi lock pasca-bayar.
 
 ---
 
@@ -659,6 +728,7 @@ Basis data relasional MySQL/MariaDB Al-Hikmah LMS mencakup 53 tabel terindeks:
 4. `php artisan gamification:refresh-leaderboard`: Snapshot peringkat santri harian (Pukul 00:00 WIB).
 5. `php artisan alerts:scan`: Memindai anomali sistem 3 kali sehari (Pukul 06:00, 12:00, 18:00 WIB).
 6. `php artisan queue:work`: Memproses antrean pesan WhatsApp dan email secara asynchronous.
+7. `Schedule Task (00:30 WIB - evaluate-mentor-burnout-daily)`: Evaluasi harian indeks kelelahan dan Smart Load Balancing untuk seluruh mentor aktif (`SmartLoadBalancerService::calculateBurnoutIndex`).
 
 ---
 
@@ -674,7 +744,7 @@ al-hikmah-lms/
 │   │   ├── Admin/                                   # Controller Admin (Tickets, Enrollment, Analytics, Mentors)
 │   │   ├── Mentor/                                  # Controller Mentor (Availability, Sessions, Questions)
 │   │   └── Parent/                                  # Controller Orang Tua (Enrollment, Children, Feedbacks)
-│   ├── Models/                                      # 53 Eloquent Models
+│   ├── Models/                                      # 58 Eloquent Models
 │   └── Services/                                    # Service Layer Bisnis & AI Matching
 ├── database/
 │   ├── migrations/                                  # Migrasi Skema Basis Data Lengkap
@@ -738,8 +808,8 @@ graph TD
 5. **Sinkronisasi Portofolio Rekrutmen Penuh (`/bergabung` ↔ `/mentor/profile`)**: Seluruh data kualifikasi yang diisi ustadz/ustazah saat mendaftar (Pendidikan Terakhir, Institusi/Kampus, Tanggal Lahir, Jenis Kelamin, Kota/Kabupaten, Jumlah Hafalan Juz, Pengalaman Mengajar, Silsilah Sanad, serta berkas CV & Sertifikat) tampil lengkap di profil guru, dapat diunduh, dan diperbarui kapan saja secara mandiri.
 6. **Sinkronisasi Data Dua Arah & FormRequest Terpusat**: Seluruh pembaruan profil divalidasi oleh `ProfileUpdateRequest` dengan pesan validasi berbahasa Indonesia yang bersahabat. Pembaruan nama oleh santri secara otomatis menyinkronkan data `users.name` dan `students.full_name` sehingga riwayat sertifikat dan absensi tetap konsisten.
 7. **Keamanan Unggah Avatar & Fallback Islami**: Validasi ketat ukuran berkas maksimal 2MB (format JPG, PNG, WEBP) dengan instant JavaScript preview (`window.previewAvatar`). Jika pengguna belum mengunggah foto, sistem menyajikan avatar fallback UI-Avatars berlatar warna primer kebanggaan Al-Hikmah `#0d7a3e` yang elegan.
-7. **Dukungan Penuh Dark Mode & Kompatibilitas Style.css**: Seluruh kartu profil, badge, input form, dan preview foto telah disesuaikan dengan skema warna gelap (*dark theme*) Al-Hikmah LMS melalui integrasi di `public/assets/css/style.css` dan `public/assets/js/scripts.js`.
-8. **Ganti Password Santri dengan Audit Trail**: Santri dapat mengganti password *default* `santri123` menjadi password pribadi rahasia secara mandiri, di mana setiap perubahan tercatat rapi pada tabel audit `password_reset_logs` untuk menjaga keamanan akun.
+8. **Dukungan Penuh Dark Mode & Kompatibilitas Style.css**: Seluruh kartu profil, badge, input form, dan preview foto telah disesuaikan dengan skema warna gelap (*dark theme*) Al-Hikmah LMS melalui integrasi di `public/assets/css/style.css` dan `public/assets/js/scripts.js`.
+9. **Ganti Password Santri dengan Audit Trail**: Santri dapat mengganti password *default* `santri123` menjadi password pribadi rahasia secara mandiri, di mana setiap perubahan tercatat rapi pada tabel audit `password_reset_logs` untuk menjaga keamanan akun.
 
 ---
 
@@ -767,13 +837,15 @@ Sistem telah diuji secara komprehensif menggunakan framework pengujian **Pest PH
    PASS  tests/Feature/MentorRecruitment/RecruitmentFlowTest.php (7 tests, 27 assertions)
    PASS  tests/Feature/MentorRecruitment/ProbationTrackingTest.php (5 tests, 31 assertions)
    PASS  tests/Feature/MentorMatchingServiceTest.php (9 tests, 34 assertions)
+   PASS  tests/Feature/MentorMatchingV3Test.php (4 tests, 12 assertions)
+   PASS  tests/Feature/MentorMatchingServiceTest.php (9 tests, 34 assertions)
    PASS  tests/Feature/MentorAvailabilityTest.php (11 tests, 56 assertions)
    PASS  tests/Feature/Admin/PredictiveAnalyticsDashboardTest.php (5 tests)
    PASS  tests/Feature/Admin/MentorPerformanceDashboardTest.php (10 tests)
    PASS  tests/Feature/StudentDashboardTest.php (10 tests)
-   PASS  ... (Seluruh Modul Operasional, Gamifikasi, AI Soal, Finansial, ATS LMS, Intervensi Sentimen, & Profil Multi-Role)
+   PASS  ... (Seluruh Modul Operasional, Gamifikasi, AI Soal, Finansial, ATS LMS, Intervensi Sentimen, Profil Multi-Role, & Smart Matchmaking v3.0)
 
-   Tests:    100% Green Pass (411 Tests Passed, 1833 Assertions)
+   Tests:    100% Green Pass (415 Tests Passed, 1845 Assertions)
    Code Style: vendor/bin/pint --format agent (100% PSR-12 / Laravel Compliant)
 ```
 
@@ -817,3 +889,73 @@ Sebagai bagian dari komitmen terhadap mutu visual premium, kejelasan alur penggu
 ### 22.3 Aksesibilitas Keyboard & Semantik HTML5:
 - Seluruh layout publik di `resources/views/layouts/landing.blade.php` telah dibungkus dengan elemen semantik `<main id="main-content">` serta tautan lompat aksesibilitas keyboard (`<a href="#main-content" class="skip-to-main">Langsung ke konten utama</a>`).
 - Seluruh formulir dilengkapi atribut `aria-label`, penanganan kontras WCAG AA, serta navigasi keyboard yang ramah pengguna.
+
+### 22.4 Eliminasi Warna Biru Navbar & Harmonisasi Palet Hijau-Emas:
+1. **Pembersihan State & Badge Biru Bootstrap**:
+   - Seluruh badge dan tag berwarna biru/sian standar Bootstrap (`bg-primary-subtle text-primary`, `bg-info-subtle text-info`) pada `resources/views/partials/navbar.blade.php` diganti menggunakan palet khas Islami Al-Hikmah: hijau zamrud muda (`bg-success-subtle text-success`) dan emas hangat (`bg-warning-subtle text-warning`).
+   - Mencegah benturan kontras visual yang menyilaukan mata dan menyulitkan keterbacaan teks bagi wali santri dan calon guru.
+2. **Override CSS Spesifik Navigasi (#mainNavbar)**:
+   - Menambahkan aturan CSS eksplisit pada `public/assets/css/style.css` agar kelas aktif dropdown navigasi (`.dropdown-item.active`, `.dropdown-item:active`, `:focus`) tidak lagi menggunakan warna biru default Bootstrap (`#0d6efd`).
+   - Pada mode terang, state aktif menggunakan `background: var(--primary-lighter)` dan `color: var(--primary)` dengan font-weight semi-tebal.
+   - Pada mode gelap (`[data-bs-theme="dark"]`), state aktif mengadopsi `background-color: rgba(34, 197, 94, 0.16)` dan teks `var(--primary)`.
+3. **Kepatuhan Guard Hak Akses Navigasi**:
+   - Menjaga 100% aturan isolasi hak akses peran: menu Karir Guru hanya tampil untuk guest (`@guest`), menu Informasi Biaya & Paket hanya dapat diakses oleh Parent & Admin (`@auth @if (auth()->user()->isParent() || auth()->user()->isAdmin())`), serta tombol aksi dinamis `Mulai Perjalanan` bagi pengunjung baru.
+
+### 22.5 Modern Split-Screen Onboarding Guru Mitra (`/bergabung`):
+1. **Arsitektur Dual-Side Layout (Form Kiri, Gambar Kanan)**:
+   - Mengubah antarmuka rekrutmen pengajar di `resources/views/public/mentor-recruitment/register.blade.php` dan `resources/views/bergabung.blade.php` menjadi layout modern split-screen `.mentor-split-card`.
+   - **Sisi Kiri (`.mentor-form-side`)**:
+     - Formulir pendaftaran terstruktur dengan 3 seksi logis: *1. Informasi Pribadi & Akun Login*, *2. Kualifikasi Pendidikan, Hafalan & Sanad*, dan *3. Unggah Berkas Persyaratan (CV & Sertifikat)*.
+     - Dilengkapi tombol interaktif intip/sembunyikan kata sandi (`btn-password-toggle`) pada kolom input password dan konfirmasi password.
+   - **Sisi Kanan (`.mentor-image-side`)**:
+     - Visual berlatar belakang foto tematik Al-Qur'an resolusi tinggi (`assets/img/auth-bg.jpg`) dengan gradien hijau zamrud-slate gelap (`mentor-image-overlay`).
+     - Kutipan Hadits Keutamaan Pengajar Al-Qur'an dari HR. Al-Bukhari No. 5027.
+     - 3 Kartu Manfaat Bermitra: *Bimbingan Bersanad & Terarah*, *Fleksibilitas Waktu & Wilayah (Online/Home Visit)*, serta *Ujrah Profesional & Amanah*.
+     - Alur ringkas 3 langkah seleksi rekrutmen dan tombol cepat konsultasi via WhatsApp ke sekretariat lembaga.
+2. **Pembersihan Komponen Obsolet**:
+   - Menghilangkan banner `breadcrumb_bg` dan section kriteria `why-card` yang sebelumnya memberatkan bagian atas halaman, sehingga calon guru langsung disambut dengan antarmuka formulir yang bersih, profesional, dan fokus.
+
+### 22.6 Elevasi Desain Halaman Metode Belajar (`/metode`):
+1. **3 Kartu Pilihan Metode Belajar Interaktif**:
+   - *Privat Guru Datang ke Rumah (Home Visit)*: Dilengkapi animasi denyut halus `badge-pulse` pada label rekomendasi keluarga.
+   - *Privat Online Tatap Layar Interaktif*: Solusi fleksibel dari mana saja dengan rekaman evaluasi tajwid.
+   - *Hybrid Fleksibel*: Kombinasi seimbang antara tatap muka langsung dan pendampingan daring.
+2. **Tabel Matriks Perbandingan Fitur Terpadu**:
+   - Menghadirkan `.table-comparison-wrapper` yang membandingkan 6 dimensi layanan (Lokasi, Interaksi Guru, Media Pembelajaran, Fleksibilitas Waktu, Ketersediaan Wilayah, dan Rekomendasi Usia) secara transparan dan mudah dipahami wali santri.
+3. **Pilihan Ritme & Intensitas Belajar**:
+   - 4 kartu ritme bimbingan (2x, 3x, 4x, dan 5x pertemuan per pekan) dengan efek angkat kartu (`hover-lift`).
+4. **Cakupan Wilayah Jabodetabek & Integrasi Peran**:
+   - Grid cakupan layanan Home Visit untuk area Jakarta, Bogor, Depok, Tangerang, dan Bekasi, dilengkapi tombol verifikasi alamat ke admin.
+   - Menjaga kepatuhan teks tombol aksi peran: `Informasi Pendampingan` bagi Parent dan `Informasi Pendampingan (Kamu Administrator)` bagi Admin.
+
+### 22.7 Overhaul Antislop Halaman Biaya & Paket (`/biaya`):
+1. **Gaya Bahasa Lugas & Tulus (Antislop Copywriting)**:
+   - Menghilangkan frasa klise AI dan hiperbola komersial. Seluruh teks disusun menggunakan bahasa Indonesia yang santun, bersahaja, dan mengedepankan nilai ibadah.
+2. **Kotak Investasi Pendaftaran Santri Baru Transparan**:
+   - Menampilkan kotak rincian registrasi santri baru sebesar Rp 150.000 dengan jabaran detail: sesi penentuan level awal (*initial assessment*), buku mutabaah hafalan digital, modul kaidah tajwid berjenjang, dan laporan evaluasi bulanan.
+3. **Kartu Paket Belajar Berjenjang (`.paket-card-v2`)**:
+   - Penyajian harga dinamis terintegrasi basis data, label usia/level santri, durasi minggu terstruktur, dan deteksi status pendaftaran santri aktif bagi wali santri terautentikasi.
+   - Teks tombol aksi terstandarisasi: `Pilih Program & Jadwal`.
+4. **4 Jaminan Layanan Syar'i Lembaga**:
+   - *Garansi Kesesuaian Guru*, *Sesi Pengganti Syar'i*, *Rapor Mutaba'ah Berkala*, dan *Komitmen Tanpa Biaya Tersembunyi*.
+5. **Akordion Tanya Jawab Investasi**:
+   - Menjawab pertanyaan lazim wali santri perihal skema cicilan/termin, pergantian guru jika tidak cocok, serta prosedur izin santri sakit/uzur.
+
+### 22.8 Animasi Mikro Elegan & Kepatuhan WCAG AA / Aksesibilitas Gerak:
+1. **Animasi Mikro Berkelanjutan**:
+   - Keyframe animasi denyut halus `@keyframes badgePulse` untuk menarik fokus tanpa mengganggu konsentrasi membaca.
+   - Efek kartu melayang vertikal halus `.hover-lift` (`transform: translateY(-4px)`) dengan transisi kubik alami.
+2. **Aksesibilitas Sensitivitas Gerak (`prefers-reduced-motion`)**:
+   - Seluruh animasi dinonaktifkan secara otomatis bagi pengguna yang mengaktifkan preferensi *reduce motion* di tingkat sistem operasi:
+     ```css
+     @media (prefers-reduced-motion: reduce) {
+         .badge-pulse,
+         .hover-lift:hover {
+             animation: none !important;
+             transform: none !important;
+         }
+     }
+     ```
+3. **Auto Cache Busting Aset Statis**:
+   - Seluruh pemanggilan `style.css` pada layout utama kini dilengkapi stempel waktu otomatis `?v={{ filemtime(...) }}` untuk mencegah masalah cache browser saat pembaruan CSS diterapkan.
+

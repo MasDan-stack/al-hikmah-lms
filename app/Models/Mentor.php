@@ -372,4 +372,24 @@ class Mentor extends Model
     {
         return $this->hasMany(AhpEvaluationSnapshot::class);
     }
+
+    public function calendarSync(): HasOne
+    {
+        return $this->hasOne(MentorCalendarSync::class, 'mentor_id');
+    }
+
+    public function loadBalanceProfile(): HasOne
+    {
+        return $this->hasOne(MentorLoadBalanceProfile::class, 'mentor_id');
+    }
+
+    public function pedagogicalProfile(): HasOne
+    {
+        return $this->hasOne(MentorPedagogicalProfile::class, 'mentor_id');
+    }
+
+    public function matchHistories(): HasMany
+    {
+        return $this->hasMany(MentorStudentMatchHistory::class, 'mentor_id');
+    }
 }

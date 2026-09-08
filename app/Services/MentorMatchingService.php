@@ -15,15 +15,17 @@ use Illuminate\Support\Facades\DB;
 class MentorMatchingService
 {
     // Bobot Kompatibilitas Sesuai PRD (Total 100%)
-    public const WEIGHT_GENDER = 0.25;
+    public const WEIGHT_GENDER = 0.20;
 
-    public const WEIGHT_LOCATION = 0.20;
+    public const WEIGHT_LOCATION = 0.15;
 
-    public const WEIGHT_SLOT = 0.25;
+    public const WEIGHT_SLOT = 0.20;
 
-    public const WEIGHT_SPECIALIZATION = 0.20;
+    public const WEIGHT_SPECIALIZATION = 0.15;
 
-    public const WEIGHT_LOAD = 0.10;
+    public const WEIGHT_LOAD = 0.15;
+
+    public const WEIGHT_PEDAGOGY = 0.15;
 
     /**
      * Dapatkan rekomendasi mentor teratas untuk sebuah enrollment (Top N).
@@ -111,13 +113,16 @@ class MentorMatchingService
                 $breakdown['disqualified_reason'] = 'Gender mentor tidak sesuai dengan aturan umur/gender santri.';
             } elseif ($breakdown['slot'] === 0.0) {
                 $totalScore = 0.0;
-                $breakdown['disqualified_reason'] = 'Mentor libur, tidak membuka slot jam yang diminta, atau jadwal bentrok dengan santri privat lain (1-on-1).';
+                $breakdown['disqualified_reason'] = $breakdown['disqualified_reason'] ?? 'Mentor libur, tidak membuka slot jam yang diminta, atau jadwal bentrok dengan santri privat lain (1-on-1).';
+            } elseif (! empty($breakdown['disqualified_reason'])) {
+                $totalScore = 0.0;
             } else {
                 $totalScore = ($breakdown['gender'] * self::WEIGHT_GENDER) +
                               ($breakdown['location'] * self::WEIGHT_LOCATION) +
                               ($breakdown['slot'] * self::WEIGHT_SLOT) +
                               ($breakdown['specialization'] * self::WEIGHT_SPECIALIZATION) +
                               ($breakdown['load'] * self::WEIGHT_LOAD) +
+                              ($breakdown['pedagogy'] * self::WEIGHT_PEDAGOGY) +
                               ($breakdown['gamification_boost'] ?? 0) +
                               ($breakdown['performance_boost'] ?? 0) -
                               ($breakdown['burnout_throttle_penalty'] ?? 0) -
@@ -174,6 +179,21 @@ class MentorMatchingService
         $slotScore = $this->calculateSlotScore($mentor, $day, $enrollment);
         $specScore = $this->calculateSpecializationScore($mentor, $program);
         $loadScore = $this->calculateLoadScore($mentor, $avgLoad);
+        $pedagogyScore = $this->calculatePedagogyScore($mentor, $student);
+
+        $disqualifiedReason = null;
+
+        // Calendar Conflict Check
+        $reqTime = $enrollment ? $enrollment->requested_time : null;
+        if ($reqTime && app(CalendarSyncService::class)->hasExternalConflict($mentor, $day, $reqTime)) {
+            $slotScore = 0.0;
+            $disqualifiedReason = 'Terdapat agenda pribadi di Google Calendar pada jam tersebut.';
+        }
+
+        // Load Throttling Check
+        if (app(SmartLoadBalancerService::class)->isThrottledFromNewStudents($mentor)) {
+            $disqualifiedReason = 'Mentor sedang dalam masa pemulihan beban mengajar.';
+        }
 
         // 1. Boost Lencana Teladan (M01 / M03) atau Rating >= 4.9 (+5%)
         $hasTopBadge = false;
@@ -198,7 +218,7 @@ class MentorMatchingService
         // 3. Burnout & Workload Safety Throttle Penalty
         $activeStudentsCount = $mentor->students()->wherePivot('is_active', true)->count();
         $burnoutPenalty = 0.0;
-        if ($activeStudentsCount >= 35) {
+        if ($activeStudentsCount >= 35 || app(SmartLoadBalancerService::class)->calculateBurnoutIndex($mentor) > 60) {
             $burnoutPenalty = 15.0; // Burnout throttle protection
         }
 
@@ -217,10 +237,12 @@ class MentorMatchingService
             'slot' => $slotScore,
             'specialization' => $specScore,
             'load' => $loadScore,
+            'pedagogy' => $pedagogyScore,
             'gamification_boost' => $badgeBoost,
             'performance_boost' => $perfBoost,
             'burnout_throttle_penalty' => $burnoutPenalty,
             'prayer_penalty' => $prayerPenalty,
+            'disqualified_reason' => $disqualifiedReason,
         ];
     }
 
@@ -422,6 +444,41 @@ class MentorMatchingService
         return max(50.0, round(100.0 - ($excess * 50.0), 1));
     }
 
+    public function calculatePedagogyScore(Mentor $mentor, Student $student): float
+    {
+        $mProfile = $mentor->pedagogicalProfile;
+        $sProfile = $student->learningStyle;
+
+        if (! $mProfile || ! $sProfile) {
+            return 80.0; // Default if not profiled
+        }
+
+        $v_s = $sProfile->visual_score;
+        $a_s = $sProfile->auditory_score;
+        $k_s = $sProfile->kinesthetic_score;
+        $p_s = $sProfile->patience_need;
+
+        $v_m = $mProfile->visual_capability;
+        $a_m = $mProfile->auditory_capability;
+        $k_m = $mProfile->kinesthetic_capability;
+        $p_m = $mProfile->patience_rating;
+
+        $dotProduct = ($v_s * $v_m) + ($a_s * $a_m) + ($k_s * $k_m) + ($p_s * $p_m);
+        $magS = sqrt(pow($v_s, 2) + pow($a_s, 2) + pow($k_s, 2) + pow($p_s, 2));
+        $magM = sqrt(pow($v_m, 2) + pow($a_m, 2) + pow($k_m, 2) + pow($p_m, 2));
+
+        if ($magS == 0 || $magM == 0) {
+            return 80.0;
+        }
+
+        $cosineSimilarity = $dotProduct / ($magS * $magM);
+        $score = $cosineSimilarity * 100;
+
+        $historyScore = (float) $mProfile->historical_retention_rate;
+
+        return round(($score * 0.7) + ($historyScore * 0.3), 1);
+    }
+
     public function isFamilyBlacklisted(?Student $student, Mentor $mentor): bool
     {
         if (! $student || ! $student->parent_id) {
@@ -495,6 +552,14 @@ class MentorMatchingService
 
         if (! $mentor->hasQuotaOnDay($dayKey)) {
             $reasons[] = "Kuota hari {$dayName} telah penuh atau mentor libur.";
+        }
+
+        if (app(SmartLoadBalancerService::class)->isThrottledFromNewStudents($mentor)) {
+            $reasons[] = 'Mentor sedang dalam masa pemulihan beban mengajar (Load Throttling).';
+        }
+
+        if ($enrollment->requested_time && app(CalendarSyncService::class)->hasExternalConflict($mentor, $dayKey, $enrollment->requested_time)) {
+            $reasons[] = 'Terdapat agenda pribadi di kalender eksternal pada jam tersebut.';
         }
 
         if (($mentor->distance_km ?? 0) > 20 && strtolower($enrollment->learning_method ?? '') === 'offline') {

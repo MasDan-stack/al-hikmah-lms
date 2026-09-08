@@ -2,6 +2,8 @@
 
 use App\Enums\EnrollmentStatus;
 use App\Models\Enrollment;
+use App\Models\Mentor;
+use App\Services\SmartLoadBalancerService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
@@ -56,3 +58,14 @@ Schedule::command('probation:daily-sync --notify')
     ->timezone('Asia/Jakarta')
     ->withoutOverlapping()
     ->name('sync-daily-mentor-probation');
+
+// ⚖️ Evaluasi Harian Indeks Kelelahan & Smart Load Balancing Mentor (Setiap pukul 00:30 WIB)
+Schedule::call(function () {
+    $mentors = Mentor::where('is_active', true)->get();
+    $loadBalancer = app(SmartLoadBalancerService::class);
+    foreach ($mentors as $mentor) {
+        $loadBalancer->calculateBurnoutIndex($mentor);
+    }
+})->dailyAt('00:30')
+    ->timezone('Asia/Jakarta')
+    ->name('evaluate-mentor-burnout-daily');

@@ -4,9 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="AL-HIKMAH: Menemani perjalanan anak usia 10–15 tahun untuk mengenal, mencintai, dan menghidupkan nilai-nilai Al-Qur'an dalam kehidupan.">
+    <meta name="description" content="@yield('meta_description', 'AL-HIKMAH: Menemani perjalanan belajar Al-Qur\'an anak dan keluarga dengan metode terarah, guru bersanad, dan pemantauan berkala.')">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="AL-HIKMAH">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('title', 'AL-HIKMAH | Menemani Perjalanan Belajar Al-Qur\'an')">
+    <meta property="og:description" content="@yield('meta_description', 'AL-HIKMAH: Menemani perjalanan belajar Al-Qur\'an anak dan keluarga dengan metode terarah, guru bersanad, dan pemantauan berkala.')">
+    <meta property="og:image" content="{{ asset('assets/img/auth-bg.jpg') }}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="@yield('title', 'AL-HIKMAH | Menemani Perjalanan Belajar Al-Qur\'an')">
+    <meta name="twitter:description" content="@yield('meta_description', 'AL-HIKMAH: Menemani perjalanan belajar Al-Qur\'an anak dan keluarga dengan metode terarah, guru bersanad, dan pemantauan berkala.')">
+    <meta name="twitter:image" content="{{ asset('assets/img/auth-bg.jpg') }}">
+
+    <!-- JSON-LD Structured Data Schema -->
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "EducationalOrganization",
+      "name": "AL-HIKMAH",
+      "url": "{{ url('/') }}",
+      "logo": "{{ asset('assets/img/logo/logo.png') }}",
+      "description": "Lembaga Bimbingan Belajar Al-Qur'an Privat Online, Home Visit, dan Tahfidz.",
+      "telephone": "{{ site_setting('whatsapp_number', '+6285786689008') }}",
+      "address": {
+        "@@type": "PostalAddress",
+        "addressCountry": "ID"
+      }
+    }
+    </script>
+
     <script>
         (function() {
             try {
@@ -36,8 +71,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.1.1/index.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    <!-- Custom CSS with Auto Cache Busting -->
+    <link href="{{ asset('assets/css/style.css') }}?v={{ file_exists(public_path('assets/css/style.css')) ? filemtime(public_path('assets/css/style.css')) : time() }}" rel="stylesheet">
 
     @stack('styles')
 </head>
@@ -48,13 +83,13 @@
 
     <noscript>
         <div style="background: #fff3cd; color: #856404; padding: 15px; text-align: center; border-bottom: 3px solid #ffc107;">
-            ⚠️ Beberapa fitur website ini memerlukan JavaScript. Silakan aktifkan JavaScript di browser Anda untuk pengalaman terbaik.
+            Perhatian: Beberapa fitur interaktif website ini memerlukan JavaScript aktif untuk pengalaman terbaik.
         </div>
     </noscript>
 
     <div id="loadingScreen" class="loading-screen">
         <div class="loader-container">
-            <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH" height="80" style="margin-bottom: 20px;">
+            <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH Logo" height="80" style="margin-bottom: 20px;">
             <div class="loader-text">AL-HIKMAH</div>
             <div class="loader-subtext">Memuat...</div>
         </div>

@@ -168,7 +168,7 @@
                     </div>
 
                     <!-- Step 4: Estimasi Jam & Catatan Khusus -->
-                    <div class="mb-4">
+                    <div class="mb-4 pb-3 border-bottom">
                         <div class="d-flex align-items-center gap-2 mb-3">
                             <span class="badge rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">4</span>
                             <h5 class="fw-bold text-heading mb-0">Waktu & Catatan Tambahan (Opsional)</h5>
@@ -187,6 +187,38 @@
                                     <i class="bi bi-chat-left-quote me-1 text-success"></i> Catatan / Preferensi Khusus
                                 </label>
                                 <textarea name="parent_notes" class="form-control rounded-4 p-3 border-subtle @error('parent_notes') is-invalid @enderror" rows="2" placeholder="Contoh: Lebih nyaman dibimbing oleh ustadzah (guru wanita), ananda baru mulai dari Iqra 2, dsb.">{{ old('parent_notes') }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Gaya Belajar Anak (Learning Style) -->
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">5</span>
+                            <h5 class="fw-bold text-heading mb-0">Gaya Belajar Anak (Learning Style) <span class="text-danger">*</span></h5>
+                        </div>
+                        <p class="text-muted small mb-3">Bantu kami mencocokkan ananda dengan guru yang paling pas melalui kuesioner singkat ini.</p>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-secondary">Visual (Suka gambar/warna?)</label>
+                                <input type="range" class="form-range" name="visual_score" min="1" max="5" step="1" value="{{ old('visual_score', 3) }}">
+                                <div class="d-flex justify-content-between small text-muted" style="font-size: 0.7rem;"><span>Kurang Suka</span><span>Sangat Suka</span></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-secondary">Auditori (Suka mendengar/bercerita?)</label>
+                                <input type="range" class="form-range" name="auditory_score" min="1" max="5" step="1" value="{{ old('auditory_score', 3) }}">
+                                <div class="d-flex justify-content-between small text-muted" style="font-size: 0.7rem;"><span>Kurang Suka</span><span>Sangat Suka</span></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-secondary">Kinestetik (Suka bergerak/praktik?)</label>
+                                <input type="range" class="form-range" name="kinesthetic_score" min="1" max="5" step="1" value="{{ old('kinesthetic_score', 3) }}">
+                                <div class="d-flex justify-content-between small text-muted" style="font-size: 0.7rem;"><span>Kurang Suka</span><span>Sangat Suka</span></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-secondary">Kebutuhan Kesabaran Ekstra?</label>
+                                <input type="range" class="form-range" name="patience_need" min="1" max="5" step="1" value="{{ old('patience_need', 3) }}">
+                                <div class="d-flex justify-content-between small text-muted" style="font-size: 0.7rem;"><span>Standar</span><span>Sangat Butuh</span></div>
                             </div>
                         </div>
                     </div>

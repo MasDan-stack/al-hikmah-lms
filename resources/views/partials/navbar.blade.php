@@ -21,7 +21,7 @@
 
         <!-- Toggler Mobile Button -->
         <button class="navbar-toggler border-0 shadow-none p-2 rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Buka menu navigasi">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -45,12 +45,12 @@
                     </a>
                     <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2">
                         <li>
-                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3" href="{{ route('tentang-kami') }}">
+                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('tentang-kami') && !request()->has('hash') ? 'active' : '' }}" href="{{ route('tentang-kami') }}">
                                 <div class="nav-icon-badge bg-success-subtle text-success rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
                                     <i class="bi bi-buildings-fill fs-6"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold text-dark small">Profil Lembaga</div>
+                                    <div class="fw-semibold small">Profil Lembaga</div>
                                     <small class="text-muted" style="font-size: 0.72rem;">Mengenal AL-HIKMAH lebih dekat</small>
                                 </div>
                             </a>
@@ -61,19 +61,19 @@
                                     <i class="bi bi-lightbulb-fill fs-6"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold text-dark small">Filosofi & Visi Misi</div>
+                                    <div class="fw-semibold small">Filosofi &amp; Visi Misi</div>
                                     <small class="text-muted" style="font-size: 0.72rem;">Landasan bimbingan Al-Qur'an</small>
                                 </div>
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3" href="{{ route('tentang-kami') }}#nilai">
-                                <div class="nav-icon-badge bg-primary-subtle text-primary rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                                <div class="nav-icon-badge bg-warning-subtle text-warning rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
                                     <i class="bi bi-patch-check-fill fs-6"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold text-dark small">Nilai-Nilai Utama</div>
-                                    <small class="text-muted" style="font-size: 0.72rem;">Integritas & adab Islami</small>
+                                    <div class="fw-semibold small">Nilai-Nilai Utama</div>
+                                    <small class="text-muted" style="font-size: 0.72rem;">Integritas &amp; adab Islami</small>
                                 </div>
                             </a>
                         </li>
@@ -89,58 +89,56 @@
                     </a>
                     <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2">
                         <li>
-                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3" href="{{ route('program') }}">
+                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('program') ? 'active' : '' }}" href="{{ route('program') }}">
                                 <div class="nav-icon-badge bg-success-subtle text-success rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
                                     <i class="bi bi-journal-text fs-6"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold text-dark small">Program Belajar</div>
-                                    <small class="text-muted" style="font-size: 0.72rem;">Tahsin, Tajwid & Fiqih</small>
+                                    <div class="fw-semibold small">Program Belajar</div>
+                                    <small class="text-muted" style="font-size: 0.72rem;">Tahsin, Tajwid &amp; Fiqih</small>
                                 </div>
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3" href="{{ route('metode') }}">
-                                <div class="nav-icon-badge bg-info-subtle text-info rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('metode') ? 'active' : '' }}" href="{{ route('metode') }}">
+                                <div class="nav-icon-badge bg-success-subtle text-success rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
                                     <i class="bi bi-laptop-fill fs-6"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold text-dark small">Metode Belajar</div>
-                                    <small class="text-muted" style="font-size: 0.72rem;">Online & Privat Guru Datang</small>
+                                    <div class="fw-semibold small">Metode Belajar</div>
+                                    <small class="text-muted" style="font-size: 0.72rem;">Online, Home Visit, &amp; Hybrid</small>
                                 </div>
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3" href="{{ route('tahfidz') }}">
-                                <div class="nav-icon-badge bg-primary-subtle text-primary rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('tahfidz') ? 'active' : '' }}" href="{{ route('tahfidz') }}">
+                                <div class="nav-icon-badge bg-warning-subtle text-warning rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
                                     <i class="bi bi-mic-fill fs-6"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold text-dark small">Program Tahfidz</div>
-                                    <small class="text-muted" style="font-size: 0.72rem;">Hafalan 30 Juz & Mutqin</small>
+                                    <div class="fw-semibold small">Program Tahfidz</div>
+                                    <small class="text-muted" style="font-size: 0.72rem;">Hafalan 30 Juz &amp; Mutqin</small>
                                 </div>
                             </a>
                         </li>
-
-                        {{-- Tampil untuk Orang Tua & Admin --}}
                         @auth
                             @if (auth()->user()->isParent() || auth()->user()->isAdmin())
                                 <li>
                                     <hr class="dropdown-divider my-1">
                                 </li>
                                 <li>
-                                    <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3" href="{{ route('biaya') }}">
+                                    <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('biaya') ? 'active' : '' }}" href="{{ route('biaya') }}">
                                         <div class="nav-icon-badge text-success rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; background: rgba(16, 185, 129, 0.12);">
                                             <i class="bi bi-tag-fill fs-6 text-success"></i>
                                         </div>
                                         <div>
-                                            <div class="fw-semibold text-dark small d-flex align-items-center gap-2">
-                                                Informasi Pendampingan
+                                            <div class="fw-semibold small d-flex align-items-center gap-2">
+                                                Informasi Biaya &amp; Paket
                                                 @if (auth()->user()->isAdmin())
                                                     <span class="badge bg-warning text-dark px-2 py-0" style="font-size: 0.62rem;">Admin</span>
                                                 @endif
                                             </div>
-                                            <small class="text-muted" style="font-size: 0.72rem;">Paket investasi & biaya</small>
+                                            <small class="text-muted" style="font-size: 0.72rem;">Paket investasi &amp; pendampingan</small>
                                         </div>
                                     </a>
                                 </li>
@@ -149,78 +147,33 @@
                     </ul>
                 </li>
 
-                <!-- 4. Rekrutmen Guru (v8.3) -->
-                @guest
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ request()->routeIs('bergabung*') || request()->routeIs('mentor.recruitment.*') ? 'active' : '' }}"
-                            href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-mortarboard-fill"></i>
-                            <span>Karir Guru</span>
-                        </a>
-                        <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2">
-                            <li>
-                                <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('bergabung') ? 'active' : '' }}" href="{{ route('bergabung') }}">
-                                    <div class="nav-icon-badge bg-primary-subtle text-primary rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
-                                        <i class="bi bi-person-plus-fill fs-6"></i>
-                                    </div>
-                                    <div>
-                                        <div class="fw-semibold text-dark small">Pendaftaran Guru Baru</div>
-                                        <small class="text-muted" style="font-size: 0.72rem;">Bergabung membina Al-Qur'an</small>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('mentor.recruitment.status') ? 'active' : '' }}" href="{{ route('mentor.recruitment.status') }}">
-                                    <div class="nav-icon-badge bg-success-subtle text-success rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
-                                        <i class="bi bi-search-heart-fill fs-6"></i>
-                                    </div>
-                                    <div>
-                                        <div class="fw-semibold text-dark small">Cek Status Lamaran</div>
-                                        <small class="text-muted" style="font-size: 0.72rem;">Pantau linimasa seleksi</small>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                @endguest
-
-                <!-- 5. Alur Belajar (Roadmap) -->
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('roadmap') ? 'active' : '' }}"
-                        href="{{ route('roadmap') }}">
-                        <i class="bi bi-signpost-split-fill"></i>
-                        <span>Alur Belajar</span>
-                    </a>
-                </li>
-
-                <!-- 6. Galeri & FAQ (Dropdown) -->
+                <!-- 4. Alur Belajar & Galeri (Dropdown) -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('faq*') || request()->routeIs('galeri*') ? 'active' : '' }}" href="#"
-                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Galeri & FAQ</span>
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('roadmap*') || request()->routeIs('galeri*') ? 'active' : '' }}"
+                        href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-signpost-split-fill"></i>
+                        <span>Alur &amp; Galeri</span>
                     </a>
                     <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2">
+                        <li>
+                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('roadmap') ? 'active' : '' }}" href="{{ route('roadmap') }}">
+                                <div class="nav-icon-badge bg-success-subtle text-success rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                                    <i class="bi bi-map-fill fs-6"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold small">Peta Alur Belajar</div>
+                                    <small class="text-muted" style="font-size: 0.72rem;">Panduan langkah pendaftaran &amp; belajar</small>
+                                </div>
+                            </a>
+                        </li>
                         <li>
                             <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('galeri') ? 'active' : '' }}" href="{{ route('galeri') }}">
                                 <div class="nav-icon-badge bg-success-subtle text-success rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
                                     <i class="bi bi-images fs-6"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold text-dark small">Galeri Kegiatan</div>
-                                    <small class="text-muted" style="font-size: 0.72rem;">Dokumentasi belajar santri</small>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('faq') ? 'active' : '' }}"
-                                href="{{ route('faq') }}">
-                                <div class="nav-icon-badge bg-info-subtle text-info rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
-                                    <i class="bi bi-question-circle-fill fs-6"></i>
-                                </div>
-                                <div>
-                                    <div class="fw-semibold text-dark small">Tanya Jawab (FAQ)</div>
-                                    <small class="text-muted" style="font-size: 0.72rem;">Informasi umum & bimbingan</small>
+                                    <div class="fw-semibold small">Galeri Dokumentasi</div>
+                                    <small class="text-muted" style="font-size: 0.72rem;">Dokumentasi kegiatan santri</small>
                                 </div>
                             </a>
                         </li>
@@ -233,30 +186,88 @@
                                     <i class="bi bi-clock-history fs-6"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold text-dark small">Jadwal Sholat & Kiblat</div>
-                                    <small class="text-muted" style="font-size: 0.72rem;">Pengingat ibadah harian</small>
+                                    <div class="fw-semibold small">Jadwal Sholat &amp; Kiblat</div>
+                                    <small class="text-muted" style="font-size: 0.72rem;">Waktu sholat akurat standar Kemenag</small>
                                 </div>
                             </a>
                         </li>
                     </ul>
                 </li>
 
-                <!-- 7. Blog & Artikel -->
+                <!-- 5. Karir Guru (Dropdown - Guest Only) -->
+                @guest
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('bergabung*') || request()->routeIs('mentor.recruitment.*') ? 'active' : '' }}"
+                            href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-mortarboard-fill"></i>
+                            <span>Karir Guru</span>
+                        </a>
+                        <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2">
+                            <li>
+                                <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('bergabung') ? 'active' : '' }}" href="{{ route('bergabung') }}">
+                                    <div class="nav-icon-badge bg-success-subtle text-success rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                                        <i class="bi bi-person-plus-fill fs-6"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-semibold small">Pendaftaran Guru Baru</div>
+                                        <small class="text-muted" style="font-size: 0.72rem;">Bergabung membina Al-Qur'an</small>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('mentor.recruitment.status') ? 'active' : '' }}" href="{{ route('mentor.recruitment.status') }}">
+                                    <div class="nav-icon-badge bg-success-subtle text-success rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                                        <i class="bi bi-search-heart-fill fs-6"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-semibold small">Cek Status Lamaran</div>
+                                        <small class="text-muted" style="font-size: 0.72rem;">Pantau linimasa seleksi</small>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endguest
+
+                <!-- 6. Blog & Artikel -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('blog*') ? 'active' : '' }}"
-                        href="{{ route('blog.index') }}">
+                    <a class="nav-link {{ request()->routeIs('blog*') ? 'active' : '' }}" href="{{ route('blog.index') }}">
                         <i class="bi bi-newspaper"></i>
-                        <span>Blog & Artikel</span>
+                        <span>Blog</span>
                     </a>
                 </li>
 
-                <!-- 8. Kontak -->
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}"
-                        href="{{ route('contact') }}">
-                        <i class="bi bi-chat-left-text-fill"></i>
-                        <span>Kontak</span>
+                <!-- 7. Tanya Jawab & Kontak -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('faq*') || request()->routeIs('contact*') ? 'active' : '' }}"
+                        href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-question-circle-fill"></i>
+                        <span>Bantuan</span>
                     </a>
+                    <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2">
+                        <li>
+                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('faq') ? 'active' : '' }}" href="{{ route('faq') }}">
+                                <div class="nav-icon-badge bg-warning-subtle text-warning rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                                    <i class="bi bi-question-circle-fill fs-6"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold small">Tanya Jawab (FAQ)</div>
+                                    <small class="text-muted" style="font-size: 0.72rem;">Pertanyaan umum &amp; panduan</small>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">
+                                <div class="nav-icon-badge bg-success-subtle text-success rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                                    <i class="bi bi-chat-left-text-fill fs-6"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold small">Hubungi Kami</div>
+                                    <small class="text-muted" style="font-size: 0.72rem;">Layanan konsultasi &amp; pesan</small>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
 
@@ -290,7 +301,7 @@
                                     style="width: 30px; height: 30px; background: linear-gradient(135deg, var(--primary) 0%, #059669 100%); font-size: 0.78rem;">
                                     {{ $initials }}
                                 </div>
-                                <span class="fw-semibold text-dark small text-truncate" style="max-width: 120px;">{{ $user->name }}</span>
+                                <span class="fw-semibold small text-truncate" style="max-width: 120px;">{{ $user->name }}</span>
                             </div>
                             <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0" style="font-size: 0.68rem; font-weight: 600;">
                                 {{ $user->role?->label ?? 'User' }}
@@ -304,7 +315,7 @@
                                         {{ $initials }}
                                     </div>
                                     <div class="overflow-hidden">
-                                        <div class="fw-bold text-dark text-truncate small">{{ $user->name }}</div>
+                                        <div class="fw-bold text-truncate small">{{ $user->name }}</div>
                                         <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.62rem;">
                                             <i class="bi bi-shield-check me-1"></i>{{ $user->role?->label ?? 'User' }}
                                         </span>
@@ -343,7 +354,7 @@
                     <button type="button" class="btn btn-daftar rounded-pill px-3 py-2 d-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal"
                         data-bs-target="#daftarModal">
                         <i class="bi bi-pencil-square"></i>
-                        <span>Mulai Belajar</span>
+                        <span>Mulai Perjalanan</span>
                     </button>
                 @endauth
             </div>

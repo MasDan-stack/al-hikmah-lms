@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Student extends Model
 {
@@ -150,6 +152,16 @@ class Student extends Model
     public function latestLearningVelocity()
     {
         return $this->hasOne(StudentLearningVelocity::class)->latestOfMany();
+    }
+
+    public function learningStyle(): HasOne
+    {
+        return $this->hasOne(StudentLearningStyle::class, 'student_id');
+    }
+
+    public function matchHistories(): HasMany
+    {
+        return $this->hasMany(MentorStudentMatchHistory::class, 'student_id');
     }
 
     public function getDisplayName(): string

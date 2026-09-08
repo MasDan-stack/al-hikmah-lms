@@ -36,6 +36,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Mentor\AvailabilityController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
+use App\Http\Controllers\Mentor\MentorCalendarController;
 use App\Http\Controllers\Mentor\MentorLeaveController;
 use App\Http\Controllers\Mentor\MentorMessageController;
 use App\Http\Controllers\Mentor\MentorOrientationController;
@@ -379,6 +380,12 @@ Route::middleware(['auth', 'role:mentor'])
         Route::post('/availability', [AvailabilityController::class, 'store'])->name('availability.store');
         Route::post('/availability/update-bulk', [AvailabilityController::class, 'store'])->name('availability.update-bulk');
         Route::post('/availability/import-wa', [AvailabilityController::class, 'importFromWhatsApp'])->name('availability.import-wa');
+
+        // Google / External Calendar Integration
+        Route::get('/calendar/connect', [MentorCalendarController::class, 'connect'])->name('calendar.connect');
+        Route::get('/calendar/callback', [MentorCalendarController::class, 'callback'])->name('calendar.callback');
+        Route::post('/calendar/disconnect', [MentorCalendarController::class, 'disconnect'])->name('calendar.disconnect');
+        Route::get('/calendar/sync', [MentorCalendarController::class, 'sync'])->name('calendar.sync');
         Route::get('/progress/create', [MentorProgressController::class, 'create'])->name('progress.create');
         Route::post('/progress', [MentorProgressController::class, 'store'])->name('progress.store');
         Route::get('/progress/bulk', [MentorProgressController::class, 'createBulk'])->name('progress.bulk-create');

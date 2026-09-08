@@ -12,7 +12,25 @@
             </h3>
             <p class="text-muted small mb-0">Nama Pengajar: <strong>{{ $mentor?->getDisplayName() ?? auth()->user()->name }}</strong>. Tentukan angka slot jam kosong Anda dari Senin s/d Ahad.</p>
         </div>
-        <div class="d-flex gap-2 flex-wrap">
+        <div class="d-flex gap-2 flex-wrap align-items-center">
+            @if($mentor?->calendarSync?->is_active)
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">
+                    <i class="bi bi-check-circle me-1"></i> Google Calendar Terhubung
+                </span>
+                <a href="{{ route('mentor.calendar.sync') }}" class="btn btn-outline-primary rounded-pill px-3 shadow-sm">
+                    <i class="bi bi-arrow-repeat me-1"></i> Sinkronkan
+                </a>
+                <form action="{{ route('mentor.calendar.disconnect') }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin memutuskan koneksi Google Calendar?');">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-secondary rounded-pill px-3 shadow-sm">
+                        Putuskan
+                    </button>
+                </form>
+            @else
+                <a href="{{ route('mentor.calendar.connect') }}" class="btn btn-outline-danger rounded-pill px-3 shadow-sm">
+                    <i class="bi bi-google me-1"></i> Hubungkan Google Calendar
+                </a>
+            @endif
             <button type="button" class="btn btn-outline-success rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#importWaModal">
                 <i class="bi bi-whatsapp me-1"></i> Import Format WhatsApp
             </button>
@@ -209,7 +227,7 @@
                 <i class="bi bi-info-circle text-primary me-2"></i>Ringkasan Ketersediaan & Beban Mengajar Anda
             </h6>
             <div class="row g-3">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="p-3 bg-light rounded-4 border d-flex align-items-center justify-content-between">
                         <div>
                             <span class="text-muted small d-block">Total Slot Terbuka / Pekan</span>
@@ -218,13 +236,34 @@
                         <i class="bi bi-calendar-check text-success fs-1"></i>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="p-3 bg-light rounded-4 border d-flex align-items-center justify-content-between">
                         <div>
                             <span class="text-muted small d-block">Total Santri Binaan Terisi</span>
                             <h4 class="fw-bold text-primary mb-0">{{ $totalFilledStudents }} Santri Aktif</h4>
                         </div>
                         <i class="bi bi-people-fill text-primary fs-1"></i>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    @php
+                        $burnoutIndex = $mentor ? app(\App\Services\SmartLoadBalancerService::class)->calculateBurnoutIndex($mentor) : 0;
+                        $loadStatus = 'Aman';
+                        $loadColor = 'success';
+                        if ($burnoutIndex > 60) {
+                            $loadStatus = 'Rawan Burnout';
+                            $loadColor = 'danger';
+                        } elseif ($burnoutIndex > 40) {
+                            $loadStatus = 'Hati-Hati (Mendekati Penuh)';
+                            $loadColor = 'warning';
+                        }
+                    @endphp
+                    <div class="p-3 bg-light rounded-4 border d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small d-block">Indikator Load Balancing</span>
+                            <h4 class="fw-bold text-{{ $loadColor }} mb-0">{{ $loadStatus }}</h4>
+                        </div>
+                        <i class="bi bi-speedometer2 text-{{ $loadColor }} fs-1"></i>
                     </div>
                 </div>
             </div>

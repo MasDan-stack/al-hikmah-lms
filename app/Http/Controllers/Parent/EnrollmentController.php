@@ -76,6 +76,10 @@ class EnrollmentController extends Controller
             'requested_days.*' => ['in:monday,tuesday,wednesday,thursday,friday,saturday,sunday'],
             'requested_time' => ['nullable', 'date_format:H:i'],
             'parent_notes' => ['nullable', 'string', 'max:500'],
+            'visual_score' => ['required', 'integer', 'min:1', 'max:5'],
+            'auditory_score' => ['required', 'integer', 'min:1', 'max:5'],
+            'kinesthetic_score' => ['required', 'integer', 'min:1', 'max:5'],
+            'patience_need' => ['required', 'integer', 'min:1', 'max:5'],
         ]);
 
         // Verifikasi kepemilikan data anak
@@ -118,6 +122,18 @@ class EnrollmentController extends Controller
             'parent_notes' => $validated['parent_notes'] ?? null,
             'status' => EnrollmentStatus::WAITING_ADMIN,
         ]);
+
+        // Simpan profil Learning Style anak berdasarkan kuesioner singkat
+        $student->learningStyle()->updateOrCreate(
+            ['student_id' => $student->id],
+            [
+                'visual_score' => $validated['visual_score'],
+                'auditory_score' => $validated['auditory_score'],
+                'kinesthetic_score' => $validated['kinesthetic_score'],
+                'patience_need' => $validated['patience_need'],
+                'notes' => null,
+            ]
+        );
 
         // Notifikasi ke seluruh Admin via NotificationService terpusat
         NotificationService::notifyAdmins(

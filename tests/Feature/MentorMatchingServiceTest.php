@@ -277,9 +277,11 @@ test('auto assign allocates mentor when score is 95 percent or higher', function
         'specialization' => 'Tahfidz',
         'specializations' => ['tahfidz'],
         'rating' => 5.0,
+        'latitude' => -6.2,
+        'longitude' => 106.8,
         'is_active' => true,
         'max_students_per_day' => 10,
-        'students_count' => 1,
+        'students_count' => 0,
     ]);
 
     MentorAvailability::create([
@@ -303,6 +305,8 @@ test('auto assign allocates mentor when score is 95 percent or higher', function
         'full_name' => 'Santri Sempurna',
         'age' => 10,
         'gender' => 'L',
+        'latitude' => -6.2,
+        'longitude' => 106.8,
     ]);
 
     $enrollment = Enrollment::create([
