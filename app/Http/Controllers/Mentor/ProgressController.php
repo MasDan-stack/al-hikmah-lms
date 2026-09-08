@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Mentor;
 
+use App\Enums\EnrollmentStatus;
+use App\Enums\NotificationType;
 use App\Http\Controllers\Controller;
 use App\Models\MentorActivityLog;
 use App\Models\Progress;
 use App\Models\Session;
+use App\Models\Student;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +20,15 @@ class ProgressController extends Controller
     public function create(Request $request): View
     {
         $mentor = auth()->user()->mentor;
-        $students = $mentor ? $mentor->students()->with('user')->get() : collect();
+        $students = $mentor
+            ? Student::where(function ($q) use ($mentor) {
+                $q->whereHas('mentors', fn ($m) => $m->where('mentors.id', $mentor->id))
+                    ->orWhereHas('enrollments', fn ($e) => $e->where('mentor_id', $mentor->id)->whereIn('status', [
+                        EnrollmentStatus::CONFIRMED->value,
+                        EnrollmentStatus::ACTIVE->value,
+                    ]));
+            })->with(['user', 'parent.user', 'programs'])->get()
+            : collect();
 
         $selectedStudentId = $request->query('student_id');
         $selectedSessionId = $request->query('session_id');
@@ -30,6 +42,12 @@ class ProgressController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        if ($request->has('nilai_adab')) {
+            $request->merge([
+                'nilai_adab' => $this->sanitizeAdabValue($request->input('nilai_adab')),
+            ]);
+        }
+
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
             'session_id' => 'nullable|exists:learning_sessions,id',
@@ -42,17 +60,47 @@ class ProgressController extends Controller
             'nilai_fluent' => 'nullable|integer|min:0|max:100',
             'nilai_tajwid' => 'nullable|integer|min:0|max:100',
             'nilai_adab' => 'nullable|integer|min:0|max:100',
+            'is_mutqin_test' => 'nullable|boolean',
+            'juz_number' => 'nullable|integer|min:1|max:30',
             'catatan_evaluasi' => 'nullable|string|max:1000',
             'homework' => 'nullable|string|max:500',
+        ], [
+            'student_id.required' => 'Silakan pilih santri terlebih dahulu.',
+            'student_id.exists' => 'Santri yang dipilih tidak valid.',
+            'kategori.required' => 'Kategori bimbingan/setoran wajib dipilih.',
+            'juz.integer' => 'Nomor Juz harus berupa angka bulat antara 1 sampai 30.',
+            'juz.min' => 'Nomor Juz minimal 1.',
+            'juz.max' => 'Nomor Juz maksimal 30.',
+            'nilai_fluent.integer' => 'Nilai kelancaran harus berupa angka bulat 0 - 100.',
+            'nilai_tajwid.integer' => 'Nilai tajwid harus berupa angka bulat 0 - 100.',
+            'nilai_adab.integer' => 'Nilai adab harus berupa angka bulat 0 - 100.',
         ]);
 
         $mentor = auth()->user()->mentor;
         $validated['mentor_id'] = $mentor?->id;
+        $validated['is_mutqin_test'] = $request->boolean('is_mutqin_test');
+        if ($validated['is_mutqin_test'] && ! empty($validated['juz'])) {
+            $validated['juz_number'] = (int) $validated['juz'];
+        }
 
         $progress = Progress::create($validated);
 
         if (! empty($validated['session_id'])) {
             Session::where('id', $validated['session_id'])->update(['status' => 'completed']);
+        }
+
+        // Notifikasi ke Orang Tua Santri via NotificationService
+        $student = Student::with('parent.user')->find($validated['student_id']);
+        if ($student?->parent?->user_id) {
+            NotificationService::send(
+                $student->parent->user_id,
+                'Laporan Progres Belajar Santri',
+                "Pendamping {$mentor?->getDisplayName()} telah menambahkan catatan progres {$validated['kategori']} untuk ananda {$student->getDisplayName()}.",
+                NotificationType::SUCCESS,
+                route('parent.dashboard'),
+                'progress',
+                true
+            );
         }
 
         MentorActivityLog::log(
@@ -69,7 +117,15 @@ class ProgressController extends Controller
     public function createBulk(): View
     {
         $mentor = auth()->user()->mentor;
-        $students = $mentor ? $mentor->students()->with('user')->get() : collect();
+        $students = $mentor
+            ? Student::where(function ($q) use ($mentor) {
+                $q->whereHas('mentors', fn ($m) => $m->where('mentors.id', $mentor->id))
+                    ->orWhereHas('enrollments', fn ($e) => $e->where('mentor_id', $mentor->id)->whereIn('status', [
+                        EnrollmentStatus::CONFIRMED->value,
+                        EnrollmentStatus::ACTIVE->value,
+                    ]));
+            })->with(['user', 'parent.user', 'programs'])->get()
+            : collect();
         $sessions = $mentor ? Session::where('mentor_id', $mentor->id)->orderBy('date', 'desc')->get() : collect();
 
         return view('mentor.progress.bulk', compact('students', 'sessions'));
@@ -77,6 +133,16 @@ class ProgressController extends Controller
 
     public function storeBulk(Request $request): RedirectResponse
     {
+        if ($request->has('entries') && is_array($request->entries)) {
+            $entries = $request->entries;
+            foreach ($entries as $index => $entry) {
+                if (isset($entry['nilai_adab'])) {
+                    $entries[$index]['nilai_adab'] = $this->sanitizeAdabValue($entry['nilai_adab']);
+                }
+            }
+            $request->merge(['entries' => $entries]);
+        }
+
         $request->validate([
             'entries' => 'required|array|min:1',
             'entries.*.student_id' => 'required|exists:students,id',
@@ -119,5 +185,30 @@ class ProgressController extends Controller
         return redirect()
             ->route('mentor.dashboard')
             ->with('success', "Berhasil menyimpan {$count} catatan progres massal!");
+    }
+
+    /**
+     * Mengubah nilai adab teks (misal: 'Sangat Baik', 'Baik') menjadi angka bulat (0-100)
+     */
+    protected function sanitizeAdabValue(mixed $value): ?int
+    {
+        if (is_null($value) || $value === '') {
+            return null;
+        }
+
+        if (is_numeric($value)) {
+            return (int) $value;
+        }
+
+        $lower = strtolower(trim((string) $value));
+
+        return match (true) {
+            str_contains($lower, 'sangat baik') || str_contains($lower, 'mumtaz') || str_contains($lower, 'istimewa') => 95,
+            str_contains($lower, 'baik sekali') || str_contains($lower, 'jayyid jiddan') => 90,
+            str_contains($lower, 'baik') || str_contains($lower, 'jayyid') => 80,
+            str_contains($lower, 'cukup') || str_contains($lower, 'maqbul') => 70,
+            str_contains($lower, 'kurang') || str_contains($lower, 'bimbingan') => 60,
+            default => 80,
+        };
     }
 }

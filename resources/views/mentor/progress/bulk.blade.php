@@ -18,8 +18,29 @@
         </div>
     </div>
 
+    <!-- Flash Alert Notification Messages -->
+    @if (session('success'))
+        <div class="alert alert-success border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center justify-content-between p-3" role="alert">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-check-circle-fill fs-5 text-success"></i>
+                <div class="fw-semibold">{{ session('success') }}</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center justify-content-between p-3" role="alert">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-exclamation-triangle-fill fs-5 text-danger"></i>
+                <div class="fw-semibold">{{ session('error') }}</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     @if ($errors->any())
-        <div class="alert alert-danger rounded-3 mb-4 shadow-sm">
+        <div class="alert alert-danger border-0 rounded-4 mb-4 shadow-sm p-3">
             <h6 class="fw-bold mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>Terdapat kesalahan pengisian:</h6>
             <ul class="mb-0 small">
                 @foreach ($errors->all() as $error)
@@ -70,7 +91,7 @@
                                     <select name="entries[0][session_id]" class="form-select form-select-sm">
                                         <option value="">-- Tanpa Sesi --</option>
                                         @foreach($sessions as $ses)
-                                            <option value="{{ $ses->id }}">{{ $ses->date->format('d M') }} ({{ $ses->time }})</option>
+                                            <option value="{{ $ses->id }}">{{ $ses->date ? \Carbon\Carbon::parse($ses->date)->locale('id')->isoFormat('dddd, D MMMM Y') : '' }} ({{ date('H:i', strtotime($ses->time)) }} WIB)</option>
                                         @endforeach
                                     </select>
                                 </td>

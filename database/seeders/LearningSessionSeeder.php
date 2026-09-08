@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Mentor;
 use App\Models\Session;
+use App\Models\SessionConfirmation;
 use App\Models\Student;
 use Illuminate\Database\Seeder;
 
@@ -57,8 +58,19 @@ class LearningSessionSeeder extends Seeder
             ],
         ];
 
-        foreach ($sessions as $sessionData) {
-            Session::create($sessionData);
+        foreach ($sessions as $index => $sessionData) {
+            $createdSession = Session::create($sessionData);
+            if ($index === 1 && $createdSession->date->isToday()) {
+                $student = Student::find($sessionData['student_id']);
+                if ($student && $student->parent_id) {
+                    SessionConfirmation::create([
+                        'session_id' => $createdSession->id,
+                        'parent_id' => $student->parent_id,
+                        'status' => 'hadir',
+                        'notes' => 'Ananda sudah siap bimbingan mengaji tepat waktu.',
+                    ]);
+                }
+            }
         }
     }
 }

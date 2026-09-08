@@ -27,8 +27,19 @@ class Progress extends Model
         'nilai_fluent',
         'nilai_tajwid',
         'nilai_adab',
+        'is_mutqin_test',
+        'juz_number',
         'catatan_evaluasi',
         'homework',
+    ];
+
+    protected $casts = [
+        'is_mutqin_test' => 'boolean',
+        'juz_number' => 'integer',
+        'juz' => 'integer',
+        'nilai_fluent' => 'integer',
+        'nilai_tajwid' => 'integer',
+        'nilai_adab' => 'integer',
     ];
 
     /**

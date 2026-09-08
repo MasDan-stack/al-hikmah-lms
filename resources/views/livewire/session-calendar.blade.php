@@ -42,12 +42,17 @@
                                 </span>
                             </td>
                             <td>
-                                <div class="small fw-medium">{{ $session->date ? \Carbon\Carbon::parse($session->date)->format('d M Y') : '-' }} {{ $session->time ?? '' }}</div>
+                                <div class="small fw-medium text-dark">{{ $session->date ? \Carbon\Carbon::parse($session->date)->locale('id')->isoFormat('dddd, D MMMM Y') : '-' }}</div>
+                                <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ $session->time ? date('H:i', strtotime($session->time)) : '' }} WIB</small>
                             </td>
                             <td>
-                                <span class="badge bg-info-subtle text-info rounded-pill">
-                                    {{ ucfirst($session->method ?? 'online') }}
-                                </span>
+                                @if($session->method === 'offline')
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2">Offline</span>
+                                @elseif($session->method === 'online')
+                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2">Online</span>
+                                @else
+                                    <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill px-2">Hybrid</span>
+                                @endif
                             </td>
                             <td>
                                 @if($session->status === 'completed')

@@ -136,125 +136,162 @@
         </div>
     </nav>
 
-    <section class="page-header section-padding"
-        style="padding-top:120px;background:linear-gradient(170deg,var(--bg-primary)0%,var(--primary-lighter)100%)">
-        <div class="container text-center">
-            <div class="section-badge mx-auto" data-reveal><i class="bi bi-grid-3x3-gap-fill"></i> Metode</div>
-            <h1 class="section-title" data-reveal>Cara Kami <span class="text-gradient">Mendampingi</span></h1>
-            <p class="section-description mx-auto" data-reveal>Belajar dengan cara yang lebih dekat dan personal.</p>
+    <!-- ============================================ -->
+    <!-- 1. ETRAIN BREADCRUMB HEADER -->
+    <!-- ============================================ -->
+    <section class="breadcrumb_bg" aria-label="Header Metode Belajar">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb_iner_item" data-reveal>
+                        <div class="section-badge mx-auto mb-2"><i class="bi bi-grid-3x3-gap-fill"></i> Fleksibilitas Belajar</div>
+                        <h2>Cara Kami <span class="text-gradient">Mendampingi</span></h2>
+                        <p>Belajar dengan cara yang lebih dekat, nyaman, dan personal sesuai kebutuhan setiap santri dan keluarga.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="section-padding" aria-label="Metode Belajar">
+    <!-- ============================================ -->
+    <!-- 2. PILIHAN METODE (ETRAIN FEATURE BOXES) -->
+    <!-- ============================================ -->
+    <section class="feature_part py-5" aria-label="Metode Belajar">
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-4 col-md-6" data-reveal>
-                    <div class="kelas-card">
-                        <div class="kelas-icon"><i class="bi bi-laptop"></i></div>
-                        <h3>Online</h3>
-                        <p>Belajar dari Mana Saja</p>
-                        <ul class="kelas-list">
-                            <li><i class="bi bi-check-circle-fill"></i> Pendampingan belajar secara online</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Bagi keluarga di luar jangkauan tatap muka</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Jadwal fleksibel</li>
+                    <div class="single_feature h-100 text-center">
+                        <div class="single_feature_icon mx-auto">
+                            <i class="bi bi-laptop"></i>
+                        </div>
+                        <h4>Kelas Online</h4>
+                        <p class="text-muted mb-3">Belajar Interaktif dari Mana Saja</p>
+                        <ul class="list-unstyled text-start small text-secondary mb-4">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Pendampingan privat via Zoom / GMeet</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Bagi santri di seluruh penjuru Indonesia</li>
+                            <li class="mb-0"><i class="bi bi-check-circle-fill text-success me-2"></i> Jadwal fleksibel pagi, siang, atau malam</li>
                         </ul>
-                        <div class="kelas-badge">Online</div>
+                        <a href="#" class="btn btn-sm btn-outline-success rounded-pill px-4 py-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#daftarModal">
+                            Pilih Online <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
+
                 <div class="col-lg-4 col-md-6" data-reveal data-reveal-delay="100">
-                    <div class="kelas-card featured-kelas">
-                        <div class="kelas-icon"><i class="bi bi-house-door"></i></div>
-                        <h3>Offline</h3>
-                        <p>Pendamping Datang ke Rumah</p>
-                        <ul class="kelas-list">
-                            <li><i class="bi bi-check-circle-fill"></i> Suasana belajar yang personal dan nyaman</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Pendamping hadir langsung di rumah</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Interaksi lebih dekat</li>
+                    <div class="single_feature h-100 text-center border-2 border-success position-relative">
+                        <span class="position-absolute top-0 start-50 translate-middle badge bg-success px-3 py-2 rounded-pill shadow-sm">
+                            Paling Populer
+                        </span>
+                        <div class="single_feature_icon mx-auto mt-2">
+                            <i class="bi bi-house-door"></i>
+                        </div>
+                        <h4>Guru Datang ke Rumah</h4>
+                        <p class="text-muted mb-3">Home Visit Privat Jabodetabek</p>
+                        <ul class="list-unstyled text-start small text-secondary mb-4">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Suasana belajar langsung nyaman di rumah</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Pendamping terpercaya &amp; tersertifikasi</li>
+                            <li class="mb-0"><i class="bi bi-check-circle-fill text-success me-2"></i> Interaksi tatap muka lebih intensif</li>
                         </ul>
-                        <div class="kelas-badge">Home Visit</div>
+                        <a href="#" class="btn btn-sm btn-success rounded-pill px-4 py-2 fw-bold text-white shadow-sm" data-bs-toggle="modal" data-bs-target="#daftarModal">
+                            Pilih Home Visit <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
+
                 <div class="col-lg-4 col-md-6" data-reveal data-reveal-delay="200">
-                    <div class="kelas-card">
-                        <div class="kelas-icon"><i class="bi bi-arrow-repeat"></i></div>
-                        <h3>Hybrid</h3>
-                        <p>Belajar dengan Fleksibilitas</p>
-                        <ul class="kelas-list">
-                            <li><i class="bi bi-check-circle-fill"></i> Perpaduan online dan offline</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Sesuai kondisi dan kebutuhan</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Pendampingan personal</li>
+                    <div class="single_feature h-100 text-center">
+                        <div class="single_feature_icon mx-auto">
+                            <i class="bi bi-arrow-repeat"></i>
+                        </div>
+                        <h4>Kelas Hybrid</h4>
+                        <p class="text-muted mb-3">Kombinasi Online &amp; Offline</p>
+                        <ul class="list-unstyled text-start small text-secondary mb-4">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Fleksibilitas saat agenda keluarga padat</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Sesuai ritme dan kesepakatan bersama</li>
+                            <li class="mb-0"><i class="bi bi-check-circle-fill text-success me-2"></i> Pendampingan berkelanjutan tanpa jeda</li>
                         </ul>
-                        <div class="kelas-badge">Fleksibel</div>
+                        <a href="#" class="btn btn-sm btn-outline-success rounded-pill px-4 py-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#daftarModal">
+                            Pilih Hybrid <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="text-center mt-4" data-reveal>
-                <p style="font-style:italic;color:var(--text-muted)">Metode dapat disesuaikan. Nilai yang kami jaga
-                    tetap sama.</p>
+
+            <div class="text-center mt-5" data-reveal>
+                <p class="text-muted fst-italic mb-0">"Metode belajar dapat disesuaikan. Nilai akhlak dan keteladanan yang kami jaga tetap sama."</p>
             </div>
         </div>
     </section>
 
-    <section class="section-padding section-alt" aria-label="Sistem Pendampingan">
+    <!-- ============================================ -->
+    <!-- 3. SISTEM PENDAMPINGAN (ETRAIN LEARNING PART) -->
+    <!-- ============================================ -->
+    <section class="learning_part bg-white py-5" aria-label="Sistem Pendampingan">
         <div class="container">
-            <h2 class="section-title text-center mb-4">Sistem <span class="text-gradient">Pendampingan</span></h2>
-            <p class="section-description mx-auto text-center mb-5">Yang kami kejar bukan sekadar cepat, tetapi
-                istiqamah.</p>
+            <div class="text-center mb-5" data-reveal>
+                <div class="section-badge mx-auto mb-2"><i class="bi bi-calendar2-range"></i> Frekuensi Pertemuan</div>
+                <h2 class="section-title">Sistem <span class="text-gradient">Pendampingan</span></h2>
+                <p class="section-description mx-auto">Yang kami kejar bukan sekadar kecepatan menyelesaikan jilid, melainkan kualitas dan keistiqamahan.</p>
+            </div>
+
             <div class="row g-4">
-                <div class="col-md-3" data-reveal>
-                    <div class="meeting-option">
-                        <div class="option-icon"><i class="bi bi-1-circle"></i></div>
-                        <div class="option-content">
-                            <h5>1x Seminggu</h5>
-                            <p>Untuk membangun kebiasaan dan konsistensi.</p>
-                        </div>
+                <div class="col-md-3 col-sm-6" data-reveal>
+                    <div class="p-4 bg-light rounded-4 border h-100 text-center transition-hover">
+                        <div class="fs-1 text-success mb-2"><i class="bi bi-1-circle"></i></div>
+                        <h5 class="fw-bold">1x Seminggu</h5>
+                        <p class="text-secondary small mb-0">Cocok untuk pembiasaan awal dan pengenalan ritme belajar tanpa membebani santri.</p>
                     </div>
                 </div>
-                <div class="col-md-3" data-reveal data-reveal-delay="100">
-                    <div class="meeting-option">
-                        <div class="option-icon"><i class="bi bi-2-circle"></i></div>
-                        <div class="option-content">
-                            <h5>2–3x Seminggu</h5>
-                            <p>Untuk keluarga yang menginginkan pendampingan lebih rutin dan intensif.</p>
-                        </div>
+                <div class="col-md-3 col-sm-6" data-reveal data-reveal-delay="100">
+                    <div class="p-4 bg-light rounded-4 border h-100 text-center transition-hover">
+                        <div class="fs-1 text-success mb-2"><i class="bi bi-2-circle"></i></div>
+                        <h5 class="fw-bold">2–3x Seminggu</h5>
+                        <p class="text-secondary small mb-0">Pilihan ideal untuk akselerasi tajwid, kelancaran membaca, dan target hafalan rutin.</p>
                     </div>
                 </div>
-                <div class="col-md-3" data-reveal data-reveal-delay="200">
-                    <div class="meeting-option">
-                        <div class="option-icon"><i class="bi bi-calendar2-check"></i></div>
-                        <div class="option-content">
-                            <h5>Jadwal yang Disesuaikan</h5>
-                            <p>Menyesuaikan kondisi dan aktivitas keluarga.</p>
-                        </div>
+                <div class="col-md-3 col-sm-6" data-reveal data-reveal-delay="200">
+                    <div class="p-4 bg-light rounded-4 border h-100 text-center transition-hover">
+                        <div class="fs-1 text-success mb-2"><i class="bi bi-calendar2-check"></i></div>
+                        <h5 class="fw-bold">Jadwal Fleksibel</h5>
+                        <p class="text-secondary small mb-0">Waktu sesi disesuaikan dengan aktivitas sekolah, pekerjaan, dan agenda keluarga.</p>
                     </div>
                 </div>
-                <div class="col-md-3" data-reveal data-reveal-delay="300">
-                    <div class="meeting-option">
-                        <div class="option-icon"><i class="bi bi-person-check"></i></div>
-                        <div class="option-content">
-                            <h5>Pendampingan Personal</h5>
-                            <p>Memberikan perhatian sesuai kebutuhan masing-masing murid.</p>
-                        </div>
+                <div class="col-md-3 col-sm-6" data-reveal data-reveal-delay="300">
+                    <div class="p-4 bg-light rounded-4 border h-100 text-center transition-hover">
+                        <div class="fs-1 text-success mb-2"><i class="bi bi-person-check"></i></div>
+                        <h5 class="fw-bold">Privat Eksklusif</h5>
+                        <p class="text-secondary small mb-0">Perhatian penuh dan penyesuaian materi sesuai kecepatan dan gaya belajar santri.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="jabodetabek-ribbon" aria-label="Informasi layanan Jabodetabek">
+    <!-- ============================================ -->
+    <!-- 4. BANNER JABODETABEK (ETRAIN ADVANCE FEATURE) -->
+    <!-- ============================================ -->
+    <section class="advance_feature_banner py-4" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: #fff;" aria-label="Informasi layanan Jabodetabek">
         <div class="container">
-            <div class="jabodetabek-content" data-reveal>
-                <div class="jabodetabek-icon"><i class="bi bi-geo-alt-fill"></i></div>
-                <div class="jabodetabek-text">
-                    <h4>📍 Melayani Area <strong>Jabodetabek</strong> & Sekitarnya</h4>
-                    <p>Pendamping datang ke rumah Anda. Tersedia juga kelas online untuk seluruh Indonesia.</p>
-                </div><a
-                    href="https://wa.me/6285786689008?text=Assalamualaikum,%20apakah%20area%20saya%20tercakup%20AL-HIKMAH?"
-                    class="btn btn-sm btn-primary-custom" target="_blank"><i class="bi bi-whatsapp me-1"></i> Cek
-                    Area</a>
+            <div class="row align-items-center" data-reveal>
+                <div class="col-lg-8 mb-3 mb-lg-0 text-center text-lg-start">
+                    <div class="d-flex align-items-center justify-content-center justify-content-lg-start gap-3">
+                        <div class="fs-1 text-warning"><i class="bi bi-geo-alt-fill"></i></div>
+                        <div>
+                            <h4 class="fw-bold text-white mb-1">Melayani Area Jabodetabek &amp; Sekitarnya</h4>
+                            <p class="mb-0 text-white-50 small">Guru pendamping kami siap datang langsung ke rumah Anda dengan protokol ramah dan aman.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center text-lg-end">
+                    <a href="https://wa.me/6285786689008?text=Assalamualaikum,%20apakah%20area%20saya%20tercakup%20layanan%20AL-HIKMAH?"
+                       class="btn btn-warning rounded-pill px-4 py-2 fw-bold text-dark shadow" target="_blank" rel="noopener">
+                        <i class="bi bi-whatsapp me-1"></i> Cek Ketersediaan Area
+                    </a>
+                </div>
             </div>
         </div>
     </section>
+
 
     <footer class="footer" aria-label="Footer">
         <div class="container">

@@ -8,15 +8,15 @@
 <div class="container-fluid p-0">
     <div class="row g-4">
         <div class="col-lg-3">
-            <div class="card border-0 shadow-sm rounded-4 bg-white p-3">
-                <div class="nav flex-column nav-pills">
-                    <a href="{{ route('parent.profile.edit') }}" class="nav-link text-dark rounded-pill mb-1">
+            <div class="card border-0 shadow-sm rounded-4 p-3">
+                <div class="nav flex-column nav-pills gap-1">
+                    <a href="{{ route('parent.profile.edit') }}" class="nav-link rounded-pill {{ request()->routeIs('parent.profile.edit') ? 'active' : '' }}">
                         <i class="bi bi-person-gear me-2"></i> Edit Profil Diri
                     </a>
-                    <a href="{{ route('parent.profile.notifications') }}" class="nav-link active rounded-pill mb-1">
+                    <a href="{{ route('parent.profile.notifications') }}" class="nav-link rounded-pill {{ request()->routeIs('parent.profile.notifications') ? 'active' : '' }}">
                         <i class="bi bi-bell me-2"></i> Preferensi Notifikasi
                     </a>
-                    <a href="{{ route('parent.profile.children') }}" class="nav-link text-dark rounded-pill mb-1">
+                    <a href="{{ route('parent.profile.children') }}" class="nav-link rounded-pill {{ request()->routeIs('parent.profile.children') ? 'active' : '' }}">
                         <i class="bi bi-people me-2"></i> Kelola Data Anak
                     </a>
                 </div>

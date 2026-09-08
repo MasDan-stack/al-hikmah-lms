@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\NotificationType;
 use App\Http\Controllers\Controller;
-use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\Program;
 use App\Models\Student;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -64,16 +65,18 @@ class PaymentController extends Controller
             'payment_date' => $request->status === 'paid' ? now() : null,
         ]);
 
-        // Kirim Notifikasi otomatis ke Orang Tua Santri
+        // Kirim Notifikasi otomatis ke Orang Tua Santri via NotificationService
         $student = Student::with('parent.user')->find($request->student_id);
         if ($student?->parent?->user_id) {
-            Notification::create([
-                'user_id' => $student->parent->user_id,
-                'type' => 'payment_reminder',
-                'title' => 'Tagihan SPP Baru Terbit',
-                'message' => 'Tagihan SPP '.($student->user?->name ?? $student->full_name).' sebesar Rp '.number_format($request->amount, 0, ',', '.').' telah terbit (Jatuh Tempo: '.date('d/m/Y', strtotime($request->due_date)).').',
-                'is_read' => false,
-            ]);
+            NotificationService::send(
+                $student->parent->user_id,
+                'Tagihan SPP Baru Terbit',
+                'Tagihan SPP '.($student->user?->name ?? $student->full_name).' sebesar Rp '.number_format($request->amount, 0, ',', '.').' telah terbit (Jatuh Tempo: '.date('d/m/Y', strtotime($request->due_date)).').',
+                NotificationType::WARNING,
+                route('parent.payments.index'),
+                'payment',
+                true
+            );
         }
 
         return redirect()->back()->with('success', 'Tagihan SPP sebesar Rp '.number_format($request->amount, 0, ',', '.').' berhasil diterbitkan!');
@@ -81,7 +84,7 @@ class PaymentController extends Controller
 
     public function update(Request $request, int $id): RedirectResponse
     {
-        $payment = Payment::findOrFail($id);
+        $payment = Payment::with(['enrollment.mentor.user', 'student.parent.user'])->findOrFail($id);
 
         $request->validate([
             'amount' => 'required|numeric|min:1000',
@@ -95,6 +98,36 @@ class PaymentController extends Controller
             'status' => $request->status,
             'payment_date' => $request->status === 'paid' ? ($payment->payment_date ?? now()) : null,
         ]);
+
+        if ($request->status === 'paid' && $payment->enrollment) {
+            $payment->enrollment->markAsPaidAndActive();
+
+            // Notifikasi ke Mentor bahwa santri baru telah aktif
+            if ($payment->enrollment->mentor?->user_id) {
+                NotificationService::send(
+                    $payment->enrollment->mentor->user_id,
+                    'Santri Baru Ditugaskan!',
+                    "Santri {$payment->student?->getDisplayName()} telah melunasi pendaftaran dan aktif dalam bimbingan Anda.",
+                    NotificationType::SUCCESS,
+                    route('mentor.students.index'),
+                    'enrollment',
+                    true
+                );
+            }
+
+            // Notifikasi ke Orang Tua bahwa pembayaran berhasil dan program aktif
+            if ($payment->student?->parent?->user_id) {
+                NotificationService::send(
+                    $payment->student->parent->user_id,
+                    'Pembayaran Berhasil & Program Aktif!',
+                    "Pembayaran tagihan {$payment->invoice_number} telah lunas. Program bimbingan untuk {$payment->student->getDisplayName()} sekarang sudah aktif.",
+                    NotificationType::SUCCESS,
+                    route('parent.dashboard'),
+                    'payment',
+                    true
+                );
+            }
+        }
 
         return redirect()->back()->with('success', 'Data tagihan SPP #'.$payment->invoice_number.' berhasil diperbarui!');
     }
@@ -120,13 +153,15 @@ class PaymentController extends Controller
         $parentUserIds = $pendingPayments->map(fn ($p) => $p->student?->parent?->user_id)->filter()->unique();
 
         foreach ($parentUserIds as $userId) {
-            Notification::create([
-                'user_id' => $userId,
-                'type' => 'payment_reminder',
-                'title' => 'Pengingat Pembayaran SPP',
-                'message' => 'Tagihan SPP anak Anda telah terbit atau mendekati jatuh tempo. Mohon segera lakukan pembayaran.',
-                'is_read' => false,
-            ]);
+            NotificationService::send(
+                $userId,
+                'Pengingat Pembayaran SPP',
+                'Tagihan SPP anak Anda telah terbit atau mendekati jatuh tempo. Mohon segera lakukan pembayaran.',
+                NotificationType::WARNING,
+                route('parent.payments.index'),
+                'payment',
+                true
+            );
         }
 
         return redirect()->back()->with('success', 'Notifikasi pengingat SPP berhasil dikirim ke '.$parentUserIds->count().' Orang Tua Wali Santri.');

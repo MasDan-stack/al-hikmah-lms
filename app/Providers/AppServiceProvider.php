@@ -2,6 +2,15 @@
 
 namespace App\Providers;
 
+use App\Events\StudentAssignedToMentor;
+use App\Listeners\LogMentorActivityListener;
+use App\Listeners\SendAssignmentNotificationListener;
+use App\Models\Gallery;
+use App\Models\Progress;
+use App\Observers\GalleryObserver;
+use App\Observers\ProgressObserver;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +30,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Carbon::setLocale('id');
+        setlocale(LC_TIME, 'id_ID.utf8', 'id_ID', 'id', 'ind');
+
+        Gallery::observe(GalleryObserver::class);
+        Progress::observe(ProgressObserver::class);
+
+        Event::listen(
+            StudentAssignedToMentor::class,
+            SendAssignmentNotificationListener::class
+        );
+
+        Event::listen(
+            StudentAssignedToMentor::class,
+            LogMentorActivityListener::class
+        );
     }
 }

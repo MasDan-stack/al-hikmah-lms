@@ -21,7 +21,7 @@ class ReportController extends Controller
         return view('reports.progress-pdf', [
             'studentUser' => $studentUser,
             'progressList' => $progressList,
-            'generatedAt' => now()->format('d F Y, H:i'),
+            'generatedAt' => now()->locale('id')->isoFormat('dddd, D MMMM Y, H:i').' WIB',
         ]);
     }
 }

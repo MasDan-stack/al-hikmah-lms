@@ -4,9 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="AL-HIKMAH — Menemani perjalanan anak usia 10–15 tahun untuk mengenal, mencintai, dan menghidupkan nilai-nilai Al-Qur'an dalam kehidupan.">
+    <meta name="description" content="@yield('meta_description', 'AL-HIKMAH: Menemani perjalanan belajar Al-Qur\'an anak dan keluarga dengan metode terarah, guru bersanad, dan pemantauan berkala.')">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="AL-HIKMAH">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('title', 'AL-HIKMAH | Menemani Perjalanan Belajar Al-Qur\'an')">
+    <meta property="og:description" content="@yield('meta_description', 'AL-HIKMAH: Menemani perjalanan belajar Al-Qur\'an anak dan keluarga dengan metode terarah, guru bersanad, dan pemantauan berkala.')">
+    <meta property="og:image" content="{{ asset('assets/img/auth-bg.jpg') }}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="@yield('title', 'AL-HIKMAH | Menemani Perjalanan Belajar Al-Qur\'an')">
+    <meta name="twitter:description" content="@yield('meta_description', 'AL-HIKMAH: Menemani perjalanan belajar Al-Qur\'an anak dan keluarga dengan metode terarah, guru bersanad, dan pemantauan berkala.')">
+    <meta name="twitter:image" content="{{ asset('assets/img/auth-bg.jpg') }}">
+
+    <!-- JSON-LD Structured Data Schema -->
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "EducationalOrganization",
+      "name": "AL-HIKMAH",
+      "url": "{{ url('/') }}",
+      "logo": "{{ asset('assets/img/logo/logo.png') }}",
+      "description": "Lembaga Bimbingan Belajar Al-Qur'an Privat Online, Home Visit, dan Tahfidz.",
+      "telephone": "{{ site_setting('whatsapp_number', '+6285786689008') }}",
+      "address": {
+        "@@type": "PostalAddress",
+        "addressCountry": "ID"
+      }
+    }
+    </script>
+
     <script>
         (function() {
             try {
@@ -24,58 +59,47 @@
     </script>
     <title>@yield('title', 'AL-HIKMAH | Menemani Perjalanan Belajar Al-Qur\'an')</title>
 
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/favicon_io/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/favicon_io/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/img/favicon_io/favicon-16x16.png') }}">
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicon_io/favicon.ico') }}">
+    <link rel="manifest" href="{{ asset('assets/img/favicon_io/site.webmanifest') }}">
+
     <!-- Bootstrap 5 & Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.1.1/index.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    <!-- Custom CSS with Auto Cache Busting -->
+    <link href="{{ asset('assets/css/style.css') }}?v={{ file_exists(public_path('assets/css/style.css')) ? filemtime(public_path('assets/css/style.css')) : time() }}" rel="stylesheet">
 
     @stack('styles')
 </head>
 
 <body>
     <!-- Skip to Main Content Link for Keyboard Accessibility -->
-    <a href="#beranda" class="skip-to-main">Langsung ke konten utama</a>
+    <a href="#main-content" class="skip-to-main">Langsung ke konten utama</a>
 
     <noscript>
         <div style="background: #fff3cd; color: #856404; padding: 15px; text-align: center; border-bottom: 3px solid #ffc107;">
-            ⚠️ Beberapa fitur website ini memerlukan JavaScript. Silakan aktifkan JavaScript di browser Anda untuk pengalaman terbaik.
+            Perhatian: Beberapa fitur interaktif website ini memerlukan JavaScript aktif untuk pengalaman terbaik.
         </div>
     </noscript>
 
-    <canvas id="bgCanvas" class="bg-3d-canvas" aria-hidden="true"></canvas>
-
-    <div class="logo-watermark" aria-hidden="true">
-        <div class="watermark-container">
-            <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH">
-            <div class="watermark-text">AL-HIKMAH</div>
-        </div>
-    </div>
-
     <div id="loadingScreen" class="loading-screen">
         <div class="loader-container">
-            <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH" height="80" style="margin-bottom: 20px;">
+            <img src="{{ asset('assets/img/logo/logo.png') }}" alt="AL-HIKMAH Logo" height="80" style="margin-bottom: 20px;">
             <div class="loader-text">AL-HIKMAH</div>
             <div class="loader-subtext">Memuat...</div>
         </div>
     </div>
 
-    <div class="bg-islamic-animation" aria-hidden="true">
-        <div class="floating-shape shape-1"></div>
-        <div class="floating-shape shape-2"></div>
-        <div class="floating-shape shape-3"></div>
-        <div class="floating-shape shape-4"></div>
-        <div class="floating-shape shape-5"></div>
-        <div class="floating-shape shape-6"></div>
-        <div class="floating-shape shape-7"></div>
-        <div class="floating-shape shape-8"></div>
-    </div>
-
     @include('partials.navbar')
 
-    @yield('content')
+    <main id="main-content">
+        @yield('content')
+    </main>
 
     @include('partials.footer')
 
@@ -91,6 +115,9 @@
 
     <!-- Modal Pendaftaran / Konsultasi (Selalu Siap di DOM) -->
     @include('partials.modal-daftar')
+
+    <!-- Global Flash Toast Notification -->
+    <x-flash-toast />
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('assets/js/scripts.js') }}"></script>

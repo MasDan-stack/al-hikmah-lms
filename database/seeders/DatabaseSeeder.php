@@ -16,11 +16,16 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             ProgramSeeder::class,
             UserSeeder::class,
+            MentorAvailabilitySeeder::class,
             LearningSessionSeeder::class,
             ProgressSeeder::class,
             PaymentSeeder::class,
             GallerySeeder::class,
             NotificationSeeder::class,
+            BlogCategorySeeder::class,
+            BlogTagSeeder::class,
+            ArticleSeeder::class,
+            EnrollmentSeeder::class,
         ]);
     }
 }

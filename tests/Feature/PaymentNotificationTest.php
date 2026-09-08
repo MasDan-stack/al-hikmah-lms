@@ -7,18 +7,18 @@ use App\Models\Payment;
 use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
-use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->seed(DatabaseSeeder::class);
+    $this->seed(RoleSeeder::class);
 
-    $this->adminRole = Role::where('name', 'admin')->first() ?? Role::create(['name' => 'admin', 'label' => 'Admin']);
-    $this->parentRole = Role::where('name', 'parent')->first() ?? Role::create(['name' => 'parent', 'label' => 'Parent']);
-    $this->studentRole = Role::where('name', 'student')->first() ?? Role::create(['name' => 'student', 'label' => 'Student']);
+    $this->adminRole = Role::firstOrCreate(['name' => 'admin'], ['label' => 'Admin']);
+    $this->parentRole = Role::firstOrCreate(['name' => 'parent'], ['label' => 'Parent']);
+    $this->studentRole = Role::firstOrCreate(['name' => 'student'], ['label' => 'Student']);
 
     // Admin user
     $this->adminUser = User::factory()->create(['role_id' => $this->adminRole->id]);
@@ -59,7 +59,7 @@ test('admin dapat menginput angka nominal tagihan spp baru dan mengirimkan notif
 
     $this->assertDatabaseHas('notifications', [
         'user_id' => $this->parentUser->id,
-        'type' => 'payment_reminder',
+        'type' => 'warning',
     ]);
 });
 
@@ -126,7 +126,7 @@ test('admin dapat mengirimkan pengingat tagihan spp massal ke orang tua santri',
 
     $this->assertDatabaseHas('notifications', [
         'user_id' => $this->parentUser->id,
-        'type' => 'payment_reminder',
+        'type' => 'warning',
         'title' => 'Pengingat Pembayaran SPP',
     ]);
 });

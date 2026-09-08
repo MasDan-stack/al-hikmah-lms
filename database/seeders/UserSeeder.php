@@ -36,6 +36,7 @@ class UserSeeder extends Seeder
             [
                 'email' => 'ustadz.ahmad@alhikmah.com',
                 'name' => 'Ustadz Ahmad Al-Hafiz',
+                'gender' => 'L',
                 'phone' => '081234567891',
                 'full_name' => 'Ustadz Ahmad Al-Hafiz, S.Ag',
                 'specialization' => 'Tahsin & Tahfidz Al-Qur\'an',
@@ -45,6 +46,7 @@ class UserSeeder extends Seeder
             [
                 'email' => 'ustadzah.fatimah@alhikmah.com',
                 'name' => 'Ustazah Fatimah Az-Zahra',
+                'gender' => 'P',
                 'phone' => '081234567894',
                 'full_name' => 'Ustazah Fatimah Az-Zahra, M.Pd',
                 'specialization' => 'Bimbingan Iqra & Tajwid Anak',
@@ -54,6 +56,7 @@ class UserSeeder extends Seeder
             [
                 'email' => 'ustadz.hasan@alhikmah.com',
                 'name' => 'Ustadz Hasan Basri',
+                'gender' => 'L',
                 'phone' => '081234567895',
                 'full_name' => 'Ustadz Hasan Basri, S.Hum',
                 'specialization' => 'Muroja\'ah & Tafsir Ringkas',
@@ -77,6 +80,7 @@ class UserSeeder extends Seeder
                 ['user_id' => $user->id],
                 [
                     'full_name' => $data['full_name'],
+                    'gender' => $data['gender'] ?? 'L',
                     'specialization' => $data['specialization'],
                     'bio' => $data['bio'],
                     'rating' => $data['rating'],
