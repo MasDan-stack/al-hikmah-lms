@@ -45,7 +45,9 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.1.1/index.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
 
@@ -124,7 +126,7 @@
                         <i class="bi bi-moon-fill" id="themeIcon"></i>
                     </button>
                     <a href="#" class="btn btn-daftar" data-bs-toggle="modal" data-bs-target="#daftarModal">
-                        <i class="bi bi-pencil-square me-1"></i> Mulai Perjalanan
+                        <i class="bi bi-calendar2-check-fill me-1"></i> Daftar Gratis
                     </a>
                 </div>
             </div>
@@ -496,104 +498,126 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- 9. ETRAIN BLOG & EDUKASI ISLAMI -->
+    <!-- 9. BLOG & EDUKASI ISLAMI -->
     <!-- ============================================ -->
     <section class="blog_part py-5" aria-label="Blog & Edukasi Qur'ani">
         <div class="container">
             <div class="row justify-content-center mb-5">
                 <div class="col-lg-7 text-center" data-reveal>
-                    <div class="section-badge mx-auto mb-2"><i class="bi bi-journal-richtext"></i> Wawasan &amp; Edukasi</div>
-                    <h2 class="section-title">Blog &amp; Artikel <span class="text-gradient">Terbaru</span></h2>
-                    <p class="section-description mx-auto">Panduan belajar Al-Qur'an, tips mendampingi anak mengaji di rumah, metode tahsin/tahfidz, dan wawasan keislaman terkini.</p>
+                    <div class="section-badge mx-auto mb-3">
+                        <i class="bi bi-journal-bookmark-fill me-1"></i> Artikel &amp; Panduan
+                    </div>
+                    <h2 class="editorial-title mb-2">Catatan &amp; Panduan Belajar <span class="text-emerald-deep">Al-Qur'an</span></h2>
+                    <p class="editorial-subtitle mx-auto" style="max-width: 580px;">
+                        Kumpulan artikel praktis seputar kaidah tajwid, metode hafalan mutqin, dan tips mendampingi anak mengaji di rumah.
+                    </p>
                 </div>
             </div>
 
             <div class="row g-4">
-                <div class="col-md-6 col-lg-4" data-reveal>
-                    <div class="single-home-blog h-100">
-                        <div class="card h-100 d-flex flex-column justify-content-between">
-                            <div>
-                                <div class="blog-card-img-wrap">
-                                    <img src="assets/img/1.jpg" class="card-img-top" alt="Tips Mengaji">
-                                    <span class="blog-date-badge"><i class="bi bi-calendar3 me-1"></i> 24 Agu 2026</span>
-                                </div>
-                                <div class="card-body p-4">
-                                    <a href="blog.html" class="btn_category_pill mb-3">
-                                        <i class="bi bi-lightbulb-fill"></i> Metode &amp; Tips Belajar
-                                    </a>
-                                    <h5 class="card-title">
-                                        <a href="single-blog.html">5 Tips Efektif Mendampingi Anak Belajar Al-Qur'an di Rumah</a>
-                                    </h5>
-                                    <p class="card-text text-secondary small mb-3">
-                                        Mendampingi anak belajar mengaji tidak harus penuh paksaan. Simak 5 langkah sederhana membangun kebiasaan mencintai Al-Qur'an sejak dini.
-                                    </p>
-                                </div>
+                <div class="col-md-6 col-lg-4 d-flex" data-reveal>
+                    <div class="blog-card w-100 d-flex flex-column">
+                        <div class="blog-card-img-wrap position-relative">
+                            <a href="single-blog.html" class="d-block">
+                                <img src="assets/img/1.jpg" class="w-100 object-fit-cover" style="height: 210px;" alt="Tips Mengaji">
+                            </a>
+                            <span class="position-absolute top-0 end-0 m-3 badge bg-white text-dark shadow-sm border fw-semibold" style="font-size: 0.76rem;">
+                                <i class="bi bi-calendar3 me-1 text-emerald-deep"></i> 24 Agu 2026
+                            </span>
+                        </div>
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                            <div class="mb-2">
+                                <a href="blog.html" class="badge bg-success-subtle text-success border border-success-subtle text-decoration-none py-1.5 px-2.5">
+                                    <i class="bi bi-lightbulb-fill me-1"></i> Metode &amp; Tips Belajar
+                                </a>
                             </div>
-                            <div class="card-footer bg-transparent px-4 pb-4 pt-0 border-0">
-                                <ul class="blog-meta-list list-unstyled d-flex justify-content-between align-items-center m-0 pt-3 border-top small text-muted">
-                                    <li><i class="bi bi-clock me-1 text-success"></i> 4 Menit</li>
-                                    <li><i class="bi bi-eye me-1 text-success"></i> 1,240 Pembaca</li>
-                                </ul>
+                            <h3 class="fw-bold fs-5 text-heading mb-2 lh-snug">
+                                <a href="single-blog.html" class="text-heading text-decoration-none hover-emerald">
+                                    5 Tips Efektif Mendampingi Anak Belajar Al-Qur'an di Rumah
+                                </a>
+                            </h3>
+                            <p class="small text-secondary flex-grow-1 mb-3" style="line-height: 1.65;">
+                                Mendampingi anak belajar mengaji tidak harus penuh paksaan. Simak 5 langkah sederhana membangun kebiasaan mencintai Al-Qur'an sejak dini.
+                            </p>
+                            <div class="pt-3 border-top mt-auto d-flex justify-content-between align-items-center small text-muted">
+                                <span class="d-inline-flex align-items-center gap-1">
+                                    <i class="bi bi-clock text-emerald-deep"></i> 4 Menit
+                                </span>
+                                <a href="single-blog.html" class="fw-semibold text-emerald-deep text-decoration-none d-inline-flex align-items-center gap-1">
+                                    Baca artikel <i class="bi bi-arrow-right"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-4" data-reveal data-reveal-delay="100">
-                    <div class="single-home-blog h-100">
-                        <div class="card h-100 d-flex flex-column justify-content-between">
-                            <div>
-                                <div class="blog-card-img-wrap">
-                                    <img src="assets/img/2.jpg" class="card-img-top" alt="Tajwid Dasar">
-                                    <span class="blog-date-badge"><i class="bi bi-calendar3 me-1"></i> 22 Agu 2026</span>
-                                </div>
-                                <div class="card-body p-4">
-                                    <a href="blog.html" class="btn_category_pill mb-3">
-                                        <i class="bi bi-mic-fill"></i> Tahsin &amp; Tajwid
-                                    </a>
-                                    <h5 class="card-title">
-                                        <a href="single-blog.html">Mengenal Perbedaan Makharijul Huruf: Panduan Dasar Tajwid</a>
-                                    </h5>
-                                    <p class="card-text text-secondary small mb-3">
-                                        Mengapa ketepatan makhraj sangat krusial dalam membaca Al-Qur'an? Pelajari 5 kelompok utama tempat keluarnya huruf hijaiyah.
-                                    </p>
-                                </div>
+                <div class="col-md-6 col-lg-4 d-flex" data-reveal data-reveal-delay="100">
+                    <div class="blog-card w-100 d-flex flex-column">
+                        <div class="blog-card-img-wrap position-relative">
+                            <a href="single-blog.html" class="d-block">
+                                <img src="assets/img/2.jpg" class="w-100 object-fit-cover" style="height: 210px;" alt="Tajwid Dasar">
+                            </a>
+                            <span class="position-absolute top-0 end-0 m-3 badge bg-white text-dark shadow-sm border fw-semibold" style="font-size: 0.76rem;">
+                                <i class="bi bi-calendar3 me-1 text-emerald-deep"></i> 22 Agu 2026
+                            </span>
+                        </div>
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                            <div class="mb-2">
+                                <a href="blog.html" class="badge bg-success-subtle text-success border border-success-subtle text-decoration-none py-1.5 px-2.5">
+                                    <i class="bi bi-mic-fill me-1"></i> Tahsin &amp; Tajwid
+                                </a>
                             </div>
-                            <div class="card-footer bg-transparent px-4 pb-4 pt-0 border-0">
-                                <ul class="blog-meta-list list-unstyled d-flex justify-content-between align-items-center m-0 pt-3 border-top small text-muted">
-                                    <li><i class="bi bi-clock me-1 text-success"></i> 5 Menit</li>
-                                    <li><i class="bi bi-eye me-1 text-success"></i> 950 Pembaca</li>
-                                </ul>
+                            <h3 class="fw-bold fs-5 text-heading mb-2 lh-snug">
+                                <a href="single-blog.html" class="text-heading text-decoration-none hover-emerald">
+                                    Mengenal Perbedaan Makharijul Huruf: Panduan Dasar Tajwid
+                                </a>
+                            </h3>
+                            <p class="small text-secondary flex-grow-1 mb-3" style="line-height: 1.65;">
+                                Mengapa ketepatan makhraj sangat krusial dalam membaca Al-Qur'an? Pelajari 5 kelompok utama tempat keluarnya huruf hijaiyah.
+                            </p>
+                            <div class="pt-3 border-top mt-auto d-flex justify-content-between align-items-center small text-muted">
+                                <span class="d-inline-flex align-items-center gap-1">
+                                    <i class="bi bi-clock text-emerald-deep"></i> 5 Menit
+                                </span>
+                                <a href="single-blog.html" class="fw-semibold text-emerald-deep text-decoration-none d-inline-flex align-items-center gap-1">
+                                    Baca artikel <i class="bi bi-arrow-right"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-4" data-reveal data-reveal-delay="200">
-                    <div class="single-home-blog h-100">
-                        <div class="card h-100 d-flex flex-column justify-content-between">
-                            <div>
-                                <div class="blog-card-img-wrap">
-                                    <img src="assets/img/62.jpg" class="card-img-top" alt="Hafalan Qur'an">
-                                    <span class="blog-date-badge"><i class="bi bi-calendar3 me-1"></i> 20 Agu 2026</span>
-                                </div>
-                                <div class="card-body p-4">
-                                    <a href="blog.html" class="btn_category_pill mb-3">
-                                        <i class="bi bi-bookmark-star-fill"></i> Tahfidz Al-Qur'an
-                                    </a>
-                                    <h5 class="card-title">
-                                        <a href="single-blog.html">Metode Murajaah Terstruktur: Rahasia Hafalan Tetap Mutqin</a>
-                                    </h5>
-                                    <p class="card-text text-secondary small mb-3">
-                                        Menghafal ayat baru itu mudah, namun menjaga hafalan lama butuh strategi disiplin. Simak formula murajaah harian teruji.
-                                    </p>
-                                </div>
+                <div class="col-md-6 col-lg-4 d-flex" data-reveal data-reveal-delay="200">
+                    <div class="blog-card w-100 d-flex flex-column">
+                        <div class="blog-card-img-wrap position-relative">
+                            <a href="single-blog.html" class="d-block">
+                                <img src="assets/img/62.jpg" class="w-100 object-fit-cover" style="height: 210px;" alt="Hafalan Qur'an">
+                            </a>
+                            <span class="position-absolute top-0 end-0 m-3 badge bg-white text-dark shadow-sm border fw-semibold" style="font-size: 0.76rem;">
+                                <i class="bi bi-calendar3 me-1 text-emerald-deep"></i> 20 Agu 2026
+                            </span>
+                        </div>
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                            <div class="mb-2">
+                                <a href="blog.html" class="badge bg-success-subtle text-success border border-success-subtle text-decoration-none py-1.5 px-2.5">
+                                    <i class="bi bi-bookmark-star-fill me-1"></i> Tahfidz Al-Qur'an
+                                </a>
                             </div>
-                            <div class="card-footer bg-transparent px-4 pb-4 pt-0 border-0">
-                                <ul class="blog-meta-list list-unstyled d-flex justify-content-between align-items-center m-0 pt-3 border-top small text-muted">
-                                    <li><i class="bi bi-clock me-1 text-success"></i> 4 Menit</li>
-                                    <li><i class="bi bi-eye me-1 text-success"></i> 1,560 Pembaca</li>
-                                </ul>
+                            <h3 class="fw-bold fs-5 text-heading mb-2 lh-snug">
+                                <a href="single-blog.html" class="text-heading text-decoration-none hover-emerald">
+                                    Metode Murajaah Terstruktur: Rahasia Hafalan Tetap Mutqin
+                                </a>
+                            </h3>
+                            <p class="small text-secondary flex-grow-1 mb-3" style="line-height: 1.65;">
+                                Menghafal ayat baru itu mudah, namun menjaga hafalan lama butuh strategi disiplin. Simak formula murajaah harian teruji.
+                            </p>
+                            <div class="pt-3 border-top mt-auto d-flex justify-content-between align-items-center small text-muted">
+                                <span class="d-inline-flex align-items-center gap-1">
+                                    <i class="bi bi-clock text-emerald-deep"></i> 4 Menit
+                                </span>
+                                <a href="single-blog.html" class="fw-semibold text-emerald-deep text-decoration-none d-inline-flex align-items-center gap-1">
+                                    Baca artikel <i class="bi bi-arrow-right"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -601,27 +625,40 @@
             </div>
 
             <div class="text-center mt-5" data-reveal>
-                <a href="blog.html" class="btn_1">
-                    <i class="bi bi-grid-fill me-1"></i> Jelajahi Semua Artikel <i class="bi bi-arrow-right ms-1"></i>
+                <a href="blog.html" class="btn-editorial-secondary">
+                    <i class="bi bi-journal-text me-2"></i> Lihat Semua Artikel
                 </a>
             </div>
         </div>
     </section>
 
     <!-- ============================================ -->
-    <!-- 10. ETRAIN CTA BANNER -->
+    <!-- 10. CTA SECTION -->
     <!-- ============================================ -->
-    <section id="kontak" class="cta-section text-center" aria-label="CTA Mulai Belajar">
-        <div class="container text-center text-white" data-reveal>
-            <h2 class="display-6 fw-bold mb-3 text-white">Mari Menanam Kebaikan <span class="text-warning">Sejak Hari Ini</span></h2>
-            <p class="lead text-white-50 max-w-700 mx-auto mb-4">Dari satu huruf, satu ayat, dan satu doa — perjalanan besar menuju generasi Qur'ani dimulai bersama AL-HIKMAH.</p>
-            <div class="d-flex flex-wrap justify-content-center gap-3">
-                <a href="#" class="btn_1 bg-warning text-dark border-0 fw-bold" data-bs-toggle="modal" data-bs-target="#daftarModal">
-                    <i class="bi bi-pencil-square me-1"></i> Mulai Perjalanan Belajar
-                </a>
-                <a href="https://wa.me/6285786689008" class="btn_2 text-white border-white" target="_blank">
-                    <i class="bi bi-whatsapp me-1"></i> Hubungi Kami via WhatsApp
-                </a>
+    <section id="kontak" class="cta-section text-center" aria-label="CTA">
+        <div class="cta-overlay" aria-hidden="true"></div>
+        <div class="container">
+            <div class="cta-content" data-reveal>
+                <div class="cta-icon mx-auto"><i class="bi bi-book"></i></div>
+                <h2 class="editorial-title text-white mb-3">
+                    Mulai Belajar Al-Qur'an Bersama Guru Bersanad
+                </h2>
+                <p class="editorial-subtitle text-white mx-auto mb-4" style="max-width: 620px; color: rgba(255, 255, 255, 0.92) !important;">
+                    Bimbingan privat 1-on-1 dengan jadwal fleksibel dan pemantauan mutaba'ah berkala. Coba sesi penempatan 15 menit tanpa biaya untuk mengukur level bacaan ananda.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <button type="button" class="btn-editorial-primary btn-lg" data-bs-toggle="modal" data-bs-target="#daftarModal">
+                        <i class="bi bi-calendar2-check-fill me-2"></i> Coba Sesi Uji Coba Gratis
+                    </button>
+                    <a href="program.html" class="btn-editorial-secondary btn-lg">
+                        <i class="bi bi-grid-fill me-2"></i> Lihat Pilihan Program
+                    </a>
+                    <a href="https://wa.me/6285786689008?text=Assalamualaikum,%20saya%20ingin%20menanyakan%20bimbingan%20mengaji%20AL-HIKMAH%20untuk%20ananda."
+                        class="btn-editorial-secondary btn-lg" target="_blank" rel="noopener"
+                        aria-label="Konsultasi program belajar AL-HIKMAH via WhatsApp">
+                        <i class="bi bi-whatsapp me-2"></i> Tanya via WhatsApp
+                    </a>
+                </div>
             </div>
         </div>
     </section>
