@@ -860,53 +860,59 @@
         <div class="container">
             <div class="row justify-content-center mb-5">
                 <div class="col-lg-7 text-center" data-reveal>
-                    <h2 class="editorial-title mb-2">Wawasan &amp; Edukasi <span class="text-emerald-deep">Qur'ani</span></h2>
-                    <p class="editorial-subtitle mx-auto">Panduan belajar Al-Qur'an, tips mendampingi anak mengaji di
-                        rumah, metode tahsin/tahfidz, dan wawasan keislaman terkini.</p>
+                    <div class="section-badge mx-auto mb-3">
+                        <i class="bi bi-journal-bookmark-fill me-1"></i> Artikel &amp; Panduan
+                    </div>
+                    <h2 class="editorial-title mb-2">Catatan &amp; Panduan Belajar <span class="text-emerald-deep">Al-Qur'an</span></h2>
+                    <p class="editorial-subtitle mx-auto" style="max-width: 580px;">
+                        Kumpulan artikel praktis seputar kaidah tajwid, metode hafalan mutqin, dan tips mendampingi anak mengaji di rumah.
+                    </p>
                 </div>
             </div>
 
             <div class="row g-4">
                 @if (isset($latestArticles) && $latestArticles->count() > 0)
                     @foreach ($latestArticles as $index => $article)
-                        <div class="col-md-6 col-lg-4" data-reveal data-reveal-delay="{{ ($index % 3) * 100 }}">
-                            <div class="editorial-card h-100 d-flex flex-column justify-content-between p-0 overflow-hidden">
-                                <div>
-                                    <div class="blog-card-img-wrap position-relative">
-                                        <img src="{{ $article->cover_url }}" class="w-100" style="height: 200px; object-fit: cover;"
+                        <div class="col-md-6 col-lg-4 d-flex" data-reveal data-reveal-delay="{{ ($index % 3) * 100 }}">
+                            <div class="blog-card w-100 d-flex flex-column">
+                                <div class="blog-card-img-wrap position-relative">
+                                    <a href="{{ route('blog.show', $article->slug) }}" class="d-block">
+                                        <img src="{{ $article->cover_url }}" class="w-100 object-fit-cover" style="height: 210px;"
                                             alt="{{ $article->title }}"
                                             onerror="this.src='{{ asset('assets/img/' . (($index % 3) + 1) . '.jpg') }}'">
-                                        <span class="blog-date-badge position-absolute top-0 end-0 m-3 badge bg-white text-dark shadow-sm border">
-                                            <i class="bi bi-calendar3 me-1"></i>
-                                            {{ $article->published_at ? $article->published_at->format('d M Y') : $article->created_at->format('d M Y') }}
-                                        </span>
-                                    </div>
-                                    <div class="p-4">
-                                        @if ($article->category)
+                                    </a>
+                                    <span class="position-absolute top-0 end-0 m-3 badge bg-white text-dark shadow-sm border fw-semibold" style="font-size: 0.76rem;">
+                                        <i class="bi bi-calendar3 me-1 text-emerald-deep"></i>
+                                        {{ $article->published_at ? $article->published_at->translatedFormat('d M Y') : $article->created_at->translatedFormat('d M Y') }}
+                                    </span>
+                                </div>
+                                <div class="p-4 d-flex flex-column flex-grow-1">
+                                    @if ($article->category)
+                                        <div class="mb-2">
                                             <a href="{{ route('blog.category', $article->category->slug) }}"
-                                                class="badge bg-light text-emerald-deep border text-decoration-none mb-3">
+                                                class="badge bg-success-subtle text-success border border-success-subtle text-decoration-none py-1.5 px-2.5">
                                                 <i class="bi {{ $article->category->icon ?? 'bi-bookmark-check' }} me-1"></i>
                                                 {{ $article->category->name }}
                                             </a>
-                                        @endif
-                                        <h3 class="fw-bold fs-5 text-heading mb-2">
-                                            <a href="{{ route('blog.show', $article->slug) }}" class="text-inherit text-decoration-none">
-                                                {{ Str::limit($article->title, 56) }}
-                                            </a>
-                                        </h3>
-                                        <p class="small text-secondary mb-0">
-                                            {{ $article->excerpt ?? Str::limit(strip_tags($article->content), 110) }}
-                                        </p>
+                                        </div>
+                                    @endif
+                                    <h3 class="fw-bold fs-5 text-heading mb-2 lh-snug">
+                                        <a href="{{ route('blog.show', $article->slug) }}" class="text-heading text-decoration-none hover-emerald">
+                                            {{ Str::limit($article->title, 64) }}
+                                        </a>
+                                    </h3>
+                                    <p class="small text-secondary flex-grow-1 mb-3" style="line-height: 1.65;">
+                                        {{ $article->excerpt ?? Str::limit(strip_tags($article->content), 120) }}
+                                    </p>
+                                    <div class="pt-3 border-top mt-auto d-flex justify-content-between align-items-center small text-muted">
+                                        <span class="d-inline-flex align-items-center gap-1">
+                                            <i class="bi bi-clock text-emerald-deep"></i>
+                                            {{ $article->reading_time_label }}
+                                        </span>
+                                        <a href="{{ route('blog.show', $article->slug) }}" class="fw-semibold text-emerald-deep text-decoration-none d-inline-flex align-items-center gap-1">
+                                            Baca artikel <i class="bi bi-arrow-right"></i>
+                                        </a>
                                     </div>
-                                </div>
-                                <div class="px-4 pb-4 pt-0">
-                                    <ul class="blog-meta-list list-unstyled d-flex justify-content-between align-items-center m-0 pt-3 border-top small text-muted"
-                                        style="border-color: var(--border-color) !important;">
-                                        <li><i class="bi bi-clock me-1 text-emerald-deep"></i>
-                                            {{ $article->reading_time_label }}</li>
-                                        <li><i class="bi bi-eye me-1 text-emerald-deep"></i>
-                                            <span class="tnum-price">{{ number_format($article->views_count) }}</span> Pembaca</li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -924,7 +930,7 @@
 
             <div class="text-center mt-5" data-reveal>
                 <a href="{{ route('blog.index') }}" class="btn-editorial-secondary">
-                    <i class="bi bi-grid-fill me-1"></i> Jelajahi Semua Artikel
+                    <i class="bi bi-journal-text me-2"></i> Lihat Semua Artikel
                 </a>
             </div>
         </div>
@@ -938,77 +944,70 @@
         <div class="container">
             <div class="cta-content" data-reveal>
                 <div class="cta-icon mx-auto"><i class="bi bi-book"></i></div>
-                <h2 class="editorial-title text-white mb-3">
-                    @auth
+
+                @auth
+                    <h2 class="editorial-title text-white mb-3">
                         Selamat Datang Kembali,<br><span style="color: #6ee7b7;">{{ auth()->user()->name }}</span>
-                    @else
-                        Mari Menanam Kebaikan<br><span style="color: #6ee7b7;">Sejak Hari Ini</span>
-                    @endauth
-                </h2>
-                <p class="editorial-subtitle text-white mx-auto mb-4" style="max-width: 640px; color: rgba(255, 255, 255, 0.92) !important;">
-                    @auth
-                        Lanjutkan aktivitas pembelajaran Al-Qur'an dan pantau perkembangan mutaba'ah hari ini.
-                    @else
-                        Dari satu huruf, satu ayat, satu doa, perjalanan besar menuju generasi Qur'ani dimulai bersama AL-HIKMAH.
-                    @endauth
-                </p>
-                <div class="d-flex flex-wrap justify-content-center gap-3">
-                    @guest
-                        <button type="button" class="btn-editorial-primary btn-lg" data-bs-toggle="modal" data-bs-target="#trialModal">
-                            <i class="bi bi-calendar2-check-fill me-1"></i> Daftar Gratis Sekarang
-                        </button>
-                        <a href="{{ route('program') }}" class="btn-editorial-secondary btn-lg">
-                            <i class="bi bi-grid-fill me-1"></i> Mulai Belajar
-                        </a>
-                    @endguest @auth
+                    </h2>
+                    <p class="editorial-subtitle text-white mx-auto mb-4" style="max-width: 620px; color: rgba(255, 255, 255, 0.92) !important;">
+                        Lanjutkan sesi bimbingan Al-Qur'an dan pantau catatan mutaba'ah hari ini.
+                    </p>
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
                         @if (auth()->user()->isParent())
-                            <a href="{{ route('parent.enrollments.index') }}" class="btn-editorial-primary">
-                                <i class="bi bi-journal-plus me-1"></i> Daftarkan Program Baru Anak
+                            <a href="{{ route('parent.dashboard') }}" class="btn-editorial-primary btn-lg">
+                                <i class="bi bi-speedometer2 me-2"></i> Buka Dashboard Orang Tua
                             </a>
-                            <a href="{{ route('parent.dashboard') }}" class="btn-editorial-secondary text-white border-white">
-                                <i class="bi bi-speedometer2 me-1"></i> Dashboard Orang Tua
+                            <a href="{{ route('parent.schedules.index') }}" class="btn-editorial-secondary btn-lg">
+                                <i class="bi bi-calendar-week me-2"></i> Jadwal Belajar Ananda
                             </a>
                         @elseif(auth()->user()->isStudent())
-                            <a href="{{ route('student.dashboard') }}" class="btn-editorial-primary">
-                                <i class="bi bi-journal-check me-1"></i> Masuk Ruang Santri
+                            <a href="{{ route('student.dashboard') }}" class="btn-editorial-primary btn-lg">
+                                <i class="bi bi-journal-check me-2"></i> Masuk Ruang Santri
                             </a>
-                            <a href="{{ route('student.targets.today') }}" class="btn-editorial-secondary text-white border-white">
-                                <i class="bi bi-bullseye me-1"></i> Target Hafalan Hari Ini
+                            <a href="{{ route('student.targets.today') }}" class="btn-editorial-secondary btn-lg">
+                                <i class="bi bi-bullseye me-2"></i> Target Hafalan Hari Ini
                             </a>
                         @elseif(auth()->user()->isMentor())
-                            <a href="{{ route('mentor.dashboard') }}" class="btn-editorial-primary">
-                                <i class="bi bi-mortarboard me-1"></i> Dashboard Mengajar
+                            <a href="{{ route('mentor.dashboard') }}" class="btn-editorial-primary btn-lg">
+                                <i class="bi bi-mortarboard me-2"></i> Dashboard Mengajar
                             </a>
-                            <a href="{{ route('mentor.sessions.index') }}" class="btn-editorial-secondary text-white border-white">
-                                <i class="bi bi-calendar3 me-1"></i> Jadwal Mengajar
+                            <a href="{{ route('mentor.sessions.index') }}" class="btn-editorial-secondary btn-lg">
+                                <i class="bi bi-calendar3 me-2"></i> Jadwal Bimbingan
                             </a>
                         @elseif(auth()->user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}" class="btn-editorial-primary">
-                                <i class="bi bi-gear-fill me-1"></i> Dashboard Admin
+                            <a href="{{ route('admin.dashboard') }}" class="btn-editorial-primary btn-lg">
+                                <i class="bi bi-gear-fill me-2"></i> Dashboard Admin
                             </a>
-                            <a href="{{ route('admin.enrollments.index') }}" class="btn-editorial-secondary text-white border-white">
-                                <i class="bi bi-people-fill me-1"></i> Kelola Pendaftaran
+                            <a href="{{ route('admin.enrollments.index') }}" class="btn-editorial-secondary btn-lg">
+                                <i class="bi bi-people-fill me-2"></i> Kelola Pendaftaran
                             </a>
                         @else
-                            <a href="{{ route('dashboard') }}" class="btn-editorial-primary">
-                                <i class="bi bi-speedometer2 me-1"></i> Ke Dashboard
+                            <a href="{{ route('dashboard') }}" class="btn-editorial-primary btn-lg">
+                                <i class="bi bi-speedometer2 me-2"></i> Buka Dashboard
                             </a>
                         @endif
-                    @else
-                        <button type="button" class="btn-editorial-primary" data-bs-toggle="modal" data-bs-target="#trialModal">
-                            <i class="bi bi-pencil-square me-1"></i> Daftar Gratis Sekarang
+                    </div>
+                @else
+                    <h2 class="editorial-title text-white mb-3">
+                        Mulai Belajar Al-Qur'an Bersama Guru Bersanad
+                    </h2>
+                    <p class="editorial-subtitle text-white mx-auto mb-4" style="max-width: 620px; color: rgba(255, 255, 255, 0.92) !important;">
+                        Bimbingan privat 1-on-1 dengan jadwal fleksibel dan pemantauan mutaba'ah berkala. Coba sesi penempatan 15 menit tanpa biaya untuk mengukur level bacaan ananda.
+                    </p>
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
+                        <button type="button" class="btn-editorial-primary btn-lg" data-bs-toggle="modal" data-bs-target="#trialModal">
+                            <i class="bi bi-calendar2-check-fill me-2"></i> Coba Sesi Uji Coba Gratis
                         </button>
-                        <button type="button" class="btn-editorial-secondary text-white border-white" data-bs-toggle="modal"
-                            data-bs-target="#daftarModal">
-                            <i class="bi bi-person-plus me-1"></i> Mulai Belajar
-                        </button>
-                        <a href="{{ wa_url('Assalamualaikum, saya ingin berkonsultasi mengenai program belajar AL-HIKMAH') }}"
-                            class="btn-editorial-whatsapp" target="_blank" rel="noopener"
-                            aria-label="Konsultasi program belajar AL-HIKMAH via WhatsApp">
-                            <i class="bi bi-whatsapp me-1" aria-hidden="true"></i> Konsultasi via WhatsApp
+                        <a href="{{ route('program') }}" class="btn-editorial-secondary btn-lg">
+                            <i class="bi bi-grid-fill me-2"></i> Lihat Pilihan Program
                         </a>
-                    @endauth
-                </div>
+                        <a href="{{ wa_url('Assalamualaikum, saya ingin menanyakan bimbingan mengaji AL-HIKMAH untuk ananda.') }}"
+                            class="btn-editorial-secondary btn-lg" target="_blank" rel="noopener"
+                            aria-label="Konsultasi program belajar AL-HIKMAH via WhatsApp">
+                            <i class="bi bi-whatsapp me-2"></i> Tanya via WhatsApp
+                        </a>
+                    </div>
+                @endauth
             </div>
         </div>
     </section>

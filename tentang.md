@@ -1157,6 +1157,20 @@ Sebagai pemenuhan arahan arsitektur data bersih (*clean database hygiene*):
    - Keadaan Normal: Permukaan warna batu hangat (`#fafaf9`) dengan garis tepi lembut.
    - Keadaan Terpilih (`:has(input:checked)`): Berubah seketika menjadi hijau zamrud lembut (`#ecfdf5`), garis tepi hijau pekat (`#064e3b`), lingkaran lencana opsi huruf (A/B/C/D) menjadi hijau tua solid dengan huruf putih, serta teks jawaban berganti menjadi warna hijau zamrud tegas.
 
+### 26.6 Penerapan Antislop-Copywriting & Rekonstruksi Bersih CTA & Blog Beranda (home.blade.php)
+1. **Eliminasi Anomali Duplikasi Tombol CTA (@guest vs @auth / @else)**:
+   - Menghapus tumpang tindih sintaks `@guest ... @endguest @auth ... @else ... @endauth` pada Section CTA (`#kontak`) yang sebelumnya menyebabkan pengunjung non-login melihat 5 tombol aksi sekaligus secara ganda.
+   - Mengonsolidasikan struktur menjadi percabangan tunggal `@auth ... @else ... @endauth`:
+     - Pengunjung Tamu (*Guest*): Disuguhkan tepat 3 tombol bermakna (*Coba Sesi Uji Coba Gratis*, *Lihat Pilihan Program*, dan *Tanya via WhatsApp*).
+     - Pengguna Login (*Auth*): Disuguhkan 2 tombol navigasi yang disesuaikan secara dinamis menurut peran (`Parent`, `Student`, `Mentor`, `Admin`).
+2. **Penerapan Antislop-Copywriting (Tanpa Buzzword & Tanpa Inflasi Signifikansi)**:
+   - Menghapus klaim abstrak dan metafora puitis hampa (*"Mari Menanam Kebaikan Sejak Hari Ini... perjalanan besar"*).
+   - Mengganti teks dengan proposisi nilai yang nyata, jujur, dan beradab: *"Mulai Belajar Al-Qur'an Bersama Guru Bersanad"*, dengan penjelasan konkret: *"Bimbingan privat 1-on-1 dengan jadwal fleksibel dan pemantauan mutaba'ah berkala. Coba sesi penempatan 15 menit tanpa biaya untuk mengukur level bacaan ananda."*
+   - Menjamin tidak ada em-dash (`—`), tidak ada huruf kapital berseru, dan tidak ada klaim statistik palsu.
+3. **Standardisasi Kartu Blog Beranda (.blog-card)**:
+   - Mengganti `.editorial-card` yang sebelumnya berantakan dengan kelas `.blog-card` terstandarisasi.
+   - Menggunakan rasio gambar seragam (`height: 210px; object-fit: cover;`), penanda tanggal terformat lokal Indonesia (`d M Y`), pill kategori kurikulum hijau lembut, estimasi waktu baca (`reading_time_label`), dan tautan aksi eksplisit (*"Baca artikel →"*).
+
 ---
 
 **Disahkan oleh:** Tim Manajemen & Pengembang AL-HIKMAH LMS  
