@@ -2,7 +2,7 @@
 
 @section('title', 'Papan Peringkat Santri')
 @section('header', 'Papan Peringkat Santri 🏆')
-@section('subheader', 'Fastabiqul Khoirot — Berlomba-lomba dalam kebaikan dan menghafal kalam-Nya.')
+@section('subheader', 'Fastabiqul Khoirot: Berlomba-lomba dalam kebaikan dan menghafal kalam-Nya.')
 
 @section('content')
 <!-- Header Category Navigation & Privacy Settings -->

@@ -12,6 +12,7 @@ use App\Models\Progress;
 use App\Models\Session;
 use App\Models\Student;
 use App\Services\DecisionSupport\AhpRankingService;
+use App\Services\RevenueAnalyticsService;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -167,6 +168,18 @@ class DashboardController extends Controller
             ? app(AhpRankingService::class)->getMentorAhpSummary($mentor)
             : null;
 
+        // 💰 Hak Honorarium Mengajar Guru (Transparansi Rp 100rb/sesi selesai, privasi margin terjaga)
+        $honorariumSummary = ($mentorId && ! $isRecruitmentMode)
+            ? app(RevenueAnalyticsService::class)->getMentorHonorariumSummary($mentorId)
+            : null;
+
+        // 🧾 Slip Gaji Bulanan (Bagian A & B, status verifikasi admin)
+        $slipMonth = (int) request('slip_month', now()->month);
+        $slipYear = (int) request('slip_year', now()->year);
+        $salarySlip = ($mentorId && ! $isRecruitmentMode)
+            ? app(RevenueAnalyticsService::class)->getMentorSalarySlipData($mentorId, $slipMonth, $slipYear)
+            : null;
+
         return view('mentor.dashboard', compact(
             'isRecruitmentMode',
             'mentorApplication',
@@ -188,7 +201,9 @@ class DashboardController extends Controller
             'recentActivities',
             'probationTracking',
             'activeIntervention',
-            'ahpPerformance'
+            'ahpPerformance',
+            'honorariumSummary',
+            'salarySlip'
         ));
     }
 
@@ -201,5 +216,21 @@ class DashboardController extends Controller
             : collect();
 
         return view('mentor.profile', compact('user', 'mentor', 'recentActivities'));
+    }
+
+    public function printSalarySlip(): View
+    {
+        $user = auth()->user();
+        $mentor = $user->mentor;
+        $mentorId = $mentor?->id;
+
+        $slipMonth = (int) request('slip_month', now()->month);
+        $slipYear = (int) request('slip_year', now()->year);
+
+        $salarySlip = $mentorId
+            ? app(RevenueAnalyticsService::class)->getMentorSalarySlipData($mentorId, $slipMonth, $slipYear)
+            : null;
+
+        return view('mentor.salary-slip-print', compact('salarySlip', 'mentor'));
     }
 }

@@ -2,9 +2,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
-    // ============================================
-    // Loading Screen - Optimized
-    // ============================================
+    // Loading Screen
     const loadingScreen = document.getElementById('loadingScreen');
     window.addEventListener('load', function () {
         if (loadingScreen) {
@@ -19,9 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         once: true
     });
 
-    // ============================================
-    // Dark Mode Toggle - Event Delegation & Sync All Elements
-    // ============================================
+    // Dark Mode Toggle
     const html = document.documentElement;
 
     function setTheme(isDark) {
@@ -83,9 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // ============================================
-    // Navbar Scroll Effect - Throttled
-    // ============================================
+    // Navbar Scroll Effect
     const navbar = document.getElementById('mainNavbar');
     let scrollTicking = false;
 
@@ -109,9 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
         passive: true
     });
 
-    // ============================================
-    // Smooth Scroll for Anchor Links - Fixed
-    // ============================================
+    // Smooth Scrolling for Anchor Links
     document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
         if (anchor.classList.contains('dropdown-toggle')) return;
 
@@ -141,9 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ============================================
-    // Active Nav Link on Scroll - Only for on-page sections
-    // ============================================
+    // Active Nav Link on Scroll
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
     let activeTicking = false;
@@ -219,9 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
         passive: true
     });
 
-    // ============================================
-    // Back to Top Button - Throttled
-    // ============================================
+    // Back to Top Button
     const backToTopBtn = document.getElementById('backToTop');
     let topBtnTicking = false;
 
@@ -255,9 +243,7 @@ document.addEventListener('DOMContentLoaded', function () {
         backToTopBtn.setAttribute('aria-label', 'Kembali ke atas halaman');
     }
 
-    // ============================================
-    // Scroll Reveal Animation - Performance
-    // ============================================
+    // Scroll Reveal Animation
     const revealElements = document.querySelectorAll('[data-reveal]');
 
     if ('IntersectionObserver' in window && revealElements.length > 0) {
@@ -287,9 +273,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ============================================
-    // Floating WhatsApp Tooltip
-    // ============================================
+    // Tooltips Initialization
     const waBtn = document.querySelector('.floating-whatsapp');
     if (waBtn) {
         const tooltip = waBtn.querySelector('.wa-tooltip');
@@ -306,9 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
         waBtn.setAttribute('aria-label', 'Hubungi kami via WhatsApp');
     }
 
-    // ============================================
-    // Image Error Handling
-    // ============================================
+    // Form Validation Enhancements
     document.querySelectorAll('img').forEach(function (img) {
         img.addEventListener('error', function () {
             if (!this.hasAttribute('data-failed')) {
@@ -322,9 +304,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ============================================
     // Form Submission - Modal Pendaftaran ke Register Form
-    // ============================================
     const registrationForm = document.getElementById('registrationForm');
     if (registrationForm) {
         registrationForm.addEventListener('submit', function (e) {
@@ -354,9 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ============================================
     // Modal Focus Trap for Accessibility
-    // ============================================
     const daftarModal = document.getElementById('daftarModal');
     if (daftarModal) {
         daftarModal.addEventListener('shown.bs.modal', function () {
@@ -365,9 +343,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ============================================
-    // 38. PRAYER TIMES ENGINE (JADWAL SHOLAT REAL-TIME)
-    // ============================================
+    // Real-Time Prayer Times Engine (Kemenag RI)
     const PrayerTimesApp = {
         cities: [
             // Jabodetabek
@@ -1048,9 +1024,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize Prayer Times App on Page Load
     PrayerTimesApp.init();
 
-    // ============================================
     // DataTables Global Consistency & Responsiveness
-    // ============================================
     function ensureDataTablesConsistent() {
         if (typeof DataTable === 'undefined') return;
 
@@ -1073,11 +1047,100 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Run consistency check after initial load
     setTimeout(ensureDataTablesConsistent, 150);
+
+    // Free trial 15-minute booking form handler with accessible feedback
+    const trialForm = document.getElementById('trialBookingForm');
+    const trialModal = document.getElementById('trialModal');
+    const trialAlert = document.getElementById('trialFormAlert');
+    const trialSuccessView = document.getElementById('trialSuccessView');
+    const trialSubmitBtn = document.getElementById('btnSubmitTrial');
+    const trialSpinner = document.getElementById('trialSubmitSpinner');
+    const trialSubmitIcon = document.getElementById('trialSubmitIcon');
+    const trialDirectWaBtn = document.getElementById('trialDirectWaBtn');
+    const trialSuccessMsg = document.getElementById('trialSuccessMessage');
+
+    if (trialForm) {
+        trialForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (!trialForm.checkValidity()) {
+                e.stopPropagation();
+                trialForm.classList.add('was-validated');
+                return;
+            }
+
+            // Set loading state
+            if (trialSubmitBtn) trialSubmitBtn.disabled = true;
+            if (trialSpinner) trialSpinner.classList.remove('d-none');
+            if (trialSubmitIcon) trialSubmitIcon.classList.add('d-none');
+            if (trialAlert) {
+                trialAlert.className = 'd-none mb-4';
+                trialAlert.textContent = '';
+            }
+
+            const formData = new FormData(trialForm);
+
+            fetch(trialForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                }
+            })
+            .then(async response => {
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) {
+                    throw new Error(data.message || 'Terjadi kesalahan saat mengirim formulir. Mohon periksa isian data Anda.');
+                }
+                return data;
+            })
+            .then(data => {
+                trialForm.classList.add('d-none');
+                if (trialSuccessMsg && data.message) {
+                    trialSuccessMsg.textContent = data.message;
+                }
+                if (trialDirectWaBtn && data.wa_url) {
+                    trialDirectWaBtn.href = data.wa_url;
+                }
+                if (trialSuccessView) {
+                    trialSuccessView.classList.remove('d-none');
+                }
+            })
+            .catch(err => {
+                if (trialAlert) {
+                    trialAlert.className = 'alert alert-danger mb-4 small';
+                    trialAlert.textContent = err.message || 'Mohon maaf, sistem sedang sibuk. Silakan coba beberapa saat lagi.';
+                }
+            })
+            .finally(() => {
+                if (trialSubmitBtn) trialSubmitBtn.disabled = false;
+                if (trialSpinner) trialSpinner.classList.add('d-none');
+                if (trialSubmitIcon) trialSubmitIcon.classList.remove('d-none');
+            });
+        });
+    }
+
+    // Reset modal state when closed
+    if (trialModal) {
+        trialModal.addEventListener('hidden.bs.modal', function () {
+            if (trialForm) {
+                trialForm.reset();
+                trialForm.classList.remove('was-validated');
+                trialForm.classList.remove('d-none');
+            }
+            if (trialSuccessView) {
+                trialSuccessView.classList.add('d-none');
+            }
+            if (trialAlert) {
+                trialAlert.className = 'd-none mb-4';
+                trialAlert.textContent = '';
+            }
+        });
+    }
 });
 
-// ============================================
 // Global Profile Helpers: Map Tester & Avatar Preview
-// ============================================
 window.testMapLink = function (inputId) {
     const input = (inputId ? document.getElementById(inputId) : null)
         || document.getElementById('mapsLinkInput')

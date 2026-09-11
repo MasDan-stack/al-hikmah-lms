@@ -7,7 +7,9 @@ use App\Models\FinancialAuditLog;
 use App\Models\Mentor;
 use App\Models\MentorActivityLog;
 use App\Models\MentorPerformanceSnapshot;
+use App\Services\RevenueAnalyticsService;
 use App\Services\StaffAnalyticsService;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -61,7 +63,11 @@ class AdminStaffController extends Controller
             ->latest()
             ->first();
 
-        return view('admin.staff.show', compact('mentor', 'cvDoc', 'certDoc', 'latestSnap', 'latestBankLog'));
+        $slipMonth = (int) request('slip_month', now()->month);
+        $slipYear = (int) request('slip_year', now()->year);
+        $salarySlip = app(RevenueAnalyticsService::class)->getMentorSalarySlipData($mentor->id, $slipMonth, $slipYear);
+
+        return view('admin.staff.show', compact('mentor', 'cvDoc', 'certDoc', 'latestSnap', 'latestBankLog', 'salarySlip'));
     }
 
     /**
@@ -114,5 +120,59 @@ class AdminStaffController extends Controller
             'status' => $status,
             'status_label' => $statusLabel,
         ]);
+    }
+
+    /**
+     * Tandai status pembayaran honor bulanan mentor (Lunas / Pending) oleh Admin
+     */
+    public function markSalaryPaid(Request $request, int $id): JsonResponse
+    {
+        $request->validate([
+            'year' => 'required|integer|min:2020|max:2099',
+            'month' => 'required|integer|min:1|max:12',
+            'status' => 'required|in:paid,pending',
+        ]);
+
+        $mentor = Mentor::findOrFail($id);
+        $year = (int) $request->input('year');
+        $month = (int) $request->input('month');
+        $status = $request->input('status');
+
+        app(RevenueAnalyticsService::class)->markMentorSalaryStatus(
+            mentorId: $mentor->id,
+            year: $year,
+            month: $month,
+            status: $status,
+        );
+
+        $statusLabel = $status === 'paid' ? 'Lunas' : 'Menunggu Verifikasi Admin';
+        $periodLabel = Carbon::createFromDate($year, $month, 1)->locale('id')->translatedFormat('F Y');
+
+        MentorActivityLog::log(
+            $mentor->id,
+            'salary_status_updated',
+            "Status honor periode {$periodLabel} ditandai '{$statusLabel}' oleh Admin."
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => "Honor {$mentor->full_name} periode {$periodLabel} berhasil ditandai sebagai {$statusLabel}.",
+            'status' => $status,
+            'status_label' => $statusLabel,
+        ]);
+    }
+
+    /**
+     * Cetak lembar slip gaji resmi mentor dari dashboard admin
+     */
+    public function printSalarySlip(int $id): View
+    {
+        $mentor = Mentor::findOrFail($id);
+        $slipMonth = (int) request('slip_month', now()->month);
+        $slipYear = (int) request('slip_year', now()->year);
+
+        $salarySlip = app(RevenueAnalyticsService::class)->getMentorSalarySlipData($mentor->id, $slipMonth, $slipYear);
+
+        return view('mentor.salary-slip-print', compact('salarySlip', 'mentor'));
     }
 }

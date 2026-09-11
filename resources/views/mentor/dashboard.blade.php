@@ -683,6 +683,256 @@
             </div>
         @endif
 
+        <!-- 💰 WIDGET TRANSPARANSI HONOR MENGAJAR GURU (RP 100.000 / SESI) -->
+        @if(isset($honorariumSummary) && $honorariumSummary)
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color) !important;">
+                <div class="card-header border-0 py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2" style="background: rgba(13, 122, 62, 0.05);">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle p-2 d-flex align-items-center justify-content-center shadow-xs text-white" style="background: var(--primary); width: 42px; height: 42px;">
+                            <i class="bi bi-wallet2 fs-5"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <h6 class="fw-bold mb-0" style="color: var(--text-primary);">Rekapitulasi Honor Mengajar Saya</h6>
+                                <span class="badge rounded-pill px-2.5 py-1" style="background: rgba(13, 122, 62, 0.12); color: var(--primary); font-size: 0.72rem;">
+                                    Rp 100.000 / Sesi 90 Menit Selesai
+                                </span>
+                            </div>
+                            <small class="text-muted">Honorarium dihitung otomatis dan amanah untuk setiap sesi bimbingan yang telah selesai dilaksanakan.</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <span class="fs-4 fw-bold text-success">Rp {{ number_format($honorariumSummary['this_month_honor'], 0, ',', '.') }}</span>
+                        <small class="text-muted d-block">Honor Bulan Ini ({{ $honorariumSummary['this_month_sessions'] }} Sesi)</small>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-sm-4">
+                            <div class="p-3 rounded-3 border bg-light h-100">
+                                <div class="small text-muted mb-1">Sesi Selesai Bulan Ini</div>
+                                <div class="fs-5 fw-bold text-dark">{{ $honorariumSummary['this_month_sessions'] }} Sesi</div>
+                                <div class="small text-success mt-1">Rp {{ number_format($honorariumSummary['this_month_honor'], 0, ',', '.') }} terkumpul</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="p-3 rounded-3 border bg-light h-100">
+                                <div class="small text-muted mb-1">Total Sesi Selesai (Semua Waktu)</div>
+                                <div class="fs-5 fw-bold text-dark">{{ $honorariumSummary['total_completed_sessions'] }} Sesi</div>
+                                <div class="small text-primary mt-1">Total Rp {{ number_format($honorariumSummary['total_honor'], 0, ',', '.') }}</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="p-3 rounded-3 border bg-light h-100">
+                                <div class="small text-muted mb-1">Estimasi Sesi Mendatang</div>
+                                <div class="fs-5 fw-bold text-dark">{{ $honorariumSummary['upcoming_sessions'] }} Sesi Terjadwal</div>
+                                <div class="small text-muted mt-1">Potensi honor: Rp {{ number_format($honorariumSummary['estimated_upcoming_honor'], 0, ',', '.') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        <!-- 🧾 SLIP GAJI / HONORARIUM MENGAJAR RESMI -->
+        @if(isset($salarySlip) && $salarySlip)
+        @php
+            $slipStatus = $salarySlip['salary_status'];
+            $isPaid = $slipStatus === 'paid';
+        @endphp
+        <div class="card border-0 shadow-sm rounded-4 mb-4" id="salary-slip-card" style="background: var(--card-bg); border: 1px solid var(--border-color) !important;">
+            <div class="card-header border-0 pt-4 px-4 pb-3 d-flex justify-content-between align-items-start flex-wrap gap-3" style="background: transparent;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center text-white flex-shrink-0"
+                         style="width: 48px; height: 48px; background: linear-gradient(135deg, var(--primary), #0d5c32);">
+                        <i class="bi bi-file-earmark-text-fill fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0" style="color: var(--text-primary);">Slip Gaji / Honorarium Mengajar Guru</h5>
+                        <div class="d-flex align-items-center gap-2 mt-1 flex-wrap">
+                            <small class="text-muted">Periode: <strong>{{ $salarySlip['period_label'] }}</strong></small>
+                            @if($isPaid)
+                                <span class="badge rounded-pill px-3 py-1" style="background: rgba(16, 185, 129, 0.15); color: #059669;">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Lunas
+                                </span>
+                            @else
+                                <span class="badge rounded-pill px-3 py-1" style="background: rgba(234, 179, 8, 0.15); color: #ca8a04;">
+                                    <i class="bi bi-clock-fill me-1"></i> Menunggu Verifikasi Admin
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    {{-- Filter Periode --}}
+                    <form method="GET" action="{{ route('mentor.dashboard') }}#salary-slip-card" class="d-flex align-items-center gap-2">
+                        <select name="slip_month" class="form-select form-select-sm" style="width: auto;">
+                            @foreach(range(1, 12) as $m)
+                                <option value="{{ $m }}" @selected($m == $salarySlip['period_month'])>
+                                    {{ \Carbon\Carbon::create()->month($m)->locale('id')->translatedFormat('F') }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <select name="slip_year" class="form-select form-select-sm" style="width: auto;">
+                            @foreach(range(now()->year, now()->year - 2, -1) as $y)
+                                <option value="{{ $y }}" @selected($y == $salarySlip['period_year'])>{{ $y }}</option>
+                            @endforeach
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-outline-secondary px-3">
+                            <i class="bi bi-funnel me-1"></i> Tampilkan
+                        </button>
+                    </form>
+                    <a href="{{ route('mentor.salary-slip.print', ['slip_month' => $salarySlip['period_month'], 'slip_year' => $salarySlip['period_year']]) }}"
+                       target="_blank"
+                       class="btn btn-sm px-3 text-white" style="background: var(--primary);">
+                        <i class="bi bi-printer-fill me-1"></i> Cetak Slip
+                    </a>
+                </div>
+            </div>
+
+            <div class="card-body px-4 pb-4">
+                @if(count($salarySlip['sessions_a']) === 0)
+                    <div class="text-center py-5">
+                        <div class="text-muted mb-2"><i class="bi bi-calendar-x fs-2"></i></div>
+                        <div class="text-muted small">Tidak ada sesi terjadwal pada periode <strong>{{ $salarySlip['period_label'] }}</strong>.</div>
+                    </div>
+                @else
+                    {{-- BAGIAN A: Rincian Sesi & Jadwal Mengajar --}}
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge rounded-pill px-3 py-1 fw-semibold" style="background: rgba(14, 165, 233, 0.12); color: #0284c7; font-size: 0.8rem;">
+                                A. Rincian Sesi &amp; Jadwal Mengajar
+                            </span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle small mb-0">
+                                <thead style="background: var(--bg-surface);">
+                                    <tr>
+                                        <th class="fw-semibold text-muted border-0 ps-3" style="width: 2.5rem;">No</th>
+                                        <th class="fw-semibold text-muted border-0">Hari / Tanggal &amp; Jam</th>
+                                        <th class="fw-semibold text-muted border-0">Nama Santri</th>
+                                        <th class="fw-semibold text-muted border-0">Status Kehadiran</th>
+                                        <th class="fw-semibold text-muted border-0 text-end">Tarif</th>
+                                        <th class="fw-semibold text-muted border-0 text-end pe-3">Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($salarySlip['sessions_a'] as $i => $sess)
+                                    <tr>
+                                        <td class="ps-3 text-muted">{{ $i + 1 }}</td>
+                                        <td>
+                                            <div class="fw-semibold" style="color: var(--text-primary);">{{ $sess['date'] }}</div>
+                                            <div class="text-muted">{{ $sess['time'] }} WIB &bull; <span class="text-capitalize">{{ $sess['method'] }}</span></div>
+                                        </td>
+                                        <td style="color: var(--text-primary);">{{ $sess['student_name'] }}</td>
+                                        <td>
+                                            @if($sess['is_valid_attendance'])
+                                                @if($sess['confirmation_status'] === 'hadir')
+                                                    <span class="badge rounded-pill" style="background: rgba(16, 185, 129, 0.12); color: #059669;">
+                                                        <i class="bi bi-check-circle-fill me-1"></i> Hadir
+                                                    </span>
+                                                @else
+                                                    <span class="badge rounded-pill" style="background: rgba(234, 179, 8, 0.12); color: #ca8a04;">
+                                                        <i class="bi bi-clock-fill me-1"></i> Terlambat
+                                                    </span>
+                                                @endif
+                                                <small class="d-block text-success ms-1">= 1 kehadiran</small>
+                                            @else
+                                                @if($sess['confirmation_status'] === 'izin')
+                                                    <span class="badge rounded-pill" style="background: rgba(99, 102, 241, 0.12); color: #6366f1;">Izin</span>
+                                                @elseif($sess['confirmation_status'] === 'sakit')
+                                                    <span class="badge rounded-pill" style="background: rgba(239, 68, 68, 0.12); color: #ef4444;">Sakit</span>
+                                                @else
+                                                    <span class="badge rounded-pill bg-secondary-subtle text-secondary">{{ ucfirst($sess['confirmation_status']) }}</span>
+                                                @endif
+                                                <small class="d-block text-muted ms-1">= tidak dihitung</small>
+                                            @endif
+                                        </td>
+                                        <td class="text-end text-muted">
+                                            @if($sess['is_valid_attendance'])Rp {{ number_format($sess['rate'], 0, ',', '.') }}@else —@endif
+                                        </td>
+                                        <td class="text-end pe-3 fw-semibold" style="color: {{ $sess['is_valid_attendance'] ? 'var(--primary)' : 'var(--text-secondary)' }};">
+                                            @if($sess['is_valid_attendance'])
+                                                Rp {{ number_format($sess['amount'], 0, ',', '.') }}
+                                            @else
+                                                <span class="text-muted fw-normal">—</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {{-- BAGIAN B: Rincian Kehadiran & Honor persantri --}}
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge rounded-pill px-3 py-1 fw-semibold" style="background: rgba(16, 185, 129, 0.12); color: #059669; font-size: 0.8rem;">
+                                B. Rincian Kehadiran &amp; Honor Persantri
+                            </span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle small mb-0">
+                                <thead style="background: var(--bg-surface);">
+                                    <tr>
+                                        <th class="fw-semibold text-muted border-0 ps-3" style="width: 2.5rem;">No</th>
+                                        <th class="fw-semibold text-muted border-0">Nama Siswa</th>
+                                        <th class="fw-semibold text-muted border-0">Paket / Program</th>
+                                        <th class="fw-semibold text-muted border-0 text-center">Total Sesi</th>
+                                        <th class="fw-semibold text-muted border-0 text-center">Kehadiran Valid</th>
+                                        <th class="fw-semibold text-muted border-0 text-end pe-3">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($salarySlip['students_b'] as $i => $st)
+                                    <tr>
+                                        <td class="ps-3 text-muted">{{ $i + 1 }}</td>
+                                        <td class="fw-semibold" style="color: var(--text-primary);">{{ $st['student_name'] }}</td>
+                                        <td class="text-muted">{{ $st['program_name'] }}</td>
+                                        <td class="text-center text-muted">{{ $st['total_sessions'] }} sesi</td>
+                                        <td class="text-center">
+                                            <span class="badge rounded-pill fw-semibold px-3" style="background: rgba(16, 185, 129, 0.12); color: #059669;">
+                                                {{ $st['valid_attendance'] }} kali hadir
+                                            </span>
+                                        </td>
+                                        <td class="text-end pe-3 fw-bold" style="color: var(--primary);">
+                                            Rp {{ number_format($st['subtotal'], 0, ',', '.') }}
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                                <tfoot>
+                                    <tr style="border-top: 2px solid var(--border-color);">
+                                        <td colspan="4" class="ps-3 pt-3 fw-semibold small text-muted">TOTAL KEHADIRAN VALID</td>
+                                        <td class="text-center pt-3">
+                                            <span class="badge rounded-pill fw-bold px-3" style="background: rgba(13, 122, 62, 0.15); color: var(--primary); font-size: 0.85rem;">
+                                                {{ $salarySlip['total_valid_attendance'] }} kali
+                                            </span>
+                                        </td>
+                                        <td class="text-end pe-3 pt-3"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="ps-3 fw-bold" style="color: var(--text-primary);">TOTAL HONORARIUM MENGAJAR</td>
+                                        <td class="text-end pe-3 fw-bold fs-5" style="color: var(--primary);">
+                                            Rp {{ number_format($salarySlip['total_honor'], 0, ',', '.') }}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    {{-- Catatan Wajib --}}
+                    <div class="rounded-3 px-4 py-3 small" style="background: rgba(234, 179, 8, 0.06); border: 1px solid rgba(234, 179, 8, 0.25);">
+                        <i class="bi bi-info-circle-fill text-warning me-2"></i>
+                        <span style="color: #78350f;">honor dihitung dari Daftar hadir: tiap anak yang hadir atau terlambat pada satu pertemuan dihitung satu kehadiran, slip ini belum menandakan pembayaran. Status berubah setelah admin menandai lunas</span>
+                    </div>
+                @endif
+            </div>
+        </div>
+        @endif
+
         <!-- Cards Summary -->
         <div class="row g-3 mb-4">
             <div class="col-sm-6 col-xl-3">

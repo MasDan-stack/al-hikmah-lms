@@ -6,6 +6,7 @@ use App\Models\ParentProfile;
 use App\Models\Program;
 use App\Models\Student;
 use App\Models\User;
+use App\Services\RevenueAnalyticsService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -42,10 +43,31 @@ class ProgramAndPricingTest extends TestCase
 
         $response->assertStatus(403);
         $response->assertSee('Akses Terbatas');
-        $response->assertSee('403');
     }
 
-    public function test_student_or_mentor_cannot_access_biaya_page(): void
+    public function test_guest_does_not_see_package_prices_or_simulations_on_home_page(): void
+    {
+        $response = $this->get(route('home'));
+
+        $response->assertStatus(200);
+        $response->assertDontSee('Rp 600.000');
+        $response->assertDontSee('Rp 1.200.000');
+        $response->assertDontSee('Flat Rp 150.000');
+        $response->assertDontSee('homeSimulasiButtons');
+        $response->assertDontSee(route('biaya'));
+    }
+
+    public function test_mentor_cannot_access_biaya_page_and_receives_403(): void
+    {
+        $mentorUser = User::factory()->mentor()->create();
+
+        $response = $this->actingAs($mentorUser)->get(route('biaya'));
+
+        $response->assertStatus(403);
+        $response->assertSee('Akses Terbatas');
+    }
+
+    public function test_student_cannot_access_biaya_page_and_receives_403(): void
     {
         $studentUser = User::factory()->student()->create();
 
@@ -53,6 +75,15 @@ class ProgramAndPricingTest extends TestCase
 
         $response->assertStatus(403);
         $response->assertSee('Akses Terbatas');
+    }
+
+    public function test_admin_can_access_biaya_page(): void
+    {
+        $adminUser = User::factory()->admin()->create();
+
+        $response = $this->actingAs($adminUser)->get(route('biaya'));
+
+        $response->assertStatus(200);
     }
 
     public function test_authenticated_parent_can_access_biaya_page_with_prices(): void
@@ -87,7 +118,11 @@ class ProgramAndPricingTest extends TestCase
         $response->assertSee('Tahsin Dasar');
         $response->assertSee('Rp 450.000');
         $response->assertSee('150.000');
-        $response->assertSee('Pilih Program & Jadwal', false);
+        $response->assertSee('Pilih Paket &amp; Tentukan Jadwal', false);
+        $response->assertDontSee('Flat Rp 150.000');
+        $response->assertDontSee('Untuk Mentor');
+        $response->assertDontSee('Untuk Owner');
+        $response->assertDontSee('10% dari alokasi');
     }
 
     public function test_pre_register_program_stores_session_and_redirects(): void
@@ -195,5 +230,22 @@ class ProgramAndPricingTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Ingin Mengetahui Rincian Investasi');
         $response->assertSee('Lihat Informasi Biaya');
+    }
+
+    public function test_revenue_analytics_service_calculates_sharing_formula_correctly(): void
+    {
+        $service = app(RevenueAnalyticsService::class);
+        $summary = $service->getRevenueSharingSummary();
+
+        $this->assertEquals(150000, RevenueAnalyticsService::RATE_PER_SESSION);
+        $this->assertEquals(100000, RevenueAnalyticsService::MENTOR_FEE_PER_SESSION);
+        $this->assertEquals(50000, RevenueAnalyticsService::OWNER_GROSS_PER_SESSION);
+        $this->assertEquals(5000, RevenueAnalyticsService::INFAQ_PER_SESSION);
+        $this->assertEquals(45000, RevenueAnalyticsService::OWNER_NET_PER_SESSION);
+        $this->assertArrayHasKey('completed_sessions_count', $summary);
+        $this->assertArrayHasKey('total_retail_revenue', $summary);
+        $this->assertArrayHasKey('total_mentor_honor', $summary);
+        $this->assertArrayHasKey('total_infaq_dakwah', $summary);
+        $this->assertArrayHasKey('total_owner_net', $summary);
     }
 }

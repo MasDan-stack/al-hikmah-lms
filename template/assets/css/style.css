@@ -6254,9 +6254,9 @@ table.dataTable tbody tr:hover td {
 }
 
 .btn_2 {
-    border: 2px solid var(--primary) !important;
-    color: var(--primary) !important;
-    background: transparent !important;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    background: transparent;
     border-radius: 50px;
     padding: 11px 30px;
     font-weight: 600;
@@ -6269,9 +6269,26 @@ table.dataTable tbody tr:hover td {
 }
 
 .btn_2:hover {
-    background: var(--primary) !important;
-    color: #ffffff !important;
+    background: var(--primary);
+    color: #ffffff;
     transform: translateY(-2px);
+}
+
+.btn_2.text-white,
+.btn_2.text-white:visited,
+a.btn_2.text-white {
+    color: #ffffff !important;
+}
+
+.btn_2.border-white {
+    border-color: #ffffff !important;
+}
+
+.btn_2.text-white:hover,
+a.btn_2.text-white:hover {
+    background: #ffffff !important;
+    color: var(--primary-dark, #085429) !important;
+    border-color: #ffffff !important;
 }
 
 /* Etrain Banner Section */

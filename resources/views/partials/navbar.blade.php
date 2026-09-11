@@ -181,7 +181,7 @@
                             <hr class="dropdown-divider my-1">
                         </li>
                         <li>
-                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3" href="{{ route('home') }}#jadwal-sholat">
+                            <a class="dropdown-item rounded-3 py-2 px-3 d-flex align-items-center gap-3 {{ request()->routeIs('jadwal-sholat') ? 'active' : '' }}" href="{{ route('jadwal-sholat') }}">
                                 <div class="nav-icon-badge bg-warning-subtle text-warning rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
                                     <i class="bi bi-clock-history fs-6"></i>
                                 </div>
@@ -347,14 +347,14 @@
                     </div>
                 @else
                     <!-- Guest Actions -->
-                    <a href="{{ route('login') }}" class="btn btn-outline-custom rounded-pill px-3 py-2 d-flex align-items-center gap-1 shadow-sm">
+                    <a href="{{ route('login') }}" class="btn btn-editorial-secondary py-2 px-3 d-flex align-items-center gap-1.5" style="border-radius: var(--radius-md);">
                         <i class="bi bi-box-arrow-in-right"></i>
                         <span>Masuk</span>
                     </a>
-                    <button type="button" class="btn btn-daftar rounded-pill px-3 py-2 d-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal"
-                        data-bs-target="#daftarModal">
+                    <button type="button" class="btn btn-editorial-primary py-2 px-3 d-flex align-items-center gap-2" data-bs-toggle="modal"
+                        data-bs-target="#daftarModal" style="border-radius: var(--radius-md);">
                         <i class="bi bi-pencil-square"></i>
-                        <span>Mulai Perjalanan</span>
+                        <span>Mulai Belajar</span>
                     </button>
                 @endauth
             </div>

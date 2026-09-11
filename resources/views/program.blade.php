@@ -32,9 +32,13 @@
 
             <div class="row g-4 mt-1">
                 @foreach($anakPrograms as $index => $program)
+                    @php
+                        $iconClass = str_starts_with($program->icon ?? '', 'bi-') ? $program->icon : 'bi-' . ($program->icon ?? 'book');
+                        if ($iconClass === 'bi-seedling') { $iconClass = 'bi-flower1'; }
+                    @endphp
                     <div class="col-md-6" data-reveal data-reveal-delay="{{ ($index % 2) * 100 }}">
                         <div class="program-card">
-                            <div class="program-icon"><i class="bi {{ $program->icon }}"></i></div>
+                            <div class="program-icon"><i class="bi {{ $iconClass }}"></i></div>
                             <h4>{{ $program->name }}</h4>
                             <p>{{ $program->description }}</p>
                         </div>
@@ -55,9 +59,13 @@
 
             <div class="row g-4 mt-1">
                 @foreach($dewasaPrograms as $index => $program)
+                    @php
+                        $iconClass = str_starts_with($program->icon ?? '', 'bi-') ? $program->icon : 'bi-' . ($program->icon ?? 'people');
+                        if ($iconClass === 'bi-seedling') { $iconClass = 'bi-flower1'; }
+                    @endphp
                     <div class="col-md-6" data-reveal data-reveal-delay="{{ ($index % 2) * 100 }}">
                         <div class="program-card">
-                            <div class="program-icon"><i class="bi {{ $program->icon }}"></i></div>
+                            <div class="program-icon"><i class="bi {{ $iconClass }}"></i></div>
                             <h4>{{ $program->name }}</h4>
                             <p>{{ $program->description }}</p>
                         </div>
@@ -78,9 +86,13 @@
 
             <div class="row g-4 mt-1">
                 @foreach($arabPrograms as $index => $program)
+                    @php
+                        $iconClass = str_starts_with($program->icon ?? '', 'bi-') ? $program->icon : 'bi-' . ($program->icon ?? 'chat-dots');
+                        if ($iconClass === 'bi-seedling') { $iconClass = 'bi-flower1'; }
+                    @endphp
                     <div class="col-md-6" data-reveal data-reveal-delay="{{ ($index % 2) * 100 }}">
                         <div class="program-card arabic-featured">
-                            <div class="program-icon"><i class="bi {{ $program->icon }}"></i></div>
+                            <div class="program-icon"><i class="bi {{ $iconClass }}"></i></div>
                             <h4>{{ $program->name }}</h4>
                             <p>{{ $program->description }}</p>
                         </div>

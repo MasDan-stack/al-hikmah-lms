@@ -58,6 +58,7 @@ use App\Http\Controllers\Parent\ParentPaymentController;
 use App\Http\Controllers\Parent\ParentProfileController;
 use App\Http\Controllers\Parent\ParentScheduleController;
 use App\Http\Controllers\Public\MentorApplicationController;
+use App\Http\Controllers\Public\TrialBookingController;
 use App\Http\Controllers\PublicBlogController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Student\StudentDashboardController;
@@ -106,8 +107,14 @@ Route::post('/tahfidz/pre-register', [RegisteredUserController::class, 'preRegis
 // Halaman Biaya (dengan data paket dari DB via LandingController)
 Route::get('/biaya', [LandingController::class, 'biaya'])->name('biaya');
 
+// Halaman Jadwal Sholat & Kompas Kiblat Real-Time Terdedikasi
+Route::get('/jadwal-sholat', [LandingController::class, 'jadwalSholat'])->name('jadwal-sholat');
+
 // Pre-Register Khusus Program
 Route::post('/program/pre-register', [RegisteredUserController::class, 'preRegisterProgram'])->name('program.pre-register');
+
+// Booking Sesi Uji Coba Gratis 15 Menit (Placement Test)
+Route::post('/uji-coba-gratis', [TrialBookingController::class, 'store'])->name('trial.store');
 
 // Halaman Bergabung (Pendaftaran Pendamping / Guru Al-Qur'an) - V8.3
 Route::get('/bergabung', [MentorApplicationController::class, 'create'])->name('bergabung');
@@ -319,7 +326,9 @@ Route::middleware(['auth', 'role:admin'])
         // Staff & HR Workload
         Route::get('/staff', [AdminStaffController::class, 'index'])->name('staff.index');
         Route::get('/staff/{id}', [AdminStaffController::class, 'show'])->name('staff.show');
+        Route::get('/staff/{id}/salary-slip/print', [AdminStaffController::class, 'printSalarySlip'])->name('staff.salary-slip.print');
         Route::post('/staff/{id}/verify-bank', [AdminStaffController::class, 'verifyBank'])->name('staff.verify-bank');
+        Route::post('/staff/{id}/mark-salary-paid', [AdminStaffController::class, 'markSalaryPaid'])->name('staff.mark-salary-paid');
 
         // Operational Alerts Center
         Route::get('/alerts', [AdminAlertController::class, 'index'])->name('alerts.index');
@@ -371,6 +380,7 @@ Route::middleware(['auth', 'role:mentor'])
     ->name('mentor.')
     ->group(function () {
         Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/salary-slip/print', [MentorDashboardController::class, 'printSalarySlip'])->name('salary-slip.print');
         Route::get('/sessions', [MentorSessionController::class, 'index'])->name('sessions.index');
         Route::post('/sessions/{id}/status', [MentorSessionController::class, 'updateStatus'])->name('sessions.update-status');
         Route::get('/students', [MentorStudentController::class, 'index'])->name('students.index');

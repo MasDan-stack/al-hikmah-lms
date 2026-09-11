@@ -31,8 +31,8 @@
     <!-- Role Selection (Orang Tua vs Santri) -->
     @if(session()->has('pre_registration'))
         <input type="hidden" name="role" value="parent">
-        <div class="mb-3 p-2.5 bg-light border rounded-3 text-center">
-            <span class="badge bg-success mb-1"><i class="bi bi-people-fill me-1"></i> Orang Tua / Wali</span>
+        <div class="mb-3 p-3 bg-body-tertiary border rounded-3 text-center">
+            <span class="badge bg-light text-emerald-deep border mb-1"><i class="bi bi-people-fill me-1"></i> Orang Tua / Wali</span>
             <p class="small text-muted mb-0">Akun Anda otomatis didaftarkan sebagai Orang Tua / Wali murid.</p>
         </div>
     @else
@@ -41,14 +41,14 @@
             <div class="row g-2">
                 <div class="col-6">
                     <input type="radio" class="btn-check" name="role" id="roleParent" value="parent" {{ old('role', 'parent') === 'parent' ? 'checked' : '' }}>
-                    <label class="btn btn-outline-success w-100 py-2 d-flex flex-column align-items-center rounded-3" for="roleParent">
+                    <label class="btn btn-outline-success w-100 py-2.5 d-flex flex-column align-items-center rounded-3" for="roleParent" style="min-height: 44px;">
                         <i class="bi bi-people-fill fs-5 mb-1"></i>
                         <span class="small fw-bold">Orang Tua / Wali</span>
                     </label>
                 </div>
                 <div class="col-6">
                     <input type="radio" class="btn-check" name="role" id="roleStudent" value="student" {{ old('role') === 'student' ? 'checked' : '' }}>
-                    <label class="btn btn-outline-success w-100 py-2 d-flex flex-column align-items-center rounded-3" for="roleStudent">
+                    <label class="btn btn-outline-success w-100 py-2.5 d-flex flex-column align-items-center rounded-3" for="roleStudent" style="min-height: 44px;">
                         <i class="bi bi-person-workspace fs-5 mb-1"></i>
                         <span class="small fw-bold">Murid / Santri</span>
                     </label>
@@ -113,7 +113,7 @@
             <input type="password" name="password" id="password" 
                    class="form-control border-start-0 border-end-0 @error('password') is-invalid @enderror" 
                    required placeholder="Minimal 8 karakter" autocomplete="new-password">
-            <button type="button" class="btn-password-toggle rounded-end" aria-label="Tampilkan atau sembunyikan kata sandi">
+            <button type="button" class="btn-password-toggle rounded-end" aria-label="Tampilkan atau sembunyikan kata sandi" style="min-width: 44px; min-height: 44px;">
                 <i class="bi bi-eye"></i>
             </button>
         </div>
@@ -130,29 +130,29 @@
             <input type="password" name="password_confirmation" id="password_confirmation" 
                    class="form-control border-start-0 border-end-0" 
                    required placeholder="Ulangi kata sandi" autocomplete="new-password">
-            <button type="button" class="btn-password-toggle rounded-end" aria-label="Tampilkan atau sembunyikan konfirmasi kata sandi">
+            <button type="button" class="btn-password-toggle rounded-end" aria-label="Tampilkan atau sembunyikan konfirmasi kata sandi" style="min-width: 44px; min-height: 44px;">
                 <i class="bi bi-eye"></i>
             </button>
         </div>
     </div>
 
     <!-- Submit Button -->
-    <button type="submit" class="btn btn-daftar w-100 py-2.5 justify-content-center mb-3">
-        <i class="bi bi-person-plus me-2"></i> Daftar Akun Sekarang
+    <button type="submit" class="btn-editorial-primary w-100 py-2.5 justify-content-center mb-3">
+        <i class="bi bi-person-plus me-1"></i> Daftar Akun Sekarang
     </button>
 
     <!-- Navigation to Mentor Registration -->
-    <div class="p-3 bg-light rounded-3 text-center mb-3 border">
+    <div class="p-3 bg-body-tertiary rounded-3 text-center mb-3 border">
         <span class="small text-muted d-block mb-1">Ingin mendaftar sebagai Pengajar / Guru Al-Qur'an?</span>
-        <a href="{{ route('bergabung') }}" class="fw-bold text-success text-decoration-none small">
+        <a href="{{ route('bergabung') }}" class="fw-bold text-emerald-deep text-decoration-none small">
             <i class="bi bi-person-badge me-1"></i> Daftar Sebagai Calon Guru di Sini
         </a>
     </div>
 
     <!-- Navigation to Login -->
-    <div class="text-center text-secondary small pt-2 border-top">
+    <div class="text-center text-secondary small pt-3 border-top">
         Sudah memiliki akun? 
-        <a href="{{ route('login') }}" class="text-success fw-bold text-decoration-none ms-1">Masuk di Sini</a>
+        <a href="{{ route('login') }}" class="text-emerald-deep fw-bold text-decoration-none ms-1">Masuk di Sini</a>
     </div>
 </form>
 @endsection

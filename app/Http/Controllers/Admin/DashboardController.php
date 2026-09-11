@@ -36,8 +36,9 @@ class DashboardController extends Controller
         $totalParents = ParentProfile::count();
         $totalUsers = User::count();
 
-        // 📊 Analitik Eksekutif (v8.2)
+        // 📊 Analitik Eksekutif (v8.2) & Bagi Hasil Otomatis
         $revenueMetrics = $this->revenueService->getSummaryMetrics();
+        $revenueSharing = $this->revenueService->getRevenueSharingSummary();
         $staffSummary = $this->staffService->getStaffSummary();
         $allAlerts = $this->alertService->getAllAlerts();
 
@@ -96,6 +97,7 @@ class DashboardController extends Controller
             'totalParents',
             'totalUsers',
             'revenueMetrics',
+            'revenueSharing',
             'staffSummary',
             'allAlerts',
             'pendingApplicationsCount',

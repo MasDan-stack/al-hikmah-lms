@@ -224,9 +224,17 @@
                            class="btn-primary-custom">
                             <i class="bi bi-whatsapp me-2"></i> Konsultasi Program
                         </a>
-                        <a href="{{ route('biaya') }}" class="btn-outline-custom">
-                            <i class="bi bi-tag me-2"></i> Lihat Paket Belajar
-                        </a>
+                        @auth
+                            @if (auth()->user()->isParent() || auth()->user()->isAdmin())
+                                <a href="{{ route('biaya') }}" class="btn-outline-custom">
+                                    <i class="bi bi-tag me-2"></i> Lihat Paket Belajar
+                                </a>
+                            @endif
+                        @else
+                            <a href="{{ route('register') }}" class="btn-outline-custom">
+                                <i class="bi bi-person-plus me-2"></i> Daftar Akun Wali Santri
+                            </a>
+                        @endauth
                     </div>
                 </div>
                 <div class="col-lg-7" data-reveal data-reveal-delay="150">

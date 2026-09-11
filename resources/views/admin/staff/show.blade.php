@@ -267,6 +267,86 @@
                     @endif
                 </div>
             </div>
+
+            <!-- 2b. 🧾 Slip Gaji & Pelunasan Honor Bulanan -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white border-start border-4 border-success">
+                <div class="card-header bg-white border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h5 class="fw-bold text-dark mb-0">
+                        <i class="bi bi-cash-coin text-success me-2"></i>Slip Gaji &amp; Pelunasan Honor
+                    </h5>
+                    <span id="salaryStatusBadge">
+                        @if(($salarySlip['salary_status'] ?? 'pending') === 'paid')
+                            <span class="badge bg-success-subtle text-success border border-success rounded-pill px-3 py-1">
+                                <i class="bi bi-check-circle-fill me-1"></i>Lunas
+                            </span>
+                        @else
+                            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning rounded-pill px-3 py-1">
+                                <i class="bi bi-clock-fill me-1"></i>Menunggu Verifikasi Admin
+                            </span>
+                        @endif
+                    </span>
+                </div>
+
+                <div class="card-body px-4 pb-4 pt-2">
+                    {{-- Filter Periode --}}
+                    <form method="GET" action="{{ route('admin.staff.show', $mentor->id) }}" class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+                        <div class="d-flex align-items-center gap-1">
+                            <label class="small text-muted mb-0">Periode:</label>
+                            <select name="slip_month" class="form-select form-select-sm" style="width: auto;">
+                                @foreach(range(1, 12) as $m)
+                                    <option value="{{ $m }}" @selected($m == ($salarySlip['period_month'] ?? now()->month))>
+                                        {{ \Carbon\Carbon::create()->month($m)->locale('id')->translatedFormat('F') }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <select name="slip_year" class="form-select form-select-sm" style="width: auto;">
+                                @foreach(range(now()->year, now()->year - 2, -1) as $y)
+                                    <option value="{{ $y }}" @selected($y == ($salarySlip['period_year'] ?? now()->year))>{{ $y }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-outline-secondary px-3">
+                            <i class="bi bi-funnel me-1"></i> Pilih
+                        </button>
+                    </form>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <div class="p-2 rounded-3 border bg-light">
+                                <div class="text-muted small">Kehadiran Valid</div>
+                                <div class="fw-bold fs-6 text-dark">{{ $salarySlip['total_valid_attendance'] ?? 0 }} <span class="small fw-normal text-muted">dari {{ $salarySlip['total_sessions'] ?? 0 }} sesi</span></div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 rounded-3 border bg-light">
+                                <div class="text-muted small">Total Honor Mengajar</div>
+                                <div class="fw-bold fs-6 text-success">Rp {{ number_format($salarySlip['total_honor'] ?? 0, 0, ',', '.') }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-light border small text-muted p-2 rounded-3 mb-3">
+                        <i class="bi bi-info-circle me-1 text-primary"></i>
+                        <span class="text-dark">Honor dihitung dari daftar hadir: tiap anak yang hadir atau terlambat pada satu pertemuan dihitung satu kehadiran (Rp 100.000).</span>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        @if(($salarySlip['salary_status'] ?? 'pending') === 'paid')
+                            <button type="button" id="btnToggleSalaryStatus" class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-xs" onclick="toggleSalaryStatus('pending')">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i>Batalkan Lunas (Kembali Pending)
+                            </button>
+                        @else
+                            <button type="button" id="btnToggleSalaryStatus" class="btn btn-sm btn-success rounded-pill px-3 shadow-xs text-white" onclick="toggleSalaryStatus('paid')">
+                                <i class="bi bi-check2-circle me-1"></i>Tandai Honor Lunas
+                            </button>
+                        @endif
+
+                        <a href="{{ route('admin.staff.salary-slip.print', ['id' => $mentor->id, 'slip_month' => $salarySlip['period_month'] ?? now()->month, 'slip_year' => $salarySlip['period_year'] ?? now()->year]) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-xs">
+                            <i class="bi bi-printer-fill me-1"></i>Cetak Slip
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Kolom Kanan -->
@@ -544,6 +624,45 @@
         .catch(error => {
             btn.disabled = false;
             btn.innerHTML = 'Simpan Verifikasi';
+            alert('Terjadi kesalahan jaringan: ' + error.message);
+        });
+    }
+
+    function toggleSalaryStatus(newStatus) {
+        const btn = document.getElementById('btnToggleSalaryStatus');
+        const csrfToken = document.querySelector('input[name="_token"]')?.value || '{{ csrf_token() }}';
+        const year = {{ $salarySlip['period_year'] ?? now()->year }};
+        const month = {{ $salarySlip['period_month'] ?? now()->month }};
+
+        if (!confirm('Apakah Anda yakin ingin mengubah status honor periode ini menjadi ' + (newStatus === 'paid' ? 'LUNAS' : 'PENDING') + '?')) {
+            return;
+        }
+
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Menyimpan...';
+        }
+
+        fetch("{{ route('admin.staff.mark-salary-paid', $mentor->id) }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ year: year, month: month, status: newStatus })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                if (btn) btn.disabled = false;
+                alert('Gagal: ' + (data.message || 'Terjadi kesalahan sistem.'));
+            }
+        })
+        .catch(error => {
+            if (btn) btn.disabled = false;
             alert('Terjadi kesalahan jaringan: ' + error.message);
         });
     }

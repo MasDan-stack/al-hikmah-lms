@@ -84,16 +84,18 @@
                                     <button type="button" class="btn_1" data-bs-toggle="modal" data-bs-target="#tahfidzLoggedInModal">
                                         Daftar Program Tahfidz <i class="bi bi-arrow-right ms-1"></i>
                                     </button>
+                                    <a href="{{ route('biaya') }}" class="btn_2">
+                                        <i class="bi bi-info-circle me-1"></i> Rincian Paket &amp; Biaya
+                                    </a>
+                                @elseif(auth()->user()->isAdmin())
+                                    <a href="{{ route('admin.dashboard') }}" class="btn_1">
+                                        Dashboard Admin <i class="bi bi-speedometer2 ms-1"></i>
+                                    </a>
+                                    <a href="{{ route('biaya') }}" class="btn_2">
+                                        <i class="bi bi-info-circle me-1"></i> Halaman Biaya (Admin)
+                                    </a>
                                 @else
-                                    @php
-                                        $dashRoute = match(true) {
-                                            auth()->user()->isAdmin() => route('admin.dashboard'),
-                                            auth()->user()->isMentor() => route('mentor.dashboard'),
-                                            auth()->user()->isStudent() => route('student.dashboard'),
-                                            default => route('parent.dashboard'),
-                                        };
-                                    @endphp
-                                    <a href="{{ $dashRoute }}" class="btn_1">
+                                    <a href="{{ route('dashboard') }}" class="btn_1">
                                         Masuk ke Dashboard <i class="bi bi-speedometer2 ms-1"></i>
                                     </a>
                                 @endif
@@ -101,20 +103,95 @@
                                 <button type="button" class="btn_1" data-bs-toggle="modal" data-bs-target="#tahfidzDaftarModal">
                                     Daftar Program Tahfidz <i class="bi bi-arrow-right ms-1"></i>
                                 </button>
+                                <a href="{{ route('register') }}" class="btn_2">
+                                    <i class="bi bi-person-plus me-1"></i> Daftar Akun Wali Santri
+                                </a>
+                                <button type="button" class="btn btn-outline-success rounded-pill px-3 py-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#trialModal">
+                                    <i class="bi bi-gift-fill me-1"></i> Daftar Gratis
+                                </button>
                             @endauth
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                            @auth
-                                @if (auth()->user()->isParent())
-                                    <a href="{{ route('biaya') }}" class="btn_2">
-                                        <i class="bi bi-info-circle me-1"></i> Informasi Pendampingan
-                                    </a>
-                                @elseif (auth()->user()->isAdmin())
-                                    <a href="{{ route('biaya') }}" class="btn_2">
-                                        <i class="bi bi-info-circle me-1"></i> Informasi Pendampingan (Kamu Administrator)
-                                    </a>
-                                @endif
-                            @endauth
-
+            <!-- Kartu Program Unggulan: Mahir Tahfidz Al-Qur'an (18x / Bulan) -->
+            <div class="row justify-content-center mt-5 pt-3" data-reveal>
+                <div class="col-lg-10">
+                    <div class="card border-2 border-success shadow-sm rounded-4 overflow-hidden" style="background: var(--card-bg);">
+                        <div class="card-header border-0 py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2" style="background: rgba(13, 122, 62, 0.06);">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-success text-white p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                                    <i class="bi bi-award-fill fs-5"></i>
+                                </div>
+                                <div>
+                                    <span class="badge bg-warning text-dark fw-bold rounded-pill px-2.5 py-1 small mb-1">Program Unggulan Eksklusif</span>
+                                    <h4 class="fw-bold mb-0 text-success fs-5">Mahir Tahfidz Al-Qur'an (18 Pertemuan / Bulan)</h4>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fs-4 fw-bold text-success">Rp 2.700.000 <span class="text-muted small fs-6">/ bulan</span></div>
+                                <small class="text-muted" style="font-size: 0.78rem;">Flat Rp 150.000 / sesi privat (90 Menit)</small>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-4 align-items-center">
+                                <div class="col-md-7">
+                                    <p class="text-secondary small mb-3">
+                                        Program halaqah privat intensif bagi santri yang berazam menghafal Al-Qur'an secara mutqin dengan bimbingan talaqqi 1-on-1 bersama ustadz/ustadzah hafidz/hafidzah pilihan.
+                                    </p>
+                                    <div class="row g-2">
+                                        <div class="col-sm-6">
+                                            <div class="d-flex align-items-center gap-2 small text-secondary">
+                                                <i class="bi bi-check-circle-fill text-success"></i>
+                                                <span>18 Sesi Privat (90 Menit)</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="d-flex align-items-center gap-2 small text-secondary">
+                                                <i class="bi bi-check-circle-fill text-success"></i>
+                                                <span>Talaqqi Hafalan Baru</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="d-flex align-items-center gap-2 small text-secondary">
+                                                <i class="bi bi-check-circle-fill text-success"></i>
+                                                <span>Murajaah Terjadwal Mutqin</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="d-flex align-items-center gap-2 small text-secondary">
+                                                <i class="bi bi-check-circle-fill text-success"></i>
+                                                <span>Buku Mutaba'ah &amp; Rapor</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 text-md-end">
+                                    <div class="p-3 rounded-3 bg-light border text-start mb-3">
+                                        <div class="small fw-semibold text-success mb-1"><i class="bi bi-heart-fill me-1"></i> Amanah &amp; Keberkahan Bersama</div>
+                                        <p class="text-secondary small mb-0" style="font-size: 0.78rem;">
+                                            Setiap langkah bimbingan ananda turut mendukung syiar dakwah Al-Qur'an dan kepedulian bagi santri yatim.
+                                        </p>
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-2 justify-content-md-end">
+                                        @auth
+                                            @if (auth()->user()->isParent() || auth()->user()->isAdmin())
+                                                <a href="{{ route('biaya') }}" class="btn btn-primary-custom py-2 px-3 rounded-pill fw-bold shadow-sm">
+                                                    <i class="bi bi-pencil-square me-1"></i> Pilih &amp; Mulai Program
+                                                </a>
+                                            @endif
+                                        @else
+                                            <a href="{{ route('register') }}" class="btn btn-primary-custom py-2 px-3 rounded-pill fw-bold shadow-sm">
+                                                <i class="bi bi-person-plus me-1"></i> Daftar Sekarang
+                                            </a>
+                                        @endauth
+                                        <button type="button" class="btn btn-outline-custom py-2 px-3 rounded-pill fw-semibold" data-bs-toggle="modal" data-bs-target="#trialModal">
+                                            <i class="bi bi-gift me-1"></i> Daftar Gratis
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

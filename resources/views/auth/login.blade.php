@@ -33,7 +33,7 @@
         <div class="d-flex justify-content-between align-items-center mb-1">
             <label for="password" class="form-label fw-semibold text-secondary small mb-0">Kata Sandi</label>
             @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}" class="text-sm text-success text-decoration-none fw-medium" style="font-size: 0.8rem;">Lupa kata sandi?</a>
+                <a href="{{ route('password.request') }}" class="text-sm text-emerald-deep text-decoration-none fw-semibold" style="font-size: 0.82rem;">Lupa kata sandi?</a>
             @endif
         </div>
         <div class="input-group">
@@ -41,7 +41,7 @@
             <input type="password" name="password" id="password" 
                    class="form-control border-start-0 border-end-0 @error('password') is-invalid @enderror" 
                    required placeholder="••••••••" autocomplete="current-password">
-            <button type="button" class="btn-password-toggle rounded-end" aria-label="Tampilkan atau sembunyikan kata sandi">
+            <button type="button" class="btn-password-toggle rounded-end" aria-label="Tampilkan atau sembunyikan kata sandi" style="min-width: 44px; min-height: 44px;">
                 <i class="bi bi-eye"></i>
             </button>
         </div>
@@ -57,14 +57,14 @@
     </div>
 
     <!-- Submit Button -->
-    <button type="submit" class="btn btn-daftar w-100 py-2.5 justify-content-center mb-3">
-        <i class="bi bi-box-arrow-in-right me-2"></i> Masuk Sekarang
+    <button type="submit" class="btn-editorial-primary w-100 py-2.5 justify-content-center mb-3">
+        <i class="bi bi-box-arrow-in-right me-1"></i> Masuk Sekarang
     </button>
 
     <!-- Navigation to Register -->
-    <div class="text-center text-secondary small mt-4 pt-2 border-top">
+    <div class="text-center text-secondary small mt-4 pt-3 border-top">
         Belum memiliki akun santri atau wali? 
-        <a href="{{ route('register') }}" class="text-success fw-bold text-decoration-none ms-1">Daftar Akun Baru</a>
+        <a href="{{ route('register') }}" class="text-emerald-deep fw-bold text-decoration-none ms-1">Daftar Akun Baru</a>
     </div>
 </form>
 @endsection

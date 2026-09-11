@@ -27,6 +27,7 @@
                     <li><a href="{{ route('program') }}">Program</a></li>
                     <li><a href="{{ route('metode') }}">Metode Belajar</a></li>
                     <li><a href="{{ route('faq') }}">Tanya Jawab (FAQ)</a></li>
+                    <li><a href="{{ route('jadwal-sholat') }}">Jadwal Sholat &amp; Kiblat</a></li>
                     @auth
                         @if (auth()->user()->isParent())
                             <li><a href="{{ route('biaya') }}">Biaya</a></li>
@@ -52,6 +53,7 @@
                         <li><a href="{{ route('bergabung') }}">Pendaftaran Guru</a></li>
                         <li><a href="{{ route('mentor.recruitment.status') }}">Cek Status Lamaran</a></li>
                     @endguest
+                </ul>
             </div>
             <div class="col-lg-3 col-md-6">
                 <h6 class="footer-title">Kontak</h6>

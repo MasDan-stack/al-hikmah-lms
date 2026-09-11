@@ -3,8 +3,11 @@
 namespace App\Services;
 
 use App\Models\FinancialAuditLog;
+use App\Models\Mentor;
 use App\Models\Payment;
 use App\Models\Program;
+use App\Models\Session;
+use App\Models\Setting;
 use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -12,6 +15,33 @@ use Illuminate\Support\Facades\Cache;
 
 class RevenueAnalyticsService
 {
+    /**
+     * Standar Tarif & Pembagian Hasil Bimbingan Al-Hikmah (Per Sesi 90 Menit)
+     */
+    public const RATE_PER_SESSION = 150000;
+
+    public const MENTOR_FEE_PER_SESSION = 100000;
+
+    public const OWNER_GROSS_PER_SESSION = 50000;
+
+    public const INFAQ_PERCENTAGE = 0.10;
+
+    public const INFAQ_PER_SESSION = 5000;
+
+    public const OWNER_NET_PER_SESSION = 45000;
+
+    /**
+     * Biaya Pendaftaran Santri Baru (1x di awal, bukan sesi)
+     * Rp 150.000 = Bagian Admin Rp 50.000 + 10% Infaq Rp 5.000 + Operasional Rp 95.000
+     */
+    public const REGISTRATION_FEE = 150000;
+
+    public const OWNER_REGISTRATION_GROSS = 50000;
+
+    public const INFAQ_REGISTRATION = 5000;
+
+    public const OWNER_REGISTRATION_NET = 45000;
+
     /**
      * Cache duration in minutes
      */
@@ -262,6 +292,287 @@ class RevenueAnalyticsService
             ->latest('created_at')
             ->take($limit)
             ->get();
+    }
+
+    /**
+     * Dapatkan rekapitulasi bagi hasil otomatis (Admin & Yayasan)
+     * Formula Sesi: Rp 150rb = Mentor Rp 100rb + Owner Rp 50rb (Infaq 10% = Rp 5rb, Owner Net = Rp 45rb)
+     * Formula Pendaftaran: Rp 150rb = Operasional Rp 100rb + Owner Rp 50rb (Infaq 10% = Rp 5rb, Owner Net = Rp 45rb)
+     */
+    public function getRevenueSharingSummary(?Carbon $startDate = null, ?Carbon $endDate = null): array
+    {
+        $query = Session::where('status', 'completed');
+        if ($startDate && $endDate) {
+            $query->whereBetween('date', [$startDate->startOfDay(), $endDate->endOfDay()]);
+        }
+        $completedSessions = (int) $query->count();
+
+        $thisMonthSessions = (int) Session::where('status', 'completed')
+            ->whereMonth('date', now()->month)
+            ->whereYear('date', now()->year)
+            ->count();
+
+        // Metrik Pendaftaran Santri Baru (payment dengan registration_fee > 0 & status paid)
+        $regQuery = Payment::where('status', 'paid')->where('registration_fee', '>', 0);
+        if ($startDate && $endDate) {
+            $regQuery->whereBetween('payment_date', [$startDate->startOfDay(), $endDate->endOfDay()]);
+        }
+        $totalRegistrations = (int) $regQuery->count();
+
+        $thisMonthRegistrations = (int) Payment::where('status', 'paid')
+            ->where('registration_fee', '>', 0)
+            ->whereMonth('payment_date', now()->month)
+            ->whereYear('payment_date', now()->year)
+            ->count();
+
+        // Akumulasi Infaq Khusus: Pendaftaran + Sesi ("Untuk Allah SWT")
+        $totalInfaqRegistration = $totalRegistrations * self::INFAQ_REGISTRATION;
+        $totalInfaqDakwah = $completedSessions * self::INFAQ_PER_SESSION;
+        $totalInfaqCombined = $totalInfaqRegistration + $totalInfaqDakwah;
+
+        $thisMonthInfaqRegistration = $thisMonthRegistrations * self::INFAQ_REGISTRATION;
+        $thisMonthInfaqDakwah = $thisMonthSessions * self::INFAQ_PER_SESSION;
+        $thisMonthInfaqCombined = $thisMonthInfaqRegistration + $thisMonthInfaqDakwah;
+
+        return [
+            'rate_per_session' => self::RATE_PER_SESSION,
+            'mentor_fee_per_session' => self::MENTOR_FEE_PER_SESSION,
+            'owner_gross_per_session' => self::OWNER_GROSS_PER_SESSION,
+            'infaq_per_session' => self::INFAQ_PER_SESSION,
+            'owner_net_per_session' => self::OWNER_NET_PER_SESSION,
+            'infaq_percentage' => (int) (self::INFAQ_PERCENTAGE * 100),
+
+            // Sesi Bimbingan
+            'completed_sessions_count' => $completedSessions,
+            'total_retail_revenue' => $completedSessions * self::RATE_PER_SESSION,
+            'total_mentor_honor' => $completedSessions * self::MENTOR_FEE_PER_SESSION,
+            'total_owner_gross' => $completedSessions * self::OWNER_GROSS_PER_SESSION,
+            'total_infaq_dakwah' => $totalInfaqDakwah,
+            'total_owner_net' => $completedSessions * self::OWNER_NET_PER_SESSION,
+
+            'this_month_sessions_count' => $thisMonthSessions,
+            'this_month_retail_revenue' => $thisMonthSessions * self::RATE_PER_SESSION,
+            'this_month_mentor_honor' => $thisMonthSessions * self::MENTOR_FEE_PER_SESSION,
+            'this_month_owner_gross' => $thisMonthSessions * self::OWNER_GROSS_PER_SESSION,
+            'this_month_infaq_dakwah' => $thisMonthInfaqDakwah,
+            'this_month_owner_net' => $thisMonthSessions * self::OWNER_NET_PER_SESSION,
+
+            // Pendaftaran Santri Baru (1x daftar Rp 150.000)
+            'registration_fee' => self::REGISTRATION_FEE,
+            'owner_registration_gross' => self::OWNER_REGISTRATION_GROSS,
+            'infaq_registration_per_student' => self::INFAQ_REGISTRATION,
+            'owner_registration_net' => self::OWNER_REGISTRATION_NET,
+
+            'total_registrations' => $totalRegistrations,
+            'total_registration_owner_gross' => $totalRegistrations * self::OWNER_REGISTRATION_GROSS,
+            'total_infaq_registration' => $totalInfaqRegistration,
+            'total_registration_owner_net' => $totalRegistrations * self::OWNER_REGISTRATION_NET,
+
+            'this_month_registrations' => $thisMonthRegistrations,
+            'this_month_registration_owner_gross' => $thisMonthRegistrations * self::OWNER_REGISTRATION_GROSS,
+            'this_month_infaq_registration' => $thisMonthInfaqRegistration,
+            'this_month_registration_owner_net' => $thisMonthRegistrations * self::OWNER_REGISTRATION_NET,
+
+            // Grand Total Alokasi Khusus "Untuk Allah SWT" (10%) - Gabungan Semua Sumber
+            'total_infaq_combined' => $totalInfaqCombined,
+            'this_month_infaq_combined' => $thisMonthInfaqCombined,
+        ];
+    }
+
+    /**
+     * Dapatkan data slip gaji / honorarium mengajar mentor untuk satu periode bulan.
+     *
+     * @return array{
+     *   mentor_id: int,
+     *   mentor_name: string,
+     *   period_month: int,
+     *   period_year: int,
+     *   period_label: string,
+     *   salary_status: string,
+     *   sessions_a: array,
+     *   students_b: array,
+     *   total_valid_attendance: int,
+     *   total_honor: int,
+     *   rate_per_attendance: int,
+     * }
+     */
+    public function getMentorSalarySlipData(int $mentorId, ?int $month = null, ?int $year = null): array
+    {
+        $month = $month ?? now()->month;
+        $year = $year ?? now()->year;
+        $periodLabel = Carbon::createFromDate($year, $month, 1)->locale('id')->translatedFormat('F Y');
+
+        $mentor = Mentor::with('user')->find($mentorId);
+        $mentorName = $mentor?->user?->name ?? $mentor?->full_name ?? 'Guru';
+
+        // Ambil semua sesi mentor pada periode ini (termasuk yang ada konfirmasi kehadiran)
+        $sessions = Session::with([
+            'student.user',
+            'student.enrollments.program',
+            'confirmation',
+        ])
+            ->where('mentor_id', $mentorId)
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
+            ->orderBy('date')
+            ->orderBy('time')
+            ->get();
+
+        // Bagian A: Rincian Sesi & Jadwal Mengajar
+        $sessionsA = [];
+        foreach ($sessions as $session) {
+            $confirmationStatus = $session->confirmation?->status;
+            // hadir / terlambat = 1 kehadiran valid; izin / sakit / null = 0
+            $isValidAttendance = in_array($confirmationStatus, ['hadir', 'terlambat']);
+
+            $sessionsA[] = [
+                'session_id' => $session->id,
+                'student_name' => $session->student?->user?->name ?? $session->student?->full_name ?? '-',
+                'date' => $session->date->locale('id')->translatedFormat('l, d M Y'),
+                'date_raw' => $session->date->format('Y-m-d'),
+                'time' => Carbon::parse($session->time)->format('H:i'),
+                'method' => $session->method,
+                'confirmation_status' => $confirmationStatus ?? 'belum dikonfirmasi',
+                'is_valid_attendance' => $isValidAttendance,
+                'rate' => self::MENTOR_FEE_PER_SESSION,
+                'amount' => $isValidAttendance ? self::MENTOR_FEE_PER_SESSION : 0,
+            ];
+        }
+
+        // Bagian B: Rincian Kehadiran & Honor persantri (groupby student)
+        $studentGroups = [];
+        foreach ($sessions as $session) {
+            $studentId = $session->student_id;
+            $confirmationStatus = $session->confirmation?->status;
+            $isValidAttendance = in_array($confirmationStatus, ['hadir', 'terlambat']);
+
+            if (! isset($studentGroups[$studentId])) {
+                // Cari program/paket aktif santri
+                $activeEnrollment = $session->student?->enrollments
+                    ->where('mentor_id', $mentorId)
+                    ->whereIn('status', ['active', 'pending'])
+                    ->first();
+                $programName = $activeEnrollment?->program?->name
+                    ?? $session->student?->enrollments->first()?->program?->name
+                    ?? 'Program Bimbingan';
+
+                $studentGroups[$studentId] = [
+                    'student_id' => $studentId,
+                    'student_name' => $session->student?->user?->name ?? $session->student?->full_name ?? '-',
+                    'program_name' => $programName,
+                    'total_sessions' => 0,
+                    'valid_attendance' => 0,
+                    'subtotal' => 0,
+                ];
+            }
+
+            $studentGroups[$studentId]['total_sessions']++;
+            if ($isValidAttendance) {
+                $studentGroups[$studentId]['valid_attendance']++;
+                $studentGroups[$studentId]['subtotal'] += self::MENTOR_FEE_PER_SESSION;
+            }
+        }
+        $studentsB = array_values($studentGroups);
+
+        $totalValidAttendance = array_sum(array_column($studentsB, 'valid_attendance'));
+        $totalHonor = $totalValidAttendance * self::MENTOR_FEE_PER_SESSION;
+
+        // Status pembayaran slip
+        $salaryStatusKey = "mentor_salary_status_{$mentorId}_{$year}_{$month}";
+        $salaryStatus = Setting::get($salaryStatusKey, 'pending');
+
+        return [
+            'mentor_id' => $mentorId,
+            'mentor_name' => $mentorName,
+            'period_month' => $month,
+            'period_year' => $year,
+            'period_label' => $periodLabel,
+            'salary_status' => $salaryStatus,
+            'sessions_a' => $sessionsA,
+            'students_b' => $studentsB,
+            'total_sessions' => $sessions->count(),
+            'total_valid_attendance' => $totalValidAttendance,
+            'total_honor' => $totalHonor,
+            'rate_per_attendance' => self::MENTOR_FEE_PER_SESSION,
+        ];
+    }
+
+    /**
+     * Tandai status pembayaran honor bulanan mentor (dipanggil oleh Admin).
+     */
+    public function markMentorSalaryStatus(
+        int $mentorId,
+        int $year,
+        int $month,
+        string $status,
+    ): void {
+        $key = "mentor_salary_status_{$mentorId}_{$year}_{$month}";
+        Setting::set($key, $status);
+    }
+
+    /**
+     * Dapatkan ringkasan akumulasi honor mentor (Khusus Mentor - Margin & Harga Retail Terisolasi Aman)
+     */
+    public function getMentorHonorariumSummary(int $mentorId): array
+    {
+        $completedSessions = (int) Session::where('mentor_id', $mentorId)
+            ->where('status', 'completed')
+            ->count();
+
+        $thisMonthSessions = (int) Session::where('mentor_id', $mentorId)
+            ->where('status', 'completed')
+            ->whereMonth('date', now()->month)
+            ->whereYear('date', now()->year)
+            ->count();
+
+        $upcomingSessions = (int) Session::where('mentor_id', $mentorId)
+            ->whereDate('date', '>=', today())
+            ->where('status', '!=', 'cancelled')
+            ->count();
+
+        return [
+            'rate_per_session' => self::MENTOR_FEE_PER_SESSION,
+            'this_month_sessions' => $thisMonthSessions,
+            'this_month_honor' => $thisMonthSessions * self::MENTOR_FEE_PER_SESSION,
+            'total_completed_sessions' => $completedSessions,
+            'total_honor' => $completedSessions * self::MENTOR_FEE_PER_SESSION,
+            'upcoming_sessions' => $upcomingSessions,
+            'estimated_upcoming_honor' => $upcomingSessions * self::MENTOR_FEE_PER_SESSION,
+        ];
+    }
+
+    /**
+     * Dapatkan ringkasan sesi & alokasi berkah infaq 10% (Untuk Orang Tua Santri)
+     */
+    public function getParentSessionBlessingSummary(array $childIds): array
+    {
+        if (empty($childIds)) {
+            return [
+                'completed_sessions' => 0,
+                'this_month_sessions' => 0,
+                'infaq_allocated' => 0,
+                'infaq_percentage' => (int) (self::INFAQ_PERCENTAGE * 100),
+                'rate_per_session' => self::RATE_PER_SESSION,
+            ];
+        }
+
+        $completedSessions = (int) Session::whereIn('student_id', $childIds)
+            ->where('status', 'completed')
+            ->count();
+
+        $thisMonthSessions = (int) Session::whereIn('student_id', $childIds)
+            ->where('status', 'completed')
+            ->whereMonth('date', now()->month)
+            ->whereYear('date', now()->year)
+            ->count();
+
+        return [
+            'completed_sessions' => $completedSessions,
+            'this_month_sessions' => $thisMonthSessions,
+            'infaq_allocated' => $completedSessions * self::INFAQ_PER_SESSION,
+            'infaq_percentage' => (int) (self::INFAQ_PERCENTAGE * 100),
+            'rate_per_session' => self::RATE_PER_SESSION,
+        ];
     }
 
     /**

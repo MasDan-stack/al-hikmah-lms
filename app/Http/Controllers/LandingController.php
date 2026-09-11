@@ -128,22 +128,16 @@ class LandingController extends Controller
     }
 
     /**
-     * Tampilkan informasi paket & biaya belajar (Terhubung Database, Khusus Orang Tua & Admin)
+     * Tampilkan informasi paket & biaya belajar (Khusus Orang Tua / Wali & Administrator yang Terdaftar)
      */
     public function biaya(): View|RedirectResponse
     {
+        // Isolasi keamanan & privasi: Harga retail paket hanya dapat diakses oleh Orang Tua / Wali dan Admin yang sudah login
         if (! auth()->check() || (! auth()->user()->isParent() && ! auth()->user()->isAdmin())) {
-            abort(403, 'Informasi rincian investasi dan biaya belajar hanya dapat diakses oleh Orang Tua / Wali dan Administrator yang telah terdaftar.');
-        }
-
-        // Jika Orang Tua belum mendaftarkan anak, arahkan untuk isi data anak dulu
-        if (auth()->user()->isParent() && ! auth()->user()->hasChildren()) {
-            return redirect()->route('parent.profile.children')
-                ->with('warning', 'Sebelum memilih program belajar, silakan daftarkan data lengkap anak binaan Anda terlebih dahulu.');
+            abort(403, 'Akses Terbatas: Informasi rincian investasi dan paket belajar hanya dapat diakses oleh Orang Tua / Wali dan Administrator yang telah terdaftar.');
         }
 
         $programs = Program::where('is_active', true)
-            ->orderBy('category')
             ->orderBy('sort_order')
             ->get();
 
@@ -160,5 +154,13 @@ class LandingController extends Controller
         }
 
         return view('biaya', compact('programs', 'registrationFee', 'parentEnrollments'));
+    }
+
+    /**
+     * Tampilkan jadwal sholat & arah kiblat real-time terdedikasi
+     */
+    public function jadwalSholat(): View
+    {
+        return view('jadwal-sholat');
     }
 }

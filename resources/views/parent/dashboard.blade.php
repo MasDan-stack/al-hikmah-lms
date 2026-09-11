@@ -471,6 +471,30 @@
                 </div>
             </div>
 
+            <!-- 🌟 Transparansi Infaq & Keberkahan Sesi Belajar -->
+            @if(isset($parentBlessing) && $parentBlessing['completed_sessions'] > 0)
+                <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color) !important;">
+                    <div class="p-3 px-4 d-flex align-items-center justify-content-between flex-wrap gap-3" style="background: rgba(13, 122, 62, 0.04);">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle p-2 d-flex align-items-center justify-content-center shadow-xs text-white" style="background: var(--primary); width: 38px; height: 38px;">
+                                <i class="bi bi-heart-fill fs-6"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold small" style="color: var(--text-primary);">
+                                    Jejak Berkah Dakwah: {{ $parentBlessing['completed_sessions'] }} Sesi Terlaksana
+                                </div>
+                                <div class="text-muted" style="font-size: 0.8rem;">
+                                    Alhamdulillah, dari sesi belajar ananda, sebesar <strong>Rp {{ number_format($parentBlessing['infaq_allocated'], 0, ',', '.') }}</strong> (10% dari alokasi kas yayasan Al-Hikmah) telah disalurkan untuk infaq dakwah Al-Qur'an.
+                                </div>
+                            </div>
+                        </div>
+                        <span class="badge rounded-pill px-3 py-1.5 fw-semibold" style="background: rgba(13, 122, 62, 0.12); color: var(--primary); font-size: 0.75rem;">
+                            <i class="bi bi-shield-check me-1"></i> Amanah Fii Sabilillah
+                        </span>
+                    </div>
+                </div>
+            @endif
+
             <!-- 2️⃣ Quick Action Buttons -->
             <div class="d-flex gap-2 mb-4 flex-wrap">
                 <a href="{{ route('parent.children.index') }}"

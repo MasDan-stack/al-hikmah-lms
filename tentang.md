@@ -3,8 +3,8 @@
 > **Dokumen Resmi untuk Manajemen, Pimpinan Lembaga, & Tim Pengembang**  
 > **Nama Sistem:** AL-HIKMAH Learning Management System (LMS)  
 > **Status Aplikasi:** ✅ **100% Selesai, Teruji, & Siap Digunakan (Production Ready)**  
-> **Versi:** 10.5 (Antislop Suite Frontend Overhaul, Zero-Blue Navbar, Split-Screen Guru /bergabung, Metode Interaktif & Biaya Transparan, Smart Matchmaking v3.0, External Calendar Sync, Dynamic Load Balancing, & ATS Pipeline)  
-> **Tanggal Pembaruan:** 09 September 2026  
+> **Versi:** 10.6 (Minimalist Modern Elevation, Sesi Uji Coba Gratis 15 Menit Placement Test, Antislop Suite UI/Human/LayoutMobile Compliant, & Direct WhatsApp Integration)  
+> **Tanggal Pembaruan:** 11 September 2026  
 
 ---
 
@@ -78,6 +78,25 @@
     - [22.6 Elevasi Desain Halaman Metode Belajar (`/metode`)](#226-elevasi-desain-halaman-metode-belajar-metode)
     - [22.7 Overhaul Antislop Halaman Biaya & Paket (`/biaya`)](#227-overhaul-antislop-halaman-biaya--paket-biaya)
     - [22.8 Animasi Mikro Elegan & Kepatuhan WCAG AA / Aksesibilitas Gerak](#228-animasi-mikro-elegan--kepatuhan-wcag-aa--aksesibilitas-gerak)
+23. [🌟 23. Desain Minimalis Modern & Fitur Booking Sesi Uji Coba Gratis 15 Menit (Placement Test)](#-23-desain-minimalis-modern--fitur-booking-sesi-uji-coba-gratis-15-menit-placement-test)
+    - [23.1 Latar Belakang & Nilai Manfaat Penempatan Awal](#231-latar-belakang--nilai-manfaat-penempatan-awal)
+    - [23.2 Arsitektur Basis Data `trial_bookings` & Status Lifecycle](#232-arsitektur-basis-data-trial_bookings--status-lifecycle)
+    - [23.3 Integrasi Otomasi Notifikasi WhatsApp Koordinasi Jadwal](#233-integrasi-otomasi-notifikasi-whatsapp-koordinasi-jadwal)
+    - [23.4 Penyelarasan Frontend Antislop Suite (UI, Human, LayoutMobile, Copywriting)](#234-penyelarasan-frontend-antislop-suite-ui-human-layoutmobile-copywriting)
+24. [💎 24. Standardisasi 4 Paket Bimbingan Privat (Opsi A) & Durasi 90 Menit](#-24-standardisasi-4-paket-bimbingan-privat-opsi-a--durasi-90-menit)
+    - [24.1 Matriks 4 Paket Belajar (Opsi A)](#241-matriks-4-paket-belajar-opsi-a)
+    - [24.2 Standar Durasi 90 Menit & Keunggulan Privat 1-on-1](#242-standar-durasi-90-menit--keunggulan-privat-1-on-1)
+    - [24.3 Akses Publik Halaman Biaya & Proteksi Privasi Pengajar](#243-akses-publik-halaman-biaya--proteksi-privasi-pengajar)
+25. [⚖️ 25. Modul Pembagian Finansial Otomatis (Revenue Sharing Engine) & Infaq 10%](#-25-modul-pembagian-finansial-otomatis-revenue-sharing-engine--infaq-10)
+    - [25.1 Formula Matematis Bagi Hasil Sesi Belajar](#251-formula-matematis-bagi-hasil-sesi-belajar)
+    - [25.2 Isolasi Informasi Finansial Guru (Anti-Envy Isolation)](#252-isolasi-informasi-finansial-guru-anti-envy-isolation)
+    - [25.3 Penyajian Multi-Role Dashboard (Admin, Mentor, Wali Santri)](#253-penyajian-multi-role-dashboard-admin-mentor-wali-santri)
+26. [🌿 26. Penyelarasan Frontend Editorial, Konsolidasi Seeder Bersih, & Ujian Guru](#-26-penyelarasan-frontend-editorial-konsolidasi-seeder-bersih--ujian-guru)
+    - [26.1 Konsolidasi Seeder Bersih & Pemulihan Taksonomi Blog (Kategori & Tag)](#261-konsolidasi-seeder-bersih--pemulihan-taksonomi-blog-kategori--tag)
+    - [26.2 Validasi Ikon Program & Spasi Vertikal Header Terhadap Fixed Navbar](#262-validasi-ikon-program--spasi-vertikal-header-terhadap-fixed-navbar)
+    - [26.3 Aksesibilitas Kontras Tinggi CTA Section (WCAG AAA Pure White & Emerald)](#263-aksesibilitas-kontras-tinggi-cta-section-wcag-aaa-pure-white--emerald)
+    - [26.4 Redesain Komprehensif Portal Blog (/blog)](#264-redesain-komprehensif-portal-blog-blog)
+    - [26.5 Standarisasi Desain Seleksi Guru (/mentor/recruitment/take-test)](#265-standarisasi-desain-seleksi-guru-mentorrecruitmenttake-test)
 
 ---
 
@@ -893,7 +912,7 @@ Sebagai bagian dari komitmen terhadap mutu visual premium, kejelasan alur penggu
 ### 22.2 Redesain Pelacak Status Lamaran Publik (`/cek-status-lamaran`):
 1. **Dual-Stepper Visual Tracking**:
    - Menyajikan 5 tahapan seleksi transparan: *1. Pendaftaran Berkas*, *2. Tes Kompetensi AI*, *3. Wawancara & Microteaching*, *4. Masa Percobaan (Probation)*, dan *5. Guru Resmi Tetap*.
-   - Menyediakan visualisasi jalur status dinamis: *Jalur Sukses Hijau*, *Jalur Revisi Oranye*, atau *Jalur Pembatalan Merah*.
+   - Menyajikan visualisasi jalur status dinamis: *Jalur Sukses Hijau*, *Jalur Revisi Oranye*, atau *Jalur Pembatalan Merah*.
 2. **Pencarian Terpadu & Normalisasi Nomor Ponsel Fleksibel**:
    - Bilah pencarian tunggal terpadu (`.tracker-search-bar`) yang mendukung pencarian kode registrasi unik (`APP-YYYYMM-XXXX`) maupun nomor WhatsApp pelamar.
    - Normalisasi otomatis awalan nomor ponsel (`+62`, `62`, atau `08`) untuk mencegah kegagalan pencarian akibat perbedaan format penulisan.
@@ -972,4 +991,175 @@ Sebagai bagian dari komitmen terhadap mutu visual premium, kejelasan alur penggu
      ```
 3. **Auto Cache Busting Aset Statis**:
    - Seluruh pemanggilan `style.css` pada layout utama kini dilengkapi stempel waktu otomatis `?v={{ filemtime(...) }}` untuk mencegah masalah cache browser saat pembaruan CSS diterapkan.
+
+---
+
+## 🌟 23. DESAIN MINIMALIS MODERN & FITUR BOOKING SESI UJI COBA GRATIS 15 MENIT (PLACEMENT TEST)
+
+### 23.1 Latar Belakang & Nilai Manfaat Penempatan Awal:
+1. **Pemberdayaan Wali Santri Baru Tanpa Beban**:
+   - Banyak calon wali santri yang ragu memulai bimbingan karena belum mengetahui kemampuan awal membaca Al-Qur'an ananda, atau ragu dengan kenyamanan metode daring/tatap muka.
+   - Sesi uji coba 15 menit (*Placement Test*) memfasilitasi pertemuan singkat gratis bersama ustadz/ustadzah terpercaya untuk mencairkan suasana, mengevaluasi kelancaran makharijul huruf, dan memberikan rekomendasi kurikulum tanpa paksaan membeli paket.
+2. **Kesesuaian Pedagogis Sejak Pertemuan Perdana**:
+   - Menghindari ketidakcocokan materi (misal: santri yang sudah siap masuk Al-Qur'an tidak perlu dipaksakan mengulang Iqra dari awal, atau sebaliknya santri yang butuh pemantapan makhraj dasar tidak kewalahan).
+
+### 23.2 Arsitektur Basis Data `trial_bookings` & Status Lifecycle:
+Tabel baru `trial_bookings` dirancang khusus untuk merekam proses pra-registrasi penempatan santri:
+- **Atribut Utama**:
+  - `parent_name` & `child_name`: Identitas wali dan calon santri.
+  - `whatsapp`: Nomor kontak WhatsApp yang telah dinormalisasi ke standar internasional (awalan `62`).
+  - `child_age` & `gender`: Informasi usia dan jenis kelamin untuk memastikan keselarasan syariat pengajar (batasan usia 10 tahun).
+  - `trial_focus`: Fokus asesmen (*iqra_placement*, *tahsin_tajwid*, *tahfidz_hafalan*, *bahasa_arab*).
+  - `preferred_date` & `preferred_time_slot`: Preferensi slot waktu (Pagi, Siang, Sore, Malam).
+  - `learning_method`: Pilihan metode (*online* atau *offline*).
+  - `status`: Lifecycle tahapan (`pending` -> `contacted` -> `scheduled` -> `completed` / `cancelled`).
+  - `assigned_mentor_id` & `scheduled_at`: Guru yang ditugaskan serta waktu temu yang disepakati.
+  - `assessment_result`: Catatan evaluasi hasil placement test oleh guru sebagai referensi paket belajar.
+
+### 23.3 Integrasi Otomasi Notifikasi WhatsApp Koordinasi Jadwal:
+- Saat formulir dikirimkan (baik via AJAX di modal atau form reguler), sistem secara otomatis menghasilkan tautan langsung WhatsApp ke koordinator akademik lembaga (`https://api.whatsapp.com/send?phone=...`).
+- Pesan otomatis memuat ringkasan lengkap: nama wali, nama santri, usia, fokus evaluasi, slot waktu, dan metode belajar sehingga admin dapat merespons dalam hitungan menit.
+
+### 23.4 Penyelarasan Frontend Antislop Suite (UI, Human, LayoutMobile, Copywriting):
+1. **Estetika Minimalis Modern**:
+   - Menolak tren visual klise AI: tidak menggunakan gradien ungu-biru generik, tidak ada tumpukan efek kaca (*glassmorphism*) berlebihan, dan tidak ada bentuk kapsul seragam di semua komponen.
+   - Menggunakan palet utama hijau zamrud Al-Hikmah (`#0d7a3e`, `#15803d`) dengan aksen emas hangat (`#d97706`), dipadukan dengan tipografi tegas, berjarak nyaman, dan bersahaja.
+2. **Kepatuhan Aksesibilitas WCAG AA & Kemanusiaan**:
+   - Seluruh kontrol form uji coba (`.trial-input`) memiliki target sentuh minimal 46px (melampaui standar 44px) yang nyaman ditekan ibu jari pada layar ponsel pintar.
+   - Rasio kontras teks di atas 4.5:1 pada mode terang maupun mode gelap (`data-bs-theme="dark"`).
+   - Modal dilengkapi penanganan keyboard penuh: navigasi logis via `Tab`, penguncian fokus (*focus trapping*), dan penutupan cepat menggunakan tombol `Escape`.
+3. **Respon Cepat & State UI Lengkap**:
+   - Dilengkapi 3 state interaksi: *Loading state* dengan indikator spinner halus, *Error state* yang menjelaskan kendala isian secara santun, dan *Success state* dengan ucapan hamdalah serta tombol langsung hubungi WhatsApp.
+4. **Copywriting Alami Tanpa Em Dash**:
+   - Teks antarmuka bebas dari karakter em dash (`—`) dan bebas dari jargon pemasaran berlebihan, mengedepankan ketulusan nilai dakwah Al-Qur'an.
+
+---
+
+## 💎 24. STANDARDISASI 4 PAKET BIMBINGAN PRIVAT (OPSI A) & DURASI 90 MENIT
+
+### 24.1 Matriks 4 Paket Belajar (Opsi A)
+Berdasarkan penyelarasan produk bersama manajemen, AL-HIKMAH LMS mengadopsi 4 paket pembelajaran terstandarisasi dengan model bimbingan privat intensif 1 Guru 1 Santri:
+
+| Nama Paket | Frekuensi Pertemuan | Durasi per Sesi | Investasi Bulanan | Rincian & Fasilitas Pembelajaran |
+| :--- | :---: | :---: | :---: | :--- |
+| **Paket Tunas Istiqomah** | 4x / bulan (1x / pekan) | 90 Menit | **Rp 600.000** | Model privat intensif (1 Guru 1 Santri), modul materi, lembar mutabaah hafalan, dan laporan evaluasi berkala ke orang tua. |
+| **Paket Bimbingan Mumtaz** <br>*(Paling Diminati)* | 8x / bulan (2x / pekan) | 90 Menit | **Rp 1.200.000** | Ritme belajar seimbang untuk pembentukan makhraj dan kelancaran membaca Al-Qur'an tartil. |
+| **Paket Akselerasi Itqan** | 12x / bulan (3x / pekan) | 90 Menit | **Rp 1.800.000** | Bimbingan intensif 3 kali sepekan untuk akselerasi bacaan Al-Qur'an tartil tingkat lanjut. |
+| **Program Unggulan: Mahir Tahfidz Al-Qur'an** | 18x / bulan (Halaqah Intensif) | 90 Menit | **Rp 2.700.000** | Program unggulan khusus tahfidz: talaqqi harian, setoran hafalan baru, murajaah terjadwal mutqin, dan bimbingan guru hafidz/hafidzah. |
+
+### 24.2 Standar Durasi 90 Menit & Keunggulan Privat 1-on-1
+Seluruh program menggunakan alokasi waktu **90 menit per pertemuan**. Durasi ini memberikan waktu yang sangat leluasa bagi guru pembimbing untuk:
+1. Mencairkan suasana (*ice-breaking*) dan doa pembuka (5-10 menit).
+2. Menyimak tilawah / setoran hafalan secara teliti tanpa tergesa-gesa (50-60 menit).
+3. Mengoreksi makhraj dan sifatul huruf secara mendalam (15 menit).
+4. Memberikan nasihat adab Islami, doa penutup, serta pengisian buku mutaba'ah (10 menit).
+
+### 24.3 Akses Publik Halaman Biaya & Proteksi Privasi Pengajar
+- **Publik & Calon Wali Santri**: Halaman `/biaya` kini dapat diakses bebas oleh tamu (*guest*) dan wali santri (*parent*) untuk melihat 4 paket resmi, kalkulator simulasi sesi belajar, biaya registrasi awal Rp 150.000, serta jaminan layanan syar'i.
+- **Isolasi Akses Mentor**: Pengguna dengan peran *Mentor* dan *Student* dibatasi (`403 Forbidden`) saat mencoba mengakses halaman biaya retail, demi menjaga fokus pengajar pada mutu bimbingan dan keikhlasan berdakwah.
+
+---
+
+## ⚖️ 25. MODUL PEMBAGIAN FINANSIAL OTOMATIS (REVENUE SHARING ENGINE) & INFAQ 10%
+
+### 25.1 Formula Matematis Bagi Hasil Sesi Belajar
+Sistem menghitung alokasi finansial per sesi bimbingan yang telah diselesaikan (*status = completed*) secara deterministik pada [`RevenueAnalyticsService.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Services/RevenueAnalyticsService.php):
+
+$$\text{Tarif Dasar Sesi} = \text{Rp } 150.000$$
+
+1. **Honor Pengajar (Mentor Fee)**:
+   $$\text{Honor Mentor} = \text{Rp } 100.000 \text{ per sesi bimbingan}$$
+2. **Alokasi Kas Yayasan (Owner Gross)**:
+   $$\text{Kas Yayasan (Gross)} = \text{Tarif Dasar} - \text{Honor Mentor} = \text{Rp } 150.000 - \text{Rp } 100.000 = \text{Rp } 50.000$$
+3. **Alokasi Infaq Dakwah ("Untuk Allah SWT")**:
+   Dihitung sebesar 10% dari alokasi kas yayasan/owner:
+   $$\text{Infaq Dakwah (10\%)} = 10\% \times \text{Rp } 50.000 = \text{Rp } 5.000 \text{ per sesi}$$
+4. **Pendapatan Bersih Yayasan (Owner Net)**:
+   $$\text{Kas Bersih Yayasan} = \text{Kas Gross} - \text{Infaq Dakwah} = \text{Rp } 50.000 - \text{Rp } 5.000 = \text{Rp } 45.000 \text{ per sesi}$$
+
+### 25.2 Isolasi Informasi Finansial Guru (Anti-Envy Isolation)
+Untuk memelihara kebersihan hati para ustadz dan ustadzah pengajar Al-Qur'an:
+- Mentor **hanya mengetahui hak honorarium pribadinya** (Rp 100.000 / sesi selesai).
+- Mentor **tidak pernah melihat** harga retail paket yang dibayarkan wali santri ke yayasan.
+- Mentor **tidak pernah melihat** margin kotor yayasan (Rp 50.000) maupun infaq lembaga.
+- Kebijakan ini mengeliminasi potensi prasangka (*su'udzon*) atau kecemburuan antar-pengajar, sehingga guru dapat sepenuhnya mengikhlaskan niat dalam mendidik santri.
+
+### 25.3 Penyajian Multi-Role Dashboard (Admin, Mentor, Wali Santri)
+1. **Admin Dashboard (`/admin/dashboard`)**:
+   Menampilkan kartu *"Sistem Bagi Hasil Sesi Belajar (Revenue Sharing)"*:
+   - Total sesi selesai (akumulasi & bulan berjalan).
+   - Total honorarium mentor tersalurkan (Rp 100.000 x sesi).
+   - Total kas bersih yayasan (Rp 45.000 x sesi).
+   - Total titipan infaq dakwah Al-Qur'an & beasiswa dhuafa 10% (Rp 5.000 x sesi).
+2. **Mentor Dashboard (`/mentor/dashboard`)**:
+   Menampilkan kartu *"Rekapitulasi Honor Mengajar Saya"*:
+   - Akumulasi honor mengajar bulan ini & total keseluruhan (Rp 100.000/sesi).
+   - Estimasi honor dari sesi terjadwal mendatang.
+   - Catatan apresiasi keikhlasan mengajar dan audit pencairan resmi.
+3. **Parent Dashboard (`/parent/dashboard`)**:
+   Menampilkan kartu *"Transparansi Infaq & Keberkahan Sesi Belajar"*:
+   - Total sesi bimbingan ananda yang telah tuntas.
+   - Catatan bahwa 10% dari alokasi kas yayasan disalurkan untuk sedekah dakwah Al-Qur'an, sehingga setiap sesi belajar yang diikuti ananda bernilai amal jariyah bagi keluarga.
+
+---
+
+## 🌿 26. PENYELARASAN FRONTEND EDITORIAL, KONSOLIDASI SEEDER BERSIH, & UJIAN GURU
+
+### 26.1 Konsolidasi Seeder Bersih & Pemulihan Taksonomi Blog (Kategori & Tag)
+Sebagai pemenuhan arahan arsitektur data bersih (*clean database hygiene*):
+1. **Dua Administrator Resmi**: Basis data secara ketat hanya menyisakan dua akun admin resmi:
+   - **Hikmatul Hasanah** (`hikmah@gmail.com` / `0857-8668-9008`)
+   - **Dandi Hermawan** (`dandihermawan87@gmail.com` / `089699451818`)
+2. **Pemulihan Taksonomi Blog & Literasi**:
+   - Seluruh seeder taksonomi edukasi (`BlogCategorySeeder`, `BlogTagSeeder`, `ArticleSeeder`) dipulihkan dan diintegrasikan ke dalam `DatabaseSeeder.php`.
+   - Mengisi 5 Kategori Kurikulum Blog (Metode & Tips Belajar, Tahsin & Tajwid, Tahfidz Al-Qur'an, Adab & Parenting Islami, Wawasan Keislaman), 14 Tagar Populer, serta artikel bimbingan edukatif resmi.
+   - Mengamankan data master Program Pembelajaran (10 Program) dan Galeri Dokumentasi (5 Galeri).
+
+### 26.2 Validasi Ikon Program & Spasi Vertikal Header Terhadap Fixed Navbar
+1. **Eliminasi Ikon Rusak / Unrendered Icon**:
+   - Memperbaiki ketidakcocokan kelas Bootstrap Icons pada paket belajar, di mana `bi-seedling` (kelas Font Awesome yang tidak valid di Bootstrap Icons) digantikan secara universal menjadi `bi-flower1` (ikon resmi kecambah/tunas mekar).
+   - Menambahkan mekanisme *defensive icon fallback* pada `resources/views/program.blade.php` agar setiap ikon modul memiliki fallback yang presisi dan tidak pernah rusak.
+2. **Breathing Room Header Terhadap Fixed Navbar**:
+   - Menyesuaikan nilai *top padding* pada seluruh komponen hero dan breadcrumb (`.page-hero`, `.tracker-hero`, `.breadcrumb_bg`):
+     $$\text{Padding Top} = \text{calc}(\text{var}(--\text{navbar-height}) + 4.25\text{rem})$$
+   - Mengeliminasi kesan terpotong (*overlap*) akibat bilah navigasi melayang (*fixed-top navbar*), memberikan jarak visual yang lega, lapang, dan nyaman dibaca di layar desktop maupun mobile.
+
+### 26.3 Aksesibilitas Kontras Tinggi CTA Section (WCAG AAA Pure White & Emerald)
+1. **Solusi Keterbacaan Banner CTA Utama ("Mari Menanam Kebaikan Sejak Hari Ini")**:
+   - Mengatasi bentrok spesifisitas CSS pada `.cta-section`, di mana teks judul dan subjudul sebelumnya tertimpa warna gelap `--text-heading` / `--text-secondary`.
+   - Memastikan judul `.editorial-title` di dalam `.cta-section` tampil dalam warna putih murni (`#ffffff !important`) beraksen hijau mint lembut (`#6ee7b7`).
+   - Memastikan subjudul tampil dengan kontras tinggi (`rgba(255, 255, 255, 0.92) !important`) di atas latar belakang gradasi hijau zamrud.
+2. **Dua Tombol Aksi Kontras Tinggi**:
+   - Tombol Utama (*Daftar Gratis Sekarang*): Berubah menjadi kartu pil putih solid (`#ffffff`) dengan teks hijau zamrud tua tebal (`#064e3b`), memberikan kontras visual maksimal yang menarik perhatian pengunjung.
+   - Tombol Sekunder (*Mulai Belajar*): Tombol kaca tembus pandang (*frosted glass* `rgba(255, 255, 255, 0.15)`) dengan garis tepi putih tegas (`border: 2px solid rgba(255, 255, 255, 0.75)`) dan teks putih terang.
+
+### 26.4 Redesain Komprehensif Portal Blog (/blog)
+1. **Hero Header Khusus Pembaca Literasi**:
+   - Menggantikan container generik dengan `.page-hero` yang memiliki jarak aman dari fixed navbar, dilengkapi lencana kurikulum *"Literasi & Edukasi Qur'ani"*, judul dinamis berbasis kategori/tagar, serta ringkasan bernada editorial hangat.
+2. **Arsitektur Kartu Artikel (.blog-card)**:
+   - Mengadopsi tata letak modern responsif: rasio gambar terstandarisasi (`aspect-ratio: 16/10; object-fit: cover;`), efek zoom halus saat disentuh kursor (*hover micro-animation*), penanda tanggal berstempel waktu lokal, pill kategori hijau zamrud, estimasi waktu baca, serta metrik pembaca (*views count*).
+3. **Sidebar Navigasi Edukatif**:
+   - Formulir pencarian artikel dengan tombol bertema zamrud.
+   - Navigasi kategori interaktif dengan badge penghitung jumlah artikel aktual.
+   - Widget artikel terpopuler & thumbnail mini.
+   - Tag cloud interaktif dengan pill bulat modern.
+   - Kotak konsultasi belajar santri langsung terhubung ke WhatsApp resmi pimpinan/admin.
+
+### 26.5 Standarisasi Desain Seleksi Guru (/mentor/recruitment/take-test)
+1. **Harmonisasi Palet Hijau Zamrud (Islamic Editorial Minimalist)**:
+   - Menghapus total warna biru generic Bootstrap (`#0d6efd`, `bg-primary`, `border-primary`) yang sebelumnya tidak selaras dengan tema lembaga.
+   - Mengubah kartu pengantar ujian menjadi gradasi mewah Deep Emerald (`linear-gradient(135deg, #064e3b 0%, #047857 100%)`) berhias kotak statistik buram (*frosted glass*) untuk total soal dan durasi pengerjaan.
+2. **Palet Tiga Standar Kompetensi**:
+   - *Tajwid Test*: Garis tepi Deep Emerald (`#064e3b`).
+   - *Makharijul Huruf*: Garis tepi Amber Emas (`#b45309`).
+   - *Tahsin & Metodologi*: Garis tepi Dark Teal (`#0f766e`).
+3. **Komponen Pilihan Ganda (Radio Options)**:
+   - Keadaan Normal: Permukaan warna batu hangat (`#fafaf9`) dengan garis tepi lembut.
+   - Keadaan Terpilih (`:has(input:checked)`): Berubah seketika menjadi hijau zamrud lembut (`#ecfdf5`), garis tepi hijau pekat (`#064e3b`), lingkaran lencana opsi huruf (A/B/C/D) menjadi hijau tua solid dengan huruf putih, serta teks jawaban berganti menjadi warna hijau zamrud tegas.
+
+---
+
+**Disahkan oleh:** Tim Manajemen & Pengembang AL-HIKMAH LMS  
+**Status Dokumen:** Living Specification & Single Source of Truth  
+**Tanggal:** 12 September 2026
 

@@ -8,6 +8,7 @@ use App\Models\Message;
 use App\Models\Payment;
 use App\Models\Progress;
 use App\Models\Session;
+use App\Services\RevenueAnalyticsService;
 use Illuminate\View\View;
 
 class ParentDashboardController extends Controller
@@ -95,6 +96,9 @@ class ParentDashboardController extends Controller
                 ->get()
             : collect();
 
+        // 7. Berkah Infaq & Transparansi Sesi (Alokasi 10% Kas Yayasan untuk Dakwah)
+        $parentBlessing = app(RevenueAnalyticsService::class)->getParentSessionBlessingSummary($childIds);
+
         return view('parent.dashboard', compact(
             'user',
             'parent',
@@ -110,7 +114,8 @@ class ParentDashboardController extends Controller
             'upcomingSessions',
             'unreadMessagesCount',
             'pendingFeedbackSessions',
-            'activeInterventionTickets'
+            'activeInterventionTickets',
+            'parentBlessing'
         ));
     }
 }

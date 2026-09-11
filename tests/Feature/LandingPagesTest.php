@@ -62,8 +62,15 @@ test('tentang kami page displays statistic counters', function () {
         ->assertSee('Program Belajar');
 });
 
-test('home page renders real-time prayer times widget and modals', function () {
+test('home page renders prayer times banner linking to dedicated page', function () {
     $this->get(route('home'))
+        ->assertStatus(200)
+        ->assertSee('Waktu Ibadah &amp; Arah Kiblat Harian', false)
+        ->assertSee(route('jadwal-sholat'));
+});
+
+test('dedicated prayer times page renders real-time widget and modals', function () {
+    $this->get(route('jadwal-sholat'))
         ->assertStatus(200)
         ->assertSee('Waktu Ibadah Harian')
         ->assertSee('id="jadwal-sholat"', false)

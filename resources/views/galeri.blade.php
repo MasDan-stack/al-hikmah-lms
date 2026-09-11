@@ -17,16 +17,17 @@
 
 @section('content')
     <!-- ============================================ -->
-    <!-- 1. ETRAIN BREADCRUMB HEADER -->
+    <!-- 1. PAGE HEADER - EDITORIAL MINIMALIST -->
     <!-- ============================================ -->
-    <section class="breadcrumb_bg" aria-label="Header Galeri">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb_iner_item" data-reveal>
-                        <div class="section-badge mx-auto mb-2"><i class="bi bi-images"></i> Dokumentasi Kegiatan</div>
-                        <h2>Menyimpan Momen, <span class="text-gradient">Menyaksikan Perjalanan</span></h2>
-                        <p>Setiap pertemuan memiliki cerita. Inilah rekaman perjalanan nyata santri dan pendamping dalam mencintai Al-Qur'an.</p>
+    <section class="py-5 bg-body-tertiary border-bottom" aria-label="Header Galeri">
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-lg-9 text-center">
+                    <div data-reveal>
+                        <h1 class="editorial-title mb-3">Dokumentasi &amp; Momen <span class="text-emerald-deep">Belajar Santri</span></h1>
+                        <p class="editorial-subtitle mx-auto">
+                            Menyimpan rekaman perjalanan nyata santri dan asatidz AL-HIKMAH dalam mempelajari dan mencintai Al-Qur'an dengan adab dan ketenangan.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -281,35 +282,37 @@
                 </div>
             @endif
 
-            <!-- CTA Pattern Card -->
+            <!-- CTA Pattern Cards -->
             <div class="row g-4 mt-2">
                 <div class="col-lg-6" data-reveal>
-                    <div class="gallery-item gallery-bg-pattern" style="border-radius:20px;overflow:hidden;height:320px;">
-                        <div class="gallery-pattern-content"
-                            style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:40px;">
-                            <i class="bi bi-book" style="font-size:3rem;margin-bottom:16px;"></i>
-                            <h5 style="font-size:1.6rem;font-weight:800;letter-spacing:2px;">AL-HIKMAH</h5>
-                            <p style="font-size:0.95rem;opacity:0.85;margin-bottom:20px;">Menemani Perjalanan Belajar
-                                Al-Qur'an</p>
+                    <div class="editorial-card p-4 p-md-5 justify-content-center text-center">
+                        <div class="editorial-icon-badge mx-auto mb-3" style="width: 52px; height: 52px; font-size: 1.5rem;">
+                            <i class="bi bi-chat-dots-fill"></i>
+                        </div>
+                        <h2 class="editorial-title fs-4 mb-2">Konsultasi Kebutuhan Belajar</h2>
+                        <p class="editorial-subtitle text-muted mb-4 small">
+                            Diskusikan jadwal, kurikulum privat, atau penempatan tingkat belajar ananda bersama tim konselor AL-HIKMAH.
+                        </p>
+                        <div>
                             <a href="https://wa.me/6285786689008?text=Assalamualaikum,%20saya%20ingin%20info%20lebih%20lanjut%20tentang%20AL-HIKMAH"
-                                class="btn btn-primary-custom rounded-pill px-4" target="_blank" rel="noopener">
-                                <i class="bi bi-whatsapp me-1"></i> Berbincang dengan Kami
+                                class="btn-editorial-whatsapp px-4" target="_blank" rel="noopener">
+                                <i class="bi bi-whatsapp"></i> Hubungi Konselor via WhatsApp
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6" data-reveal data-reveal-delay="100">
-                    <div class="gallery-item gallery-bg-pattern"
-                        style="border-radius:20px;overflow:hidden;height:320px;background:var(--primary-gradient);">
-                        <div class="gallery-pattern-content"
-                            style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:40px;">
-                            <i class="bi bi-people" style="font-size:3rem;margin-bottom:16px;"></i>
-                            <h5 style="font-size:1.6rem;font-weight:800;letter-spacing:2px;">Program Tersedia</h5>
-                            <p style="font-size:0.95rem;opacity:0.85;margin-bottom:20px;">Anak, Dewasa, Muslimah, dan
-                                Bahasa Arab</p>
-                            <a href="{{ route('program') }}"
-                                class="btn btn-light rounded-pill px-4 text-primary fw-bold">
-                                <i class="bi bi-journal-bookmark me-1"></i> Lihat Program
+                    <div class="editorial-card editorial-card-featured p-4 p-md-5 justify-content-center text-center">
+                        <div class="editorial-icon-badge mx-auto mb-3" style="width: 52px; height: 52px; font-size: 1.5rem;">
+                            <i class="bi bi-journal-check"></i>
+                        </div>
+                        <h2 class="editorial-title fs-4 mb-2">Pilihan Program Bimbingan</h2>
+                        <p class="editorial-subtitle text-muted mb-4 small">
+                            Tersedia program Privat Anak, Tahsin Dewasa, Muslimah, Tahfidz Mutqin, serta Bahasa Arab Dasar.
+                        </p>
+                        <div>
+                            <a href="{{ route('program') }}" class="btn-editorial-primary px-4">
+                                <i class="bi bi-journal-bookmark"></i> Lihat Pilihan Program
                             </a>
                         </div>
                     </div>
@@ -319,81 +322,63 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- TESTIMONIAL SECTION - MODERN -->
+    <!-- TESTIMONIAL SECTION - EDITORIAL MINIMALIST -->
     <!-- ============================================ -->
-    <section class="section-padding section-alt" aria-label="Testimoni">
-        <div class="container">
-            <div class="text-center mb-5">
-                <div class="section-badge mx-auto" data-reveal>
-                    <i class="bi bi-chat-quote"></i> Testimoni
-                </div>
-                <h2 class="section-title" data-reveal>
-                    Cerita dari <span class="text-gradient">Keluarga</span>
-                </h2>
-                <p class="text-muted" data-reveal>Pengalaman nyata dari mereka yang telah merasakan pendampingan AL-HIKMAH.
-                </p>
+    <section class="py-5 bg-body-tertiary border-top border-bottom" aria-label="Testimoni Santri">
+        <div class="container py-3">
+            <div class="text-center mb-5" data-reveal>
+                <h2 class="editorial-title fs-2 mb-2">Cerita Nyata <span class="text-emerald-deep">Keluarga Santri</span></h2>
+                <p class="editorial-subtitle text-muted">Pengalaman nyata dari mereka yang telah merasakan pendampingan privat AL-HIKMAH.</p>
             </div>
 
             <div class="row g-4">
                 <div class="col-md-4" data-reveal>
-                    <div class="testimonial-card h-100" style="border-radius:20px;">
-                        <div class="testimonial-stars">
-                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-fill"></i>
+                    <div class="editorial-card p-4">
+                        <div class="d-flex gap-1 text-warning mb-3">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
                         </div>
-                        <p class="testimonial-text">"Anak saya lebih semangat belajar Al-Qur'an. Pendekatannya sabar dan
-                            membuat anak nyaman."</p>
-                        <div class="testimonial-author">
-                            <div class="author-avatar"
-                                style="background:var(--primary-lighter);border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--primary);">
-                                <i class="bi bi-person-circle"></i>
+                        <p class="text-secondary flex-grow-1 mb-4" style="line-height: 1.6;">"Anak saya jauh lebih semangat belajar Al-Qur'an. Pendekatan asatidz sangat sabar, ramah, dan membuat anak nyaman tanpa beban."</p>
+                        <div class="d-flex align-items-center gap-3 pt-3 border-top">
+                            <div class="editorial-icon-badge mb-0" style="width: 40px; height: 40px; font-size: 1.1rem;">
+                                <i class="bi bi-person-heart"></i>
                             </div>
-                            <div class="author-info">
-                                <h6 style="font-weight:700;margin-bottom:0;">Orang Tua Murid</h6>
-                                <span style="font-size:0.8rem;color:var(--text-muted);">Program Anak</span>
+                            <div>
+                                <h3 class="fs-6 fw-bold mb-0">Orang Tua Santri</h3>
+                                <span class="small text-muted">Program Privat Anak</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4" data-reveal data-reveal-delay="100">
-                    <div class="testimonial-card h-100" style="border-radius:20px;">
-                        <div class="testimonial-stars">
-                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-fill"></i>
+                    <div class="editorial-card p-4">
+                        <div class="d-flex gap-1 text-warning mb-3">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
                         </div>
-                        <p class="testimonial-text">"Saya belajar dari nol di usia dewasa. Pendampingnya sabar, tidak
-                            pernah membuat saya malu."</p>
-                        <div class="testimonial-author">
-                            <div class="author-avatar"
-                                style="background:var(--primary-lighter);border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--primary);">
-                                <i class="bi bi-person-circle"></i>
+                        <p class="text-secondary flex-grow-1 mb-4" style="line-height: 1.6;">"Saya belajar dari nol di usia dewasa. Pendampingnya sangat sabar, teliti membimbing makharijul huruf, dan tidak pernah membuat saya canggung."</p>
+                        <div class="d-flex align-items-center gap-3 pt-3 border-top">
+                            <div class="editorial-icon-badge mb-0" style="width: 40px; height: 40px; font-size: 1.1rem;">
+                                <i class="bi bi-person-check"></i>
                             </div>
-                            <div class="author-info">
-                                <h6 style="font-weight:700;margin-bottom:0;">Peserta Dewasa</h6>
-                                <span style="font-size:0.8rem;color:var(--text-muted);">Program Tahsin</span>
+                            <div>
+                                <h3 class="fs-6 fw-bold mb-0">Peserta Dewasa</h3>
+                                <span class="small text-muted">Program Tahsin Dewasa</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4" data-reveal data-reveal-delay="200">
-                    <div class="testimonial-card h-100" style="border-radius:20px;">
-                        <div class="testimonial-stars">
-                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-fill"></i>
+                    <div class="editorial-card p-4">
+                        <div class="d-flex gap-1 text-warning mb-3">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
                         </div>
-                        <p class="testimonial-text">"Jadwal fleksibel, pendamping profesional. Anak saya lebih disiplin
-                            sekarang."</p>
-                        <div class="testimonial-author">
-                            <div class="author-avatar"
-                                style="background:var(--primary-lighter);border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--primary);">
-                                <i class="bi bi-person-circle"></i>
+                        <p class="text-secondary flex-grow-1 mb-4" style="line-height: 1.6;">"Jadwal fleksibel, laporan mutaba'ah selalu tercatat rapi di sistem. Kami sebagai wali santri dapat memantau progres hafalan ananda dengan tenang."</p>
+                        <div class="d-flex align-items-center gap-3 pt-3 border-top">
+                            <div class="editorial-icon-badge mb-0" style="width: 40px; height: 40px; font-size: 1.1rem;">
+                                <i class="bi bi-house-heart"></i>
                             </div>
-                            <div class="author-info">
-                                <h6 style="font-weight:700;margin-bottom:0;">Orang Tua Murid</h6>
-                                <span style="font-size:0.8rem;color:var(--text-muted);">Home Visit</span>
+                            <div>
+                                <h3 class="fs-6 fw-bold mb-0">Wali Santri</h3>
+                                <span class="small text-muted">Bimbingan Home Visit</span>
                             </div>
                         </div>
                     </div>
@@ -402,8 +387,7 @@
 
             <div class="text-center mt-4">
                 <p class="text-muted small fst-italic">
-                    <i class="bi bi-quote me-1"></i> Testimoni adalah representasi dari pengalaman belajar yang ingin kami
-                    tumbuhkan.
+                    <i class="bi bi-quote me-1"></i> Testimoni adalah representasi amanah pendampingan belajar Al-Qur'an yang terus kami jaga.
                 </p>
             </div>
         </div>
@@ -442,10 +426,8 @@
                                         id="modalProgram"></span></span>
                             </div>
 
-                            <div id="modalCaptionWrapper"
-                                style="background:var(--bg-secondary);border-radius:12px;padding:16px;margin-bottom:16px;border-left:4px solid var(--primary);">
-                                <p id="modalCaption" class="mb-0 fst-italic"
-                                    style="font-size:0.9rem;color:var(--text-secondary);"></p>
+                            <div id="modalCaptionWrapper" class="p-3 mb-3 rounded-3 bg-body-tertiary border">
+                                <p id="modalCaption" class="mb-0 fst-italic small text-secondary"></p>
                             </div>
 
                             <div class="description" id="modalDescription"></div>

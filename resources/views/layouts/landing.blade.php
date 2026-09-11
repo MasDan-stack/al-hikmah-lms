@@ -69,7 +69,9 @@
     <!-- Bootstrap 5 & Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.1.1/index.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 
     <!-- Custom CSS with Auto Cache Busting -->
     <link href="{{ asset('assets/css/style.css') }}?v={{ file_exists(public_path('assets/css/style.css')) ? filemtime(public_path('assets/css/style.css')) : time() }}" rel="stylesheet">
@@ -115,6 +117,9 @@
 
     <!-- Modal Pendaftaran / Konsultasi (Selalu Siap di DOM) -->
     @include('partials.modal-daftar')
+
+    <!-- Modal Pendaftaran & Penempatan Level Gratis (Placement Test) -->
+    @include('partials.modal-trial')
 
     <!-- Global Flash Toast Notification -->
     <x-flash-toast />
