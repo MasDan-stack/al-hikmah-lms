@@ -110,9 +110,9 @@ class LandingPagesRoleVisibilityTest extends TestCase
         $response = $this->get(route('home'));
 
         $response->assertStatus(200);
-        $response->assertSee('Mulai Belajar');
-        $response->assertSee('Mulai Perjalanan Belajar');
-        $response->assertSee('data-bs-target="#daftarModal"', false);
+        $response->assertSee('Bekal Terindah Ananda Membaca Surat Cinta-Nya');
+        $response->assertSee('Daftar Evaluasi Awal Tanpa Biaya');
+        $response->assertSee('data-bs-target="#trialModal"', false);
     }
 
     public function test_parent_sees_dashboard_and_enrollment_cta_on_home_page(): void
@@ -122,9 +122,9 @@ class LandingPagesRoleVisibilityTest extends TestCase
         $response = $this->actingAs($parent)->get(route('home'));
 
         $response->assertStatus(200);
-        $response->assertDontSee('Mulai Perjalanan Belajar');
-        $response->assertSee('Daftarkan Program Baru Anak');
-        $response->assertSee('Dashboard Orang Tua');
+        $response->assertDontSee('Bekal Terindah Ananda Membaca Surat Cinta-Nya');
+        $response->assertSee('Buka Dashboard Orang Tua');
+        $response->assertSee('Jadwal Belajar Ananda');
         $response->assertSee('Selamat Datang Kembali');
         $response->assertSee('Bunda Siti');
     }
@@ -136,7 +136,7 @@ class LandingPagesRoleVisibilityTest extends TestCase
         $response = $this->actingAs($student)->get(route('home'));
 
         $response->assertStatus(200);
-        $response->assertDontSee('Mulai Perjalanan Belajar');
+        $response->assertDontSee('Bekal Terindah Ananda Membaca Surat Cinta-Nya');
         $response->assertSee('Masuk Ruang Santri');
         $response->assertSee('Target Hafalan Hari Ini');
         $response->assertSee('Ahmad Santri');
@@ -149,9 +149,9 @@ class LandingPagesRoleVisibilityTest extends TestCase
         $response = $this->actingAs($mentor)->get(route('home'));
 
         $response->assertStatus(200);
-        $response->assertDontSee('Mulai Perjalanan Belajar');
+        $response->assertDontSee('Bekal Terindah Ananda Membaca Surat Cinta-Nya');
         $response->assertSee('Dashboard Mengajar');
-        $response->assertSee('Jadwal Mengajar');
+        $response->assertSee('Jadwal Bimbingan');
         $response->assertSee('Ustadz Ali');
     }
 
@@ -162,7 +162,7 @@ class LandingPagesRoleVisibilityTest extends TestCase
         $response = $this->actingAs($admin)->get(route('home'));
 
         $response->assertStatus(200);
-        $response->assertDontSee('Mulai Perjalanan Belajar');
+        $response->assertDontSee('Bekal Terindah Ananda Membaca Surat Cinta-Nya');
         $response->assertSee('Dashboard Admin');
         $response->assertSee('Kelola Pendaftaran');
         $response->assertSee('Admin Utama');

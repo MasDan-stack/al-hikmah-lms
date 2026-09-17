@@ -9,10 +9,10 @@
                         <i class="bi bi-gift-fill me-1"></i> 100% Bebas Biaya • Penempatan Level Belajar
                     </span>
                     <h4 class="modal-title font-display fw-bold text-heading" id="trialModalLabel">
-                        Daftar Gratis &amp; Penempatan Level Belajar
+                        Sesi Perkenalan &amp; Penempatan Belajar Ananda
                     </h4>
                     <p class="text-secondary small mb-0 mt-1">
-                        Kenalkan ananda dengan ustadz/ustadzah kami untuk evaluasi bacaan awal secara ramah, santai, dan tanpa rasa cemas.
+                        Kami mengajak ananda mengobrol dan membaca bersama Ustadz atau Ustadzah selama 15 menit. Tujuannya mengenali tingkat bacaan ananda dalam suasana yang santai, bersahabat, dan tanpa rasa tertekan.
                     </p>
                 </div>
                 <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Tutup jendela pendaftaran"></button>

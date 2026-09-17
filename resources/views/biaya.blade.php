@@ -6,14 +6,14 @@
 @section('content')
 
     {{-- 1. PAGE HEADER --}}
-    <section class="py-5 bg-body-tertiary border-bottom" aria-label="Header Biaya Belajar">
-        <div class="container py-4">
+    <section class="editorial-page-header bg-body-tertiary border-bottom" aria-label="Header Biaya Belajar">
+        <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-9 text-center">
                     <div data-reveal>
                         <h1 class="editorial-title mb-3">Paket Bimbingan <span class="text-emerald-deep">Privat Al-Qur'an</span></h1>
                         <p class="editorial-subtitle mx-auto">
-                            Biaya transparan tanpa biaya tersembunyi. Setiap sesi 90 menit privat bersama satu guru untuk satu santri.
+                            Setiap pertemuan berlangsung selama 90 menit penuh, mempertemukan satu guru dengan satu santri secara tenang. Ananda mendapatkan bimbingan tartil yang runtut, disimak dengan sabar, dan dipantau melalui catatan perkembangan harian.
                         </p>
                     </div>
                 </div>
@@ -26,37 +26,201 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-10" data-reveal>
-                    <div class="editorial-card p-4 p-md-5 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-4">
-                        <div class="flex-grow-1">
-                            <div class="d-flex align-items-center gap-3 mb-2">
-                                <div class="editorial-icon-badge flex-shrink-0" style="width: 44px; height: 44px;">
-                                    <i class="bi bi-person-check-fill"></i>
-                                </div>
-                                <div>
-                                    <span class="badge bg-light text-emerald-deep border mb-1">Akun Terdaftar</span>
-                                    <h2 class="fw-bold text-heading fs-5 mb-0">Ahlan wa Sahlan, {{ auth()->user()->name }}</h2>
-                                </div>
-                            </div>
-                            <p class="small text-secondary mb-0" style="max-width: 560px;">
-                                Seluruh bimbingan diselenggarakan secara privat 1 Guru 1 Santri, 90 menit per sesi, dengan kurikulum personal yang disesuaikan hasil evaluasi awal ananda.
-                            </p>
+                    <div class="editorial-card p-4 p-md-5 rounded-4 shadow-sm border position-relative overflow-hidden">
+                        {{-- Subtle background decoration --}}
+                        <div class="position-absolute top-0 end-0 p-4 opacity-10 pointer-events-none d-none d-md-block" style="transform: translate(20%, -20%);" aria-hidden="true">
+                            <i class="bi bi-award-fill" style="font-size: 14rem; color: var(--primary);"></i>
                         </div>
 
-                        <div class="flex-shrink-0 w-100" style="max-width: 280px;">
-                            <div class="p-3.5 rounded-3 bg-body border">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="small fw-semibold text-secondary">Registrasi Santri Baru:</span>
-                                    <span class="badge bg-light text-secondary border">1x di Awal</span>
+                        <div class="row g-4 align-items-center position-relative">
+                            {{-- Sisi Kiri: Profil & Komitmen Bimbingan --}}
+                            <div class="col-lg-7">
+                                <div class="d-inline-flex align-items-center gap-2 px-3 py-1.5 rounded-pill bg-success-subtle text-success small fw-semibold mb-3">
+                                    <i class="bi bi-patch-check-fill"></i> Akun Wali Santri Terdaftar
                                 </div>
-                                <div class="tnum-price fw-bold text-emerald-deep fs-3 mb-1">
-                                    Rp {{ number_format($registrationFee, 0, ',', '.') }}
-                                </div>
-                                <p class="small text-secondary mb-0" style="font-size: 0.76rem; line-height: 1.4;">
-                                    Mencakup assessment makhraj, tajwid, penyusunan kurikulum personal, dan akun portal santri.
+                                <h2 class="editorial-title fs-3 mb-2">
+                                    Ahlan wa Sahlan, <span class="text-emerald-deep">{{ auth()->user()->name }}</span>
+                                </h2>
+                                <p class="text-secondary small mb-4" style="line-height: 1.6; max-width: 540px;">
+                                    Selamat datang di portal bimbingan Al-Qur'an Al-Hikmah. Seluruh sesi belajar diselenggarakan secara privat 1 guru untuk 1 santri, berdurasi 90 menit penuh, dengan kurikulum personal yang dirancang khusus sesuai karakter dan hasil evaluasi ananda.
                                 </p>
+
+                                <div class="row g-3">
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-start gap-2.5">
+                                            <div class="rounded-circle p-1.5 bg-success-subtle text-success d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
+                                                <i class="bi bi-bullseye fs-6"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-heading small">Kurikulum Personal</div>
+                                                <small class="text-secondary" style="font-size: 0.74rem;">Disesuaikan ritme &amp; karakter anak</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-start gap-2.5">
+                                            <div class="rounded-circle p-1.5 bg-success-subtle text-success d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
+                                                <i class="bi bi-clock-history fs-6"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-heading small">90 Menit Penuh</div>
+                                                <small class="text-secondary" style="font-size: 0.74rem;">Talaqqi sabar tanpa antre giliran</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-start gap-2.5">
+                                            <div class="rounded-circle p-1.5 bg-success-subtle text-success d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
+                                                <i class="bi bi-phone fs-6"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-heading small">Rapor Mutaba'ah Real-Time</div>
+                                                <small class="text-secondary" style="font-size: 0.74rem;">Pantau capaian hafalan dari HP</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-start gap-2.5">
+                                            <div class="rounded-circle p-1.5 bg-success-subtle text-success d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
+                                                <i class="bi bi-shield-check fs-6"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-heading small">Garansi Guru Cocok</div>
+                                                <small class="text-secondary" style="font-size: 0.74rem;">Kenyamanan belajar santri utama</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Sisi Kanan: Kartu Investasi Registrasi Awal (Membership Pass Style) --}}
+                            <div class="col-lg-5">
+                                <div class="p-4 rounded-4 text-white position-relative shadow-lg"
+                                     style="background: linear-gradient(145deg, #064e3b 0%, #022c22 100%); border: 1px solid rgba(255, 255, 255, 0.15);">
+                                    <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+                                        <span class="badge bg-warning text-dark fw-bold px-2.5 py-1 rounded-pill" style="font-size: 0.7rem; letter-spacing: 0.3px;">
+                                            <i class="bi bi-gem me-1"></i> INVESTASI 1X DIAWAL
+                                        </span>
+                                        <span class="small text-white-50" style="font-size: 0.72rem;">Santri Baru</span>
+                                    </div>
+
+                                    <div class="text-white-50 small mt-2">Biaya Registrasi &amp; Asesmen Personal</div>
+                                    <div class="tnum-price fw-bold text-white fs-2 mb-3">
+                                        Rp {{ number_format($registrationFee, 0, ',', '.') }}
+                                    </div>
+
+                                    <div class="border-top pt-3 border-white border-opacity-10 d-flex flex-column gap-2">
+                                        <div class="d-flex align-items-center gap-2 small text-white text-opacity-85" style="font-size: 0.8rem;">
+                                            <i class="bi bi-check2-circle text-warning fs-6 flex-shrink-0"></i>
+                                            <span>Asesmen diagnostik makhraj &amp; tajwid awal</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 small text-white text-opacity-85" style="font-size: 0.8rem;">
+                                            <i class="bi bi-check2-circle text-warning fs-6 flex-shrink-0"></i>
+                                            <span>Penyusunan kurikulum &amp; target juz personal</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 small text-white text-opacity-85" style="font-size: 0.8rem;">
+                                            <i class="bi bi-check2-circle text-warning fs-6 flex-shrink-0"></i>
+                                            <span>Aktivasi akun sistem mutaba'ah santri &amp; wali</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 small text-white text-opacity-85" style="font-size: 0.8rem;">
+                                            <i class="bi bi-check2-circle text-warning fs-6 flex-shrink-0"></i>
+                                            <span>Garansi kesesuaian guru pembimbing</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="pt-3 mt-3 border-top border-white border-opacity-10 text-white-50 small d-flex align-items-center gap-1.5" style="font-size: 0.72rem;">
+                                        <i class="bi bi-shield-lock-fill text-warning"></i>
+                                        <span>Bebas biaya daftar ulang selamanya selama aktif.</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 2.5 KOMPARASI BIAYA & NILAI --}}
+    <section class="py-5" aria-label="Perbandingan Nilai Bimbingan">
+        <div class="container">
+            <div class="row justify-content-center mb-4" data-reveal>
+                <div class="col-lg-8 text-center">
+                    <h2 class="editorial-title fs-3 mb-2">Mengapa Bimbingan Privat di <span class="text-emerald-deep">Al-Hikmah Berbeda?</span></h2>
+                    <p class="editorial-subtitle mx-auto">Pemahaman rasional mengapa durasi dan fokus guru sangat menentukan kualitas bacaan ananda.</p>
+                </div>
+            </div>
+            <div class="row justify-content-center" data-reveal data-reveal-delay="100">
+                <div class="col-lg-10">
+                    <div class="table-responsive rounded-4 shadow-sm border mb-4">
+                        <table class="table table-hover align-middle mb-0 bg-white">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col" class="py-3 px-4 fw-semibold text-secondary w-25 border-end">Aspek Belajar</th>
+                                    <th scope="col" class="py-3 px-4 fw-semibold text-secondary w-25 border-end text-center">Ngaji Biasa / TPA</th>
+                                    <th scope="col" class="py-3 px-4 fw-bold text-emerald-deep w-50 text-center" style="background: rgba(6, 78, 59, 0.05);"><i class="bi bi-star-fill text-warning me-1"></i> Privat 1-on-1 Al-Hikmah</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-3 px-4 fw-medium text-dark border-end">Rasio Guru : Murid</td>
+                                    <td class="py-3 px-4 text-center text-muted border-end small">1 Guru : 15 - 20 Santri</td>
+                                    <td class="py-3 px-4 text-center text-dark fw-semibold small" style="background: rgba(6, 78, 59, 0.02);">1 Guru : 1 Santri (Fokus 100%)</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 fw-medium text-dark border-end">Waktu Disimak Guru</td>
+                                    <td class="py-3 px-4 text-center text-muted border-end small">Cuma 5 - 7 menit (sisanya mengantre)</td>
+                                    <td class="py-3 px-4 text-center text-dark fw-semibold small" style="background: rgba(6, 78, 59, 0.02);">90 Menit Penuh (Fokus ke Ananda)</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 fw-medium text-dark border-end">Laporan Progres</td>
+                                    <td class="py-3 px-4 text-center text-muted border-end small">Tidak ada / buku paraf manual</td>
+                                    <td class="py-3 px-4 text-center text-dark fw-semibold small" style="background: rgba(6, 78, 59, 0.02);">Rapor Digital Real-Time di HP Orang Tua</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 fw-medium text-dark border-end">Kurikulum Belajar</td>
+                                    <td class="py-3 px-4 text-center text-muted border-end small">Disamaratakan seluruh kelas</td>
+                                    <td class="py-3 px-4 text-center text-dark fw-semibold small" style="background: rgba(6, 78, 59, 0.02);">Personal sesuai ritme kecepatan ananda</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 fw-medium text-dark border-end">Hasil Belajar</td>
+                                    <td class="py-3 px-4 text-center text-muted border-end small">Sering berbulan-bulan jalan di tempat</td>
+                                    <td class="py-3 px-4 text-center text-dark fw-bold small text-success" style="background: rgba(6, 78, 59, 0.02);">3 - 4x Lebih Cepat Lancar &amp; Mutqin</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Reframing & Pesan Kunci -->
+                    <div class="row g-3">
+                        <div class="col-md-7">
+                            <div class="p-3 p-md-4 rounded-4 bg-white border shadow-sm h-100 d-flex gap-3 align-items-start">
+                                <div class="rounded-circle p-2 bg-success-subtle text-success d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
+                                    <i class="bi bi-clock-history fs-5"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-heading small mb-1">Nilai Waktu Emas Ananda</div>
+                                    <p class="text-secondary small mb-0" style="line-height: 1.5;">
+                                        Satu sesi 90 menit di Al-Hikmah setara dengan 3 minggu anak mengantre di pengajian umum. Ayah dan Bunda menghemat waktu emas di usia tumbuh kembang ananda.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="p-3 p-md-4 rounded-4 bg-white border shadow-sm h-100 d-flex gap-3 align-items-start">
+                                <div class="rounded-circle p-2 bg-warning-subtle text-warning-emphasis d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
+                                    <i class="bi bi-cup-hot-fill fs-5 text-warning"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-heading small mb-1">Investasi Seharga Jajan Harian</div>
+                                    <p class="text-secondary small mb-0" style="line-height: 1.5;">
+                                        Hanya mulai <strong>Rp 20.000 per hari</strong> (seharga segelas es kopi susu atau jajan ananda) untuk bekal bacaan Al-Qur'an yang ia bawa seumur hidup.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -193,19 +357,19 @@
                                 <div class="mb-4">
                                     <div class="d-flex align-items-start gap-2 mb-2 small text-secondary">
                                         <i class="bi bi-check2-circle text-emerald-deep fs-6 mt-0.5 flex-shrink-0"></i>
-                                        <span>Model Privat Intensif (1 Guru 1 Santri)</span>
+                                        <span>Sesi Privat 90 Menit (1 Guru 1 Murid)</span>
                                     </div>
                                     <div class="d-flex align-items-start gap-2 mb-2 small text-secondary">
                                         <i class="bi bi-check2-circle text-emerald-deep fs-6 mt-0.5 flex-shrink-0"></i>
-                                        <span>Durasi 90 menit per pertemuan</span>
+                                        <span>Rapor Progres &amp; Evaluasi Tajwid Real-Time</span>
                                     </div>
                                     <div class="d-flex align-items-start gap-2 mb-2 small text-secondary">
                                         <i class="bi bi-check2-circle text-emerald-deep fs-6 mt-0.5 flex-shrink-0"></i>
-                                        <span>Modul materi &amp; lembar mutabaah digital</span>
+                                        <span>Jadwal Fleksibel Bisa Disesuaikan</span>
                                     </div>
-                                    <div class="d-flex align-items-start gap-2 mb-2 small text-secondary">
-                                        <i class="bi bi-check2-circle text-emerald-deep fs-6 mt-0.5 flex-shrink-0"></i>
-                                        <span>Laporan evaluasi tajwid berkala ke orang tua</span>
+                                    <div class="d-flex align-items-start gap-2 mb-2 small text-success fw-medium">
+                                        <i class="bi bi-check2-circle text-success fs-6 mt-0.5 flex-shrink-0"></i>
+                                        <span>Sudah termasuk infaq jariyah dakwah Al-Qur'an</span>
                                     </div>
                                     @if(str_contains($program->name, 'Tahfidz'))
                                         <div class="d-flex align-items-start gap-2 mb-2 small text-secondary">
@@ -249,11 +413,7 @@
                 @endforeach
             </div>
 
-            <div class="text-center mt-5 pt-2" data-reveal>
-                <p class="text-muted small fst-italic mb-0">
-                    "Setiap santri memiliki kecepatan belajar yang berbeda. Tim akademik Al-Hikmah siap mencocokkan guru pembimbing berdasarkan karakter dan hasil evaluasi awal ananda."
-                </p>
-            </div>
+
 
         </div>
     </section>

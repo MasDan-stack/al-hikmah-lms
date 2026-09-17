@@ -28,11 +28,11 @@
                     </div>
 
                     <h1 class="editorial-title display-5 mb-3">
-                        Membimbing Buah Hati Menjadi <span class="text-emerald-deep">Generasi Qur'ani</span> dengan Penuh Kasih dan Adab.
+                        Mau Ajarkan Anak Ngaji Sendiri tapi <span class="text-emerald-deep">Sering Kehabisan Sabar</span> setelah Lelah Bekerja?
                     </h1>
 
                     <p class="editorial-subtitle mb-4">
-                        Belajar Al-Qur'an adalah perjalanan mengenal Allah, memperbagus makhraj tartil, dan menumbuhkan akhlak mulia. AL-HIKMAH mendampingi ananda melalui bimbingan privat 1-on-1 berdurasi 90 menit per sesi bersama pendidik pilihan yang sabar dan ramah anak.
+                        Serahkan pada guru privat Al-Hikmah. Melalui 90 menit bimbingan sabar 1-on-1 bersama ustadz dan ustadzah pilihan, ananda disimak penuh tanpa terburu-buru, dan Ayah Bunda tinggal memantau perkembangan hafalan ananda langsung lewat HP.
                     </p>
 
                     <!-- Trust Badges Row -->
@@ -61,15 +61,12 @@
                         @else
                             <button type="button" class="btn-editorial-primary" data-bs-toggle="modal"
                                 data-bs-target="#trialModal">
-                                <i class="bi bi-pencil-square" aria-hidden="true"></i> Daftar Gratis Sekarang
+                                <i class="bi bi-pencil-square" aria-hidden="true"></i> Daftar Evaluasi Awal Tanpa Biaya
                             </button>
-                            <a href="#pilihan-program" class="btn-editorial-secondary">
-                                <i class="bi bi-journal-text" aria-hidden="true"></i> Pilihan Program
-                            </a>
                             <a href="{{ wa_url('Assalamualaikum Admin Al-Hikmah, saya ingin konsultasi mengenai bimbingan Al-Qur\'an untuk ananda.') }}"
                                 target="_blank" rel="noopener"
                                 class="btn-editorial-whatsapp">
-                                <i class="bi bi-whatsapp" aria-hidden="true"></i> Konsultasi WhatsApp
+                                <i class="bi bi-whatsapp" aria-hidden="true"></i> Konsultasi via WhatsApp
                             </a>
                         @endauth
                     </div>
@@ -81,16 +78,16 @@
                             height="420" fetchpriority="high" onerror="this.src='{{ asset('assets/img/1.jpg') }}'"
                             class="img-fluid">
 
-                        <!-- Floating Badge Kiri Bawah: Pendampingan Santun 1 Guru 1 Santri -->
+                        <!-- Floating Badge Kiri Bawah: 90 Menit Fokus Penuh -->
                         <div class="position-absolute bottom-0 start-0 m-3 editorial-floating-badge text-start d-none d-sm-flex align-items-center gap-3"
-                            style="max-width: 290px;">
+                            style="max-width: 300px;">
                             <div class="rounded-circle bg-success text-white p-2 d-flex align-items-center justify-content-center flex-shrink-0"
                                 style="width: 42px; height: 42px;">
-                                <i class="bi bi-heart-fill fs-5" aria-hidden="true"></i>
+                                <i class="bi bi-clock-fill fs-5" aria-hidden="true"></i>
                             </div>
                             <div>
-                                <div class="fw-bold small text-heading">Pendampingan Santun</div>
-                                <div class="text-secondary" style="font-size: 0.76rem; line-height: 1.35;">1 Guru fokus mendampingi 1 Santri (90 Menit).</div>
+                                <div class="fw-bold small text-heading">90 Menit Fokus Penuh</div>
+                                <div class="text-secondary" style="font-size: 0.76rem; line-height: 1.35;">Disimak penuh tanpa antre, 3x lebih cepat lancar dan mutqin.</div>
                             </div>
                         </div>
 
@@ -590,12 +587,10 @@
 
                 <div class="col-lg-6 order-1 order-lg-2" data-reveal data-reveal-delay="150">
                     <div class="ps-lg-4">
-                        <h2 class="editorial-title text-start mb-3">Laporan Pembelajaran Rapi, <span
-                                class="text-emerald-deep">Langsung di Genggaman</span> Ayah &amp; Bunda</h2>
+                        <h2 class="editorial-title text-start mb-3">Bukan Sekadar Mengaji, <span
+                                class="text-emerald-deep">Tetapi Terukur Setiap Ayatnya</span></h2>
                         <p class="editorial-subtitle text-start mb-4">
-                            Bunda tidak perlu lagi menebak atau khawatir tentang perkembangan mengaji ananda. Setiap kali sesi
-                            90 menit selesai, guru pembimbing langsung memperbarui rapor mutaba'ah digital yang mencakup
-                            capaian materi, ketukan tajwid, hingga catatan adab.
+                            Dilengkapi Dashboard Digital Pintar: pantau nilai makhraj, ketukan tajwid, target hafalan, dan catatan perkembangan dari ustadz langsung setiap selesai sesi bimbingan. Terukur, transparan, dan menenangkan hati Ayah serta Bunda.
                         </p>
 
                         <div class="d-flex flex-column gap-3 mb-4">
@@ -637,7 +632,7 @@
                         <div class="d-flex flex-wrap gap-3">
                             <button type="button" class="btn-editorial-primary" data-bs-toggle="modal"
                                 data-bs-target="#trialModal">
-                                <i class="bi bi-pencil-square me-1"></i> Daftar Akun Santri Gratis
+                                <i class="bi bi-pencil-square me-1"></i> Daftar Evaluasi Awal Tanpa Biaya
                             </button>
                             <a href="{{ wa_url('Assalamualaikum Admin Al-Hikmah, saya ingin menanyakan jadwal bimbingan mengaji untuk ananda.') }}"
                                 target="_blank" rel="noopener"
@@ -989,14 +984,14 @@
                     </div>
                 @else
                     <h2 class="editorial-title text-white mb-3">
-                        Mulai Belajar Al-Qur'an Bersama Guru Bersanad
+                        Bekal Terindah Ananda Membaca Surat Cinta-Nya
                     </h2>
-                    <p class="editorial-subtitle text-white mx-auto mb-4" style="max-width: 620px; color: rgba(255, 255, 255, 0.92) !important;">
-                        Bimbingan privat 1-on-1 dengan jadwal fleksibel dan pemantauan mutaba'ah berkala. Coba sesi penempatan 15 menit tanpa biaya untuk mengukur level bacaan ananda.
+                    <p class="editorial-subtitle text-white mx-auto mb-4" style="max-width: 660px; color: rgba(255, 255, 255, 0.92) !important;">
+                        Bimbel pelajaran umum jutaan rupiah kita siapkan, les musik dan bakat rutin kita dukung. Sudahkah kita menyisihkan yang terbaik untuk bekal ananda membaca ayat-ayat-Nya dengan tartil kelak di hadapan Allah? Mulai langkah awal ananda melalui sesi evaluasi 15 menit tanpa biaya.
                     </p>
                     <div class="d-flex flex-wrap justify-content-center gap-3">
                         <button type="button" class="btn-editorial-primary btn-lg" data-bs-toggle="modal" data-bs-target="#trialModal">
-                            <i class="bi bi-calendar2-check-fill me-2"></i> Coba Sesi Uji Coba Gratis
+                            <i class="bi bi-calendar2-check-fill me-2"></i> Daftar Evaluasi Awal Tanpa Biaya
                         </button>
                         <a href="{{ route('program') }}" class="btn-editorial-secondary btn-lg">
                             <i class="bi bi-grid-fill me-2"></i> Lihat Pilihan Program

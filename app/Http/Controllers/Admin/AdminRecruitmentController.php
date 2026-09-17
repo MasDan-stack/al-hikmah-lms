@@ -141,7 +141,10 @@ class AdminRecruitmentController extends Controller
         $application = MentorApplication::findOrFail($id);
 
         try {
-            $this->recruitmentService->scheduleInterview($application, $request->all());
+            $this->recruitmentService->scheduleInterview(
+                $application,
+                $request->only(['interview_scheduled_at', 'interview_type', 'interview_meeting_link', 'interview_notes'])
+            );
 
             return back()->with('success', 'Pelamar dijadwalkan wawancara.');
         } catch (\Exception $e) {

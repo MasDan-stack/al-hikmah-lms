@@ -3,14 +3,19 @@
 > **Dokumen Resmi untuk Manajemen, Pimpinan Lembaga, & Tim Pengembang**  
 > **Nama Sistem:** AL-HIKMAH Learning Management System (LMS)  
 > **Status Aplikasi:** ✅ **100% Selesai, Teruji, & Siap Digunakan (Production Ready)**  
-> **Versi:** 10.6 (Minimalist Modern Elevation, Sesi Uji Coba Gratis 15 Menit Placement Test, Antislop Suite UI/Human/LayoutMobile Compliant, & Direct WhatsApp Integration)  
-> **Tanggal Pembaruan:** 11 September 2026  
+> **Versi:** 10.9 (Consolidated Product Foundations, Strategic Marketing Conversion Architecture, High-Empathy Parent Hooks, Value Comparison & Reframing Matrix, Membership Pass Elevation, Subpage Fixed-Navbar Safe Spacing)  
+> **Tanggal Pembaruan:** 17 September 2026  
 
 ---
 
 ## 📋 DAFTAR ISI LAPORAN
 
-1. [📌 1. Ringkasan Eksekutif & Nilai Manfaat Aplikasi](#-1-ringkasan-eksekutif--nilai-manfaat-aplikasi)
+1. [📌 1. Ringkasan Eksekutif, Fondasi Produk & Nilai Manfaat Aplikasi](#-1-ringkasan-eksekutif-fondasi-produk--nilai-manfaat-aplikasi)
+   - [1.1 Platform, Tech Stack, & 4 Persona Pengguna Inti](#11-platform-tech-stack--4-persona-pengguna-inti)
+   - [1.2 Positioning Produk, Brand Commitments & 4 Prinsip Desain](#12-positioning-produk-brand-commitments--4-prinsip-desain)
+   - [1.3 Kapabilitas Inti & Batasan Sistem (Capabilities & Constraints)](#13-kapabilitas-inti--batasan-sistem-capabilities--constraints)
+   - [1.4 Metrik Bisnis & Dampak Operasional](#14-metrik-bisnis--dampak-operasional)
+   - [1.5 Konsolidasi Dokumen Rekayasa & PRD ke dalam Single Source of Truth](#15-konsolidasi-dokumen-rekayasa--prd-ke-dalam-single-source-of-truth)
 2. [🎓 2. Modul Rekrutmen, Ujian Kompetensi, & Masa Percobaan Guru](#-2-modul-rekrutmen-ujian-kompetensi--masa-percobaan-guru)
    - [2.1 Alur Seleksi & Kategori Ujian Kompetensi](#21-alur-seleksi--kategori-ujian-kompetensi)
    - [2.2 Isolasi Hak Akses Dashboard (Gating Lifecycle)](#22-isolasi-hak-akses-dashboard-gating-lifecycle)
@@ -87,7 +92,7 @@
     - [24.1 Matriks 4 Paket Belajar (Opsi A)](#241-matriks-4-paket-belajar-opsi-a)
     - [24.2 Standar Durasi 90 Menit & Keunggulan Privat 1-on-1](#242-standar-durasi-90-menit--keunggulan-privat-1-on-1)
     - [24.3 Akses Publik Halaman Biaya & Proteksi Privasi Pengajar](#243-akses-publik-halaman-biaya--proteksi-privasi-pengajar)
-25. [⚖️ 25. Modul Pembagian Finansial Otomatis (Revenue Sharing Engine) & Infaq 10%](#-25-modul-pembagian-finansial-otomatis-revenue-sharing-engine--infaq-10)
+25: [⚖️ 25. Modul Pembagian Finansial Otomatis (Revenue Sharing Engine) & Infaq 10%](#-25-modul-pembagian-finansial-otomatis-revenue-sharing-engine--infaq-10)
     - [25.1 Formula Matematis Bagi Hasil Sesi Belajar](#251-formula-matematis-bagi-hasil-sesi-belajar)
     - [25.2 Isolasi Informasi Finansial Guru (Anti-Envy Isolation)](#252-isolasi-informasi-finansial-guru-anti-envy-isolation)
     - [25.3 Penyajian Multi-Role Dashboard (Admin, Mentor, Wali Santri)](#253-penyajian-multi-role-dashboard-admin-mentor-wali-santri)
@@ -97,10 +102,25 @@
     - [26.3 Aksesibilitas Kontras Tinggi CTA Section (WCAG AAA Pure White & Emerald)](#263-aksesibilitas-kontras-tinggi-cta-section-wcag-aaa-pure-white--emerald)
     - [26.4 Redesain Komprehensif Portal Blog (/blog)](#264-redesain-komprehensif-portal-blog-blog)
     - [26.5 Standarisasi Desain Seleksi Guru (/mentor/recruitment/take-test)](#265-standarisasi-desain-seleksi-guru-mentorrecruitmenttake-test)
+27. [🛡️ 27. Arsitektur Keamanan Sistem (Laravel Security Hardening & Compliance Alignment)](#-27-arsitektur-keamanan-sistem-laravel-security-hardening--compliance-alignment)
+    - [27.1 Kepatuhan Standar Laravel Cloud Compliance (SOC 2 Type 2, HIPAA, ISO 27001, OWASP Top 10)](#271-kepatuhan-standar-laravel-cloud-compliance-soc-2-type-2-hipaa-iso-27001-owasp-top-10)
+    - [27.2 Implementasi 8 Pilar Keamanan Laravel (Danushaka Dissanayaka)](#272-implementasi-8-pilar-keamanan-laravel-danushaka-dissanayaka)
+    - [27.3 Lapisan Pertahanan HTTP Security Headers & Content Security Policy (CSP)](#273-lapisan-pertahanan-http-security-headers--content-security-policy-csp)
+    - [27.4 Sistem Rate Limiting & Proteksi Brute-Force Terdistribusi](#274-sistem-rate-limiting--proteksi-brute-force-terdistribusi)
+    - [27.5 Audit Mass Assignment, Enkripsi Sesi, & Sanitasi File Upload Klien](#275-audit-mass-assignment-enkripsi-sesi--sanitasi-file-upload-klien)
+    - [27.6 Konfigurasi Web Server Apache (.htaccess) & Isolasi Berkas Lingkungan (.env)](#276-konfigurasi-web-server-apache-htaccess--isolasi-berkas-lingkungan-env)
+    - [27.7 Hasil Pengujian Keamanan Otomatis & Kesiapan Produksi (Production Ready)](#277-hasil-pengujian-keamanan-otomatis--kesiapan-produksi-production-ready)
+28. [🎯 28. Arsitektur Strategi Marketing Konversi Tinggi & Optimalisasi Etalase Biaya](#-28-arsitektur-strategi-marketing-konversi-tinggi--optimalisasi-etalase-biaya)
+    - [28.1 Latar Belakang & Eliminasi Blunder Transparansi Dapur Finansial](#281-latar-belakang--eliminasi-blunder-transparansi-dapur-finansial)
+    - [28.2 Empat Hook Emosional Utama & Trust Anchors di Beranda](#282-empat-hook-emosional-utama--trust-anchors-di-beranda)
+    - [28.3 Tabel Komparasi Nilai "TPA Tradisional vs Privat Al-Hikmah 1-on-1"](#283-tabel-komparasi-nilai-tpa-tradisional-vs-privat-al-hikmah-1-on-1)
+    - [28.4 Reframing Investasi "Rp 20.000/Hari" & Alokasi Infaq Jariyah Dakwah](#284-reframing-investasi-rp-20000hari--alokasi-infaq-jariyah-dakwah)
+    - [28.5 Redesain Kartu Membership Pass & Briefing Kurikulum Personal Santri Baru](#285-redesain-kartu-membership-pass--briefing-kurikulum-personal-santri-baru)
+    - [28.6 Standardisasi Spasi Vertikal Fixed-Navbar Subpage (.editorial-page-header)](#286-standardisasi-spasi-vertikal-fixed-navbar-subpage-editorial-page-header)
 
 ---
 
-## 📌 1. RINGKASAN EKSEKUTIF & NILAI MANFAAT APLIKASI
+## 📌 1. RINGKASAN EKSEKUTIF, FONDASI PRODUK & NILAI MANFAAT APLIKASI
 
 **AL-HIKMAH LMS** adalah platform manajemen pendampingan belajar Al-Qur'an terpadu berbasis web yang dirancang khusus untuk memfasilitasi anak-anak dan dewasa dalam belajar membaca Al-Qur'an (Iqra/Tahsin), menghafal (Tahfidz), memahami Tajwid & Makharijul Huruf, Fiqih Nisa, Bahasa Arab Dasar, Nahwu & Sharaf, serta pembiasaan Adab & Doa Harian.
 
@@ -117,9 +137,45 @@ graph LR
     F -->|"PA-EWS: Dropout Risk, Velocity, & Revenue Forecast"| B
 ```
 
-### 💼 Metrik Bisnis & Dampak Operasional:
+### 1.1 Platform, Tech Stack, & 4 Persona Pengguna Inti
 
-| Parameter Kinerja | Sebelum Digitalisasi (Manual) | Dengan AL-HIKMAH LMS (v8.8) | Peningkatan Efisiensi |
+1. **Platform**: Web responsive lintas perangkat (Desktop, Tablet, dan Smartphone) yang dioptimalkan untuk orang tua, santri, guru, dan pengelola yayasan.
+2. **Tech Stack Modern**:
+   - **Backend Framework**: Laravel 12 (PHP 8.2+) dengan arsitektur Service Provider, Job/Queue, Console Scheduler, dan Event-Driven.
+   - **Frontend & Templating**: Blade Views, Bootstrap 5.3.3 terintegrasi Custom CSS Tokens (Emerald Deep `#0d7a3e`, Warm Amber `#d97706`, Neutral Canvas `#fcfdfd`), Vanilla JavaScript modular, dan Vite asset bundling.
+   - **Database & Storage**: MySQL 8.0+ dengan spatial indices (`ST_Distance_Sphere`), Eloquent ORM, serta DataTables berbasis aset lokal.
+3. **Empat Persona Pengguna (User Personas)**:
+   - **Wali Santri (Orang Tua)**: Mencari bimbingan Al-Qur'an terpercaya, sabar, privat 1-on-1 untuk ananda dengan jadwal fleksibel, transparansi investasi, kemudahan booking uji coba gratis, dan pemantauan rapor perkembangan berkala via ponsel.
+   - **Santri (Anak-anak & Remaja)**: Mempelajari Iqra, Tahsin, Tajwid, dan Tahfidz dengan pendampingan ramah anak, penuh adab, serta termotivasi oleh gamifikasi poin Fastabiqul Khoirot dan 15 lencana prestasi.
+   - **Guru / Mentor Al-Qur'an**: Pendidik bersanad dan terverifikasi yang membimbing santri secara privat, mencatat evaluasi mutaba'ah per sesi, serta memantau jadwal dan akumulasi honor secara transparan dan berkehormatan.
+   - **Admin / Pengelola Lembaga**: Mengelola seluruh siklus operasional: kurikulum, seleksi guru (ATS), pencocokan pintar (Smart Matchmaking AI), pemantauan jadwal bebas guru, penagihan invoice, dan pembukuan bagi hasil otomatis.
+
+### 1.2 Positioning Produk, Brand Commitments & 4 Prinsip Desain
+
+1. **Positioning Produk**:  
+   Bukan sekadar kursus mengaji kilat atau marketplace guru umum lepas (*gig platform*). AL-HIKMAH berfokus pada **pendampingan santun 1 Guru 1 Santri (90 menit penuh)**, kurikulum personal berbasis evaluasi awal makhraj/tajwid, garansi kecocokan pendidik, dan keterbukaan rapor mutaba'ah digital setiap sesi ke orang tua.
+2. **Brand Commitments & Tone of Voice**:
+   - **Identitas**: AL-HIKMAH (Bimbingan Al-Qur'an & LMS Generasi Qur'ani).
+   - **Tone of Voice**: Santun, hangat, mengayomi, profesional, menenangkan, penuh adab dan amanah.
+   - **Visual Personality**: *Islamic Editorial Minimalist*, bersih, elegan, terpercaya, bebas dari ornamen berlebihan atau elemen generik (*AI slop*).
+3. **Empat Prinsip Desain Produk**:
+   - 🛡️ **Amanah & Transparansi**: Informasi biaya, kurikulum, dan fasilitas disajikan jujur tanpa klaim palsu atau biaya tersembunyi.
+   - 🌸 **Ketenangan & Kehangatan**: Desain menghadirkan ketenangan (*sakinah*), kenyamanan visual, dan rasa percaya bagi orang tua.
+   - ⚡ **Kemudahan Akses**: Navigasi intuitif, mobile-first, tombol aksi jelas, dan ramah keyboard (WCAG AA/AAA).
+   - 📖 **Respek terhadap Konten Al-Qur'an**: Tipografi dan tata letak menghormati adab dan keagungan Al-Qur'an dengan font Arab `Amiri` terstandarisasi.
+
+### 1.3 Kapabilitas Inti & Batasan Sistem (Capabilities & Constraints)
+
+- **Model Bimbingan**: Privat 1-on-1 (durasi 90 menit per sesi) dengan opsi *Home Visit* (guru datang ke rumah) atau *Online Interaktif*.
+- **Pintu Masuk Bebas Risiko**: Booking sesi uji coba / placement test awal 15 menit gratis tanpa kewajiban bayar di awal.
+- **Standar Paket Belajar**: 4 paket intensitas bertingkat (*Tunas Istiqomah*, *Bimbingan Mumtaz*, *Akselerasi Itqan*, *Mahir Tahfidz*).
+- **Proteksi Dapur Finansial (Gated Pricing)**: Rincian harga paket bimbingan dan simulasi investasi hanya dapat diakses setelah Orang Tua mendaftar dan login (`/biaya`), sedangkan formula margin bagi hasil internal lembaga tersimpan aman di level backend.
+- **Konsultasi WhatsApp Instan**: Tautan WhatsApp otomatis terintegrasi untuk pendampingan customer service cepat.
+- **Dukungan Tema Konsisten**: Mendukung mode terang (*Light*) dan gelap (*Dark*) yang nyaman di mata santri dan wali.
+
+### 1.4 Metrik Bisnis & Dampak Operasional:
+
+| Parameter Kinerja | Sebelum Digitalisasi (Manual) | Dengan AL-HIKMAH LMS (v10.9) | Peningkatan Efisiensi |
 | :--- | :--- | :--- | :---: |
 | **Akurasi Alokasi Privat 1-on-1** | Sering terjadi bentrok slot jam yang sama | Proteksi slot 1-on-1 ketat di AI & Dropdown OPSI A | **100% Zero Double-Booking** |
 | **Kepatuhan Syariat Gender Santri** | Gender guru tercampur tanpa filter ketat umur | Rule 10 Tahun Otomatis (L < 10th & P -> Ustazah, L $\ge$ 10th -> Ustadz) | **100% Sesuai Syariat** |
@@ -132,10 +188,13 @@ graph LR
 
 ### 1.5 Konsolidasi Dokumen Rekayasa & PRD ke dalam Single Source of Truth
 
-Seluruh dokumen rekayasa awal (*Product Requirements Documents / Issue Trackers*) yang sebelumnya digunakan sebagai cetak biru teknis telah **100% tuntas diimplementasikan, diverifikasi melalui unit/feature tests, dan disatukan secara komprehensif ke dalam dokumen `tentang.md` ini**:
+Seluruh dokumen rekayasa awal (*Product Requirements Documents / Issue Trackers*) yang sebelumnya digunakan sebagai cetak biru teknis telah **100% tuntas diimplementasikan, diverifikasi melalui automated test suite, dan disatukan secara komprehensif ke dalam dokumen `tentang.md` ini**:
 
 | Dokumen PRD Awal | Cakupan Fitur Utama | Status Implementasi | Rujukan Bab di `tentang.md` |
 | :--- | :--- | :---: | :--- |
+| **`PRODUCT.md`** | Fondasi Spesifikasi Produk, Tech Stack Modern (Laravel 12 + Blade + Vite), 4 Persona Pengguna Inti, Positioning Produk Privat 1-on-1, Brand Commitments & Islamic Editorial Design Principles | ✅ **Selesai 100%** | [Bab 1.1–1.3](#11-platform-tech-stack--4-persona-pengguna-inti) & [Bab 22](#-22-standarisasi-antarmuka-publik--penyelarasan-frontend-antislop-ui) |
+| **`revisi-total.md`** | Revisi Total Frontend, Standardisasi 4 Paket Bimbingan Privat (Tunas Istiqomah, Bimbingan Mumtaz, Akselerasi Itqan, Mahir Tahfidz @ 90 Mnt), Sistem Finansial Bagi Hasil & Infaq 10%, Proteksi Gated Pricing `/biaya` (Role Parent & Admin), serta Benchmark Taqiyya Bimbel (`taqiyyabimbel.my.id`) | ✅ **Selesai 100%** | [Bab 24](#-24-standardisasi-4-paket-bimbingan-privat-opsi-a--durasi-90-menit), [Bab 25](#-25-modul-pembagian-finansial-otomatis-revenue-sharing-engine--infaq-10), [Bab 26](#-26-penyelarasan-frontend-editorial-konsolidasi-seeder-bersih--ujian-guru), & [Bab 27](#-27-arsitektur-keamanan-sistem-laravel-security-hardening--compliance-alignment) |
+| **`marketing.md`** | Arsitektur Strategi Marketing Konversi Tinggi: 5 Pilar Penjualan, Tabel Komparasi Nilai TPA vs Al-Hikmah 1-on-1, Daily Cost Reframing Rp 20.000/Hari, Naskah Hook Empati Wali Santri di Beranda, dan Checklist Infaq Jariyah Dakwah | ✅ **Selesai 100%** | [Bab 28](#-28-arsitektur-strategi-marketing-konversi-tinggi--optimalisasi-etalase-biaya) |
 | **`issue.md`** | Revitalisasi Rekrutmen ATS 7-Tahap, Live Probation Hub, Orientasi 4 Pilar, dan Rating Evaluasi Sesi Orang Tua | ✅ **Selesai 100%** | [Bab 2](#-2-modul-rekrutmen-ujian-kompetensi--masa-percobaan-guru) & [Bab 7](#-7-modul-portal-wali-santri--penguncian-jadwal-pasca-bayar) |
 | **`issue_profile.md`** | Portal Detail Profil Guru Admin (`/admin/staff/{id}`), Masking & Verifikasi Rekening Bank, Dokumen CV/Sanad, Hand-Over Wizard | ✅ **Selesai 100%** | [Bab 2.7](#27-detail-profil-lengkap-guru-adminstaffid-verifikasi-rekening-bank--student-hand-over-wizard) |
 | **`matching.md`** | Smart Matchmaking AI v3.0, Integrasi Google Calendar, Smart Load Balancing (Burnout Protection), Cosine Similarity Gaya Belajar | ✅ **Selesai 100%** | [Bab 5](#-5-modul-smart-matchmaking-v30-external-calendar-sync--dynamic-load-balancing) |
@@ -1054,9 +1113,24 @@ Seluruh program menggunakan alokasi waktu **90 menit per pertemuan**. Durasi ini
 3. Mengoreksi makhraj dan sifatul huruf secara mendalam (15 menit).
 4. Memberikan nasihat adab Islami, doa penutup, serta pengisian buku mutaba'ah (10 menit).
 
-### 24.3 Akses Publik Halaman Biaya & Proteksi Privasi Pengajar
-- **Publik & Calon Wali Santri**: Halaman `/biaya` kini dapat diakses bebas oleh tamu (*guest*) dan wali santri (*parent*) untuk melihat 4 paket resmi, kalkulator simulasi sesi belajar, biaya registrasi awal Rp 150.000, serta jaminan layanan syar'i.
-- **Isolasi Akses Mentor**: Pengguna dengan peran *Mentor* dan *Student* dibatasi (`403 Forbidden`) saat mencoba mengakses halaman biaya retail, demi menjaga fokus pengajar pada mutu bimbingan dan keikhlasan berdakwah.
+### 24.3 Proteksi Gated Pricing Halaman Biaya (/biaya) & Isolasi Privasi Pengajar
+- **Proteksi Akses Gated Pricing (`/biaya`)**: Informasi harga retail paket dan nominal investasi bulanan bersifat terkunci (*gated*), hanya dapat diakses oleh Orang Tua/Wali Santri (`parent`) dan Administrator (`admin`) yang telah terdaftar dan login (`@auth`).
+- **Isolasi Tamu, Mentor, dan Santri (403 Forbidden)**: Tamu publik belum login (*guest*), santri (*student*), dan mentor/pengajar (*mentor*) dibatasi secara ketat dan langsung menerima respon `403 Forbidden` saat mencoba mengakses rute `/biaya`. Hal ini menjaga kemurnian niat dan objektivitas pengajar agar berfokus penuh pada mutu bimbingan tanpa terdistraksi margin retail.
+- **Beranda Publik Bebas Angka Rupiah Mentah**: Halaman beranda publik ([`home.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/home.blade.php)) bersih dari kalkulator simulasi harga mentah, melainkan mengedepankan proposisi nilai bimbingan santun: 1 Guru 1 Santri, durasi 90 menit penuh, rapor mutaba'ah rutin, serta kemudahan pendaftaran sesi uji coba gratis 15 menit (*placement test*).
+
+### 24.4 Standardisasi Desain & Benchmark Referensi Taqiyya Bimbel (taqiyyabimbel.my.id)
+Sebagai tolok ukur platform edtech anak era 2026, AL-HIKMAH LMS mengadopsi standar antarmuka modern yang terbukti efektif pada **Taqiyya Bimbel** (`taqiyyabimbel.my.id`):
+1. **Tipografi & Hirarki Visual**:
+   - Memadukan `Plus Jakarta Sans` dan `Inter` yang kokoh, tegas, dan mudah dibaca oleh orang tua di perangkat mobile maupun desktop.
+   - Micro-badges lembut (*pill badges*) untuk status akreditasi, rasio bimbingan (1 Guru 1 Santri), dan penanda program unggulan.
+2. **Komposisi Hero & Trust Signals**:
+   - Hero banner ramah keluarga dengan *floating trust cards* ("Pendampingan Santun: 1 Guru fokus mendampingi 1 Santri", durasi 90 menit per sesi, "Rapor Mutaba'ah Rutin").
+   - Jalur konversi tanpa hambatan: Tombol uji coba gratis 15 menit (*placement test*) terintegrasi modal interaktif dan konsultasi WhatsApp instan.
+3. **Privasi & Ekosistem Multi-Role**:
+   - Mengikuti keunggulan model Taqiyya yang memisahkan portal Siswa/Ortu dan Tutor/Guru secara profesional.
+   - Pada AL-HIKMAH LMS, privasi disempurnakan dengan *Gated Pricing*: harga retail dan rincian investasi terkunci aman bagi publik/mentor, menjaga objektivitas dan keikhlasan ustadz/ustadzah.
+4. **Nuansa Visual Quiet Luxury Islamic**:
+   - Tetap setia pada identitas Al-Qur'an melalui palet Emerald Islami (`#0d7a3e`), aksen Amber Gold hangat, serta tipografi Arab `Amiri` yang anggun untuk ayat/doa tanpa slop visual.
 
 ---
 
@@ -1173,7 +1247,237 @@ Sebagai pemenuhan arahan arsitektur data bersih (*clean database hygiene*):
 
 ---
 
+## 🛡️ 27. ARSITEKTUR KEAMANAN SISTEM (LARAVEL SECURITY HARDENING & COMPLIANCE ALIGNMENT)
+
+Mengacu pada standar kepatuhan **Laravel Cloud Compliance** ([laravel.com/cloud/docs/compliance](https://laravel.com/cloud/docs/compliance)) dan prinsip baku **8 Security Best Practices in Laravel** ([Danushaka Dissanayaka](https://medium.com/@dsjayamal/8-security-best-practices-in-laravel-ad7513798cfb)), AL-HIKMAH LMS telah memperketat seluruh postur keamanan sistem melalui pendekatan pertahanan berlapis (*defense-in-depth*).
+
+### 27.1 Kepatuhan Standar Laravel Cloud Compliance
+Platform dirancang selaras dengan standar tata kelola keamanan cloud modern:
+1. **SOC 2 Type 2 Trust Services Criteria**:
+   - **Keamanan (Security)**: Seluruh endpoint web dan API dilindungi oleh middleware keamanan terpusat, rate limiting bertingkat, dan isolasi otorisasi berbasis peran (Role-Based Access Control / RBAC) yang ketat (`admin`, `mentor`, `parent`, `student`).
+   - **Kerahasiaan (Confidentiality)**: Data sensitif (seperti nomor rekening bank, dokumen sanad, dan token integrasi) diisolasi, disensor (*masked* secara default di UI), serta dilindungi dari paparan publik.
+   - **Ketersediaan (Availability)**: Dilengkapi mekanisme proteksi DoS, cascade failover multi-provider AI (Google Gemini, DeepSeek, Qwen, Claude, GPT), bank kurikulum offline darurat, serta penanganan rate-limiting agar server tidak mengalami starvation kuota.
+2. **Kesiapan HIPAA (Health & Personal Data Safeguards)**:
+   - Menerapkan perlindungan data privasi keluarga dan rekam data anak santri.
+   - Mengisolasi riwayat sesi bimbingan, catatan evaluasi akhlak, dan data identitas santri agar hanya dapat diakses oleh wali santri bersangkutan, mentor pembimbing yang ditugaskan, dan koordinator akademik.
+3. **Penyelarasan Roadmap ISO 27001 & OWASP Top 10 Coverage**:
+   - **A01: Broken Access Control**: Middleware `EnsureUserHasRole` dan `EnsureParentHasPaidProgram` memvalidasi setiap hak akses sebelum rute dieksekusi. Tindakan mutasi dilarang keras menggunakan HTTP GET.
+   - **A02: Cryptographic Failures**: Enforce TLS/HTTPS pada lingkungan produksi (`URL::forceScheme('https')`), HTTP Strict Transport Security (HSTS) berdurasi 1 tahun (`max-age=31536000; includeSubDomains; preload`), serta hashing password menggunakan algoritma bcrypt terstandarisasi.
+   - **A03: Injection**: 100% kueri database menggunakan Eloquent ORM dan parameter binding PDO (Zero Raw Concatenation).
+   - **A04: Insecure Design**: Validasi ketersediaan privat 1-on-1 (*Zero Double-Booking*) dan validasi batasan muatan mentor (*Burnout Protection*).
+   - **A05: Security Misconfiguration**: Pemblokiran akses web server ke berkas `.env`, `.git`, `.yml`, `.sql`, `.log`, dan penonaktifan directory indexing. Penanganan error ramah pengguna tanpa membocorkan stack trace database saat `APP_DEBUG=false`.
+   - **A07: Identification and Authentication Failures**: Throttling login (maksimal 5 percobaan per menit per email + IP), perlindungan brute-force form reset password, dan regenerasi ID sesi pasca-login.
+
+### 27.2 Implementasi 8 Pilar Keamanan Laravel (Danushaka Dissanayaka)
+
+| No | Prinsip Keamanan | Risiko Tanpa Proteksi | Implementasi Resmi di AL-HIKMAH LMS |
+| :---: | :--- | :--- | :--- |
+| **1** | **Larangan `$request->all()` (Mass Assignment Prevention)** | Penyerang dapat menyuntikkan kolom ilegal seperti `is_admin`, `status`, atau `role` | Seluruh controller menggunakan FormRequest atau `$request->only([...])` dan `$request->validated()`. 100% model Eloquent menggunakan `$fillable` eksplisit tanpa satupun `$guarded = []`. |
+| **2** | **Pengamanan File Upload Klien** | Eksekusi file berbahaya (PHP/webshell) atau path traversal | Validasi ketat MIME type (`mimes:pdf` untuk CV, `mimes:pdf,jpg,jpeg,png` untuk sertifikat), batasan ukuran file (`max:2048` KB), penyimpanan pada direktori privat (`storage/app/private/`), serta sanitasi nama berkas klien menggunakan `strip_tags(basename(...))`. |
+| **3** | **Proteksi CSRF & Larangan State Mutation pada GET** | Serangan pemalsuan permintaan antar-situs (CSRF) pada aksi administratif | Seluruh aksi mutasi (buat, ubah, hapus, verifikasi) wajib menggunakan kata kerja HTTP `POST`, `PUT`, `PATCH`, atau `DELETE` ber-token `@csrf`. Pengecualian CSRF hanya diberikan secara spesifik untuk webhook resmi Pakasir Payment Gateway yang divalidasi via signature. |
+| **4** | **Proteksi Berkas `.env` Mutlak** | Kebocoran kredensial database, API key AI, dan kunci enkripsi aplikasi | Konfigurasi ganda Apache `.htaccess` (di root proyek dan di `public/`) memblokir akses langsung ke seluruh dotfiles (`.env`, `.git`), berkas `.yml`, `.sql`, `.sh`, serta log server. |
+| **5** | **Pencegahan XSS pada Template Blade** | Injeksi skrip jahat ke peramban pengguna lain melalui nama santri/ulasan | 100% output dinamis Blade menggunakan sintaks auto-escaping `{{ $data }}` yang mengeksekusi `htmlspecialchars()` secara otomatis. Penggunaan `{!! !!}` hanya diterapkan pada konten blog yang telah lolos sanitasi admin. |
+| **6** | **Penonaktifan Debug Mode di Lingkungan Produksi** | Tampilan error Laravel (Ignition) membocorkan struktur tabel, variabel `.env`, dan kueri SQL | Pengaturan baku `APP_DEBUG=false` di lingkungan produksi, didukung halaman error kustom yang elegan dan bersahabat (`401`, `402`, `403`, `404`, `419`, `429`, `500`, `503`) tanpa membocorkan rincian teknis internal server. |
+| **7** | **Rate Limiting Terdistribusi (Brute-Force & Abuse Protection)** | Serangan brute-force password, spam formulir publik, dan pemborosan kuota API AI | Diterapkannya sistem RateLimiter bertingkat: login (5x/menit), kontak (5x/menit), booking uji coba (5x/menit), pendaftaran guru (5x/menit), pelacak status (10x/menit), dan pembuatan bank soal AI (10x/menit). |
+| **8** | **HTTP Security Headers & Content Security Policy (CSP)** | Clickjacking, pencurian sesi via iframe, MIME sniffing, dan injeksi resource luar | Middleware `SecurityHeaders` menginjeksikan 7 header keamanan esensial pada seluruh siklus response HTTP secara otomatis. |
+
+### 27.3 Lapisan Pertahanan HTTP Security Headers & Content Security Policy (CSP)
+Middleware [`App\Http\Middleware\SecurityHeaders`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Middleware/SecurityHeaders.php) secara otomatis menginjeksikan header pada setiap siklus HTTP request di grup middleware `web`:
+
+1. **`X-Frame-Options: SAMEORIGIN`**: Melindungi aplikasi dari serangan pembajakan klik (*clickjacking*) dengan melarang pemuatan halaman LMS di dalam iframe domain luar.
+2. **`X-Content-Type-Options: nosniff`**: Memaksa peramban mematuhi MIME type yang dideklarasikan server, mencegah eksekusi skrip berbahaya berkedok berkas gambar.
+3. **`X-XSS-Protection: 1; mode=block`**: Mengaktifkan filter XSS reflektif bawaan peramban generasi lama.
+4. **`Referrer-Policy: strict-origin-when-cross-origin`**: Mencegah kebocoran parameter URL sensitif saat navigasi menuju domain eksternal.
+5. **`Permissions-Policy: camera=(), microphone=(), geolocation=(self), payment=(self)`**: Membatasi akses peramban terhadap API perangkat keras secara prinsip *least-privilege*.
+6. **`Strict-Transport-Security: max-age=31536000; includeSubDomains; preload`**: Memaksa koneksi HTTPS terenkripsi selama minimal 1 tahun pada peramban klien.
+7. **`Content-Security-Policy` (CSP)**:
+   - `default-src 'self'`: Seluruh resource secara default hanya boleh berasal dari origin yang sama.
+   - `script-src`: Mengizinkan skrip lokal, inline script penting Blade/Vite, serta CDN terpercaya (cdnjs, unpkg, jsdelivr).
+   - `style-src`: Mengizinkan stylesheet lokal, inline style Bootstrap/Antislop, Google Fonts, dan CDN terdaftar.
+   - `font-src`: Mengizinkan Google Fonts dan ikon Bootstrap/FontAwesome.
+   - `connect-src`: Mengizinkan koneksi API resmi jadwal sholat (Aladhan, MyQuran) dan payment gateway (Pakasir).
+   - `frame-ancestors 'self'`: Mencegah embedding iframe dari domain luar.
+   - `form-action 'self' https://app.pakasir.com`: Membatasi target pengiriman form hanya ke internal LMS dan gateway Pakasir.
+   - `object-src 'none'`: Memblokir total pemuatan plugin Flash/Java applet yang usang dan rentan.
+
+### 27.4 Sistem Rate Limiting & Proteksi Brute-Force Terdistribusi
+Dikonfigurasi secara terpusat pada [`AppServiceProvider::configureRateLimiting()`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Providers/AppServiceProvider.php):
+
+```mermaid
+graph TD
+    User["Permintaan Pengguna / Bot"] --> Throttle{"Evaluasi Rate Limiter"}
+    Throttle -->|"POST /login (≤ 5x / mnt)"| AuthPass["Lolos Autentikasi"]
+    Throttle -->|"POST /login (> 5x / mnt)"| Block429["429 Too Many Requests (Cooldown 60 Detik)"]
+    Throttle -->|"POST /kontak (≤ 5x / mnt)"| ContactPass["Pesan Diteruskan"]
+    Throttle -->|"POST /kontak (> 5x / mnt)"| Block429
+    Throttle -->|"POST /uji-coba-gratis (≤ 5x / mnt)"| BookingPass["Booking Diproses"]
+    Throttle -->|"POST /uji-coba-gratis (> 5x / mnt)"| Block429
+    Throttle -->|"POST /mentor/questions/* (≤ 10x / mnt)"| AIPass["Generate Soal AI"]
+    Throttle -->|"POST /mentor/questions/* (> 10x / mnt)"| Block429
+```
+
+- **`login`**: Dibatasi 5 percobaan per menit berbasis kunci gabungan `strtolower(email) . '|' . IP`. Mencegah serangan kamus (*dictionary attacks*) dan *credential stuffing*.
+- **`contact`**: Dibatasi 5 pengiriman per menit per IP, mencegah spam kotak masuk admin.
+- **`trial_booking`**: Dibatasi 5 pemesanan per menit per IP, mencegah bot membanjiri antrean uji coba penempatan gratis.
+- **`mentor_apply`**: Dibatasi 5 pendaftaran per menit per IP, mencegah serangan DoS pengisian berkas pelamar.
+- **`status_tracker`**: Dibatasi 10 pengecekan per menit per IP, mencegah penyerang melakukan enumerasi nomor telepon pelamar secara membabi-buta.
+- **`ai_generation`**: Dibatasi 10 generasi soal per menit per user mentor, mengamankan saldo token API dan menghindari pemblokiran *rate-limit* dari vendor AI eksternal.
+
+### 27.5 Audit Mass Assignment, Enkripsi Sesi, & Sanitasi File Upload Klien
+1. **Audit Total Kueri & Mass Assignment**:
+   - Seluruh pemanggilan `$request->all()` pada alur kritis ketersediaan (`AvailabilityController`) dan rekrutmen admin (`AdminRecruitmentController`) telah diganti secara presisi menjadi `$request->only([...])`.
+   - Tidak ada model yang menggunakan `$guarded = []`.
+2. **Pengerasan Cookie Sesi**:
+   - `config/session.php` dikonfigurasi dengan:
+     - `'http_only' => true`: Menghalangi pencurian sesi via serangan JavaScript XSS (`document.cookie`).
+     - `'same_site' => 'lax'`: Mencegah kebocoran sesi pada permintaan lintas-situs (CSRF defense).
+     - `'secure' => env('SESSION_SECURE_COOKIE', env('APP_ENV') === 'production')`: Memastikan cookie hanya dikirimkan via kanal HTTPS saat aplikasi berstatus production.
+3. **Sanitasi File Upload Klien**:
+   - Nama berkas asli saat diunggah calon guru disanitasi menggunakan `strip_tags(basename($file->getClientOriginalName()))` sebelum disimpan ke basis data, mengeliminasi risiko injeksi skrip atau manipulasi direktori nama berkas (*path traversal*).
+   - Berkas sensitif (CV dan sertifikat) disimpan pada disk `private` (`storage/app/private/mentor_applications/...`), bukan di folder publik.
+
+### 27.6 Konfigurasi Web Server Apache (.htaccess) & Isolasi Berkas Lingkungan (.env)
+1. **Root `.htaccess` (Pencegahan Kesalahan Konfigurasi Host)**:
+   - Mengantisipasi skenario di mana Apache DocumentRoot mengarah ke root repositori, berkas root `.htaccess` secara otomatis memblokir akses ke berkas `.env`, direktori `storage/logs`, folder framework (`app/`, `bootstrap/`, `database/`, `config/`), dan meneruskan seluruh lalu lintas web ke direktori `/public/`.
+2. **Public `.htaccess` (Perlindungan Baris Terdepan)**:
+   - Menambahkan aturan pemblokiran berkas tersembunyi (*dotfiles*): `RewriteRule "(^|/)\.(?!well-known)" - [F,L]`.
+   - Menolak akses ke ekstensi berbahaya: `<FilesMatch "\.(env|sql|log|sh|yml|yaml|git|lock)$"> Deny from all </FilesMatch>`.
+   - Menonaktifkan penelusuran direktori secara global (`Options -Indexes`).
+
+### 27.7 Hasil Pengujian Keamanan Otomatis & Kesiapan Produksi (Production Ready)
+Seluruh lapisan keamanan telah diverifikasi melalui pengujian fitur otomatis [`tests/Feature/SecurityHardeningTest.php`](file:///c:/xampp/htdocs/al-hikmah-lms/tests/Feature/SecurityHardeningTest.php) dengan hasil **8 Passed (51 assertions, 100% Green)**:
+
+```text
+PASS  Tests\Feature\SecurityHardeningTest
+✓ security headers are present on web responses
+✓ hsts header is present on secure requests
+✓ contact form has rate limiting
+✓ trial booking has rate limiting
+✓ status tracker has rate limiting
+✓ session cookie configuration is secure
+✓ file upload rejects dangerous file extensions
+✓ login route has rate limiting
+
+Tests:    8 passed (51 assertions)
+Duration: 3.40s
+```
+
+---
+
+## 🎯 28. ARSITEKTUR STRATEGI MARKETING KONVERSI TINGGI & OPTIMALISASI ETALASE BIAYA
+
+### 28.1 Latar Belakang & Eliminasi Blunder Transparansi Dapur Finansial
+Dalam strategi penetapan harga (*pricing strategy*) jasa pendidikan Al-Qur'an, terdapat kecenderungan awal untuk menampilkan rincian alokasi biaya internal ke etalase publik (misalnya memajang pembagian Rp 100.000 untuk Ustadz, Rp 45.000 untuk operasional yayasan, dan Rp 5.000 untuk infaq).
+
+Namun, hasil evaluasi pemasaran dan psikologi konsumen membuktikan bahwa memajang kalkulasi dapur finansial secara mentah ke publik merupakan kesalahan pemasaran (*marketing blunder*):
+1. **Memicu Skeptisisme Wali Santri**: Orang tua secara psikologis akan menganalisis margin operasional lembaga daripada berfokus pada manfaat kurikulum dan kenyamanan anak.
+2. **Menurunkan Marwah Pendidik**: Menampilkan nominal gaji guru secara eksplisit di katalog publik dapat mengurangi wibawa (*muru'ah*) ustadz dan ustadzah pembimbing.
+3. **Kesan Defensif & Menimbulkan Keraguan**: Lembaga terkesan merasa bersalah atau meminta izin atas penetapan harga jasanya.
+
+**Solusi Arsitektural**:
+Seluruh formula pembagian proporsional internal (Guru : Yayasan : Infaq Dakwah) tetap terkunci rapi di dalam modul backend (*Revenue Sharing Engine* bab 25). Sementara pada antarmuka publik (`/` dan `/biaya`), strategi dibungkus dengan pendekatan *Pure High-Value Marketing* yang bertumpu pada empati orang tua, pembuktian efisiensi waktu, pembingkaian nilai (*reframing*), dan kepastian kualitas.
+
+```mermaid
+graph TD
+    subgraph Dapur Internal [Backend & Admin Dashboard Al-Hikmah]
+        Formula["Formula Bagi Hasil Sesi (Bab 25)"]
+        GuruPay["Hak Penuh Ustadz: Rp 100.000"]
+        OpsPay["Operasional & Platform: Rp 45.000"]
+        InfaqPay["Infaq Dakwah 10%: Rp 5.000"]
+        Formula --> GuruPay
+        Formula --> OpsPay
+        Formula --> InfaqPay
+    end
+
+    subgraph Etalase Publik [Frontend Beranda & Halaman Biaya]
+        ParentView["Orang Tua / Calon Wali Santri"]
+        HookEmpati["Hook Frustrasi & Rasa Bersalah Orang Tua"]
+        Komparasi["Tabel Nilai: 90 Mnt Privat vs 5 Mnt Antre TPA"]
+        Reframing["Investasi Rp 20.000/Hari (Seharga Jajan Anak)"]
+        JariyahBadge["Sertifikasi Infaq Jariyah Dakwah Lembaga"]
+        ParentView --> HookEmpati
+        ParentView --> Komparasi
+        ParentView --> Reframing
+        ParentView --> JariyahBadge
+    end
+```
+
+### 28.2 Empat Hook Emosional Utama & Trust Anchors di Beranda
+Diimplementasikan pada [`resources/views/home.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/home.blade.php):
+
+1. **Hero Headline (Parent Frustration & Guilt Relief)**:
+   - *Headline*: *"Mau Ajarkan Anak Ngaji Sendiri tapi Sering Kehabisan Sabar setelah Lelah Bekerja?"*
+   - *Fungsi Psikologis*: Menghapus rasa bersalah orang tua modern yang kesulitan meluangkan energi sabar untuk mendampingi anak setelah pulang kantor. Al-Hikmah hadir sebagai mitra terpercaya, bukan penghakim.
+
+2. **Floating Assessment Badge (Penyelamat Waktu yang Buntu)**:
+   - *Pesan*: *"Sudah berbulan-bulan belajar tapi bacaan ananda masih tersendat? Kami siap mengevaluasi tajwid & makhraj ananda lebih dulu."*
+   - *Fungsi Psikologis*: Menyentuh orang tua yang resah karena anak sudah lama mengaji di tempat lain namun belum ada perkembangan berarti.
+
+3. **Section Nilai Guru (Jaminan Kesabaran & Sanad)**:
+   - *Headline*: *"Bukan Sekadar Bisa Baca, tapi Guru yang Punya Waktu & Kesabaran Mendengarkan."*
+   - *Fungsi Psikologis*: Menjamin suasana belajar ramah anak tanpa bentakan atau tekanan terburu-buru.
+
+4. **Bottom CTA (Investasi Bekal Akhirat)**:
+   - *Headline*: *"Hadiah Terbaik untuk Masa Depan Ananda: Bacaan Al-Qur'an yang Tartil dan Terjaga Seumur Hidup."*
+   - *Fungsi Psikologis*: Mengangkat bimbingan Al-Qur'an dari sekadar pengeluaran rutin menjadi warisan abadi yang pahalanya terus mengalir.
+
+### 28.3 Tabel Komparasi Nilai "TPA Tradisional vs Privat Al-Hikmah 1-on-1"
+Diterapkan pada [`resources/views/biaya.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/biaya.blade.php) tepat sebelum rincian paket:
+
+| Parameter Evaluasi | Mengaji Biasa / TPA Tradisional | Privat Eksklusif AL-HIKMAH |
+| :--- | :--- | :--- |
+| **Rasio Perhatian Guru** | 1 Guru mengajar 15 sampai 25 santri sekaligus | 1 Guru mendampingi 1 Santri (fokus 100%) |
+| **Waktu Disimak Guru** | Cuma 5 sampai 7 menit per hari (sisanya antre dan bermain) | 90 Menit Penuh (disimak runtut tanpa terburu-buru) |
+| **Laporan Progres Belajar** | Tidak ada atau buku paraf manual mingguan | Rapor digital real-time langsung ke HP orang tua |
+| **Kurikulum Belajar** | Disamaratakan seluruh kelas tanpa melihat bakat | Personal, disesuaikan dengan ritme dan karakter anak |
+| **Hasil & Kecepatan Belajar** | Berbulan-bulan jalan di tempat karena minim perhatian | 3 sampai 4 kali lebih cepat lancar dan mutqin |
+
+### 28.4 Reframing Investasi "Rp 20.000/Hari" & Alokasi Infaq Jariyah Dakwah
+1. **Reframing Waktu Emas Anak**:
+   - Satu sesi privat 90 menit di Al-Hikmah setara dengan 3 pekan waktu mengantre di pengajian umum. Orang tua menghemat masa keemasan (*golden age*) ananda agar tidak terbuang sia-sia.
+2. **Reframing Pengeluaran Harian**:
+   - Investasi bimbingan dianalogikan mulai *Rp 20.000 per hari* (seharga segelas es kopi susu atau jajanan sore), namun memberi dampak kecakapan Al-Qur'an seumur hidup.
+3. **Inklusi Infaq Jariyah Dakwah**:
+   - Pada checklist setiap paket bimbingan disematkan klausul: *"Sudah termasuk infaq jariyah dakwah Al-Qur'an"*.
+   - Mengalihkan fokus dari hitungan biaya komersial menjadi kemitraan dakwah yang menghadirkan ketenangan batin (*spiritual peace of mind*) bagi Ayah dan Bunda.
+
+### 28.5 Redesain Kartu Membership Pass & Briefing Kurikulum Personal Santri Baru
+Bagian registrasi santri baru pada [`resources/views/biaya.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/biaya.blade.php) direvitalisasi menjadi kartu keanggotaan privat (*Membership Pass*):
+- **Identitas Personal**: Menyapa wali santri dengan *"Ahlan wa Sahlan, [Nama Wali Santri]"* lengkap dengan lencana akun terverifikasi.
+- **4 Pilar Komitmen Bimbingan**:
+  - *Kurikulum Personal*: Disesuaikan ritme dan karakter anak.
+  - *Satu Guru Satu Santri*: Pendampingan 90 menit penuh tanpa distraksi.
+  - *Rapor Digital Terpadu*: Pantauan mutabaah langsung dari gawai.
+  - *Infaq Jariyah Dakwah*: Berkah mengalir bagi keluarga santri.
+- **Kartu Investasi Registrasi Awal**: Penataan nominal Rp 150.000 (1x di awal) dengan tipografi numerik tebal (`tnum-price`), lencana hijau, dan ringkasan benefit asesmen makhraj, tajwid, dan portal santri.
+
+### 28.6 Standardisasi Spasi Vertikal Fixed-Navbar Subpage (.editorial-page-header)
+Mengatasi layout di mana bagian header subpage terlalu dempet dengan bilah navigasi melayang (*fixed navbar*), ditambahkan sistem kelas utilitas terpadu pada [`public/assets/css/style.css`](file:///c:/xampp/htdocs/al-hikmah-lms/public/assets/css/style.css):
+
+```css
+/* --- 8. Editorial Subpage Header (Fixed Navbar Safe Spacing) --- */
+.editorial-page-header,
+main#main-content > section:first-child.py-5 {
+    padding-top: calc(var(--navbar-height) + 3rem) !important;
+    padding-bottom: 3.5rem;
+}
+
+@media (min-width: 992px) {
+    .editorial-page-header,
+    main#main-content > section:first-child.py-5 {
+        padding-top: calc(var(--navbar-height) + 4.5rem) !important;
+        padding-bottom: 4rem;
+    }
+}
+```
+
+- **Perlindungan Otomatis**: Selector `main#main-content > section:first-child.py-5` menjamin seluruh halaman turunan (seperti `/biaya`, `/kontak`, `/faq`, `/galeri`) otomatis mendapatkan ruang aman sebesar ~64px di bawah navbar tanpa penyesuaian manual berulang.
+- **Keseimbangan Simetris**: Mengeliminasi kelas ganda `py-4` di dalam container, menciptakan jarak atas dan bawah judul yang seimbang dan mewah (*editorial proportion*).
+
+---
+
 **Disahkan oleh:** Tim Manajemen & Pengembang AL-HIKMAH LMS  
 **Status Dokumen:** Living Specification & Single Source of Truth  
-**Tanggal:** 12 September 2026
+**Tanggal:** 16 September 2026
+
 

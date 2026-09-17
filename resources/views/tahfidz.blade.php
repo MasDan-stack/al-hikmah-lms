@@ -176,9 +176,13 @@
                                     </div>
                                     <div class="d-flex flex-wrap gap-2 justify-content-md-end">
                                         @auth
-                                            @if (auth()->user()->isParent() || auth()->user()->isAdmin())
+                                            @if (auth()->user()->isParent())
                                                 <a href="{{ route('biaya') }}" class="btn btn-primary-custom py-2 px-3 rounded-pill fw-bold shadow-sm">
-                                                    <i class="bi bi-pencil-square me-1"></i> Pilih &amp; Mulai Program
+                                                    <i class="bi bi-info-circle me-1"></i> Informasi Pendampingan
+                                                </a>
+                                            @elseif (auth()->user()->isAdmin())
+                                                <a href="{{ route('biaya') }}" class="btn btn-primary-custom py-2 px-3 rounded-pill fw-bold shadow-sm">
+                                                    <i class="bi bi-info-circle me-1"></i> Informasi Pendampingan (Kamu Administrator)
                                                 </a>
                                             @endif
                                         @else

@@ -634,6 +634,7 @@ noscript div {
     display: flex;
     align-items: center;
     gap: 10px;
+    border-top: none;
 }
 
 .navbar-collapse {
@@ -10240,6 +10241,21 @@ table.dataTable thead th.dt-ordering-desc .dt-column-order:after {
     background-color: var(--primary);
     color: #ffffff;
     border-color: var(--primary);
+}
+
+/* --- 8. Editorial Subpage Header (Fixed Navbar Safe Spacing) --- */
+.editorial-page-header,
+main#main-content > section:first-child.py-5 {
+    padding-top: calc(var(--navbar-height) + 3rem) !important;
+    padding-bottom: 3.5rem;
+}
+
+@media (min-width: 992px) {
+    .editorial-page-header,
+    main#main-content > section:first-child.py-5 {
+        padding-top: calc(var(--navbar-height) + 4.5rem) !important;
+        padding-bottom: 4rem;
+    }
 }
 
 

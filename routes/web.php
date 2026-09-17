@@ -114,13 +114,19 @@ Route::get('/jadwal-sholat', [LandingController::class, 'jadwalSholat'])->name('
 Route::post('/program/pre-register', [RegisteredUserController::class, 'preRegisterProgram'])->name('program.pre-register');
 
 // Booking Sesi Uji Coba Gratis 15 Menit (Placement Test)
-Route::post('/uji-coba-gratis', [TrialBookingController::class, 'store'])->name('trial.store');
+Route::post('/uji-coba-gratis', [TrialBookingController::class, 'store'])
+    ->middleware('throttle:trial_booking')
+    ->name('trial.store');
 
 // Halaman Bergabung (Pendaftaran Pendamping / Guru Al-Qur'an) - V8.3
 Route::get('/bergabung', [MentorApplicationController::class, 'create'])->name('bergabung');
-Route::post('/bergabung', [MentorApplicationController::class, 'store'])->name('mentor.recruitment.store');
+Route::post('/bergabung', [MentorApplicationController::class, 'store'])
+    ->middleware('throttle:mentor_apply')
+    ->name('mentor.recruitment.store');
 Route::get('/cek-status-lamaran', [MentorApplicationController::class, 'status'])->name('mentor.recruitment.status');
-Route::post('/cek-status-lamaran', [MentorApplicationController::class, 'checkStatus'])->name('mentor.recruitment.check-status');
+Route::post('/cek-status-lamaran', [MentorApplicationController::class, 'checkStatus'])
+    ->middleware('throttle:status_tracker')
+    ->name('mentor.recruitment.check-status');
 
 // Halaman Roadmap / Peta Alur Belajar
 Route::get('/roadmap', [LandingController::class, 'roadmap'])->name('roadmap');
@@ -132,7 +138,9 @@ Route::get('/faq', function () {
 
 // Halaman Hubungi Kami (Contact Form)
 Route::get('/kontak', [ContactController::class, 'index'])->name('contact');
-Route::post('/kontak', [ContactController::class, 'store'])->name('contact.store');
+Route::post('/kontak', [ContactController::class, 'store'])
+    ->middleware('throttle:contact')
+    ->name('contact.store');
 
 // Halaman Galeri Interaktif Publik
 Route::get('/galeri', [LandingController::class, 'galeri'])->name('galeri');

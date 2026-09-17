@@ -48,7 +48,7 @@ class MentorApplicationController extends Controller
             $application->documents()->create([
                 'document_type' => 'cv',
                 'file_path' => $path,
-                'file_name' => $request->file('cv')->getClientOriginalName(),
+                'file_name' => strip_tags(basename($request->file('cv')->getClientOriginalName())),
                 'file_size' => $request->file('cv')->getSize() / 1024,
                 'mime_type' => $request->file('cv')->getMimeType(),
             ]);
@@ -59,7 +59,7 @@ class MentorApplicationController extends Controller
             $application->documents()->create([
                 'document_type' => 'certificate',
                 'file_path' => $path,
-                'file_name' => $request->file('certificate')->getClientOriginalName(),
+                'file_name' => strip_tags(basename($request->file('certificate')->getClientOriginalName())),
                 'file_size' => $request->file('certificate')->getSize() / 1024,
                 'mime_type' => $request->file('certificate')->getMimeType(),
             ]);

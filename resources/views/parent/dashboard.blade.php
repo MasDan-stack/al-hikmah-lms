@@ -484,7 +484,7 @@
                                     Jejak Berkah Dakwah: {{ $parentBlessing['completed_sessions'] }} Sesi Terlaksana
                                 </div>
                                 <div class="text-muted" style="font-size: 0.8rem;">
-                                    Alhamdulillah, dari sesi belajar ananda, sebesar <strong>Rp {{ number_format($parentBlessing['infaq_allocated'], 0, ',', '.') }}</strong> (10% dari alokasi kas yayasan Al-Hikmah) telah disalurkan untuk infaq dakwah Al-Qur'an.
+                                    Alhamdulillah, dari keikutsertaan ananda dalam sesi bimbingan, dana sebesar Rp {{ number_format($parentBlessing['infaq_allocated'], 0, ',', '.') }} telah disalurkan melalui program infaq dakwah Al-Qur'an. Jazakumullah khairan atas amanah dan kebersamaan Ayah serta Bunda bersama Al-Hikmah.
                                 </div>
                             </div>
                         </div>

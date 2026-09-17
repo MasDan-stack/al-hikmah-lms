@@ -107,7 +107,7 @@ class AvailabilityController extends Controller
         ]);
 
         try {
-            $results = $this->availabilityService->saveAvailability($mentor->id, $request->all());
+            $results = $this->availabilityService->saveAvailability($mentor->id, $request->only(['max_students', 'days', 'availability']));
 
             // Kirim notifikasi ke Admin jika mentor menetapkan hari libur
             $holidayDays = collect($results)->filter(fn ($avail) => $avail->is_holiday)->keys();

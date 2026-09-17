@@ -272,7 +272,7 @@
             </ul>
 
             <!-- Actions (Theme Toggle + Notifications + Login/Dashboard) -->
-            <div class="navbar-actions d-flex align-items-center gap-2 gap-lg-3 mt-3 mt-lg-0 pt-2 pt-lg-0 border-top border-lg-0">
+            <div class="navbar-actions d-flex align-items-center gap-2 gap-lg-3 mt-3 mt-lg-0">
                 <!-- Theme Toggle Button (Desktop) -->
                 <button type="button" class="theme-toggle-btn d-none d-lg-flex shadow-sm" id="themeToggle" title="Ganti Tema (Gelap/Terang)" aria-label="Ganti Tema">
                     <i class="bi bi-moon-fill" id="themeIcon"></i>
