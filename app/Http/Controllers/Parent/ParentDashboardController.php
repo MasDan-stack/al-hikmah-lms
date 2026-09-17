@@ -8,6 +8,7 @@ use App\Models\Message;
 use App\Models\Payment;
 use App\Models\Progress;
 use App\Models\Session;
+use App\Models\TrialBooking;
 use App\Services\RevenueAnalyticsService;
 use Illuminate\View\View;
 
@@ -99,6 +100,25 @@ class ParentDashboardController extends Controller
         // 7. Berkah Infaq & Transparansi Sesi (Alokasi 10% Kas Yayasan untuk Dakwah)
         $parentBlessing = app(RevenueAnalyticsService::class)->getParentSessionBlessingSummary($childIds);
 
+        // 8. Sesi Uji Coba Gratis 15 Menit (Placement Test Ananda)
+        $parentPhone = $parent?->emergency_phone ?? $user->phone;
+        $cleanPhone = preg_replace('/[^0-9]/', '', (string) $parentPhone);
+        if (str_starts_with($cleanPhone, '0')) {
+            $cleanPhone = '62'.substr($cleanPhone, 1);
+        }
+
+        $parentTrialBookings = TrialBooking::with(['program', 'assignedMentor.user'])
+            ->where(function ($q) use ($user, $cleanPhone) {
+                $q->where('user_id', $user->id);
+                if (! empty($cleanPhone)) {
+                    $q->orWhere('whatsapp', $cleanPhone)
+                        ->orWhere('whatsapp', 'like', "%{$cleanPhone}%");
+                }
+            })
+            ->latest()
+            ->take(5)
+            ->get();
+
         return view('parent.dashboard', compact(
             'user',
             'parent',
@@ -115,7 +135,8 @@ class ParentDashboardController extends Controller
             'unreadMessagesCount',
             'pendingFeedbackSessions',
             'activeInterventionTickets',
-            'parentBlessing'
+            'parentBlessing',
+            'parentTrialBookings'
         ));
     }
 }

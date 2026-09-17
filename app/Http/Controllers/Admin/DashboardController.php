@@ -14,6 +14,7 @@ use App\Models\Payment;
 use App\Models\Session;
 use App\Models\SessionConfirmation;
 use App\Models\Student;
+use App\Models\TrialBooking;
 use App\Models\User;
 use App\Services\AlertService;
 use App\Services\RevenueAnalyticsService;
@@ -90,6 +91,13 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        // 🎁 Permintaan Sesi Uji Coba Gratis 15 Menit (Placement Test)
+        $pendingTrialBookingsCount = TrialBooking::where('status', 'pending')->count();
+        $recentTrialBookings = TrialBooking::with(['program', 'assignedMentor.user'])
+            ->latest()
+            ->take(6)
+            ->get();
+
         return view('admin.dashboard', compact(
             'totalStudents',
             'totalMentors',
@@ -113,7 +121,9 @@ class DashboardController extends Controller
             'recentFeedbacks',
             'expiringProbationsCount',
             'openTicketsCount',
-            'recentTickets'
+            'recentTickets',
+            'pendingTrialBookingsCount',
+            'recentTrialBookings'
         ));
     }
 }

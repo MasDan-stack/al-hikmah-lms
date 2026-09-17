@@ -54,6 +54,11 @@ class TrialBookingController extends Controller
             }
         }
 
+        // Automatically associate user_id if logged in (Parent)
+        if (auth()->check()) {
+            $validated['user_id'] = auth()->id();
+        }
+
         $booking = TrialBooking::create($validated);
 
         // Generate WA coordination link for the parent

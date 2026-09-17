@@ -1476,8 +1476,50 @@ main#main-content > section:first-child.py-5 {
 
 ---
 
+## BAB 29: STRATEGI KONVERSI BERJENJANG PROGRAM TAHFIDZ & INTEGRASI MULTI-DASHBOARD SESI UJI COBA GRATIS 15 MENIT (VERSI 11.0)
+
+### 29.1 Latar Belakang & Eliminasi Tombol Pendaftaran Bertumpuk
+Sebelumnya pada [`resources/views/tahfidz.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/tahfidz.blade.php), terdapat fenomena redundansi tombol pendaftaran (menampilkan 4 hingga 5 tombol sekaligus: *Daftar Program Tahfidz*, *Daftar Akun Wali Santri*, *Daftar Gratis*, dan *Konsultasi & Daftar Tahfidz*). Hal ini membebani kognitif calon orang tua (*decision fatigue*) dan menurunkan rasio konversi.
+
+### 29.2 Dua Aksi Utama Berjenjang (Tiered Conversion Funnel)
+Antarmuka disederhanakan menjadi 2 aksi utama berjenjang dengan tingkat friksi terendah:
+1. **Bagi Pengunjung Publik / Tamu (Guest)**:
+   - **Primary CTA (Konversi Tertinggi / Zero Financial Friction)**: *"Coba Sesi Uji Coba Gratis 15 Menit"* (Membuka `#trialModal` yang otomatis mengarahkan fokus ke `tahfidz_hafalan` atau Evaluasi Kelancaran Hafalan & Murajaah). Orang tua tidak dibebani komitmen biaya di awal sehingga lebih terdorong mencoba.
+   - **Secondary CTA (Pendekatan Ramah WhatsApp)**: *"Konsultasi via WhatsApp"* (Tautan langsung dengan teks ramah: *"Assalamualaikum Admin, saya ingin konsultasi mengenai program Tahfidz Al-Qur'an untuk ananda"*).
+2. **Bagi Wali Santri Terautentikasi (`@auth` Parent)**:
+   - *"Daftarkan Anak ke Tahfidz"* (membuka modal pendaftaran terhubung `#tahfidzLoggedInModal`).
+   - *"Informasi Pendampingan & Biaya"* (menuju route `biaya`).
+
+### 29.3 Edukasi Santun Penambahan Program Aktif bagi Wali Santri
+Jika orang tua telah memiliki santri yang aktif di salah satu program bimbingan (misal: Paket 4x/8x dari `biaya.blade.php`), sistem secara cerdas menampilkan kartu informasi santun di halaman `/tahfidz`:
+- Menampilkan daftar ananda dan program yang sedang diikuti.
+- Menjelaskan bahwa pendaftaran program Tahfidz dipersilakan, namun sangat disarankan berkonsultasi via WhatsApp terlebih dahulu agar kapasitas hafalan dan waktu istirahat ananda tetap seimbang.
+- Menyediakan tombol cepat: *"Konsultasi Penambahan Program (WhatsApp)"*.
+
+### 29.4 Penegakan Privasi Harga (*Gated Pricing*)
+Kartu *"Program Unggulan Eksklusif: Mahir Tahfidz Al-Qur'an (Rp 2.700.000 / bulan)"* yang sebelumnya terpampang di halaman publik `/tahfidz` **dihapus total**. Tindakan ini menegakkan aturan bahwa seluruh nominal rupiah dan simulasi investasi privat terlindungi di balik autentikasi wali santri (`/biaya`), menjaga privasi margin lembaga dan mencegah kebocoran harga ke publik.
+
+### 29.5 Kebijakan Siklus Hidup Akun Sesi Uji Coba (Tanpa Auto-Delete)
+Setelah sesi 15 menit selesai:
+1. **Akun & Data Tidak Dihapus Otomatis**: Data calon santri dan nomor WhatsApp tetap tersimpan permanen di basis data agar hasil catatan evaluasi guru tidak hilang dan admin dapat melakukan tindak lanjut ramah.
+2. **Perubahan Status Bertahap**:
+   - `pending` -> Pendaftaran baru diterima, menunggu koordinasi admin.
+   - `scheduled` -> Jadwal temu 15 menit ditetapkan bersama guru.
+   - `completed` -> Sesi evaluasi 15 menit selesai. Guru memasukkan catatan hasil asesmen makhraj/tajwid/hafalan.
+3. **Pintu Masuk Bimbingan Resmi**: Pada dashboard orang tua, sesi yang telah selesai menampilkan tombol *"Pilih Paket Bimbingan Resmi"* yang langsung mengarahkan ke halaman `/biaya` tanpa perlu mengetik ulang data profil anak.
+
+### 29.6 Integrasi Pemantauan Real-Time di 3 Dashboard
+1. **Admin Dashboard ([`Admin\DashboardController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Admin/DashboardController.php))**:
+   - Panel monitor pendaftar sesi gratis 15 menit lengkap dengan indikator badge pending, data anak, wali santri, fokus asesmen, waktu preferensi, dan tombol 1-klik chat WhatsApp follow-up.
+2. **Parent Dashboard ([`Parent\ParentDashboardController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Parent/ParentDashboardController.php))**:
+   - Widget status pendaftaran sesi uji coba ananda (jadwal temu, guru pendamping, dan catatan hasil evaluasi).
+3. **Mentor Dashboard ([`Mentor\DashboardController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Mentor/DashboardController.php))**:
+   - Widget tugas sesi uji coba & placement test 15 menit yang ditugaskan kepada guru bersangkutan, lengkap dengan kontak wali untuk koordinasi talaqqi singkat.
+
+---
+
 **Disahkan oleh:** Tim Manajemen & Pengembang AL-HIKMAH LMS  
 **Status Dokumen:** Living Specification & Single Source of Truth  
-**Tanggal:** 16 September 2026
+**Tanggal:** 17 September 2026
 
 

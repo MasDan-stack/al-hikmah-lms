@@ -440,6 +440,107 @@
         </div>
     </div>
 
+    <!-- Section Sesi Uji Coba Gratis 15 Menit (Placement Test Leads) -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden" style="background: var(--card-bg); border: 1px solid var(--border-color) !important;">
+                <div class="card-header border-0 pt-4 px-4 pb-3 d-flex justify-content-between align-items-center flex-wrap gap-2" style="background: transparent;">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <h5 class="fw-bold mb-0" style="color: var(--text-primary);"><i class="bi bi-clock-history me-2 text-warning"></i>Permintaan Sesi Uji Coba Gratis 15 Menit</h5>
+                            @if($pendingTrialBookingsCount > 0)
+                                <span class="badge bg-warning text-dark fw-bold rounded-pill px-2.5 py-1 small">{{ $pendingTrialBookingsCount }} Baru</span>
+                            @else
+                                <span class="badge bg-success-subtle text-success fw-semibold rounded-pill px-2.5 py-1 small">Semua Terjadwal</span>
+                            @endif
+                        </div>
+                        <p class="text-muted small mb-0">Calon santri yang mendaftar uji coba perkenalan &amp; asesmen 15 menit (tahsin, tahfidz, iqra). Follow up via WhatsApp untuk kesepakatan jadwal.</p>
+                    </div>
+                    <div class="text-end">
+                        <span class="text-muted small">Total Pending: <strong>{{ $pendingTrialBookingsCount }}</strong> sesi</span>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0" style="border-color: var(--border-color);">
+                            <thead class="table-light small" style="border-bottom: 2px solid var(--border-color);">
+                                <tr>
+                                    <th class="ps-4">Calon Santri</th>
+                                    <th>Orang Tua / Wali</th>
+                                    <th>Fokus Uji Coba</th>
+                                    <th>Waktu &amp; Metode</th>
+                                    <th>Status &amp; Guru</th>
+                                    <th class="text-end pe-4 no-sort">Aksi Follow-Up</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($recentTrialBookings as $tb)
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="fw-bold text-dark">{{ $tb->child_name }}</div>
+                                            <small class="text-muted">{{ $tb->child_age }} • {{ $tb->gender === 'L' ? 'Ikhwan' : 'Akhwat' }}</small>
+                                        </td>
+                                        <td>
+                                            <div class="fw-semibold text-dark">{{ $tb->parent_name }}</div>
+                                            <small class="text-muted">
+                                                <i class="bi bi-geo-alt me-1"></i>{{ $tb->city ?? 'Online' }}
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 rounded-pill small fw-semibold">
+                                                {{ $tb->focus_label }}
+                                            </span>
+                                            @if($tb->notes)
+                                                <div class="text-muted small mt-1 text-truncate" style="max-width: 220px;" title="{{ $tb->notes }}">
+                                                    <em>"{{ $tb->notes }}"</em>
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="small fw-semibold text-dark">
+                                                <i class="bi bi-clock me-1 text-secondary"></i>{{ $tb->time_slot_label }}
+                                            </div>
+                                            <small class="text-muted text-capitalize">
+                                                <i class="bi bi-camera-video me-1"></i>{{ $tb->learning_method }}
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <span class="badge {{ $tb->status_badge }} px-2.5 py-1 rounded-pill small mb-1 d-inline-block">
+                                                {{ \App\Models\TrialBooking::STATUS_LABELS[$tb->status] ?? ucfirst($tb->status) }}
+                                            </span>
+                                            @if($tb->assignedMentor)
+                                                <div class="small text-secondary">
+                                                    <i class="bi bi-person-badge me-1"></i>{{ $tb->assignedMentor->getDisplayName() }}
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td class="text-end pe-4 text-nowrap">
+                                            @php
+                                                $waText = "Assalamu'alaikum Ayah/Bunda {$tb->parent_name}, kami dari Admin Lembaga AL-HIKMAH terkait pendaftaran Sesi Uji Coba Gratis 15 Menit untuk ananda {$tb->child_name} (Fokus: {$tb->focus_label}). Kapan kiranya waktu yang paling nyaman untuk kami jadwalkan bersama Ustadz/Ustadzah?";
+                                                $waLink = 'https://api.whatsapp.com/send?phone=' . $tb->whatsapp . '&text=' . rawurlencode($waText);
+                                            @endphp
+                                            <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
+                                               class="btn btn-sm btn-success rounded-pill px-3 fw-bold d-inline-flex align-items-center gap-1">
+                                                <i class="bi bi-whatsapp"></i> Chat Wali
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4 text-muted small">
+                                            <i class="bi bi-inbox fs-3 d-block mb-1 text-secondary"></i>
+                                            Belum ada antrean pendaftaran sesi uji coba gratis 15 menit baru.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Section Widget Monitor Aktivitas Orang Tua (Parent Monitoring Widget) -->
     <div class="row g-4 mb-4">
         <div class="col-12">

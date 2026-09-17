@@ -78,124 +78,94 @@
                             </div>
                         </div>
 
+                        {{-- Notifikasi Khusus Orang Tua yang Sudah Terdaftar & Memiliki Program Berjalan --}}
+                        @auth
+                            @if(auth()->user()->isParent())
+                                @php
+                                    $parentUser = auth()->user();
+                                    $parentProfile = $parentUser?->parentProfile;
+                                    $activeEnrollments = collect();
+                                    if ($parentProfile) {
+                                        $studentIds = $parentProfile->students()->pluck('id');
+                                        $activeEnrollments = \App\Models\Enrollment::with(['student.user', 'program'])
+                                            ->whereIn('student_id', $studentIds)
+                                            ->whereIn('status', [
+                                                \App\Enums\EnrollmentStatus::ACTIVE->value,
+                                                \App\Enums\EnrollmentStatus::CONFIRMED->value,
+                                                \App\Enums\EnrollmentStatus::WAITING_CONFIRMATION->value,
+                                                \App\Enums\EnrollmentStatus::WAITING_PAYMENT->value,
+                                            ])
+                                            ->latest()
+                                            ->get();
+                                    }
+                                @endphp
+
+                                @if($activeEnrollments->isNotEmpty())
+                                    <div class="p-3 p-md-4 rounded-4 border mb-4 shadow-sm text-start" style="background: rgba(13, 122, 62, 0.05); border-color: rgba(13, 122, 62, 0.2) !important;">
+                                        <div class="d-flex align-items-start gap-3">
+                                            <div class="p-2 rounded-circle bg-success text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 36px; height: 36px;">
+                                                <i class="bi bi-info-circle-fill fs-5"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="fw-bold text-success mb-1">Status Bimbingan Ananda Saat Ini</h6>
+                                                <p class="text-secondary small mb-2" style="line-height: 1.5;">
+                                                    Alhamdulillah, ananda tercatat aktif mengikuti bimbingan:
+                                                    @foreach($activeEnrollments as $enr)
+                                                        <strong class="text-dark">{{ $enr->student?->getDisplayName() }}</strong> ({{ $enr->program?->name ?? 'Program Bimbingan' }})@if(!$loop->last), @endif
+                                                    @endforeach.
+                                                </p>
+                                                <p class="text-secondary small mb-0" style="line-height: 1.5;">
+                                                    Ayah/Bunda dapat mendaftarkan ananda ke program Tahfidz tambahan kapan saja. Namun, agar beban hafalan dan jadwal istirahat ananda tetap seimbang, kami menyarankan untuk berkonsultasi terlebih dahulu dengan koordinator kurikulum Al-Hikmah.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
+                        @endauth
+
+                        {{-- 2 Aksi Utama Berjenjang --}}
                         <div class="d-flex flex-wrap gap-3">
                             @auth
                                 @if(auth()->user()->isParent())
+                                    @if(isset($activeEnrollments) && $activeEnrollments->isNotEmpty())
+                                        <a href="{{ wa_url("Assalamualaikum Admin Al-Hikmah, ananda sudah aktif di bimbingan Al-Hikmah. Saya ingin konsultasi penambahan program Tahfidz Al-Qur'an untuk ananda.") }}"
+                                           target="_blank" rel="noopener noreferrer" class="btn_2" style="background: rgba(13, 122, 62, 0.1); color: #0d7a3e; border-color: #0d7a3e;">
+                                            <i class="bi bi-whatsapp me-1"></i> Konsultasi via WhatsApp
+                                        </a>
+                                    @endif
                                     <button type="button" class="btn_1" data-bs-toggle="modal" data-bs-target="#tahfidzLoggedInModal">
-                                        Daftar Program Tahfidz <i class="bi bi-arrow-right ms-1"></i>
+                                        <i class="bi bi-book-half me-1"></i> Daftarkan Anak ke Tahfidz
                                     </button>
                                     <a href="{{ route('biaya') }}" class="btn_2">
-                                        <i class="bi bi-info-circle me-1"></i> Rincian Paket &amp; Biaya
+                                        <i class="bi bi-info-circle me-1"></i> Informasi Pendampingan &amp; Biaya
                                     </a>
                                 @elseif(auth()->user()->isAdmin())
                                     <a href="{{ route('admin.dashboard') }}" class="btn_1">
-                                        Dashboard Admin <i class="bi bi-speedometer2 ms-1"></i>
+                                        <i class="bi bi-speedometer2 me-1"></i> Dashboard Admin
                                     </a>
                                     <a href="{{ route('biaya') }}" class="btn_2">
-                                        <i class="bi bi-info-circle me-1"></i> Halaman Biaya (Admin)
+                                        <i class="bi bi-info-circle me-1"></i> Informasi Pendampingan (Kamu Administrator)
                                     </a>
                                 @else
                                     <a href="{{ route('dashboard') }}" class="btn_1">
-                                        Masuk ke Dashboard <i class="bi bi-speedometer2 ms-1"></i>
+                                        <i class="bi bi-speedometer2 me-1"></i> Masuk ke Dashboard
+                                    </a>
+                                    <a href="{{ route('biaya') }}" class="btn_2">
+                                        <i class="bi bi-info-circle me-1"></i> Lihat Rincian Biaya
                                     </a>
                                 @endif
                             @else
-                                <button type="button" class="btn_1" data-bs-toggle="modal" data-bs-target="#tahfidzDaftarModal">
-                                    Daftar Program Tahfidz <i class="bi bi-arrow-right ms-1"></i>
+                                {{-- Primary CTA (Konversi Tertinggi / Tanpa Beban Biaya Awal) --}}
+                                <button type="button" class="btn_1" data-bs-toggle="modal" data-bs-target="#trialModal" data-focus="tahfidz_hafalan">
+                                    <i class="bi bi-clock-history me-1"></i> Coba Sesi Uji Coba Gratis 15 Menit
                                 </button>
-                                <a href="{{ route('register') }}" class="btn_2">
-                                    <i class="bi bi-person-plus me-1"></i> Daftar Akun Wali Santri
+                                {{-- Secondary CTA (Pendekatan Ramah via WhatsApp) --}}
+                                <a href="{{ wa_url("Assalamualaikum Admin, saya ingin konsultasi mengenai program Tahfidz Al-Qur'an untuk ananda") }}"
+                                   target="_blank" rel="noopener noreferrer" class="btn_2">
+                                    <i class="bi bi-whatsapp me-1"></i> Konsultasi via WhatsApp
                                 </a>
-                                <button type="button" class="btn btn-outline-success rounded-pill px-3 py-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#trialModal">
-                                    <i class="bi bi-gift-fill me-1"></i> Daftar Gratis
-                                </button>
                             @endauth
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Kartu Program Unggulan: Mahir Tahfidz Al-Qur'an (18x / Bulan) -->
-            <div class="row justify-content-center mt-5 pt-3" data-reveal>
-                <div class="col-lg-10">
-                    <div class="card border-2 border-success shadow-sm rounded-4 overflow-hidden" style="background: var(--card-bg);">
-                        <div class="card-header border-0 py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2" style="background: rgba(13, 122, 62, 0.06);">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-success text-white p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-                                    <i class="bi bi-award-fill fs-5"></i>
-                                </div>
-                                <div>
-                                    <span class="badge bg-warning text-dark fw-bold rounded-pill px-2.5 py-1 small mb-1">Program Unggulan Eksklusif</span>
-                                    <h4 class="fw-bold mb-0 text-success fs-5">Mahir Tahfidz Al-Qur'an (18 Pertemuan / Bulan)</h4>
-                                </div>
-                            </div>
-                            <div class="text-end">
-                                <div class="fs-4 fw-bold text-success">Rp 2.700.000 <span class="text-muted small fs-6">/ bulan</span></div>
-                                <small class="text-muted" style="font-size: 0.78rem;">Flat Rp 150.000 / sesi privat (90 Menit)</small>
-                            </div>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="row g-4 align-items-center">
-                                <div class="col-md-7">
-                                    <p class="text-secondary small mb-3">
-                                        Program halaqah privat intensif bagi santri yang berazam menghafal Al-Qur'an secara mutqin dengan bimbingan talaqqi 1-on-1 bersama ustadz/ustadzah hafidz/hafidzah pilihan.
-                                    </p>
-                                    <div class="row g-2">
-                                        <div class="col-sm-6">
-                                            <div class="d-flex align-items-center gap-2 small text-secondary">
-                                                <i class="bi bi-check-circle-fill text-success"></i>
-                                                <span>18 Sesi Privat (90 Menit)</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="d-flex align-items-center gap-2 small text-secondary">
-                                                <i class="bi bi-check-circle-fill text-success"></i>
-                                                <span>Talaqqi Hafalan Baru</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="d-flex align-items-center gap-2 small text-secondary">
-                                                <i class="bi bi-check-circle-fill text-success"></i>
-                                                <span>Murajaah Terjadwal Mutqin</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="d-flex align-items-center gap-2 small text-secondary">
-                                                <i class="bi bi-check-circle-fill text-success"></i>
-                                                <span>Buku Mutaba'ah &amp; Rapor</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5 text-md-end">
-                                    <div class="p-3 rounded-3 bg-light border text-start mb-3">
-                                        <div class="small fw-semibold text-success mb-1"><i class="bi bi-heart-fill me-1"></i> Amanah &amp; Keberkahan Bersama</div>
-                                        <p class="text-secondary small mb-0" style="font-size: 0.78rem;">
-                                            Setiap langkah bimbingan ananda turut mendukung syiar dakwah Al-Qur'an dan kepedulian bagi santri yatim.
-                                        </p>
-                                    </div>
-                                    <div class="d-flex flex-wrap gap-2 justify-content-md-end">
-                                        @auth
-                                            @if (auth()->user()->isParent())
-                                                <a href="{{ route('biaya') }}" class="btn btn-primary-custom py-2 px-3 rounded-pill fw-bold shadow-sm">
-                                                    <i class="bi bi-info-circle me-1"></i> Informasi Pendampingan
-                                                </a>
-                                            @elseif (auth()->user()->isAdmin())
-                                                <a href="{{ route('biaya') }}" class="btn btn-primary-custom py-2 px-3 rounded-pill fw-bold shadow-sm">
-                                                    <i class="bi bi-info-circle me-1"></i> Informasi Pendampingan (Kamu Administrator)
-                                                </a>
-                                            @endif
-                                        @else
-                                            <a href="{{ route('register') }}" class="btn btn-primary-custom py-2 px-3 rounded-pill fw-bold shadow-sm">
-                                                <i class="bi bi-person-plus me-1"></i> Daftar Sekarang
-                                            </a>
-                                        @endauth
-                                        <button type="button" class="btn btn-outline-custom py-2 px-3 rounded-pill fw-semibold" data-bs-toggle="modal" data-bs-target="#trialModal">
-                                            <i class="bi bi-gift me-1"></i> Daftar Gratis
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -213,17 +183,31 @@
                 <div class="cta-icon"><i class="bi bi-bookmark-star-fill"></i></div>
                 <h2 class="display-6 fw-bold mb-3 text-white">Mulai Perjalanan <span class="text-warning">Menghafal Al-Qur'an</span></h2>
                 <p class="lead text-white-50 max-w-700 mx-auto mb-4">Dari satu ayat, satu halaman, hingga satu juz, setiap langkah ikhtiar adalah kebaikan abadi.</p>
-                @auth
-                    @if(auth()->user()->isParent())
-                        <button type="button" class="btn_1 bg-warning text-dark border-0 fw-bold shadow" data-bs-toggle="modal" data-bs-target="#tahfidzLoggedInModal" style="background-image: none !important; background-color: #ffc107 !important; color: #1a1a2e !important;">
-                            <i class="bi bi-book-half me-1"></i> Daftarkan Anak ke Tahfidz
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    @auth
+                        @if(auth()->user()->isParent())
+                            <button type="button" class="btn_1 bg-warning text-dark border-0 fw-bold shadow" data-bs-toggle="modal" data-bs-target="#tahfidzLoggedInModal" style="background-image: none !important; background-color: #ffc107 !important; color: #1a1a2e !important;">
+                                <i class="bi bi-book-half me-1"></i> Daftarkan Anak ke Tahfidz
+                            </button>
+                            <a href="{{ wa_url("Assalamualaikum Admin, saya ingin konsultasi mengenai program Tahfidz Al-Qur'an untuk ananda") }}"
+                               target="_blank" rel="noopener noreferrer" class="btn_2 text-white border-white">
+                                <i class="bi bi-whatsapp me-1"></i> Konsultasi via WhatsApp
+                            </a>
+                        @else
+                            <a href="{{ route('dashboard') }}" class="btn_1 bg-warning text-dark border-0 fw-bold shadow" style="background-image: none !important; background-color: #ffc107 !important; color: #1a1a2e !important;">
+                                <i class="bi bi-speedometer2 me-1"></i> Buka Dashboard
+                            </a>
+                        @endif
+                    @else
+                        <button type="button" class="btn_1 bg-warning text-dark border-0 fw-bold shadow" data-bs-toggle="modal" data-bs-target="#trialModal" data-focus="tahfidz_hafalan" style="background-image: none !important; background-color: #ffc107 !important; color: #1a1a2e !important;">
+                            <i class="bi bi-clock-history me-1"></i> Coba Sesi Uji Coba Gratis 15 Menit
                         </button>
-                    @endif
-                @else
-                    <button type="button" class="btn_1 bg-warning text-dark border-0 fw-bold shadow" data-bs-toggle="modal" data-bs-target="#tahfidzDaftarModal" style="background-image: none !important; background-color: #ffc107 !important; color: #1a1a2e !important;">
-                        <i class="bi bi-pencil-square me-1"></i> Konsultasi &amp; Daftar Tahfidz
-                    </button>
-                @endauth
+                        <a href="{{ wa_url("Assalamualaikum Admin, saya ingin konsultasi mengenai program Tahfidz Al-Qur'an untuk ananda") }}"
+                           target="_blank" rel="noopener noreferrer" class="btn_2 text-white border-white">
+                            <i class="bi bi-whatsapp me-1"></i> Konsultasi via WhatsApp
+                        </a>
+                    @endauth
+                </div>
             </div>
         </div>
     </section>

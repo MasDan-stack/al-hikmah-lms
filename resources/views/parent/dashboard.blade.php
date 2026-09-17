@@ -13,6 +13,76 @@
             </div>
         @endif
 
+        {{-- Widget Status Sesi Uji Coba Gratis 15 Menit Ananda --}}
+        @if (isset($parentTrialBookings) && $parentTrialBookings->isNotEmpty())
+            <div class="card border-0 shadow-sm rounded-4 bg-white mb-4 overflow-hidden" style="border: 1px solid rgba(13, 122, 62, 0.2) !important;">
+                <div class="card-header bg-success bg-opacity-10 border-0 py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="rounded-circle bg-success text-white p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                            <i class="bi bi-clock-history fs-6"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0">Status Sesi Uji Coba Gratis 15 Menit (Placement Test)</h6>
+                            <small class="text-muted">Perkenalan santai dan evaluasi bacaan ananda bersama Ustadz/Ustadzah Al-Hikmah</small>
+                        </div>
+                    </div>
+                    <span class="badge bg-success text-white rounded-pill px-3 py-1 small fw-semibold">
+                        <i class="bi bi-gift-fill me-1"></i> Bebas Biaya
+                    </span>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        @foreach ($parentTrialBookings as $ptb)
+                            <div class="col-md-6">
+                                <div class="p-3 rounded-4 bg-light border h-100 position-relative">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                        <div>
+                                            <div class="fw-bold text-dark">{{ $ptb->child_name }} ({{ $ptb->child_age }})</div>
+                                            <small class="text-muted"><i class="bi bi-bookmark-star me-1 text-success"></i>{{ $ptb->focus_label }}</small>
+                                        </div>
+                                        <span class="badge {{ $ptb->status_badge }} px-2.5 py-1 rounded-pill small">
+                                            {{ \App\Models\TrialBooking::STATUS_LABELS[$ptb->status] ?? ucfirst($ptb->status) }}
+                                        </span>
+                                    </div>
+                                    <div class="small bg-white p-3 rounded-3 border mb-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-1.5">
+                                            <span class="text-muted"><i class="bi bi-clock me-1"></i>Preferensi Waktu:</span>
+                                            <span class="fw-semibold text-dark">{{ $ptb->time_slot_label }} ({{ ucfirst($ptb->learning_method) }})</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-1.5">
+                                            <span class="text-muted"><i class="bi bi-person-badge me-1"></i>Guru Pendamping:</span>
+                                            <span class="fw-semibold text-success">{{ $ptb->assignedMentor?->getDisplayName() ?? 'Sedang Ditugaskan Tim' }}</span>
+                                        </div>
+                                        @if($ptb->assessment_result)
+                                            <div class="mt-2 pt-2 border-top">
+                                                <div class="text-muted small fw-semibold mb-1"><i class="bi bi-chat-quote me-1 text-primary"></i>Catatan Hasil Evaluasi:</div>
+                                                <div class="text-secondary small fst-italic" style="font-size: 0.8rem;">"{{ $ptb->assessment_result }}"</div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center">
+                                        @if($ptb->status === 'completed')
+                                            <a href="{{ route('biaya') }}" class="btn btn-sm btn-primary-custom rounded-pill px-3 fw-bold">
+                                                <i class="bi bi-mortarboard me-1"></i> Pilih Paket Bimbingan Resmi
+                                            </a>
+                                        @else
+                                            <a href="{{ wa_url("Assalamualaikum Admin Al-Hikmah, saya ingin menanyakan jadwal sesi uji coba 15 menit untuk ananda {$ptb->child_name}") }}"
+                                               target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-semibold">
+                                                <i class="bi bi-whatsapp me-1"></i> Koordinasi Jadwal Sesi
+                                            </a>
+                                            <a href="{{ route('biaya') }}" class="btn btn-sm btn-light rounded-pill px-3 fw-semibold text-secondary">
+                                                Lihat Pilihan Paket
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
+
         @if ($children->isNotEmpty())
             <!-- Info Akun Login Santri & Password Default -->
             <div class="card border-0 shadow-sm rounded-4 bg-white mb-4 overflow-hidden">

@@ -525,6 +525,77 @@
             </div>
         @endif
 
+        {{-- 🎁 PANEL PENUGASAN SESI UJI COBA & PLACEMENT TEST (15 MENIT) --}}
+        @if(isset($assignedTrialBookings) && $assignedTrialBookings->isNotEmpty())
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden border-start border-4 border-warning bg-white">
+                <div class="card-header bg-warning bg-opacity-10 border-0 py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="rounded-circle bg-warning text-dark p-2 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                            <i class="bi bi-clock-history fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0">Tugas Sesi Uji Coba &amp; Placement Test (15 Menit)</h6>
+                            <small class="text-muted">Asesmen singkat tingkat bacaan calon santri binaan baru</small>
+                        </div>
+                    </div>
+                    <span class="badge bg-warning text-dark rounded-pill px-3 py-1 fw-bold">
+                        {{ $assignedTrialBookings->count() }} Penugasan
+                    </span>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        @foreach($assignedTrialBookings as $atb)
+                            <div class="col-md-6 col-lg-4">
+                                <div class="p-3 rounded-4 bg-light border h-100 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                            <div>
+                                                <div class="fw-bold text-dark">{{ $atb->child_name }} ({{ $atb->child_age }})</div>
+                                                <small class="text-muted"><i class="bi bi-person me-1"></i>Wali: {{ $atb->parent_name }}</small>
+                                            </div>
+                                            <span class="badge {{ $atb->status_badge }} px-2 py-1 rounded-pill" style="font-size: 0.72rem;">
+                                                {{ \App\Models\TrialBooking::STATUS_LABELS[$atb->status] ?? ucfirst($atb->status) }}
+                                            </span>
+                                        </div>
+                                        <div class="p-2.5 bg-white rounded-3 border small mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span class="text-muted">Fokus Uji:</span>
+                                                <span class="fw-semibold text-success">{{ $atb->focus_label }}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span class="text-muted">Waktu:</span>
+                                                <span class="fw-semibold text-dark">{{ $atb->time_slot_label }}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span class="text-muted">Metode:</span>
+                                                <span class="fw-semibold text-dark text-capitalize">{{ $atb->learning_method }}</span>
+                                            </div>
+                                            @if($atb->notes)
+                                                <div class="text-muted mt-2 pt-1 border-top" style="font-size: 0.75rem;">
+                                                    <em>"{{ $atb->notes }}"</em>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 pt-2 border-top d-flex justify-content-between align-items-center">
+                                        @php
+                                            $waMentorText = "Assalamu'alaikum Ayah/Bunda {$atb->parent_name}, saya Guru dari Lembaga AL-HIKMAH yang ditugaskan untuk sesi uji coba perkenalan 15 menit ananda {$atb->child_name}. Apakah waktu ananda bersiap sesuai jadwal?";
+                                            $waMentorLink = 'https://api.whatsapp.com/send?phone=' . $atb->whatsapp . '&text=' . rawurlencode($waMentorText);
+                                        @endphp
+                                        <a href="{{ $waMentorLink }}" target="_blank" rel="noopener noreferrer"
+                                           class="btn btn-sm btn-success rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-1">
+                                            <i class="bi bi-whatsapp"></i> Hubungi Wali
+                                        </a>
+                                        <span class="small text-muted" style="font-size: 0.75rem;">15 Menit Sesi</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <!-- 🔔 NOTIFIKASI KEHADIRAN SANTRI HARI INI -->
         @if(isset($attendedTodaySessions) && $attendedTodaySessions->isNotEmpty())
             <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden border-start border-4 border-success bg-white">

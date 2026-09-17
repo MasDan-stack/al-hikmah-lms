@@ -11,6 +11,7 @@ use App\Models\MentorProbationTracking;
 use App\Models\Progress;
 use App\Models\Session;
 use App\Models\Student;
+use App\Models\TrialBooking;
 use App\Services\DecisionSupport\AhpRankingService;
 use App\Services\RevenueAnalyticsService;
 use Illuminate\View\View;
@@ -180,6 +181,16 @@ class DashboardController extends Controller
             ? app(RevenueAnalyticsService::class)->getMentorSalarySlipData($mentorId, $slipMonth, $slipYear)
             : null;
 
+        // 🎁 Sesi Uji Coba & Placement Test (15 Menit) yang Ditugaskan
+        $assignedTrialBookings = ($mentorId && ! $isRecruitmentMode)
+            ? TrialBooking::with(['program', 'user'])
+                ->where('assigned_mentor_id', $mentorId)
+                ->whereIn('status', ['scheduled', 'contacted', 'pending', 'completed'])
+                ->latest()
+                ->take(5)
+                ->get()
+            : collect();
+
         return view('mentor.dashboard', compact(
             'isRecruitmentMode',
             'mentorApplication',
@@ -203,7 +214,8 @@ class DashboardController extends Controller
             'activeIntervention',
             'ahpPerformance',
             'honorariumSummary',
-            'salarySlip'
+            'salarySlip',
+            'assignedTrialBookings'
         ));
     }
 

@@ -32,6 +32,7 @@
                                 Nama Orang Tua / Wali <span class="text-danger">*</span>
                             </label>
                             <input type="text" class="form-control trial-input" id="trialParentName" name="parent_name"
+                                   value="{{ auth()->check() ? auth()->user()->name : '' }}"
                                    required placeholder="Nama Anda (Bunda / Ayah)" autocomplete="name">
                             <div class="invalid-feedback small">Mohon masukkan nama orang tua atau wali.</div>
                         </div>
@@ -42,6 +43,7 @@
                                 Nomor WhatsApp Aktif <span class="text-danger">*</span>
                             </label>
                             <input type="tel" class="form-control trial-input" id="trialWhatsapp" name="whatsapp"
+                                   value="{{ auth()->check() ? (auth()->user()->phone ?? auth()->user()->parentProfile?->emergency_phone ?? '') : '' }}"
                                    required placeholder="Contoh: 081234567890" autocomplete="tel">
                             <div class="invalid-feedback small">Mohon masukkan nomor WhatsApp untuk konfirmasi jadwal.</div>
                         </div>
@@ -183,3 +185,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const trialModalEl = document.getElementById('trialModal');
+        if (trialModalEl) {
+            trialModalEl.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                if (button && button.getAttribute('data-focus')) {
+                    const focusVal = button.getAttribute('data-focus');
+                    const focusSelect = document.getElementById('trialFocus');
+                    if (focusSelect) {
+                        focusSelect.value = focusVal;
+                    }
+                }
+            });
+        }
+    });
+</script>

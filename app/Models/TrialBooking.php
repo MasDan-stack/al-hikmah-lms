@@ -12,6 +12,7 @@ class TrialBooking extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'parent_name',
         'child_name',
         'whatsapp',
@@ -64,6 +65,11 @@ class TrialBooking extends Model
         'completed' => 'Sesi Selesai',
         'cancelled' => 'Dibatalkan',
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function program(): BelongsTo
     {
