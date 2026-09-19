@@ -63,10 +63,15 @@ class DashboardController extends Controller
         // 📌 Widget Monitor User Terdaftar & Role
         $recentUsers = User::with('role')->latest()->take(5)->get();
 
-        // 📌 Widget Monitor Aktivitas Orang Tua (Parent Monitoring Activity)
-        $recentConfirmations = SessionConfirmation::with(['session.student.user', 'parent.user'])
+        // 📌 Widget Monitor Aktivitas Presensi & Konfirmasi (Wali Santri & Input Guru)
+        $recentConfirmations = SessionConfirmation::with([
+            'session.student.user',
+            'session.student.enrollments.program',
+            'session.mentor.user',
+            'parent.user',
+        ])
             ->latest()
-            ->take(5)
+            ->take(10)
             ->get();
 
         $recentPayments = Payment::with(['student.user', 'program'])

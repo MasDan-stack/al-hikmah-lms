@@ -391,6 +391,14 @@ Route::middleware(['auth', 'role:mentor'])
         Route::get('/salary-slip/print', [MentorDashboardController::class, 'printSalarySlip'])->name('salary-slip.print');
         Route::get('/sessions', [MentorSessionController::class, 'index'])->name('sessions.index');
         Route::post('/sessions/{id}/status', [MentorSessionController::class, 'updateStatus'])->name('sessions.update-status');
+        Route::get('/sessions/{id}/confirm-attendance', [MentorSessionController::class, 'showConfirmAttendance'])
+            ->withoutMiddleware(['role:mentor'])
+            ->middleware(['role:mentor,admin'])
+            ->name('sessions.confirm-attendance');
+        Route::post('/sessions/{id}/confirm-attendance', [MentorSessionController::class, 'confirmAttendance'])
+            ->withoutMiddleware(['role:mentor'])
+            ->middleware(['role:mentor,admin'])
+            ->name('sessions.confirm-attendance.submit');
         Route::get('/students', [MentorStudentController::class, 'index'])->name('students.index');
         Route::get('/students/parents', [MentorStudentController::class, 'parents'])->name('students.parents');
         Route::get('/students/{id}', [MentorStudentController::class, 'show'])->name('students.show');

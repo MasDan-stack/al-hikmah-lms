@@ -126,21 +126,21 @@
                                 @endphp
                                 <tr>
                                     <td class="ps-4 py-3">
-                                        <div class="fw-bold text-dark">
+                                        <div class="fw-bold text-heading">
                                             {{ $session->date ? \Carbon\Carbon::parse($session->date)->locale('id')->isoFormat('dddd, D MMMM Y') : '-' }}
                                         </div>
-                                        <span class="badge bg-light text-dark border font-monospace mt-1" style="font-size: 0.72rem;">
+                                        <span class="badge bg-light text-secondary border font-monospace mt-1" style="font-size: 0.72rem;">
                                             <i class="bi bi-clock-fill text-warning me-1"></i>{{ date('H:i', strtotime($session->time)) }} WIB
                                         </span>
                                     </td>
                                     <td>
-                                        <div class="fw-bold text-dark">{{ $student?->getDisplayName() }}</div>
+                                        <div class="fw-bold text-heading">{{ $student?->getDisplayName() }}</div>
                                         <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.68rem;">
                                             {{ $programName }}
                                         </span>
                                     </td>
                                     <td>
-                                        <div class="small fw-semibold text-dark">{{ $student?->parent_name ?? $student?->parent?->user?->name ?? 'Wali Santri' }}</div>
+                                        <div class="small fw-semibold text-heading">{{ $student?->parent_name ?? $student?->parent?->user?->name ?? 'Wali Santri' }}</div>
                                         @if($parentPhone)
                                             <a href="https://wa.me/{{ $cleanPhone }}?text=Assalamu'alaikum%20Bapak/Ibu%20wali%20santri%20{{ urlencode($student?->getDisplayName() ?? '') }}" 
                                                target="_blank" 
@@ -192,27 +192,40 @@
                                     </td>
                                     <td>
                                         @if($session->confirmation)
-                                            @if($session->confirmation->status === 'hadir')
-                                                <span class="badge bg-success text-white rounded-pill px-3 py-1">
-                                                    <i class="bi bi-check-circle-fill me-1"></i> Hadir
+                                            <div class="d-flex flex-column align-items-start gap-1">
+                                                @if($session->confirmation->status === 'hadir')
+                                                    <span class="badge bg-success text-white rounded-pill px-3 py-1">
+                                                        <i class="bi bi-check-circle-fill me-1"></i> Hadir
+                                                    </span>
+                                                @elseif($session->confirmation->status === 'izin')
+                                                    <span class="badge bg-warning text-dark rounded-pill px-3 py-1" title="{{ $session->confirmation->notes }}">
+                                                        <i class="bi bi-info-circle-fill me-1"></i> Izin
+                                                    </span>
+                                                @elseif($session->confirmation->status === 'sakit')
+                                                    <span class="badge bg-danger text-white rounded-pill px-3 py-1" title="{{ $session->confirmation->notes }}">
+                                                        <i class="bi bi-heart-pulse-fill me-1"></i> Sakit
+                                                    </span>
+                                                @endif
+
+                                                <span class="badge bg-light text-secondary rounded-pill border px-2 py-0.5" style="font-size: 0.68rem;">
+                                                    {{ $session->confirmation->confirmed_by === 'mentor' ? 'Input Guru' : 'Konfirmasi Wali' }}
                                                 </span>
-                                            @elseif($session->confirmation->status === 'izin')
-                                                <span class="badge bg-warning text-dark rounded-pill px-3 py-1" title="{{ $session->confirmation->notes }}">
-                                                    <i class="bi bi-info-circle-fill me-1"></i> Izin
-                                                </span>
-                                            @elseif($session->confirmation->status === 'sakit')
-                                                <span class="badge bg-danger text-white rounded-pill px-3 py-1" title="{{ $session->confirmation->notes }}">
-                                                    <i class="bi bi-heart-pulse-fill me-1"></i> Sakit
-                                                </span>
-                                            @endif
-                                            @if($session->confirmation->notes)
-                                                <small class="d-block text-muted fst-italic mt-1" style="font-size: 0.68rem; max-width: 150px;">
-                                                    "{{ \Illuminate\Support\Str::limit($session->confirmation->notes, 30) }}"
-                                                </small>
-                                            @endif
+
+                                                @if($session->confirmation->proof_image_url)
+                                                    <a href="{{ $session->confirmation->proof_image_url }}" target="_blank" class="badge bg-light text-primary border rounded-pill text-decoration-none px-2 py-0.5 d-inline-flex align-items-center gap-1" title="Buka foto dokumentasi pengajaran">
+                                                        <i class="bi bi-camera-fill text-success"></i> Foto Bukti
+                                                    </a>
+                                                @endif
+
+                                                @if($session->confirmation->notes)
+                                                    <small class="d-block text-muted fst-italic mt-0.5" style="font-size: 0.68rem; max-width: 150px;">
+                                                        "{{ \Illuminate\Support\Str::limit($session->confirmation->notes, 30) }}"
+                                                    </small>
+                                                @endif
+                                            </div>
                                         @else
                                             <span class="badge bg-light text-secondary rounded-pill border px-3 py-1">
-                                                <i class="bi bi-hourglass-split me-1"></i> Belum Konfirmasi
+                                                <i class="bi bi-hourglass-split me-1"></i> Belum Ada Presensi
                                             </span>
                                         @endif
                                     </td>
@@ -231,15 +244,23 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="text-end pe-4">
-                                        <form action="{{ route('mentor.sessions.update-status', $session->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            <select name="status" class="form-select form-select-sm rounded-pill shadow-xs" onchange="this.form.submit()" style="font-size: 0.75rem;">
-                                                <option value="scheduled" {{ $session->status === 'scheduled' ? 'selected' : '' }}>⏳ Terjadwal</option>
-                                                <option value="completed" {{ $session->status === 'completed' ? 'selected' : '' }}>✅ Selesai</option>
-                                                <option value="cancelled" {{ $session->status === 'cancelled' ? 'selected' : '' }}>❌ Batalkan</option>
-                                            </select>
-                                        </form>
+                                    <td class="text-end pe-4 text-nowrap">
+                                        <div class="d-flex align-items-center justify-content-end gap-1.5 flex-wrap">
+                                            <a href="{{ route('mentor.sessions.confirm-attendance', $session->id) }}" 
+                                               class="btn btn-sm btn-success text-white rounded-pill px-2.5 py-1 shadow-xs fw-semibold d-inline-flex align-items-center gap-1" 
+                                               title="Input presensi mandiri & upload bukti foto di lokasi santri">
+                                                <i class="bi bi-camera-fill"></i> Presensi
+                                            </a>
+
+                                            <form action="{{ route('mentor.sessions.update-status', $session->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <select name="status" class="form-select form-select-sm rounded-pill shadow-xs" onchange="this.form.submit()" style="font-size: 0.75rem; width: auto; display: inline-block;">
+                                                    <option value="scheduled" {{ $session->status === 'scheduled' ? 'selected' : '' }}>⏳ Terjadwal</option>
+                                                    <option value="completed" {{ $session->status === 'completed' ? 'selected' : '' }}>✅ Selesai</option>
+                                                    <option value="cancelled" {{ $session->status === 'cancelled' ? 'selected' : '' }}>❌ Batalkan</option>
+                                                </select>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -250,4 +271,86 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Presensi Mandiri & Upload Foto Bukti Mentor -->
+<div class="modal fade" id="mentorAttendanceModal" tabindex="-1" aria-labelledby="mentorAttendanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header border-0 bg-success text-white py-3 px-4">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-camera-fill fs-5"></i>
+                    <h5 class="modal-title fw-bold fs-6 mb-0" id="mentorAttendanceModalLabel">Input Presensi &amp; Bukti Foto Sesi</h5>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form id="attendanceProofForm" method="POST" enctype="multipart/form-data" class="p-4">
+                @csrf
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-secondary mb-1">Santri Binaan</label>
+                    <div class="p-2.5 bg-light rounded-3 border fw-semibold text-dark" id="modalStudentName">-</div>
+                </div>
+
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <label class="form-label small fw-bold text-secondary mb-1">Tanggal Sesi <span class="text-danger">*</span></label>
+                        <input type="date" name="date" id="modalDate" class="form-control form-control-sm rounded-3" required>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small fw-bold text-secondary mb-1">Waktu Sesi <span class="text-danger">*</span></label>
+                        <input type="time" name="time" id="modalTime" class="form-control form-control-sm rounded-3" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-secondary mb-1">Status Kehadiran <span class="text-danger">*</span></label>
+                    <select name="status" id="modalStatus" class="form-select form-select-sm rounded-3" required>
+                        <option value="hadir">✅ Hadir (Selesai Bimbingan - Terhitung Honor)</option>
+                        <option value="izin">⚠️ Izin (Santri/Wali Berhalangan)</option>
+                        <option value="sakit">🩹 Sakit (Santri Berhalangan)</option>
+                    </select>
+                    <small class="text-muted" style="font-size: 0.72rem;">*Status Hadir otomatis menyelesaikan sesi dan menambahkan Rp 100.000 ke Slip Honor Anda.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-secondary mb-1">
+                        <i class="bi bi-camera me-1 text-success"></i>Upload Bukti Foto Lokasi / Sesi
+                    </label>
+                    <input type="file" name="proof_image" class="form-control form-control-sm rounded-3" accept="image/*">
+                    <small class="text-muted" style="font-size: 0.72rem;">
+                        Foto dokumentasi saat mengajar di rumah murid atau tangkapan layar jika daring (JPG/PNG/WEBP, Maks. 5MB).
+                    </small>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-secondary mb-1">Catatan Pengajaran / Evaluasi</label>
+                    <textarea name="notes" id="modalNotes" class="form-control form-control-sm rounded-3" rows="3" placeholder="Contoh: Sesi berjalan lancar, ananda setoran surat Al-Mulk ayat 1-10 dengan tajwid fasih."></textarea>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-sm btn-light border rounded-pill px-3" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-sm btn-success text-white rounded-pill px-4 fw-semibold shadow-xs">
+                        <i class="bi bi-check2-circle me-1"></i> Simpan Presensi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openAttendanceModal(sessionId, studentName, sessionDate, sessionTime, currentStatus, currentNotes) {
+        const form = document.getElementById('attendanceProofForm');
+        form.action = "{{ url('/mentor/sessions') }}/" + sessionId + "/confirm-attendance";
+
+        document.getElementById('modalStudentName').innerText = studentName;
+        document.getElementById('modalDate').value = sessionDate || '';
+        document.getElementById('modalTime').value = sessionTime || '16:00';
+        document.getElementById('modalStatus').value = currentStatus || 'hadir';
+        document.getElementById('modalNotes').value = currentNotes || '';
+
+        const modal = new bootstrap.Modal(document.getElementById('mentorAttendanceModal'));
+        modal.show();
+    }
+</script>
 @endsection

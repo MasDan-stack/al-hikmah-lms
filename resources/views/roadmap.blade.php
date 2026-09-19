@@ -1,250 +1,163 @@
 @extends('layouts.landing')
 
 @section('title', 'Peta Alur & Panduan Langkah Belajar (Roadmap) | AL-HIKMAH')
-@section('meta_description', 'Panduan alur langkah demi langkah untuk calon orang tua murid, calon guru pendamping, dan
-    alur pembayaran di AL-HIKMAH LMS.')
+@section('meta_description', 'Panduan alur langkah demi langkah untuk calon orang tua murid, calon guru pendamping, dan alur pembayaran di AL-HIKMAH LMS.')
 
 @section('content')
     <!-- ============================================================ -->
-    <!-- 1. ETRAIN BREADCRUMB HEADER -->
+    <!-- 1. EDITORIAL SUBPAGE HEADER -->
     <!-- ============================================================ -->
-    <section class="breadcrumb_bg" aria-label="Header Peta Alur Belajar">
+    <section class="editorial-page-header" aria-label="Header Peta Alur Belajar">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb_iner_item" data-reveal>
-                        <div class="section-badge mx-auto mb-2"><i class="bi bi-map"></i> Panduan Langkah Awal</div>
-                        <h2>Peta Perjalanan Belajar <span class="text-gradient">AL-HIKMAH</span></h2>
-                        <p>Panduan langkah terarah mulai dari pendaftaran, pencocokan guru &amp; jadwal, hingga proses bimbingan belajar berjalan lancar.</p>
-                    </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-9 text-center" data-reveal>
+                    <span class="editorial-badge">
+                        <i class="bi bi-map-fill"></i> Panduan Langkah Awal
+                    </span>
+                    <h1>Peta Perjalanan Belajar</h1>
+                    <p>
+                        Panduan langkah terarah mulai dari eksplorasi program, pencocokan jadwal guru, hingga proses bimbingan belajar berjalan tertib dan lancar.
+                    </p>
+                    <nav aria-label="breadcrumb" class="mt-3">
+                        <ol class="breadcrumb justify-content-center mb-0 small">
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none text-secondary">Beranda</a></li>
+                            <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Roadmap Belajar</li>
+                        </ol>
+                    </nav>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ============================================================ -->
-    <!-- ROADMAP CONTENT TABS -->
+    <!-- 2. ROADMAP CONTENT TABS -->
     <!-- ============================================================ -->
     <section class="section-padding pt-4" aria-label="Roadmap Section">
         <div class="container">
 
-            <!-- ========================================================== -->
-            <!-- 🔥 FIX: Navigation Pills - Menggunakan data-bs-toggle yang benar -->
-            <!-- ========================================================== -->
+            <!-- Navigation Switcher Pills -->
             <div class="d-flex justify-content-center mb-5" data-reveal>
-                <ul class="nav nav-pills gap-2" id="roadmapTab" role="tablist"
-                    style="background:var(--bg-secondary);padding:8px;border-radius:50px;border:1px solid var(--border-color);flex-wrap:wrap;justify-content:center;">
+                <ul class="nav nav-pills gap-2 p-1.5 rounded-pill bg-body-tertiary border" id="roadmapTab" role="tablist"
+                    style="flex-wrap: wrap; justify-content: center;">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active rounded-pill px-4 py-2 fw-bold" id="parent-tab" data-bs-toggle="pill"
+                        <button class="nav-link active rounded-pill px-3.5 py-2 fw-semibold small" id="parent-tab" data-bs-toggle="pill"
                             data-bs-target="#parent-journey" type="button" role="tab" aria-controls="parent-journey"
                             aria-selected="true">
-                            <i class="bi bi-people-fill me-2"></i> Jalur Calon Orang Tua
+                            <i class="bi bi-people-fill me-1.5"></i> Jalur Calon Orang Tua
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link rounded-pill px-4 py-2 fw-bold" id="mentor-tab" data-bs-toggle="pill"
+                        <button class="nav-link rounded-pill px-3.5 py-2 fw-semibold small" id="mentor-tab" data-bs-toggle="pill"
                             data-bs-target="#mentor-journey" type="button" role="tab" aria-controls="mentor-journey"
                             aria-selected="false">
-                            <i class="bi bi-person-workspace me-2"></i> Jalur Guru / Pendamping
+                            <i class="bi bi-person-workspace me-1.5"></i> Jalur Guru / Pendamping
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link rounded-pill px-4 py-2 fw-bold" id="payment-tab" data-bs-toggle="pill"
+                        <button class="nav-link rounded-pill px-3.5 py-2 fw-semibold small" id="payment-tab" data-bs-toggle="pill"
                             data-bs-target="#payment-journey" type="button" role="tab" aria-controls="payment-journey"
                             aria-selected="false">
-                            <i class="bi bi-wallet2 me-2"></i> Alur Pembayaran &amp; SPP
+                            <i class="bi bi-wallet2 me-1.5"></i> Alur Pembayaran &amp; SPP
                         </button>
                     </li>
                 </ul>
             </div>
 
-            <!-- ========================================================== -->
-            <!-- 🔥 FIX: Tab Content - Class 'show active' hanya di parent -->
-            <!-- ========================================================== -->
+            <!-- Tab Contents -->
             <div class="tab-content" id="roadmapTabContent">
 
                 <!-- ========================================================== -->
                 <!-- TAB 1: JALUR CALON ORANG TUA -->
                 <!-- ========================================================== -->
                 <div class="tab-pane fade show active" id="parent-journey" role="tabpanel" aria-labelledby="parent-tab">
-                    <div class="text-center mb-5">
-                        <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold">
-                            <i class="bi bi-shield-check me-1"></i> Alur Zero-Friction
+                    <div class="text-center mb-5" data-reveal>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill fw-semibold small mb-2 d-inline-block">
+                            <i class="bi bi-shield-check me-1"></i> Alur Tanpa Kerumitan
                         </span>
-                        <h3 class="fw-bold mt-2">6 Langkah Menuju Bimbingan Al-Qur'an Ananda</h3>
-                        <p class="text-muted small">Mulai dari konsultasi gratis hingga ananda dibimbing oleh guru yang
-                            tepat.</p>
+                        <h2 class="editorial-title text-center mb-2">6 Langkah Menuju Bimbingan Al-Qur'an Ananda</h2>
+                        <p class="text-secondary small mx-auto" style="max-width: 600px; line-height: 1.6;">
+                            Dari konsultasi santun hingga ananda dibimbing langsung oleh guru yang sesuai dengan gaya belajar ananda.
+                        </p>
                     </div>
 
                     <div class="row g-4">
-                        <!-- Step 1 - 6 (sama seperti sebelumnya, tidak diubah) -->
                         @for ($i = 1; $i <= 6; $i++)
-                            <div class="col-md-6 col-lg-4" data-reveal data-reveal-delay="{{ ($i - 1) * 100 }}">
-                                <div
-                                    class="card h-100 border-0 shadow-sm rounded-4 p-4 position-relative card-hover-up">
-                                    <div class="d-flex align-items-center gap-3 mb-3">
-                                        <div class="rounded-circle bg-success text-white fw-bold d-flex align-items-center justify-content-center shadow-sm"
-                                            style="width: 46px; height: 46px; font-size: 1.2rem; flex-shrink:0;">
-                                            {{ $i }}</div>
-                                        <div>
-                                            <span class="text-muted small d-block">Langkah
-                                                {{ ['Pertama', 'Kedua', 'Ketiga', 'Keempat', 'Kelima', 'Keenam'][$i - 1] }}</span>
-                                            <h5 class="fw-bold mb-0">
-                                                @switch($i)
-                                                    @case(1)
-                                                        Eksplorasi Program
-                                                    @break
-
-                                                    @case(2)
-                                                        Pilih Jadwal &amp; Guru
-                                                    @break
-
-                                                    @case(3)
-                                                        Registrasi Akun
-                                                    @break
-
-                                                    @case(4)
-                                                        Review &amp; Deal Jadwal
-                                                    @break
-
-                                                    @case(5)
-                                                        Pembayaran Tagihan
-                                                    @break
-
-                                                    @case(6)
-                                                        Mulai Belajar &amp; Progres
-                                                    @break
-                                                @endswitch
-                                            </h5>
+                            <div class="col-md-6 col-lg-4" data-reveal data-reveal-delay="{{ ($i - 1) * 80 }}">
+                                <div class="why-card h-100 d-flex flex-column justify-content-between p-4">
+                                    <div>
+                                        <div class="d-flex align-items-center gap-3 mb-3">
+                                            <div class="why-icon mb-0 fw-bold" style="width: 42px; height: 42px; font-size: 1.1rem;">
+                                                {{ $i }}
+                                            </div>
+                                            <div>
+                                                <span class="text-muted small d-block" style="font-size: 0.78rem;">
+                                                    Langkah {{ ['Pertama', 'Kedua', 'Ketiga', 'Keempat', 'Kelima', 'Keenam'][$i - 1] }}
+                                                </span>
+                                                <h5 class="fw-bold mb-0 text-heading fs-6">
+                                                    @switch($i)
+                                                        @case(1) Eksplorasi Program @break
+                                                        @case(2) Pilih Jadwal &amp; Guru @break
+                                                        @case(3) Registrasi Akun @break
+                                                        @case(4) Review &amp; Deal Jadwal @break
+                                                        @case(5) Pembayaran Tagihan @break
+                                                        @case(6) Mulai Belajar &amp; Progres @break
+                                                    @endswitch
+                                                </h5>
+                                            </div>
                                         </div>
+                                        <p class="text-secondary small mb-3" style="line-height: 1.65;">
+                                            @switch($i)
+                                                @case(1)
+                                                    Pelajari kurikulum pada menu <strong>Program</strong> (Iqra, Tahsin, Tahfidz, Bahasa Arab) serta rincian paket di halaman <strong>Biaya</strong>.
+                                                @break
+                                                @case(2)
+                                                    Ajukan kombinasi hari bimbingan (misalnya Senin &amp; Kamis) dan jam luang ananda yang paling cocok dengan agenda keluarga.
+                                                @break
+                                                @case(3)
+                                                    Sistem otomatis menyiapkan akun <strong>Orang Tua</strong> dan akun <strong>Santri</strong> untuk memantau proses verifikasi jadwal.
+                                                @break
+                                                @case(4)
+                                                    Admin mencocokkan jadwal pilihan Anda dengan ustadz/ustadzah. Setelah cocok, Anda menerima detail profil guru dan tanggal mulai.
+                                                @break
+                                                @case(5)
+                                                    Pembayaran dilakukan melalui saluran otomatis resmi (QRIS, VA Bank, e-Wallet). Sistem langsung mencatat lunas seketika.
+                                                @break
+                                                @case(6)
+                                                    Jadwal sesi 4 minggu otomatis aktif. Orang tua dapat memantau catatan tajwid, kehadiran, dan mutaba'ah harian langsung dari ponsel.
+                                                @break
+                                            @endswitch
+                                        </p>
                                     </div>
-                                    <p class="text-secondary small mb-3">
+                                    <div class="pt-3 border-top mt-auto">
                                         @switch($i)
                                             @case(1)
-                                                Telusuri kurikulum bimbingan pada menu <strong>Program</strong> (Iqra, Tahsin,
-                                                Tahfidz, Bahasa Arab) atau rincian investasi di halaman <strong>Biaya</strong>.
-                                            @break
-
-                                            @case(2)
-                                                Klik tombol <em>"Pilih Program &amp; Ajukan Jadwal"</em>. Tentukan hari bimbingan
-                                                (misal: Senin &amp; Kamis) dan jam yang diinginkan keluarga.
-                                            @break
-
-                                            @case(3)
-                                                Sistem otomatis membuat akun <strong>Orang Tua</strong> dan akun
-                                                <strong>Santri</strong>. Anda langsung diarahkan ke halaman pemantauan pendaftaran.
-                                            @break
-
-                                            @case(4)
-                                                Admin mencocokkan kuota guru pembimbing. Saat jadwal disetujui, Anda menerima
-                                                notifikasi beserta rincian nama Guru dan Tanggal Mulai.
-                                            @break
-
-                                            @case(5)
-                                                Lakukan pembayaran mudah melalui <strong>Payment Gateway Otomatis</strong> (QRIS,
-                                                GoPay, Transfer Bank VA). Tagihan otomatis lunas seketika.
-                                            @break
-
-                                            @case(6)
-                                                Jadwal otomatis dibuat untuk 4 minggu ke depan. Pantau nilai tajwid, hafalan,
-                                                kehadiran ananda, dan unduh laporan PDF resmi kapan saja.
-                                            @break
-                                        @endswitch
-                                    </p>
-                                    <div class="mt-auto pt-2 border-top">
-                                        @switch($i)
-                                            @case(1)
-                                                <a href="{{ route('program') }}"
-                                                    class="btn btn-sm btn-outline-success rounded-pill px-3">
-                                                    <i class="bi bi-book-half me-1"></i> Lihat Program
+                                                <a href="{{ route('program') }}" class="btn-editorial-secondary w-100 text-center py-2 small">
+                                                    <i class="bi bi-book-half me-1"></i> Telusuri Program
                                                 </a>
                                             @break
-
                                             @case(2)
-                                                 @auth
-                                                     @if (auth()->user()->isParent())
-                                                         @php
-                                                             $latestEnrollment = isset($parentEnrollments) ? $parentEnrollments->first() : null;
-                                                         @endphp
-
-                                                         @if ($latestEnrollment && $latestEnrollment->isWaitingAdmin())
-                                                              <a href="{{ route('parent.enrollments.show', $latestEnrollment->id) }}"
-                                                                  class="btn btn-sm btn-warning text-dark rounded-pill px-3 fw-bold shadow-sm">
-                                                                  <i class="bi bi-hourglass-split me-1"></i> Sedang Direview ({{ $latestEnrollment->program?->name }})
-                                                              </a>
-                                                              <div class="text-muted mt-1" style="font-size: 0.75rem;">
-                                                                  <i class="bi bi-info-circle me-1"></i> Lembaga sedang mereview jadwal &amp; kuota guru
-                                                              </div>
-                                                          @elseif ($latestEnrollment && $latestEnrollment->isWaitingParent())
-                                                              <a href="{{ route('parent.enrollments.show', $latestEnrollment->id) }}"
-                                                                  class="btn btn-sm btn-info text-white rounded-pill px-3 fw-bold shadow-sm">
-                                                                  <i class="bi bi-chat-dots me-1"></i> Konfirmasi Jadwal ({{ $latestEnrollment->program?->name }})
-                                                              </a>
-                                                              <div class="text-muted mt-1" style="font-size: 0.75rem;">
-                                                                  <i class="bi bi-exclamation-circle me-1"></i> Ada alternatif jadwal dari lembaga
-                                                              </div>
-                                                          @elseif ($latestEnrollment && $latestEnrollment->isConfirmed())
-                                                              <a href="{{ route('parent.enrollments.show', $latestEnrollment->id) }}"
-                                                                  class="btn btn-sm btn-primary-custom rounded-pill px-3 fw-bold shadow-sm">
-                                                                  <i class="bi bi-wallet2 me-1"></i> Siap Bayar: {{ $latestEnrollment->program?->name }}
-                                                              </a>
-                                                              <div class="text-success mt-1 fw-medium" style="font-size: 0.75rem;">
-                                                                  <i class="bi bi-check-circle me-1"></i> Jadwal disetujui! Lanjutkan ke pembayaran
-                                                              </div>
-                                                          @elseif ($latestEnrollment && $latestEnrollment->isActive())
-                                                              <a href="{{ route('parent.enrollments.show', $latestEnrollment->id) }}"
-                                                                  class="btn btn-sm btn-success rounded-pill px-3 fw-bold shadow-sm">
-                                                                  <i class="bi bi-award-fill me-1"></i> Program Aktif: {{ $latestEnrollment->program?->name }}
-                                                              </a>
-                                                              <div class="text-success mt-1 fw-medium" style="font-size: 0.75rem;">
-                                                                  <i class="bi bi-person-check me-1"></i> Santri: {{ $latestEnrollment->student?->getDisplayName() }}
-                                                              </div>
-                                                          @else
-                                                             <a href="{{ route('biaya') }}"
-                                                                 class="btn btn-sm btn-primary-custom rounded-pill px-3">
-                                                                 <i class="bi bi-journal-check me-1"></i> Pilih Program
-                                                             </a>
-                                                         @endif
-                                                     @elseif (auth()->user()->isAdmin())
-                                                         <a href="{{ route('biaya') }}"
-                                                             class="btn btn-sm btn-primary-custom rounded-pill px-3">
-                                                             <i class="bi bi-journal-check me-1"></i> Pilih Program (Admin)
-                                                         </a>
-                                                     @else
-                                                         <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill small">
-                                                             <i class="bi bi-info-circle me-1"></i> Mode {{ auth()->user()->isMentor() ? 'Guru / Pendamping' : 'Santri' }}
-                                                         </span>
-                                                     @endif
-                                                 @else
-                                                     <button type="button" class="btn btn-sm btn-primary-custom rounded-pill px-3"
-                                                         data-bs-toggle="modal" data-bs-target="#daftarModal">
-                                                         <i class="bi bi-calendar-plus me-1"></i> Booking Jadwal
-                                                     </button>
-                                                 @endauth
-                                             @break
-
+                                                <button type="button" class="btn-editorial-primary w-100 text-center py-2 small" data-bs-toggle="modal" data-bs-target="#trialModal">
+                                                    <i class="bi bi-calendar-plus me-1"></i> Ajukan Penempatan
+                                                </button>
+                                            @break
                                             @case(3)
-                                                <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill small">
-                                                    <i class="bi bi-clock-history me-1"></i> Status: Menunggu Review Admin
+                                                <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill small w-100 text-center">
+                                                    <i class="bi bi-clock-history me-1"></i> Menunggu Konfirmasi Jadwal
                                                 </span>
                                             @break
-
                                             @case(4)
-                                                <span
-                                                    class="badge bg-warning-subtle text-warning-emphasis border border-warning px-3 py-2 rounded-pill small">
-                                                    <i class="bi bi-check-circle me-1"></i> Status: Jadwal Deal (CONFIRMED)
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill small w-100 text-center">
+                                                    <i class="bi bi-check-circle me-1"></i> Jadwal Disepakati
                                                 </span>
                                             @break
-
                                             @case(5)
-                                                <span class="badge bg-info-subtle text-info border px-3 py-2 rounded-pill small">
-                                                    <i class="bi bi-qr-code-scan me-1"></i> Instant Auto-Activation
+                                                <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill small w-100 text-center">
+                                                    <i class="bi bi-qr-code-scan me-1"></i> Pelunasan Otomatis
                                                 </span>
                                             @break
-
                                             @case(6)
-                                                <span class="badge bg-success text-white px-3 py-2 rounded-pill small">
-                                                    <i class="bi bi-award-fill me-1"></i> Bimbingan Aktif Berjalan
+                                                <span class="badge bg-success text-white px-3 py-1.5 rounded-pill small w-100 text-center">
+                                                    <i class="bi bi-award-fill me-1"></i> Bimbingan Berjalan
                                                 </span>
                                             @break
                                         @endswitch
@@ -259,127 +172,92 @@
                 <!-- TAB 2: JALUR CALON GURU / PENDAMPING -->
                 <!-- ========================================================== -->
                 <div class="tab-pane fade" id="mentor-journey" role="tabpanel" aria-labelledby="mentor-tab">
-                    <div class="text-center mb-5">
-                        <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-semibold">
-                            <i class="bi bi-person-heart me-1"></i> Karir &amp; Syiar Qur'ani
+                    <div class="text-center mb-5" data-reveal>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill fw-semibold small mb-2 d-inline-block">
+                            <i class="bi bi-mortarboard-fill me-1"></i> Dakwah &amp; Khidmah Qur'ani
                         </span>
-                        <h3 class="fw-bold mt-2">6 Tahapan Menjadi Guru Pendamping AL-HIKMAH</h3>
-                        <p class="text-muted small">Mari bersama mendampingi generasi Qur'ani dengan jadwal fleksibel dan
-                            teknologi modern.</p>
+                        <h2 class="editorial-title text-center mb-2">6 Tahapan Menjadi Guru Pendamping AL-HIKMAH</h2>
+                        <p class="text-secondary small mx-auto" style="max-width: 600px; line-height: 1.6;">
+                            Bergabung mendampingi generasi Qur'ani dengan fleksibilitas jadwal mengajar dan transparansi honorarium.
+                        </p>
                     </div>
 
                     <div class="row g-4">
                         @for ($i = 1; $i <= 6; $i++)
-                            <div class="col-md-6 col-lg-4" data-reveal data-reveal-delay="{{ ($i - 1) * 100 }}">
-                                <div class="card h-100 border-0 shadow-sm rounded-4 p-4">
-                                    <div class="d-flex align-items-center gap-3 mb-3">
-                                        <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center shadow-sm"
-                                            style="width: 46px; height: 46px; font-size: 1.2rem; flex-shrink:0;">
-                                            {{ $i }}</div>
-                                        <div>
-                                            <span class="text-muted small d-block">Tahap {{ $i }}</span>
-                                            <h5 class="fw-bold mb-0">
-                                                @switch($i)
-                                                    @case(1)
-                                                        Registrasi Guru
-                                                    @break
-
-                                                    @case(2)
-                                                        Seleksi &amp; Verifikasi
-                                                    @break
-
-                                                    @case(3)
-                                                        Atur Ketersediaan
-                                                    @break
-
-                                                    @case(4)
-                                                        Terima Alokasi Santri
-                                                    @break
-
-                                                    @case(5)
-                                                        Bimbingan &amp; Input Progres
-                                                    @break
-
-                                                    @case(6)
-                                                        Edukasi Berkelanjutan
-                                                    @break
-                                                @endswitch
-                                            </h5>
+                            <div class="col-md-6 col-lg-4" data-reveal data-reveal-delay="{{ ($i - 1) * 80 }}">
+                                <div class="why-card h-100 d-flex flex-column justify-content-between p-4">
+                                    <div>
+                                        <div class="d-flex align-items-center gap-3 mb-3">
+                                            <div class="why-icon mb-0 fw-bold" style="width: 42px; height: 42px; font-size: 1.1rem;">
+                                                {{ $i }}
+                                            </div>
+                                            <div>
+                                                <span class="text-muted small d-block" style="font-size: 0.78rem;">Tahap {{ $i }}</span>
+                                                <h5 class="fw-bold mb-0 text-heading fs-6">
+                                                    @switch($i)
+                                                        @case(1) Registrasi Guru @break
+                                                        @case(2) Seleksi &amp; Verifikasi @break
+                                                        @case(3) Atur Ketersediaan @break
+                                                        @case(4) Terima Alokasi Santri @break
+                                                        @case(5) Bimbingan &amp; Input Progres @break
+                                                        @case(6) Edukasi Berkelanjutan @break
+                                                    @endswitch
+                                                </h5>
+                                            </div>
                                         </div>
+                                        <p class="text-secondary small mb-3" style="line-height: 1.65;">
+                                            @switch($i)
+                                                @case(1)
+                                                    Akses halaman <strong>Bergabung</strong> untuk mengisi biodata, riwayat pendidikan, hafalan, serta spesialisasi bimbingan Anda.
+                                                @break
+                                                @case(2)
+                                                    Tim akademik AL-HIKMAH memverifikasi berkas, menyimak bacaan tajwid/tahsin, dan melakukan wawancara komitmen mengajar.
+                                                @break
+                                                @case(3)
+                                                    Setelah lolos, masuk ke portal guru untuk menentukan hari mengajar, slot jam kosong, dan batasan santri harian secara mandiri.
+                                                @break
+                                                @case(4)
+                                                    Ketika ada jadwal santri yang cocok, detail kontak dan agenda bimbingan langsung muncul di akun portal mengajar Anda.
+                                                @break
+                                                @case(5)
+                                                    Jalankan sesi bimbingan 90 menit (Home Visit atau Online) dan catat evaluasi mutaba'ah santri langsung melalui ponsel.
+                                                @break
+                                                @case(6)
+                                                    Ikuti pembekalan berkala, pelatihan metodologi pengajaran, dan supervisi untuk menjaga mutu sanad dan adab mengajar.
+                                                @break
+                                            @endswitch
+                                        </p>
                                     </div>
-                                    <p class="text-secondary small mb-3">
+                                    <div class="pt-3 border-top mt-auto">
                                         @switch($i)
                                             @case(1)
-                                                Akses halaman <strong>Bergabung</strong> dan isi biodata, spesialisasi mengajar
-                                                (Tahsin, Tahfidz, Anak/Dewasa), serta pengalaman bimbingan Anda.
-                                            @break
-
-                                            @case(2)
-                                                Tim manajemen AL-HIKMAH akan meninjau kualifikasi bacaan Al-Qur'an dan wawancara
-                                                komitmen pengajaran.
-                                            @break
-
-                                            @case(3)
-                                                Login ke Portal Mentor dan atur hari mengajar yang bisa Anda sanggupi, batas
-                                                maksimal santri per hari, dan jam luang di menu <em>Atur Jadwal</em>.
-                                            @break
-
-                                            @case(4)
-                                                Saat santri baru memilih Anda dan menyelesaikan pembayaran, data santri binaan dan
-                                                jadwal otomatis muncul di portal Anda lengkap dengan nomor WA wali santri.
-                                            @break
-
-                                            @case(5)
-                                                Laksanakan sesi bimbingan (Online / Home Visit) dan gunakan fitur <strong>Catat
-                                                    Progres Massal</strong> untuk menginput nilai tajwid &amp; hafalan dalam
-                                                hitungan detik.
-                                            @break
-
-                                            @case(6)
-                                                Ikuti pelatihan rutin dan workshop metodologi pengajaran Al-Qur'an yang
-                                                diselenggarakan oleh AL-HIKMAH untuk pengembangan kapasitas mengajar.
-                                            @break
-                                        @endswitch
-                                    </p>
-                                    <div class="mt-auto pt-2 border-top">
-                                        @switch($i)
-                                            @case(1)
-                                                <a href="{{ route('bergabung') }}"
-                                                    class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                                    <i class="bi bi-pencil-square me-1"></i> Form Bergabung
+                                                <a href="{{ route('bergabung') }}" class="btn-editorial-primary w-100 text-center py-2 small">
+                                                    <i class="bi bi-pencil-square me-1"></i> Formulir Bergabung
                                                 </a>
                                             @break
-
                                             @case(2)
-                                                <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill small">
-                                                    <i class="bi bi-shield-check me-1"></i> Standar Kualitas Pengajar
+                                                <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill small w-100 text-center">
+                                                    <i class="bi bi-shield-check me-1"></i> Standar Kualifikasi Guru
                                                 </span>
                                             @break
-
                                             @case(3)
-                                                <span
-                                                    class="badge bg-primary-subtle text-primary border px-3 py-2 rounded-pill small">
-                                                    <i class="bi bi-calendar3 me-1"></i> Fleksibilitas Waktu Penuh
+                                                <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill small w-100 text-center">
+                                                    <i class="bi bi-calendar3 me-1"></i> Fleksibilitas Slot Waktu
                                                 </span>
                                             @break
-
                                             @case(4)
-                                                <span
-                                                    class="badge bg-success-subtle text-success border px-3 py-2 rounded-pill small">
-                                                    <i class="bi bi-person-check-fill me-1"></i> Data Kontak Real-Time
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill small w-100 text-center">
+                                                    <i class="bi bi-person-check-fill me-1"></i> Kontak Terbuka
                                                 </span>
                                             @break
-
                                             @case(5)
-                                                <span class="badge bg-info-subtle text-info border px-3 py-2 rounded-pill small">
-                                                    <i class="bi bi-graph-up-arrow me-1"></i> Laporan &amp; Rekap Otomatis
+                                                <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill small w-100 text-center">
+                                                    <i class="bi bi-journal-check me-1"></i> Laporan Mutaba'ah
                                                 </span>
                                             @break
-
                                             @case(6)
-                                                <span
-                                                    class="badge bg-secondary-subtle text-secondary border px-3 py-2 rounded-pill small">
-                                                    <i class="bi bi-mortarboard-fill me-1"></i> Pengembangan Profesional
+                                                <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill small w-100 text-center">
+                                                    <i class="bi bi-mortarboard me-1"></i> Pembekalan Berkala
                                                 </span>
                                             @break
                                         @endswitch
@@ -394,92 +272,67 @@
                 <!-- TAB 3: ALUR PEMBAYARAN & SPP -->
                 <!-- ========================================================== -->
                 <div class="tab-pane fade" id="payment-journey" role="tabpanel" aria-labelledby="payment-tab">
-                    <div class="text-center mb-5">
-                        <span class="badge bg-warning-subtle text-warning-emphasis px-3 py-2 rounded-pill fw-semibold">
-                            <i class="bi bi-shield-lock-fill me-1"></i> Transparan &amp; Amanah
+                    <div class="text-center mb-5" data-reveal>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill fw-semibold small mb-2 d-inline-block">
+                            <i class="bi bi-shield-lock-fill me-1"></i> Transparan &amp; Terpercaya
                         </span>
-                        <h3 class="fw-bold mt-2">Siklus Pembayaran "Deal Dulu Baru Bayar"</h3>
-                        <p class="text-muted small">Tidak ada biaya tersembunyi. Pembayaran hanya dilakukan setelah jadwal
-                            dan guru 100% cocok.</p>
+                        <h2 class="editorial-title text-center mb-2">Siklus Pembayaran "Deal Dulu, Baru Bayar"</h2>
+                        <p class="text-secondary small mx-auto" style="max-width: 600px; line-height: 1.6;">
+                            Tidak ada biaya tersembunyi. Pembayaran hanya dilakukan setelah jadwal bimbingan dan profil guru disepakati bersama.
+                        </p>
                     </div>
 
                     <div class="row g-4">
                         @for ($i = 1; $i <= 6; $i++)
-                            @php
-                                $colors = ['secondary', 'warning', 'success', 'info', 'primary', 'dark'];
-                                $color = $colors[$i - 1];
-                            @endphp
-                            <div class="col-md-6 col-lg-4" data-reveal data-reveal-delay="{{ ($i - 1) * 100 }}">
-                                <div
-                                    class="card h-100 border-0 shadow-sm rounded-4 p-4 border-top border-4 border-{{ $color }}">
-                                    <div class="d-flex align-items-center gap-3 mb-3">
-                                        <div class="rounded-circle bg-{{ $color }} text-white fw-bold d-flex align-items-center justify-content-center shadow-sm"
-                                            style="width: 46px; height: 46px; font-size: 1.2rem; flex-shrink:0;">
-                                            {{ $i }}</div>
-                                        <div>
-                                            <span class="text-muted small d-block">Fase {{ $i }}</span>
-                                            <h5 class="fw-bold mb-0">
-                                                @switch($i)
-                                                    @case(1)
-                                                        Pengajuan Awal
-                                                    @break
-
-                                                    @case(2)
-                                                        Terbit Tagihan (Deal)
-                                                    @break
-
-                                                    @case(3)
-                                                        Pelunasan Otomatis (QRIS / VA)
-                                                    @break
-
-                                                    @case(4)
-                                                        SPP Bulan Berikutnya
-                                                    @break
-
-                                                    @case(5)
-                                                        Riwayat &amp; Monitoring
-                                                    @break
-
-                                                    @case(6)
-                                                        Siklus Berkelanjutan
-                                                    @break
-                                                @endswitch
-                                            </h5>
+                            <div class="col-md-6 col-lg-4" data-reveal data-reveal-delay="{{ ($i - 1) * 80 }}">
+                                <div class="why-card h-100 d-flex flex-column justify-content-between p-4">
+                                    <div>
+                                        <div class="d-flex align-items-center gap-3 mb-3">
+                                            <div class="why-icon mb-0 fw-bold" style="width: 42px; height: 42px; font-size: 1.1rem;">
+                                                {{ $i }}
+                                            </div>
+                                            <div>
+                                                <span class="text-muted small d-block" style="font-size: 0.78rem;">Fase {{ $i }}</span>
+                                                <h5 class="fw-bold mb-0 text-heading fs-6">
+                                                    @switch($i)
+                                                        @case(1) Pengajuan Awal @break
+                                                        @case(2) Terbit Tagihan (Deal) @break
+                                                        @case(3) Pelunasan Otomatis (QRIS / VA) @break
+                                                        @case(4) SPP Bulan Berikutnya @break
+                                                        @case(5) Riwayat &amp; Monitoring @break
+                                                        @case(6) Siklus Berkelanjutan @break
+                                                    @endswitch
+                                                </h5>
+                                            </div>
                                         </div>
+                                        <p class="text-secondary small mb-0" style="line-height: 1.65;">
+                                            @switch($i)
+                                                @case(1)
+                                                    Wali santri mengajukan preferensi jadwal. Belum ada tagihan biaya yang diterbitkan oleh sistem pada tahap ini.
+                                                @break
+                                                @case(2)
+                                                    Setelah jadwal dan kuota guru disepakati kedua pihak, sistem menerbitkan rincian tagihan paket secara transparan.
+                                                @break
+                                                @case(3)
+                                                    Pembayaran lunas melalui QRIS atau Virtual Account Bank langsung mengaktifkan jadwal belajar dan mencatat sesi di kalender santri.
+                                                @break
+                                                @case(4)
+                                                    Untuk bulan ke-2 dan seterusnya, tagihan hanya berupa SPP rutin yang diinformasikan menjelang akhir periode belajar.
+                                                @break
+                                                @case(5)
+                                                    Seluruh mutasi pembayaran tercatat rapi di menu Riwayat Transaksi akun orang tua dan dapat diunduh kapan saja.
+                                                @break
+                                                @case(6)
+                                                    Sistem menerbitkan invoice berkala secara otomatis sehingga orang tua dapat berfokus mendampingi perkembangan ananda.
+                                                @break
+                                            @endswitch
+                                        </p>
                                     </div>
-                                    <p class="text-muted small mb-0">
-                                        @switch($i)
-                                            @case(1)
-                                                Wali santri mengajukan jadwal. <strong>Belum ada tagihan</strong> yang diterbitkan
-                                                oleh sistem di tabel payments.
-                                            @break
-
-                                            @case(2)
-                                                Setelah Admin dan Wali sepakat jadwal &amp; guru, sistem menerbitkan tagihan
-                                                pendaftaran 1x + SPP bulan pertama (Status: Pending).
-                                            @break
-
-                                            @case(3)
-                                                Pembayaran lunas via QRIS/VA secara otomatis mengaktifkan status santri, mengunci
-                                                jadwal guru, dan membuat 4 minggu sesi belajar.
-                                            @break
-
-                                            @case(4)
-                                                Untuk bulan ke-2 dan seterusnya, tagihan hanya berupa <strong>SPP murni</strong>
-                                                (tanpa biaya pendaftaran lagi) yang terbit 7 hari sebelum jatuh tempo.
-                                            @break
-
-                                            @case(5)
-                                                Semua transaksi tercatat di <strong>Riwayat Pembayaran</strong>. Orang tua dapat
-                                                memonitor status tagihan kapan saja.
-                                            @break
-
-                                            @case(6)
-                                                Sistem otomatis menerbitkan tagihan SPP bulanan rutin. Orang tua tinggal bayar dan
-                                                fokus pada perkembangan anak.
-                                            @break
-                                        @endswitch
-                                    </p>
+                                    <div class="pt-3 border-top mt-3">
+                                        <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill small w-100 text-center">
+                                            <i class="bi bi-check2-circle text-primary me-1"></i> Terverifikasi Sistem
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         @endfor
@@ -488,25 +341,22 @@
 
             </div><!-- end tab-content -->
 
-            <!-- ============================================================ -->
-            <!-- BOTTOM CALL TO ACTIONS -->
-            <!-- ============================================================ -->
-            <div class="mt-5 p-4 p-md-5 rounded-4 bg-primary-subtle border border-primary-subtle text-center" data-reveal>
-                <h4 class="fw-bold text-primary-emphasis mb-2">Masih Memiliki Pertanyaan Khusus?</h4>
-                <p class="text-secondary small mb-4">Tim konsultan AL-HIKMAH siap membantu Anda mencocokkan program dan
-                    jadwal belajar yang tepat untuk keluarga.</p>
+            <!-- Bottom Call to Actions -->
+            <div class="mt-5 p-4 p-md-5 rounded-4 bg-body-tertiary border text-center" data-reveal>
+                <h3 class="fs-4 fw-bold text-heading mb-2">Masih Memiliki Pertanyaan Terkait Alur Belajar?</h3>
+                <p class="text-secondary small mx-auto mb-4" style="max-width: 580px; line-height: 1.6;">
+                    Tim konselor AL-HIKMAH siap mendengarkan kebutuhan keluarga Anda dan membantu mencocokkan jadwal terbaik untuk ananda.
+                </p>
                 <div class="d-flex justify-content-center flex-wrap gap-3">
-                    @if (Route::has('faq'))
-                        <a href="{{ route('faq') }}" class="btn btn-outline-success rounded-pill px-4 py-2 fw-bold">
-                            <i class="bi bi-question-circle me-1"></i> Buka Halaman FAQ
-                        </a>
-                    @endif
-                    <a href="{{ route('contact') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 fw-bold">
-                        <i class="bi bi-envelope-paper me-1"></i> Kirim Pesan Konsultasi
+                    <a href="{{ route('faq') }}" class="btn-editorial-secondary px-4 py-2.5">
+                        <i class="bi bi-question-circle me-1.5"></i> Pusat Tanya Jawab (FAQ)
                     </a>
-                    <a href="{{ wa_url('Assalamualaikum, saya ingin berkonsultasi mengenai alur pendaftaran AL-HIKMAH') }}"
-                        target="_blank" class="btn btn-success rounded-pill px-4 py-2 fw-bold">
-                        <i class="bi bi-whatsapp me-1"></i> WhatsApp CS
+                    <a href="{{ route('contact') }}" class="btn-editorial-secondary px-4 py-2.5">
+                        <i class="bi bi-envelope-paper me-1.5"></i> Kirim Pesan Konsultasi
+                    </a>
+                    <a href="{{ wa_url('Assalamualaikum admin AL-HIKMAH, saya ingin berkonsultasi mengenai alur pendaftaran bimbingan') }}"
+                        target="_blank" rel="noopener" class="btn-editorial-whatsapp px-4 py-2.5">
+                        <i class="bi bi-whatsapp me-1.5"></i> Hubungi WhatsApp CS
                     </a>
                 </div>
             </div>
@@ -521,7 +371,6 @@
             const tabButtons = document.querySelectorAll('#roadmapTab button[data-bs-toggle="pill"]');
             const tabPanes = document.querySelectorAll('#roadmapTabContent > .tab-pane');
 
-            // Set initial state: display active pane, hide all inactive panes
             tabPanes.forEach(function(pane) {
                 if (pane.classList.contains('active')) {
                     pane.style.setProperty('display', 'block', 'important');
@@ -536,23 +385,19 @@
                     e.preventDefault();
                     const targetSelector = btn.getAttribute('data-bs-target');
 
-                    // Reset buttons
                     tabButtons.forEach(b => {
                         b.classList.remove('active');
                         b.setAttribute('aria-selected', 'false');
                     });
 
-                    // Activate clicked tab button
                     btn.classList.add('active');
                     btn.setAttribute('aria-selected', 'true');
 
-                    // Hide ALL tab panes
                     tabPanes.forEach(pane => {
                         pane.classList.remove('show', 'active');
                         pane.style.setProperty('display', 'none', 'important');
                     });
 
-                    // Show ONLY the target active tab pane
                     if (targetSelector) {
                         const targetPane = document.querySelector(targetSelector);
                         if (targetPane) {
@@ -565,100 +410,4 @@
             });
         });
     </script>
-@endpush
-
-@push('styles')
-    <style>
-        /* ============================================
-           ROADMAP CUSTOM STYLES & STRICT TAB ISOLATION
-           ============================================ */
-
-        /* 🔥 Sembunyikan semua tab pane yang tidak aktif */
-        #roadmapTabContent > .tab-pane {
-            display: none !important;
-        }
-
-        #roadmapTabContent > .tab-pane.active,
-        #roadmapTabContent > .tab-pane.show.active {
-            display: block !important;
-        }
-
-        .card-hover-up {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card-hover-up:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 40px rgba(13, 122, 62, 0.12) !important;
-        }
-
-        /* 🔥 Jangan override class Bootstrap .nav-pills */
-        .nav-pills .nav-link {
-            border-radius: 50px !important;
-            transition: all 0.3s ease;
-            color: var(--text-secondary) !important;
-            background: transparent !important;
-        }
-
-        .nav-pills .nav-link:hover {
-            background: var(--primary-lighter) !important;
-            color: var(--primary) !important;
-        }
-
-        .nav-pills .nav-link.active {
-            background: var(--primary-gradient) !important;
-            color: #fff !important;
-            box-shadow: 0 4px 20px rgba(13, 122, 62, 0.25);
-        }
-
-        .nav-pills .nav-link i {
-            font-size: 0.95rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 767.98px) {
-            .nav-pills .nav-link {
-                font-size: 0.8rem;
-                padding: 8px 16px !important;
-            }
-
-            .nav-pills .nav-link i {
-                font-size: 0.8rem;
-            }
-
-            .section-title {
-                font-size: 1.6rem;
-            }
-
-            .card {
-                padding: 20px 16px !important;
-            }
-
-            .step-circle {
-                width: 38px !important;
-                height: 38px !important;
-                font-size: 1rem !important;
-                min-width: 38px !important;
-            }
-        }
-
-        @media (max-width: 575.98px) {
-            .nav-pills {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 4px;
-                border-radius: 16px;
-                padding: 8px !important;
-            }
-
-            .nav-pills .nav-item {
-                width: 100%;
-            }
-
-            .nav-pills .nav-link {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-    </style>
 @endpush

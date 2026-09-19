@@ -95,42 +95,52 @@
 
                             {{-- Sisi Kanan: Kartu Investasi Registrasi Awal (Membership Pass Style) --}}
                             <div class="col-lg-5">
-                                <div class="p-4 rounded-4 text-white position-relative shadow-lg"
-                                     style="background: linear-gradient(145deg, #064e3b 0%, #022c22 100%); border: 1px solid rgba(255, 255, 255, 0.15);">
+                                <div class="membership-pass-card position-relative">
                                     <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
-                                        <span class="badge bg-warning text-dark fw-bold px-2.5 py-1 rounded-pill" style="font-size: 0.7rem; letter-spacing: 0.3px;">
-                                            <i class="bi bi-gem me-1"></i> INVESTASI 1X DIAWAL
+                                        <span class="badge badge-warning-contrast fw-bold px-3 py-1.5 rounded-pill small">
+                                            <i class="bi bi-shield-check me-1"></i> CUKUP 1X DIAWAL
                                         </span>
-                                        <span class="small text-white-50" style="font-size: 0.72rem;">Santri Baru</span>
+                                        <span class="badge bg-white bg-opacity-20 text-white rounded-pill px-2.5 py-1 small fw-semibold">
+                                            Santri Baru
+                                        </span>
                                     </div>
 
-                                    <div class="text-white-50 small mt-2">Biaya Registrasi &amp; Asesmen Personal</div>
-                                    <div class="tnum-price fw-bold text-white fs-2 mb-3">
+                                    <div class="text-white text-opacity-85 small mt-3 fw-medium">Biaya Registrasi &amp; Asesmen Diagnostik</div>
+                                    <div class="fw-bold text-white fs-1 mb-2 font-monospace">
                                         Rp {{ number_format($registrationFee, 0, ',', '.') }}
                                     </div>
 
-                                    <div class="border-top pt-3 border-white border-opacity-10 d-flex flex-column gap-2">
-                                        <div class="d-flex align-items-center gap-2 small text-white text-opacity-85" style="font-size: 0.8rem;">
-                                            <i class="bi bi-check2-circle text-warning fs-6 flex-shrink-0"></i>
-                                            <span>Asesmen diagnostik makhraj &amp; tajwid awal</span>
+                                    <div class="membership-pass-notice mb-3">
+                                        <div class="membership-pass-notice-title">
+                                            <i class="bi bi-check-circle-fill"></i> 1x Pendaftaran untuk Selamanya
                                         </div>
-                                        <div class="d-flex align-items-center gap-2 small text-white text-opacity-85" style="font-size: 0.8rem;">
+                                        <p class="membership-pass-notice-text">
+                                            Bebas biaya daftar ulang berkala dan <strong>tanpa cicilan bulanan untuk registrasi</strong>. Orang tua hanya membayar biaya paket bimbingan aktif.
+                                        </p>
+                                    </div>
+
+                                    <div class="border-top pt-3 border-white border-opacity-15 d-flex flex-column gap-2">
+                                        <div class="d-flex align-items-center gap-2 small text-white text-opacity-95" style="font-size: 0.82rem;">
                                             <i class="bi bi-check2-circle text-warning fs-6 flex-shrink-0"></i>
-                                            <span>Penyusunan kurikulum &amp; target juz personal</span>
+                                            <span>Asesmen diagnostik makhraj dan tajwid awal</span>
                                         </div>
-                                        <div class="d-flex align-items-center gap-2 small text-white text-opacity-85" style="font-size: 0.8rem;">
+                                        <div class="d-flex align-items-center gap-2 small text-white text-opacity-95" style="font-size: 0.82rem;">
                                             <i class="bi bi-check2-circle text-warning fs-6 flex-shrink-0"></i>
-                                            <span>Aktivasi akun sistem mutaba'ah santri &amp; wali</span>
+                                            <span>Penyusunan kurikulum dan target juz personal</span>
                                         </div>
-                                        <div class="d-flex align-items-center gap-2 small text-white text-opacity-85" style="font-size: 0.8rem;">
+                                        <div class="d-flex align-items-center gap-2 small text-white text-opacity-95" style="font-size: 0.82rem;">
                                             <i class="bi bi-check2-circle text-warning fs-6 flex-shrink-0"></i>
-                                            <span>Garansi kesesuaian guru pembimbing</span>
+                                            <span>Aktivasi akun sistem mutaba'ah santri dan wali</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 small text-white text-opacity-95" style="font-size: 0.82rem;">
+                                            <i class="bi bi-check2-circle text-warning fs-6 flex-shrink-0"></i>
+                                            <span>Garansi pergantian guru pembimbing jika tidak cocok</span>
                                         </div>
                                     </div>
 
-                                    <div class="pt-3 mt-3 border-top border-white border-opacity-10 text-white-50 small d-flex align-items-center gap-1.5" style="font-size: 0.72rem;">
-                                        <i class="bi bi-shield-lock-fill text-warning"></i>
-                                        <span>Bebas biaya daftar ulang selamanya selama aktif.</span>
+                                    <div class="pt-3 mt-3 border-top border-white border-opacity-15 text-white text-opacity-85 small d-flex align-items-center gap-2" style="font-size: 0.78rem;">
+                                        <i class="bi bi-patch-check-fill text-warning"></i>
+                                        <span>Berlaku aktif permanen selama santri belajar di Al-Hikmah.</span>
                                     </div>
                                 </div>
                             </div>
@@ -153,39 +163,39 @@
             <div class="row justify-content-center" data-reveal data-reveal-delay="100">
                 <div class="col-lg-10">
                     <div class="table-responsive rounded-4 shadow-sm border mb-4">
-                        <table class="table table-hover align-middle mb-0 bg-white">
-                            <thead class="table-light">
+                        <table class="table table-hover align-middle mb-0 comparison-table">
+                            <thead>
                                 <tr>
-                                    <th scope="col" class="py-3 px-4 fw-semibold text-secondary w-25 border-end">Aspek Belajar</th>
+                                    <th scope="col" class="py-3 px-4 fw-semibold text-heading w-25 border-end">Aspek Belajar</th>
                                     <th scope="col" class="py-3 px-4 fw-semibold text-secondary w-25 border-end text-center">Ngaji Biasa / TPA</th>
-                                    <th scope="col" class="py-3 px-4 fw-bold text-emerald-deep w-50 text-center" style="background: rgba(6, 78, 59, 0.05);"><i class="bi bi-star-fill text-warning me-1"></i> Privat 1-on-1 Al-Hikmah</th>
+                                    <th scope="col" class="py-3 px-4 fw-bold comparison-col-highlight w-50 text-center"><i class="bi bi-star-fill text-warning me-1"></i> Privat 1-on-1 Al-Hikmah</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="py-3 px-4 fw-medium text-dark border-end">Rasio Guru : Murid</td>
-                                    <td class="py-3 px-4 text-center text-muted border-end small">1 Guru : 15 - 20 Santri</td>
-                                    <td class="py-3 px-4 text-center text-dark fw-semibold small" style="background: rgba(6, 78, 59, 0.02);">1 Guru : 1 Santri (Fokus 100%)</td>
+                                    <td class="py-3 px-4 fw-medium text-heading border-end">Rasio Guru : Murid</td>
+                                    <td class="py-3 px-4 text-center text-secondary border-end small">1 Guru : 15 - 20 Santri</td>
+                                    <td class="py-3 px-4 text-center text-heading fw-semibold small comparison-col-highlight">1 Guru : 1 Santri (Fokus 100%)</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 px-4 fw-medium text-dark border-end">Waktu Disimak Guru</td>
-                                    <td class="py-3 px-4 text-center text-muted border-end small">Cuma 5 - 7 menit (sisanya mengantre)</td>
-                                    <td class="py-3 px-4 text-center text-dark fw-semibold small" style="background: rgba(6, 78, 59, 0.02);">90 Menit Penuh (Fokus ke Ananda)</td>
+                                    <td class="py-3 px-4 fw-medium text-heading border-end">Waktu Disimak Guru</td>
+                                    <td class="py-3 px-4 text-center text-secondary border-end small">Cuma 5 - 7 menit (sisanya mengantre)</td>
+                                    <td class="py-3 px-4 text-center text-heading fw-semibold small comparison-col-highlight">90 Menit Penuh (Fokus ke Ananda)</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 px-4 fw-medium text-dark border-end">Laporan Progres</td>
-                                    <td class="py-3 px-4 text-center text-muted border-end small">Tidak ada / buku paraf manual</td>
-                                    <td class="py-3 px-4 text-center text-dark fw-semibold small" style="background: rgba(6, 78, 59, 0.02);">Rapor Digital Real-Time di HP Orang Tua</td>
+                                    <td class="py-3 px-4 fw-medium text-heading border-end">Laporan Progres</td>
+                                    <td class="py-3 px-4 text-center text-secondary border-end small">Tidak ada / buku paraf manual</td>
+                                    <td class="py-3 px-4 text-center text-heading fw-semibold small comparison-col-highlight">Rapor Digital Real-Time di HP Orang Tua</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 px-4 fw-medium text-dark border-end">Kurikulum Belajar</td>
-                                    <td class="py-3 px-4 text-center text-muted border-end small">Disamaratakan seluruh kelas</td>
-                                    <td class="py-3 px-4 text-center text-dark fw-semibold small" style="background: rgba(6, 78, 59, 0.02);">Personal sesuai ritme kecepatan ananda</td>
+                                    <td class="py-3 px-4 fw-medium text-heading border-end">Kurikulum Belajar</td>
+                                    <td class="py-3 px-4 text-center text-secondary border-end small">Disamaratakan seluruh kelas</td>
+                                    <td class="py-3 px-4 text-center text-heading fw-semibold small comparison-col-highlight">Personal sesuai ritme kecepatan ananda</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 px-4 fw-medium text-dark border-end">Hasil Belajar</td>
-                                    <td class="py-3 px-4 text-center text-muted border-end small">Sering berbulan-bulan jalan di tempat</td>
-                                    <td class="py-3 px-4 text-center text-dark fw-bold small text-success" style="background: rgba(6, 78, 59, 0.02);">3 - 4x Lebih Cepat Lancar &amp; Mutqin</td>
+                                    <td class="py-3 px-4 fw-medium text-heading border-end">Hasil Belajar</td>
+                                    <td class="py-3 px-4 text-center text-secondary border-end small">Sering berbulan-bulan jalan di tempat</td>
+                                    <td class="py-3 px-4 text-center text-success fw-bold small comparison-col-highlight">3 - 4x Lebih Cepat Lancar &amp; Mutqin</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -194,7 +204,7 @@
                     <!-- Reframing & Pesan Kunci -->
                     <div class="row g-3">
                         <div class="col-md-7">
-                            <div class="p-3 p-md-4 rounded-4 bg-white border shadow-sm h-100 d-flex gap-3 align-items-start">
+                            <div class="editorial-card p-3 p-md-4 h-100 d-flex gap-3 align-items-start border shadow-sm rounded-4">
                                 <div class="rounded-circle p-2 bg-success-subtle text-success d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
                                     <i class="bi bi-clock-history fs-5"></i>
                                 </div>
@@ -207,7 +217,7 @@
                             </div>
                         </div>
                         <div class="col-md-5">
-                            <div class="p-3 p-md-4 rounded-4 bg-white border shadow-sm h-100 d-flex gap-3 align-items-start">
+                            <div class="editorial-card p-3 p-md-4 h-100 d-flex gap-3 align-items-start border shadow-sm rounded-4">
                                 <div class="rounded-circle p-2 bg-warning-subtle text-warning-emphasis d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
                                     <i class="bi bi-cup-hot-fill fs-5 text-warning"></i>
                                 </div>
@@ -275,15 +285,15 @@
 
                             <div>
                                 <div class="d-flex align-items-center justify-content-between gap-2 mb-3" style="min-height: 28px;">
-                                    <span class="badge bg-light text-emerald-deep border">
+                                    <span class="badge badge-program-level rounded-pill px-2.5 py-1">
                                         {{ $program->level }}
                                     </span>
                                     @if($parentEnrollment)
-                                        <span class="badge bg-success text-white">
+                                        <span class="badge bg-success text-white rounded-pill px-2.5 py-1">
                                             <i class="bi bi-check-circle-fill me-1" aria-hidden="true"></i> Terdaftar
                                         </span>
                                     @elseif($isFeatured)
-                                        <span class="badge text-white" style="background: var(--emerald-deep);">
+                                        <span class="badge bg-emerald-deep text-white rounded-pill px-2.5 py-1">
                                             <i class="bi bi-star-fill text-warning me-1" aria-hidden="true"></i> Paling Diminati
                                         </span>
                                     @endif
@@ -295,15 +305,15 @@
                                     </h3>
                                 </div>
 
-                                <span class="badge bg-light text-secondary border mb-3 d-inline-block">
+                                <span class="badge text-secondary border mb-3 d-inline-block rounded-pill px-2.5 py-1" style="background: var(--bg-tertiary);">
                                     <i class="bi bi-clock text-emerald-deep me-1" aria-hidden="true"></i> 90 Menit / Sesi Privat
                                 </span>
 
                                 @if($parentEnrollment)
                                     @if($parentEnrollment->isWaitingAdmin())
                                         <div class="alert alert-warning border-0 py-2 px-3 mb-3 rounded-3 text-start small">
-                                            <div class="d-flex align-items-center gap-2 fw-bold text-dark mb-1">
-                                                <i class="bi bi-hourglass-split text-warning"></i> Sedang Direview
+                                            <div class="d-flex align-items-center gap-2 fw-bold text-heading mb-1">
+                                                <i class="bi bi-hourglass-split text-warning"></i> Status: Sedang Direview
                                             </div>
                                             <div class="text-secondary" style="font-size:0.8rem;">
                                                 Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
@@ -333,7 +343,7 @@
                                     @elseif($parentEnrollment->isActive())
                                         <div class="alert alert-success border-0 py-2 px-3 mb-3 rounded-3 text-start small">
                                             <div class="d-flex align-items-center gap-2 fw-bold text-success mb-1">
-                                                <i class="bi bi-award-fill text-success"></i> Bimbingan Aktif
+                                                <i class="bi bi-award-fill text-success"></i> Status: Bimbingan Aktif Berjalan
                                             </div>
                                             <div class="text-secondary" style="font-size:0.8rem;">
                                                 Santri: <strong>{{ $parentEnrollment->student?->getDisplayName() }}</strong><br>
@@ -383,10 +393,15 @@
                             <div class="pt-3 border-top mt-auto">
                                 @if(auth()->user()->isParent())
                                     @if($parentEnrollment)
-                                        @if($parentEnrollment->isWaitingAdmin() || $parentEnrollment->isWaitingParent() || $parentEnrollment->isConfirmed() || $parentEnrollment->isActive())
+                                        @if($parentEnrollment->isWaitingAdmin())
                                             <a href="{{ route('parent.enrollments.show', $parentEnrollment->id) }}"
                                                class="btn-editorial-primary w-100 text-center justify-content-center">
-                                                <i class="bi bi-eye me-1"></i> Lihat Status Bimbingan
+                                                <i class="bi bi-eye me-1"></i> Pantau Status Jadwal
+                                            </a>
+                                        @elseif($parentEnrollment->isWaitingParent() || $parentEnrollment->isConfirmed() || $parentEnrollment->isActive())
+                                            <a href="{{ route('parent.enrollments.show', $parentEnrollment->id) }}"
+                                               class="btn-editorial-primary w-100 text-center justify-content-center">
+                                                <i class="bi bi-eye me-1"></i> Lihat Sesi Bimbingan
                                             </a>
                                         @else
                                             <a href="{{ route('parent.enrollments.create', ['program_id' => $program->id]) }}"

@@ -41,7 +41,7 @@
     </div>
 
     <!-- Card Table -->
-    <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden mb-4">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
         <div class="card-body p-4">
             @if($sessions->isEmpty())
                 <div class="text-center py-5">
@@ -75,7 +75,7 @@
                                                 <i class="bi bi-calendar-event fs-5"></i>
                                             </div>
                                             <div>
-                                                <span class="fw-bold text-dark d-block">
+                                                <span class="fw-bold text-heading d-block">
                                                     {{ $ses->date ? \Carbon\Carbon::parse($ses->date)->locale('id')->isoFormat('dddd, D MMMM Y') : '-' }}
                                                 </span>
                                                 <span class="badge bg-light text-secondary border px-2 py-0.5 mt-1" style="font-size: 0.72rem;">
@@ -96,22 +96,33 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="fw-semibold text-dark d-block mb-1">
-                                            {{ $ses->program?->name ?? $ses->enrollment?->program?->name ?? 'Tahfidz Al-Qur\'an' }}
+                                        <span class="fw-semibold text-heading d-block mb-1">
+                                            {{ $ses->program?->name ?? $ses->enrollment?->program?->name ?? 'Bimbingan Privat Al-Qur\'an' }}
                                         </span>
-                                        @if($ses->method === 'offline')
-                                            <span class="badge bg-success-subtle text-success rounded-pill px-2.5 py-1 border border-success-subtle small">
-                                                <i class="bi bi-house-door-fill me-1"></i> Offline
-                                            </span>
-                                        @elseif($ses->method === 'online')
-                                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2.5 py-1 border border-primary-subtle small">
-                                                <i class="bi bi-camera-video-fill me-1"></i> Online
-                                            </span>
-                                        @else
-                                            <span class="badge bg-info-subtle text-info rounded-pill px-2.5 py-1 border border-info-subtle small">
-                                                <i class="bi bi-arrow-repeat me-1"></i> Hybrid
-                                            </span>
-                                        @endif
+                                        @php
+                                            $effectiveMethod = $ses->method ?: ($ses->enrollment?->learning_method ?? 'offline');
+                                        @endphp
+                                        <div class="d-flex align-items-center gap-1 flex-wrap">
+                                            @if($effectiveMethod === 'offline')
+                                                <span class="badge bg-success-subtle text-success rounded-pill px-2.5 py-1 border border-success-subtle small">
+                                                    <i class="bi bi-house-door-fill me-1"></i> Offline
+                                                </span>
+                                            @elseif($effectiveMethod === 'online')
+                                                <span class="badge bg-primary-subtle text-primary rounded-pill px-2.5 py-1 border border-primary-subtle small">
+                                                    <i class="bi bi-camera-video-fill me-1"></i> Online
+                                                </span>
+                                            @else
+                                                <span class="badge bg-info-subtle text-info rounded-pill px-2.5 py-1 border border-info-subtle small">
+                                                    <i class="bi bi-arrow-repeat me-1"></i> Hybrid
+                                                </span>
+                                            @endif
+
+                                            @if($ses->confirmation?->proof_image_url)
+                                                <span class="badge bg-light text-primary border px-2 py-0.5 rounded-pill" style="font-size: 0.68rem;" title="Dokumentasi foto mengajar di lokasi tersedia">
+                                                    <i class="bi bi-camera-fill text-success me-0.5"></i> Bukti Foto
+                                                </span>
+                                            @endif
+                                        </div>
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-2">
@@ -131,6 +142,11 @@
                                             <span class="badge bg-success-subtle text-success px-3 py-1.5 rounded-pill fw-semibold border border-success-subtle">
                                                 <i class="bi bi-check-circle-fill me-1"></i> Selesai
                                             </span>
+                                            @if($ses->confirmation)
+                                                <small class="d-block text-muted mt-1" style="font-size: 0.7rem;">
+                                                    {{ $ses->confirmation->confirmed_by === 'mentor' ? 'Presensi Guru' : 'Presensi Wali' }}
+                                                </small>
+                                            @endif
                                         @elseif($ses->status === 'in_progress')
                                             <span class="badge bg-info-subtle text-info px-3 py-1.5 rounded-pill fw-semibold border border-info-subtle">
                                                 <i class="bi bi-play-circle-fill me-1"></i> Berlangsung

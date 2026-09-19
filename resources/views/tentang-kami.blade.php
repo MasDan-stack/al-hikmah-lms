@@ -1,33 +1,33 @@
 @extends('layouts.landing')
 
 @section('title', 'Tentang Kami | AL-HIKMAH Bimbingan Al-Qur\'an')
-@section('description', 'Mengenal komitmen AL-HIKMAH dalam mendampingi anak usia 10–15 tahun belajar Al-Qur\'an dengan metode talaqqi privat, tartil tajwid, dan adab Islami.')
+@section('description', 'Mengenal komitmen AL-HIKMAH dalam mendampingi buah hati belajar Al-Qur\'an dengan metode talaqqi privat, tartil tajwid, dan adab Islami.')
 
 @section('content')
     <!-- ============================================ -->
     <!-- 1. BREADCRUMB / HERO SECTION -->
     <!-- ============================================ -->
-    <section class="breadcrumb_bg page-hero" aria-label="Header Profil Lembaga">
+    <section class="breadcrumb_bg page-hero editorial-page-header text-center" aria-label="Header Profil Lembaga">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
                     <div class="breadcrumb_iner_item" data-reveal>
                         <nav aria-label="breadcrumb" class="mb-3">
                             <ol class="breadcrumb justify-content-center mb-0 small">
                                 <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none text-muted">Beranda</a></li>
                                 <li class="breadcrumb-item text-muted">Profil Lembaga</li>
-                                <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Tentang Kami</li>
+                                <li class="breadcrumb-item active text-success fw-medium" aria-current="page">Tentang Kami</li>
                             </ol>
                         </nav>
 
-                        <div class="section-badge mx-auto mb-3">
-                            <i class="bi bi-compass"></i>
-                            <span>Profil Lembaga</span>
+                        <div class="d-inline-flex align-items-center gap-1.5 badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 small fw-semibold mb-3">
+                            <i class="bi bi-compass me-1"></i>
+                            <span>Profil &amp; Amanah Lembaga</span>
                         </div>
 
-                        <h1 class="section-title">Mendampingi Buah Hati Belajar Al-Qur'an dengan Adab dan Tartil</h1>
-                        <p class="section-description mx-auto">
-                            Lembaga bimbingan Al-Qur'an privat untuk anak dan remaja usia 10 hingga 15 tahun bersama <span class="text-gradient fw-semibold">AL-HIKMAH</span>, memadukan ketepatan kaidah tajwid, pembiasaan akhlak Islami, serta transparansi mutaba'ah bagi orang tua.
+                        <h1 class="editorial-title display-6 mb-3">Mendampingi Buah Hati Belajar Al-Qur'an dengan Adab dan Tartil</h1>
+                        <p class="editorial-subtitle mx-auto text-secondary" style="max-width: 720px;">
+                            Lembaga bimbingan Al-Qur'an privat untuk anak dan remaja bersama <span class="fw-bold text-emerald-deep">AL-HIKMAH</span>, memadukan ketepatan kaidah tajwid, pembiasaan akhlak Islami, serta transparansi mutaba'ah bagi orang tua.
                         </p>
                     </div>
                 </div>
@@ -38,69 +38,79 @@
     <!-- ============================================ -->
     <!-- 2. KISAH KAMI & LATAR BELAKANG -->
     <!-- ============================================ -->
-    <section id="profil" class="section-padding" aria-label="Latar Belakang AL-HIKMAH">
+    <section id="profil" class="py-5" aria-label="Latar Belakang AL-HIKMAH">
         <div class="container">
             <div class="row align-items-center g-5">
                 <div class="col-lg-6" data-reveal>
-                    <div class="about-image-wrapper">
-                        <div class="about-decoration" aria-hidden="true"></div>
+                    <div class="about-image-wrapper editorial-hero-frame position-relative">
                         <img src="{{ asset('assets/img/2.jpg') }}" alt="Pendampingan bimbingan belajar Al-Qur'an anak"
                              onerror="this.src='{{ asset('assets/img/1.jpg') }}'" class="about-image img-fluid">
+                        <div class="position-absolute bottom-0 start-0 m-3 editorial-floating-badge text-start d-none d-sm-flex align-items-center gap-2.5" style="max-width: 290px;">
+                            <div class="rounded-circle p-2 d-flex align-items-center justify-content-center flex-shrink-0"
+                                style="width: 38px; height: 38px; background: var(--primary-lighter); color: var(--primary);">
+                                <i class="bi bi-heart-fill fs-6" aria-hidden="true"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold small text-heading">Belajar Tanpa Rasa Tertekan</div>
+                                <div class="text-secondary" style="font-size: 0.72rem; line-height: 1.3;">Menghargai ritme unik setiap ananda</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-6" data-reveal data-reveal-delay="150">
-                    <div class="ps-lg-3">
-                        <div class="section-badge mb-2"><i class="bi bi-heart-pulse"></i> Latar Belakang</div>
-                        <h2 class="section-title text-start mb-3">
+                    <div class="ps-lg-4">
+                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 small fw-semibold mb-2 d-inline-block">
+                            <i class="bi bi-heart-pulse-fill me-1"></i> Latar Belakang
+                        </span>
+                        <h2 class="editorial-title text-start mb-3">
                             Kebutuhan Bimbingan Mengaji yang Dekat, Sabar, dan Terarah
                         </h2>
-                        <p class="text-secondary mb-3">
+                        <p class="text-secondary mb-3" style="line-height: 1.7;">
                             Setiap orang tua mendambakan putra-putrinya mampu melafalkan Al-Qur'an dengan fasih, menguasai kaidah tajwid, serta menyelesaikan hafalan juz pilihan. Namun dalam praktiknya, banyak keluarga menemui kendala nyata: keterbatasan waktu orang tua untuk menyimak setoran hafalan secara konsisten, sulitnya mencari guru mengaji privat yang bersyahadah dan sabar menghadapi karakter anak, atau metode pengajaran yang terlalu kaku sehingga anak cepat jenuh.
                         </p>
-                        <p class="text-secondary mb-3">
+                        <p class="text-secondary mb-4" style="line-height: 1.7;">
                             AL-HIKMAH dirintis untuk menjawab kebutuhan tersebut. Kami menyelenggarakan pendampingan Al-Qur'an privat secara bertahap, di mana setiap santri dibimbing secara personal sesuai kecepatan belajarnya tanpa tekanan yang membuat anak enggan membaca Al-Qur'an.
                         </p>
-                        <div class="quote-wrapper mt-4" data-reveal data-reveal-delay="200">
-                            <div class="quotes">
-                                <p class="mb-0 text-secondary small fst-italic">
-                                    "Fokus utama pendampingan kami bukan sekadar mengejar banyaknya hafalan, melainkan ketepatan makhraj huruf, adab santri terhadap Al-Qur'an, dan kenyamanan anak dalam menjalani proses belajar."
-                                </p>
-                            </div>
+                        <div class="p-3 p-md-3.5 rounded-3 border bg-body-tertiary d-flex gap-3 align-items-start">
+                            <span class="text-primary mt-1" style="font-size: 1.25rem; line-height: 1;"><i class="bi bi-quote"></i></span>
+                            <p class="mb-0 text-secondary small fst-italic" style="line-height: 1.6;">
+                                &ldquo;Fokus utama pendampingan kami bukan sekadar mengejar banyaknya hafalan, melainkan ketepatan makhraj huruf, adab santri terhadap Al-Qur'an, dan kenyamanan anak dalam menjalani proses belajar.&rdquo;
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Real-time Rekapitulasi Data Lembaga (lms-stat-card from style.css) -->
-            <div class="row g-4 justify-content-center mt-5 pt-3">
-                <div class="col-md-4 col-sm-6" data-reveal>
-                    <div class="lms-stat-card text-center h-100">
-                        <div class="stat-icon-wrap mx-auto mb-2 bg-success-subtle text-success d-flex align-items-center justify-content-center">
-                            <i class="bi bi-people-fill fs-5"></i>
+            <!-- Real-time Rekapitulasi Data Lembaga -->
+            <div class="row g-3 justify-content-center mt-5 pt-2">
+                <div class="col-4 col-md-4" data-reveal>
+                    <div class="lms-stat-card text-center h-100 p-3 p-md-4">
+                        <div class="editorial-icon-badge mx-auto mb-2" style="width: 40px; height: 40px; font-size: 1.1rem;">
+                            <i class="bi bi-people-fill"></i>
                         </div>
-                        <div class="stat-value text-primary mb-1">{{ $totalStudents }}</div>
-                        <div class="stat-label text-muted">Santri Terdaftar</div>
-                        <div class="stat-meta mt-1">Mengikuti bimbingan privat</div>
+                        <div class="stat-value tnum-price text-heading mb-1" style="font-size: clamp(1.35rem, 2.5vw, 1.95rem);">{{ $totalStudents }}</div>
+                        <div class="stat-label text-muted small fw-semibold">Santri Terdaftar</div>
+                        <div class="stat-meta text-secondary small d-none d-md-block mt-1">Mengikuti bimbingan privat aktif</div>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6" data-reveal data-reveal-delay="100">
-                    <div class="lms-stat-card text-center h-100">
-                        <div class="stat-icon-wrap mx-auto mb-2 bg-warning-subtle text-warning d-flex align-items-center justify-content-center">
-                            <i class="bi bi-person-badge-fill fs-5"></i>
+                <div class="col-4 col-md-4" data-reveal data-reveal-delay="100">
+                    <div class="lms-stat-card text-center h-100 p-3 p-md-4">
+                        <div class="editorial-icon-badge mx-auto mb-2" style="width: 40px; height: 40px; font-size: 1.1rem;">
+                            <i class="bi bi-person-badge-fill"></i>
                         </div>
-                        <div class="stat-value text-primary mb-1">{{ $totalMentors }}</div>
-                        <div class="stat-label text-muted">Pendamping Aktif</div>
-                        <div class="stat-meta mt-1">Tersyahadah dan terverifikasi</div>
+                        <div class="stat-value tnum-price text-heading mb-1" style="font-size: clamp(1.35rem, 2.5vw, 1.95rem);">{{ $totalMentors }}</div>
+                        <div class="stat-label text-muted small fw-semibold">Pendamping Aktif</div>
+                        <div class="stat-meta text-secondary small d-none d-md-block mt-1">Ustadz & ustadzah terkurasi</div>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6" data-reveal data-reveal-delay="200">
-                    <div class="lms-stat-card text-center h-100">
-                        <div class="stat-icon-wrap mx-auto mb-2 bg-primary-subtle text-primary d-flex align-items-center justify-content-center">
-                            <i class="bi bi-journal-bookmark-fill fs-5"></i>
+                <div class="col-4 col-md-4" data-reveal data-reveal-delay="200">
+                    <div class="lms-stat-card text-center h-100 p-3 p-md-4">
+                        <div class="editorial-icon-badge mx-auto mb-2" style="width: 40px; height: 40px; font-size: 1.1rem;">
+                            <i class="bi bi-journal-bookmark-fill"></i>
                         </div>
-                        <div class="stat-value text-primary mb-1">{{ $totalPrograms }}</div>
-                        <div class="stat-label text-muted">Program Belajar</div>
-                        <div class="stat-meta mt-1">Talaqqi, tahsin, dan tahfidz</div>
+                        <div class="stat-value tnum-price text-heading mb-1" style="font-size: clamp(1.35rem, 2.5vw, 1.95rem);">{{ $totalPrograms }}</div>
+                        <div class="stat-label text-muted small fw-semibold">Program Belajar</div>
+                        <div class="stat-meta text-secondary small d-none d-md-block mt-1">Talaqqi, tahsin, dan tahfidz</div>
                     </div>
                 </div>
             </div>
@@ -108,16 +118,18 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- 3. TIGA PENDEKATAN UTAMA / FILOSOFI (why-card from style.css) -->
+    <!-- 3. TIGA PENDEKATAN UTAMA / FILOSOFI -->
     <!-- Anchor #filosofi directly matches Navbar Dropdown -->
     <!-- ============================================ -->
-    <section id="filosofi" class="section-padding section-alt" aria-label="Metode Pembelajaran">
+    <section id="filosofi" class="py-5 bg-body-tertiary border-top border-bottom" aria-label="Metode Pembelajaran">
         <div class="container">
             <div class="row justify-content-center mb-5">
                 <div class="col-lg-8 text-center" data-reveal>
-                    <div class="section-badge mx-auto mb-2"><i class="bi bi-book-half"></i> Metode Bimbingan</div>
-                    <h2 class="section-title">Tiga Pendekatan Utama dalam Setiap Sesi</h2>
-                    <p class="section-description mx-auto">
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 small fw-semibold mb-2 d-inline-block">
+                        <i class="bi bi-book-half me-1"></i> Metode Bimbingan
+                    </span>
+                    <h2 class="editorial-title mb-2">Tiga Pendekatan Utama dalam Setiap Sesi</h2>
+                    <p class="editorial-subtitle mx-auto">
                         Kurikulum bimbingan kami dirancang bertahap agar santri memahami kaidah bacaan secara benar sebelum melangkah ke hafalan baru.
                     </p>
                 </div>
@@ -125,7 +137,7 @@
 
             <div class="row g-4">
                 <div class="col-md-4" data-reveal>
-                    <div class="why-card text-center">
+                    <div class="why-card">
                         <div class="why-icon" aria-hidden="true">
                             <i class="bi bi-journal-text"></i>
                         </div>
@@ -134,7 +146,7 @@
                     </div>
                 </div>
                 <div class="col-md-4" data-reveal data-reveal-delay="100">
-                    <div class="why-card text-center">
+                    <div class="why-card">
                         <div class="why-icon" aria-hidden="true">
                             <i class="bi bi-person-video3"></i>
                         </div>
@@ -143,7 +155,7 @@
                     </div>
                 </div>
                 <div class="col-md-4" data-reveal data-reveal-delay="200">
-                    <div class="why-card text-center">
+                    <div class="why-card">
                         <div class="why-icon" aria-hidden="true">
                             <i class="bi bi-heart-pulse"></i>
                         </div>
@@ -156,16 +168,18 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- 4. STANDAR KUALIFIKASI GURU / NILAI UTAMA (nilai-card from style.css) -->
+    <!-- 4. STANDAR KUALIFIKASI GURU / NILAI UTAMA -->
     <!-- Anchor #nilai directly matches Navbar Dropdown -->
     <!-- ============================================ -->
-    <section id="nilai" class="section-padding" aria-label="Standar Pengajar">
+    <section id="nilai" class="py-5" aria-label="Standar Pengajar">
         <div class="container">
             <div class="row justify-content-center mb-5">
                 <div class="col-lg-8 text-center" data-reveal>
-                    <div class="section-badge mx-auto mb-2"><i class="bi bi-award"></i> Kualifikasi Pendidik</div>
-                    <h2 class="section-title">Standar Pengajar yang Terkurasi</h2>
-                    <p class="section-description mx-auto">
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 small fw-semibold mb-2 d-inline-block">
+                        <i class="bi bi-award me-1"></i> Kualifikasi Pendidik
+                    </span>
+                    <h2 class="editorial-title mb-2">Standar Pengajar yang Terkurasi</h2>
+                    <p class="editorial-subtitle mx-auto">
                         Kami memastikan setiap pendamping yang berinteraksi dengan santri memiliki pemahaman keilmuan Al-Qur'an yang sahih serta pendekatan bimbingan yang beretika.
                     </p>
                 </div>
@@ -204,35 +218,37 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- 5. TRANSPARANSI BAGI ORANG TUA (harapan-list & custom buttons from style.css) -->
+    <!-- 5. TRANSPARANSI BAGI ORANG TUA -->
     <!-- ============================================ -->
-    <section id="wali" class="section-padding section-alt" aria-label="Dukungan untuk Orang Tua">
+    <section id="wali" class="py-5 bg-body-tertiary border-top border-bottom" aria-label="Dukungan untuk Orang Tua">
         <div class="container">
             <div class="row align-items-center g-5">
                 <div class="col-lg-5" data-reveal>
-                    <div class="section-badge mb-2"><i class="bi bi-display"></i> Portal Terpadu</div>
-                    <h2 class="section-title text-start mb-3">
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 small fw-semibold mb-2 d-inline-block">
+                        <i class="bi bi-display me-1"></i> Portal Terpadu
+                    </span>
+                    <h2 class="editorial-title text-start mb-3">
                         Transparansi Belajar yang Memudahkan Orang Tua
                     </h2>
-                    <p class="text-secondary mb-4">
+                    <p class="text-secondary mb-4" style="line-height: 1.7;">
                         Kami percaya keberhasilan belajar Al-Qur'an lahir dari kerja sama yang baik antara guru dan orang tua. Seluruh catatan pembelajaran disajikan secara terbuka sehingga orang tua dapat memantau setiap perkembangan ananda dari rumah.
                     </p>
-                    <div class="d-flex flex-wrap gap-3 mt-4">
+                    <div class="d-flex flex-wrap gap-2.5 mt-4">
                         <a href="{{ wa_url('Assalamualaikum panitia AL-HIKMAH, saya ingin berkonsultasi mengenai bimbingan mengaji untuk anak.') }}" 
                            target="_blank" 
                            rel="noopener noreferrer" 
-                           class="btn-primary-custom">
-                            <i class="bi bi-whatsapp me-2"></i> Konsultasi Program
+                           class="btn-editorial-whatsapp">
+                            <i class="bi bi-whatsapp me-1"></i> Konsultasi Program
                         </a>
                         @auth
                             @if (auth()->user()->isParent() || auth()->user()->isAdmin())
-                                <a href="{{ route('biaya') }}" class="btn-outline-custom">
-                                    <i class="bi bi-tag me-2"></i> Lihat Paket Belajar
+                                <a href="{{ route('biaya') }}" class="btn-editorial-secondary">
+                                    <i class="bi bi-tag me-1"></i> Lihat Paket Belajar
                                 </a>
                             @endif
                         @else
-                            <a href="{{ route('register') }}" class="btn-outline-custom">
-                                <i class="bi bi-person-plus me-2"></i> Daftar Akun Wali Santri
+                            <a href="{{ route('register') }}" class="btn-editorial-secondary">
+                                <i class="bi bi-person-plus me-1"></i> Daftar Akun Wali Santri
                             </a>
                         @endauth
                     </div>
@@ -282,31 +298,30 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- 6. AJAKAN BERGABUNG / KONSULTASI (cta-section from style.css) -->
+    <!-- 6. AJAKAN BERGABUNG / KONSULTASI -->
     <!-- ============================================ -->
     <section id="konsultasi" class="cta-section text-center" aria-label="Konsultasi Bimbingan">
         <div class="cta-overlay" aria-hidden="true"></div>
         <div class="container">
             <div class="cta-content" data-reveal>
-                <div class="cta-icon" aria-hidden="true">
+                <div class="cta-icon mx-auto mb-3" aria-hidden="true">
                     <i class="bi bi-chat-square-heart"></i>
                 </div>
-                <h2 class="cta-title">
+                <h2 class="editorial-title text-white mb-3">
                     Ingin Mengonsultasikan Kebutuhan<br>
-                    <span class="text-gradient-light">Belajar Ananda?</span>
+                    <span style="color: #6ee7b7;">Belajar Ananda?</span>
                 </h2>
-                <p class="cta-subtitle">
-                    Tim kurikulum AL-HIKMAH siap berdiskusi bersama Anda untuk memetakan tingkat bacaan anak serta merekomendasikan jadwal dan guru pembimbing yang tepat.
+                <p class="editorial-subtitle text-white mx-auto mb-4" style="max-width: 660px; color: rgba(255, 255, 255, 0.92) !important;">
+                    Tim kurikulum AL-HIKMAH siap berdiskusi bersama Anda untuk memetakan tingkat bacaan anak serta merekomendasikan jadwal dan guru pembimbing yang tepat, tanpa tekanan untuk langsung mendaftar.
                 </p>
-                <div class="cta-buttons">
+                <div class="d-flex flex-wrap justify-content-center gap-3">
                     <a href="{{ wa_url('Assalamualaikum panitia AL-HIKMAH, saya ingin berkonsultasi mengenai bimbingan mengaji untuk anak.') }}" 
                        target="_blank" 
                        rel="noopener noreferrer" 
-                       class="btn_1 bg-white text-success shadow text-nowrap"
-                       style="background-image: none !important; background-color: #ffffff !important; color: #0d7a3e !important;">
+                       class="btn-editorial-primary btn-lg">
                         <i class="bi bi-whatsapp me-2"></i> Buka Percakapan WhatsApp
                     </a>
-                    <a href="{{ route('program') }}" class="btn-outline-light-custom">
+                    <a href="{{ route('program') }}" class="btn-editorial-secondary btn-lg">
                         <i class="bi bi-journal-bookmark me-2"></i> Telusuri Pilihan Program
                     </a>
                 </div>

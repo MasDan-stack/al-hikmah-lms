@@ -3,8 +3,8 @@
 > **Dokumen Resmi untuk Manajemen, Pimpinan Lembaga, & Tim Pengembang**  
 > **Nama Sistem:** AL-HIKMAH Learning Management System (LMS)  
 > **Status Aplikasi:** ✅ **100% Selesai, Teruji, & Siap Digunakan (Production Ready)**  
-> **Versi:** 10.9 (Consolidated Product Foundations, Strategic Marketing Conversion Architecture, High-Empathy Parent Hooks, Value Comparison & Reframing Matrix, Membership Pass Elevation, Subpage Fixed-Navbar Safe Spacing)  
-> **Tanggal Pembaruan:** 17 September 2026  
+> **Versi:** 11.3 (Restrukturisasi Beranda Mobile-First & Overhaul Halaman Tentang Kami Antislop Minimalis)  
+> **Tanggal Pembaruan:** 19 September 2026  
 
 ---
 
@@ -25,6 +25,7 @@
    - [2.6 Cron Sinkronisasi Harian Masa Percobaan & Peringatan Otomatis WhatsApp H-14](#26-cron-sinkronisasi-harian-masa-percobaan--peringatan-otomatis-whatsapp-h-14)
    - [2.7 Detail Profil Lengkap Guru, Verifikasi Rekening Bank & Student Hand-Over Wizard](#27-detail-profil-lengkap-guru-adminstaffid-verifikasi-rekening-bank--student-hand-over-wizard)
    - [2.8 Sistem Pendukung Keputusan (SPK) Pemilihan Guru Teladan Berbasis Analytical Hierarchy Process (AHP Saaty)](#28-sistem-pendukung-keputusan-spk-pemilihan-guru-teladan-berbasis-analytical-hierarchy-process-ahp-saaty)
+   - [2.9 Fitur Presensi Manual Guru dengan Bukti Foto & Otomasi Slip Gaji](#29-fitur-presensi-manual-guru-dengan-bukti-foto--otomasi-slip-gaji)
 3. [🤖 3. Modul AI Auto-Generate Soal, Bank Soal, & Lembar Ujian PDF](#-3-modul-ai-auto-generate-soal-bank-soal--lembar-ujian-pdf)
    - [3.1 Format Lembar Ujian Siap Cetak A4 & Kunci Jawaban Guru](#31-format-lembar-ujian-siap-cetak-a4--kunci-jawaban-guru)
    - [3.2 Arsitektur Universal Multi-Provider AI & UI Selector](#32-arsitektur-universal-multi-provider-ai--ui-selector)
@@ -62,7 +63,7 @@
 9. [🔐 9. Otomasi Akun Santri & Kebijakan Keamanan Password](#-9-otomasi-akun-santri--kebijakan-keamanan-password)
    - [9.1 Format Email Bersih Bebas Karakter Acak](#91-format-email-bersih-bebas-karakter-acak)
    - [9.2 Password Default `santri123` & Banner Peringatan Keamanan](#92-password-default-santri123--banner-peringatan-keamanan)
-10. [📊 10. Standarisasi Universal DataTables Berbasis Aset Lokal](#-10-standarisasi-universal-datatables-berbasis-aset-lokal)
+10. [📊 10. Standarisasi Universal DataTables Berbasis Aset Lokal & UI/UX Harmonization](#-10-standarisasi-universal-datatables-berbasis-aset-lokal--uiux-harmonization)
 11. [📰 11. Modul Blog & Literasi Edukasi Islami](#-11-modul-blog--literasi-edukasi-islami)
 12. [🕌 12. Fitur Jadwal Sholat & Kompas Arah Kiblat Real-Time](#-12-fitur-jadwal-sholat--kompas-arah-kiblat-real-time)
 13. [💳 13. Integrasi Payment Gateway Pakasir & Invoice Real-Time](#-13-integrasi-payment-gateway-pakasir--invoice-real-time)
@@ -117,8 +118,32 @@
     - [28.4 Reframing Investasi "Rp 20.000/Hari" & Alokasi Infaq Jariyah Dakwah](#284-reframing-investasi-rp-20000hari--alokasi-infaq-jariyah-dakwah)
     - [28.5 Redesain Kartu Membership Pass & Briefing Kurikulum Personal Santri Baru](#285-redesain-kartu-membership-pass--briefing-kurikulum-personal-santri-baru)
     - [28.6 Standardisasi Spasi Vertikal Fixed-Navbar Subpage (.editorial-page-header)](#286-standardisasi-spasi-vertikal-fixed-navbar-subpage-editorial-page-header)
+29. [🎯 29. Strategi Konversi Berjenjang Program Tahfidz & Integrasi Multi-Dashboard Sesi Uji Coba Gratis 15 Menit (Versi 11.0)](#bab-29-strategi-konversi-berjenjang-program-tahfidz--integrasi-multi-dashboard-sesi-uji-coba-gratis-15-menit-versi-110)
+    - [29.1 Latar Belakang & Eliminasi Tombol Pendaftaran Bertumpuk](#291-latar-belakang--eliminasi-tombol-pendaftaran-bertumpuk)
+    - [29.2 Dua Aksi Utama Berjenjang (Tiered Conversion Funnel)](#292-dua-aksi-utama-berjenjang-tiered-conversion-funnel)
+    - [29.3 Edukasi Santun Penambahan Program Aktif bagi Wali Santri](#293-edukasi-santun-penambahan-program-aktif-bagi-wali-santri)
+    - [29.4 Penegakan Privasi Harga (Gated Pricing)](#294-penegakan-privasi-harga-gated-pricing)
+    - [29.5 Kebijakan Siklus Hidup Akun Sesi Uji Coba (Tanpa Auto-Delete)](#295-kebijakan-siklus-hidup-akun-sesi-uji-coba-tanpa-auto-delete)
+    - [29.6 Integrasi Pemantauan Real-Time di 3 Dashboard](#296-integrasi-pemantauan-real-time-di-3-dashboard)
+30. [📍 30. Fitur Presensi Manual Kehadiran Guru di Lokasi Santri dengan Bukti Foto & Sinkronisasi Multi-Dashboard (Versi 11.1)](#bab-30-fitur-presensi-manual-kehadiran-guru-di-lokasi-santri-dengan-bukti-foto--sinkronisasi-multi-dashboard-versi-111)
+    - [30.1 Latar Belakang Masalah: Orang Tua Lupa Absen & Komunikasi via WhatsApp](#301-latar-belakang-masalah-orang-tua-lupa-absen--komunikasi-via-whatsapp)
+    - [30.2 Solusi Formulir Presensi Terpadu Guru (/mentor/sessions/{id}/confirm-attendance)](#302-solusi-formulir-presensi-terpadu-guru-mentorsessionsidconfirm-attendance)
+    - [30.3 Mekanisme Pengunggahan Foto Bukti Kunjungan di Lokasi Rumah Santri](#303-mekanisme-pengunggahan-foto-bukti-kunjungan-di-lokasi-rumah-santri)
+    - [30.4 Sinkronisasi Real-Time Multi-Dashboard (Admin, Wali Santri, & Mentor)](#304-sinkronisasi-real-time-multi-dashboard-admin-wali-santri--mentor)
+    - [30.5 Integrasi Otomatis ke Slip Gaji & Honorarium Mengajar Guru (/admin/staff/{id})](#305-integrasi-otomatis-ke-slip-gaji--honorarium-mengajar-guru-adminstaffid)
+31. [🏛️ 31. Restrukturisasi & Streamlining Beranda (Home Landing Page) Mobile-First Berdaya Konversi Tinggi (Versi 11.2)](#-31-restrukturisasi--streamlining-beranda-home-landing-page-mobile-first-berdaya-konversi-tinggi-versi-112)
+    - [31.1 Masalah Sebelumnya pada Beranda](#311-masalah-sebelumnya-pada-beranda)
+    - [31.2 Arsitektur Baru: Alur Psikologis 8 Tahap](#312-arsitektur-baru-alur-psikologis-8-tahap-hook---empathy---no-risk---proof---choice---validation---utility---spiritual-cta)
+    - [31.3 Standar Kualitas Desain & Bahasa (Skill Impeccable & /antislop-copywriting)](#313-standar-kualitas-desain--bahasa-skill-impeccable---antislop-copywriting)
+32. [📖 32. Overhaul Halaman Tentang Kami (/tentang-kami): Desain Minimalis Elegan, Konsisten, Responsif, & Copywriting Realistis (Versi 11.3)](#-32-overhaul-halaman-tentang-kami-tentang-kami-desain-minimalis-elegan-konsisten-responsif--copywriting-realistis-versi-113)
+    - [32.1 Analisis Masalah Lama & Alasan Redesain Total](#321-analisis-masalah-lama--alasan-redesain-total)
+    - [32.2 Penerapan Filosofi Desain Islamic Editorial & Antislop-UI](#322-penerapan-filosofi-desain-islamic-editorial--antislop-ui)
+    - [32.3 Prinsip Copywriting Realistis (Tanpa Menipu & Tanpa Menjanjikan)](#323-prinsip-copywriting-realistis-tanpa-menipu--tanpa-menjanjikan)
+    - [32.4 Optimalisasi Tata Letak Responsif Mobile & Desktop (Antislop-Layoutmobile)](#324-optimalisasi-tata-letak-responsif-mobile--desktop-antislop-layoutmobile)
+    - [32.5 Pengujian Otomatis & Verifikasi Mutu](#325-pengujian-otomatis--verifikasi-mutu)
 
 ---
+
 
 ## 📌 1. RINGKASAN EKSEKUTIF, FONDASI PRODUK & NILAI MANFAAT APLIKASI
 
@@ -348,6 +373,12 @@ Mengadopsi metodologi ilmiah **Analytical Hierarchy Process (AHP)** dari riset *
    - Fitur cetak satu klik menghasilkan dokumen formal Surat Keputusan Yayasan Pendidikan Al-Hikmah lengkap dengan nomor SK formal, konsiderans menimbang/mengingat, diktum penetapan juara, tabel lampiran nilai 5 kriteria, dan kolom tanda tangan basah pimpinan lembaga siap cetak A4 (`@media print`).
 6. **Widget Personal "My Performance Score" di Dasbor Guru (Poin D)**:
    - Pada `/mentor/dashboard`, hadir kartu personal terdedikasi yang menyajikan skor komposit AHP pribadi, peringkat berjalan di lembaga, progress bar 5 pilar kompetensi, saran peningkatan mutu terarah, dan catatan apresiasi pimpinan.
+
+### 2.9 Fitur Presensi Manual Guru dengan Bukti Foto & Otomasi Slip Gaji
+Sebagai solusi atas kelalaian wali santri dalam melakukan absensi mandiri pada menu Jadwal & Kehadiran, sistem memberikan fleksibilitas otorisasi kepada Guru/Mentor pembimbing:
+1. **Input Absensi Manual Terverifikasi (Foto Geotagging)**: Mentor dapat menginput kehadiran secara mandiri melalui dasbor mereka pada sesi yang bersangkutan. Proses absensi ini diwajibkan untuk melampirkan foto bukti bimbingan dan catatan progres riil.
+2. **Kalkulasi Slip Gaji Komprehensif di Portal Admin (`/admin/staff/{id}`)**: Seluruh riwayat presensi (baik yang diinput oleh orang tua maupun manual oleh guru) tersinkronisasi atomik dengan *Revenue Sharing Engine*.
+3. **Detail Sesi Pembayaran**: Pada fitur "Slip Gaji & Pelunasan Honor", admin atau Koordinator Akademik dapat membentangkan (*expand*) detail sesi per honorarium untuk mengaudit transparansi riwayat absensi guru sebelum pencairan dana (pelunasan).
 
 ---
 
@@ -635,12 +666,13 @@ $$\text{Format:} \quad \text{namalengkapbersih}@\text{alhikmah.com} \quad (\text
 
 ---
 
-## 📊 10. STANDARISASI UNIVERSAL DATATABLES BERBASIS ASET LOKAL
+## 📊 10. STANDARISASI UNIVERSAL DATATABLES BERBASIS ASET LOKAL & UI/UX HARMONIZATION
 
 Seluruh tabel data di Al-Hikmah LMS telah distandarisasi menggunakan aset lokal resmi:
 - **Lokasi Aset**: `public/assets/DataTables/datatables.min.css`, `public/assets/DataTables/datatables.min.js`, dan `public/assets/js/datatables-init.js`.
 - **Bebas Ketergantungan CDN & Bebas Error jQuery**: Inisialisasi menggunakan Vanilla JS observer pada class `.datatable` dengan konfigurasi responsif, pencarian multi-kolom, dan paginasi (10, 25, 50, Semua).
 - **Query Controller**: Menggunakan query murni `->get()` pada tabel client-side (seperti `/parent/schedules/list`) untuk menghilangkan bentrok pagination Blade dengan pagination DataTables.
+- **Harmonisasi UI/UX & Aksesibilitas (WCAG)**: Struktur CSS DataTables (termasuk antarmuka *pagination*) telah diselaraskan secara visual (*antislop-ui*) agar tetap rapi, responsif, dan tidak tumpang tindih. Elemen teks di seluruh platform (seperti tipografi dan deskripsi paket pada `/biaya`) dipastikan memenuhi rasio kontras standar aksesibilitas untuk keterbacaan yang optimal bagi pengguna dari segala usia.
 
 ---
 
@@ -1518,8 +1550,207 @@ Setelah sesi 15 menit selesai:
 
 ---
 
+## BAB 30: FITUR PRESENSI MANUAL KEHADIRAN GURU DI LOKASI SANTRI DENGAN BUKTI FOTO & SINKRONISASI MULTI-DASHBOARD (VERSI 11.1)
+
+### 30.1 Latar Belakang Masalah: Orang Tua Lupa Absen & Komunikasi via WhatsApp
+Dalam operasional bimbingan belajar privat Al-Qur'an 1-on-1 datang ke rumah (*home visit*), ditemukan kendala praktis di lapangan:
+- **Orang tua santri kerap lupa melakukan konfirmasi kehadiran (absen) di sistem website** setelah sesi bimbingan berakhir karena kesibukan pekerjaan dan urusan rumah tangga.
+- Orang tua lebih sering memberikan konfirmasi izin/sakit/selesai belajar secara informal langsung kepada guru pembimbing via pesan WhatsApp.
+- Jika guru tidak dapat melakukan input kehadiran mandiri, sesi bimbingan berstatus menggantung (*pending*), riwayat belajar ananda tidak terdata rapi, dan honorarium mengajar guru tidak dapat dihitung otomatis pada slip gaji bulanan.
+- Sebelumnya, tautan `http://127.0.0.1:8000/mentor/sessions/{id}/confirm-attendance` menghasilkan status `404 Not Found` ketika diakses melalui browser (metode GET) karena rute sebelumnya hanya didefinisikan sebagai `POST`.
+
+### 30.2 Solusi Formulir Presensi Terpadu Guru (`/mentor/sessions/{id}/confirm-attendance`)
+Sistem kini menyediakan antarmuka presensi mandiri berorientasi *mobile-friendly* bagi guru pembimbing pada rute `GET /mentor/sessions/{id}/confirm-attendance` dan pemrosesan `POST /mentor/sessions/{id}/confirm-attendance` ([`Mentor\SessionController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Mentor/SessionController.php)):
+1. **Data Identitas Sesi Otomatis**:
+   - Nama Santri & Foto Profil.
+   - Program Bimbingan (Iqra/Tahsin/Tahfidz) beserta durasi standar 90 menit.
+   - Hari, Tanggal, & Jam Pelaksanaan Sesi.
+   - Alamat Lengkap Santri beserta tombol integrasi Google Maps navigasi jalan.
+   - Tautan langsung WhatsApp Wali Santri untuk koordinasi kedatangan.
+2. **Pilihan Status Kehadiran Interaktif (3 Pilihan)**:
+   - **Hadir**: Sesi tatap muka terlaksana di rumah santri. Mengubah status sesi menjadi `completed`.
+   - **Izin**: Santri/Wali meminta izin berhalangan belajar. Mengubah status sesi menjadi `cancelled`.
+   - **Sakit**: Santri sakit. Mengubah status sesi menjadi `cancelled`.
+3. **Catatan Pembelajaran & Evaluasi (*Field* Catatan)**:
+   - Evaluasi makharijul huruf, kelancaran tajwid, batas halaman/surat yang dicapai, serta evaluasi adab/sikap santri selama belajar.
+
+### 30.3 Mekanisme Pengunggahan Foto Bukti Kunjungan di Lokasi Rumah Santri
+Sebagai komitmen akuntabilitas dan pencegahan manipulasi kehadiran (*fraud prevention*):
+- Guru wajib mengunggah **1 lembar foto otentik bukti kehadiran di lokasi rumah santri** (misal: foto bersama santri saat belajar, atau foto di depan rumah santri jika santri berhalangan).
+- Kompatibel dengan kamera smartphone secara langsung (`capture="environment"`) maupun pengambilan file dari galeri.
+- Format yang didukung: JPEG, JPG, PNG, WEBP dengan ukuran maksimum 5MB.
+- Berkas disimpan aman di folder penyimpanan publik `public/attendance_proofs/` dan dapat diakses melalui symlink Laravel storage URL.
+- Antarmuka dilengkapi *Instant Client-Side Preview*: guru dapat melihat pratinjau foto sebelum menekan tombol konfirmasi.
+
+### 30.4 Sinkronisasi Real-Time Multi-Dashboard (Admin, Wali Santri, & Mentor)
+Setelah guru menekan tombol simpan presensi:
+1. **Admin Dashboard ([`Admin\DashboardController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Admin/DashboardController.php))**:
+   - Tab *"Konfirmasi Kehadiran"* menampilkan data absensi terbaru lengkap dengan label sumber konfirmasi (**Input Guru** vs **Wali Santri**).
+   - Tombol **"Lihat Foto"** dengan modal pratinjau instan (`#adminProofPhotoModal`) memungkinkan admin memeriksa foto kehadiran ukuran penuh dan mengunduh berkas tanpa perlu meninggalkan dashboard.
+2. **Parent / Wali Santri Dashboard ([`Parent\ParentDashboardController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Parent/ParentDashboardController.php))**:
+   - Pada tabel bimbingan, status kehadiran langsung terbarui secara real-time (`badge` Hadir/Izin/Sakit).
+   - Muncul label penjelasan *"Presensi Guru di Lokasi"* serta tautan cepat *"Bukti Foto Hadir"* yang dapat diklik oleh wali santri untuk melihat foto kunjungan guru di rumah mereka.
+3. **Mentor Dashboard & Jadwal Sesi ([`Mentor\DashboardController.php`](file:///c:/xampp/htdocs/al-hikmah-lms/app/Http/Controllers/Mentor/DashboardController.php) & [`resources/views/mentor/sessions/index.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/mentor/sessions/index.blade.php))**:
+   - Ditambahkan tombol cepat *"Presensi"* dengan ikon kamera pada kolom aksi tabel jadwal hari ini dan daftar sesi belajar, memudahkan guru membuka form presensi hanya dalam 1 klik.
+
+### 30.5 Integrasi Otomatis ke Slip Gaji & Honorarium Mengajar Guru (`/admin/staff/{id}`)
+- Sesi yang telah dikonfirmasi hadir (`confirmed_by = 'mentor'` atau `'parent'`) dan berstatus `completed` otomatis diakui sebagai **Sesi Terlaksana Valid**.
+- Ketika admin membuka halaman **Detail Staff / Guru** ([`resources/views/admin/staff/show.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/admin/staff/show.blade.php)) dan memilih filter bulan pada modul **Slip Gaji & Pelunasan Honor**, sistem langsung mengkalkulasikan:
+  - Jumlah total sesi hadir yang diajar oleh guru terkait pada rentang bulan tersebut.
+  - Total honorarium mengajar (Tarif per Sesi $\times$ Jumlah Sesi Hadir).
+  - Tunjangan transportasi dan bonus kehadiran.
+  - Tombol rincian audit sesi untuk memverifikasi tanggal, nama santri, dan bukti foto kehadiran.
+
+### 30.6 Jaminan Kualitas & Pengujian Fitur (Feature Test Suite)
+Fitur presensi manual guru ini telah diuji secara menyeluruh menggunakan Laravel Test Suite pada [`tests/Feature/MentorSessionAndAttendanceTest.php`](file:///c:/xampp/htdocs/al-hikmah-lms/tests/Feature/MentorSessionAndAttendanceTest.php):
+- ✅ `mentor can view confirm attendance page (GET)` (Status 200 OK, form ter-render sempurna).
+- ✅ `admin can also view mentor confirm attendance page for supervision (GET)`.
+- ✅ `guest is redirected to login when accessing confirm attendance page (GET)`.
+- ✅ `mentor can submit attendance with proof photo successfully (POST)`.
+- ✅ `admin dashboard displays mentor attendance confirmation and proof photo`.
+- ✅ `parent dashboard displays mentor attendance confirmation and photo link`.
+- ✅ `attendance submission validates required status and file type`.
+- **Hasil Pengujian**: 7 skenario lulus uji 100% (*7 passed, 26 assertions*).
+
+---
+
+## 🏛️ 31. RESTRUKTURISASI & STREAMLINING BERANDA (HOME LANDING PAGE) MOBILE-FIRST BERDAYA KONVERSI TINGGI (VERSI 11.2)
+
+Berdasarkan evaluasi pengalaman pengguna dan psikologi wali santri yang mayoritas mengakses platform AL-HIKMAH melalui smartphone di sela-sela kesibukan bekerja:
+
+### 31.1 Masalah Sebelumnya pada Beranda
+1. **Panjang Halaman Ekstrem (*Infinite Scroll Bloat*)**: Sebelumnya memuat 14 section bertumpuk dengan panjang mencapai ~30 tinggi layar HP, membuat orang tua kelelahan membaca dan meninggalkan halaman (*bounce*) sebelum mencapai formulir.
+2. **Duplikasi Konten Berulang**:
+   - Section *Pilar Keunggulan* mengulang 3 keunggulan yang sudah tertulis di Hero Banner.
+   - Section *Tentang Kami* dan *Pilar Pembelajaran* menyajikan deskripsi panjang yang kaku dan abstrak.
+   - Section *Fleksibilitas Metode Belajar* memuat ulang info *Home Visit* vs *Online* dengan gambar banner berukuran besar yang memperlambat render HP.
+3. **Interupsi Alur Emosional**: Banner *Jadwal Sholat* yang sebelumnya diletakkan tepat di bawah Hero memotong empati psikologis orang tua.
+
+### 31.2 Arsitektur Baru: Alur Psikologis 8 Tahap (Hook - Empathy - No-Risk - Proof - Choice - Validation - Utility - Spiritual CTA)
+1. **Tahap 1: Hook Kuat (Hero Section)**:
+   - *Headline*: *"Mau Ajarkan Anak Ngaji Sendiri tapi Sering Kehabisan Sabar setelah Lelah Bekerja?"*
+   - Menghubungkan keresahan nyata orang tua pekerja dengan solusi bimbingan privat 90 menit penuh kesabaran bersama ustadz/ustadzah terkurasi.
+2. **Tahap 2: Psikologis & Empati Mendalam (Memahami Kekhawatiran Orang Tua)**:
+   - 4 Kartu Bento Reassurance (`01`–`04`): Anak cepat jenuh/mogok, orang tua sibuk bekerja, kekhawatiran karakter guru tidak cocok, dan jadwal padat.
+   - Setiap kartu menyajikan pemahaman tulus dan jawaban pasti garansi Al-Hikmah.
+3. **Tahap 3: Pancingan Nol Risiko (Sesi Evaluasi & Penempatan Level 15 Menit • 100% Bebas Biaya)**:
+   - 3 Langkah santai: Kenalan hangat, simak tartil/makhraj dasar, dan rekomendasi level objektif.
+   - Tombol instan memicu modal pendaftaran evaluasi tanpa paksaan langganan.
+4. **Tahap 4: Bukti Konkret (Mockup Interaktif Rapor Mutaba'ah di Layar HP Bunda)**:
+   - Visual nyata portal wali santri: nilai makhraj, ketukan tajwid, catatan adab, dan pesan ramah ustadz untuk murajaah sebelum tidur.
+5. **Tahap 5: Pilihan Program yang Jelas & Terstruktur**:
+   - 3 Program berjenjang: *Iqra & Al-Qur'an Dasar*, *Tahsin & Tartil Tajwid*, serta *Tahfidz & Muraja'ah Terstruktur*.
+   - Setiap kartu langsung dilengkapi badge ketersediaan: `Home Visit (Guru ke Rumah)` dan `Online 1-on-1`.
+6. **Tahap 6: Validasi Sosial (Cerita Nyata Wali Santri)**:
+   - 3 Testimoni otentik dari Bunda Aisyah (Iqra), Ayah Hendra (Tahfidz), dan Bunda Fatimah (Tahsin).
+7. **Tahap 7: Utilitas & Edukasi Qur'ani Harian**:
+   - Widget ringkas *Jadwal Sholat & Arah Kiblat Harian* standar Kemenag RI dan kompas real-time.
+   - 3 Artikel edukasi dan panduan praktis mendampingi anak mencintai kalamullah.
+8. **Tahap 8: Renungan Penutup & Pancingan Kuat (Closing CTA)**:
+   - Renungan menyentuh hati: *"Bimbel pelajaran umum jutaan rupiah kita siapkan, les bakat rutin kita dukung. Sudahkah kita menyisihkan yang terbaik untuk bekal ananda membaca ayat-ayat-Nya dengan tartil kelak di hadapan Allah?"*
+   - Opsi pendaftaran evaluasi bebas biaya atau konsultasi santun via WhatsApp.
+
+### 31.3 Standar Kualitas Desain & Bahasa (Skill Impeccable & /antislop-copywriting)
+- **Zero AI Slop**: Menghilangkan negative parallelism (*"Bukan sekadar X, tetapi Y"*), em-dash (`—`), buzzword hampa (*unlock, elevate, delve, seamless*), dan signposting meta-komentar.
+- **Mobile-First Tap Targets**: Seluruh tombol aksi memiliki tinggi minimum $\ge 44\text{px}$ dan spacing nyaman.
+- **Sticky Mobile Action Bar**: Pada tampilan smartphone, bilah aksi bawah melayang dengan dua tombol cepat (*Tanya Admin* dan *Daftar Gratis*) memudahkan tindakan cepat tanpa harus scroll bolak-balik.
+
+---
+
+## 📖 32. OVERHAUL HALAMAN TENTANG KAMI (/tentang-kami): DESAIN MINIMALIS ELEGAN, KONSISTEN, RESPONSIF, & COPYWRITING REALISTIS (VERSI 11.3)
+
+Sebagai perwujudan komitmen keunggulan antarmuka dan integritas institusi, halaman **Tentang Kami** (`/tentang-kami`) telah diperbarui secara menyeluruh menggunakan pedoman **Islamic Editorial Design System**, keahlian **Impeccable**, serta standar **Antislop Suite** (`antislop-ui`, `antislop-layoutmobile`, `antislop-copywriting`).
+
+### 32.1 Analisis Masalah Lama & Alasan Redesain Total
+1. **Desain Tidak Konsisten**: Tipografi, radius kartu, dan warna aksen tidak seragam dengan halaman Beranda dan Biaya. Sebagian kartu menggunakan ornamen border ganda yang tidak memiliki relasi fungsional.
+2. **Desain Tidak Modern & Terlalu Ramai**: Penggunaan elemen dekoratif `.about-decoration` dengan offset `-16px` yang memicu kebocoran lebar layar horizontal (*horizontal overflow*) pada perangkat layar sentuh.
+3. **Desain Kurang Minimalis & Kurang Elegan**: Kartu nilai dan metodologi sebelumnya menggunakan bayangan tebal, ikon tidak proporsional, serta side-tab border tebal yang terdeteksi sebagai antipattern antarmuka generik.
+4. **Masalah Responsivitas Mobile**:
+   - Angka statistik rekapitulasi data santri, guru, dan program terpotong atau bertumpuk vertikal secara canggung pada resolusi $\le 375\text{px}$.
+   - Daftar checklist harapan orang tua memiliki padding kaku yang membuang ruang horizontal ponsel.
+5. **Copywriting Kurang Realistis**: Penggunaan klaim berlebihan dan pembatasan usia anak tanpa dasar ("10-15 tahun"), janji kesuksesan mutlak, serta tanda hubung em-dash (`—`) yang tidak lazim dalam komunikasi santun Indonesia.
+
+### 32.2 Penerapan Filosofi Desain Islamic Editorial & Antislop-UI
+- **Subpage Header Terstandarisasi (`.editorial-page-header`)**: Menggunakan padding aman fixed-navbar, breadcrumb navigasi jelas, badge kategori hijau zamrud bersudut lengkung halus, dan judul editorial berbobot tegas tanpa teks gradien norak.
+- **Kartu Metodologi & Nilai Minimalis (`.why-card` & `.nilai-card`)**: 
+  - Tata letak rata kiri yang natural dan nyaman dibaca.
+  - Ikon bersarang di squircle lembut berlatar hijau zamrud muda (`var(--primary-lighter)`).
+  - Efek hover mikro halus (`translateY(-2px)`) yang tenang dan menenangkan tanpa efek pantul kasar (*bounce easing*).
+- **Kutipan Editorial Otentik**: Menghilangkan side-tab border (AI-slop tell) dan menggantinya dengan kotak kutipan berbingkai lembut dengan aksen ikon petik ganda (`bi-quote`) yang bersahaja.
+
+### 32.3 Prinsip Copywriting Realistis (Tanpa Menipu & Tanpa Menjanjikan)
+Mengikuti arahan ketat: **Tidak menipu, tidak menjanjikan**:
+1. **Kejujuran Rentang Belajar**: Menghapus klaim instan. Menegaskan bahwa setiap santri memiliki ritme, latar belakang, dan daya tangkap masing-masing yang membutuhkan ketelatenan dan doa orang tua.
+2. **Ketiadaan Angka Fiktif**: Menghapus angka palsu seperti "100+" atau "15+". Menghubungkan metrik langsung ke data riil lembaga (`$totalStudents`, `$totalMentors`, `$totalPrograms`).
+3. **Standar Seleksi yang Realistis**: Menjelaskan proses seleksi guru secara faktual (syahadah tajwid, kesabaran ramah anak, dan evaluasi berkala) tanpa klaim hiperbolis seperti *"guru terbaik di Indonesia"*.
+4. **Eliminasi AI Buzzwords & Em-Dash**: Bersih 100% dari kata klise (*transformative, pivotal moment, elevate, game-changer*) dan bebas dari tanda em-dash (`—`).
+
+### 32.4 Optimalisasi Tata Letak Responsif Mobile & Desktop (Antislop-Layoutmobile)
+1. **Penghapusan Horizontal Overflow**: Menonaktifkan elemen `.about-decoration` absolut yang melampaui lebar viewport ponsel.
+2. **Micro-Stat Dashboard 3 Kolom Fluid**: Menggunakan grid `col-4 col-md-4` dengan tipografi `tnum-price` dan fungsi `clamp(1.35rem, 2.5vw, 1.95rem)` sehingga 3 metrik lembaga tampil sejajar rapi pada layar selebar $320\text{px}$ hingga layar monitor $4\text{K}$.
+3. **Tap Targets & Button Accessibility**: Seluruh tombol aksi (`.btn-editorial-whatsapp`, `.btn-editorial-secondary`) memiliki tinggi $\ge 44\text{px}$, padding sentuh nyaman, dan kontras warna memenuhi standar WCAG AA.
+
+### 32.5 Pengujian Otomatis & Verifikasi Mutu
+- **Test Suite**: File pengujian `tests/Feature/AboutPageDesignTest.php` memvalidasi HTTP 200, keberadaan 8 heading utama, penerapan 5 kelas CSS desain sistem (`page-hero`, `about-image-wrapper`, `why-card`, `nilai-card`, `harapan-list`), pencegahan counter palsu (`100+`, `15+`), pencegahan buzzword (*transformative*, *pivotal moment*), dan ketiadaan tanda em-dash (`—`).
+- **Hasil Pengujian**: 100% Green Pass (19 assertions).
+- **Linter & Code Style**: Lulus audit Laravel Pint (`vendor/bin/pint --dirty --format agent`).
+- **Antipattern Detection**: Audit deteksi mekanis `impeccable detect` menghasilkan 0 antipattern (`[]`).
+
+---
+
+## 🏛️ 33. OVERHAUL TOTAL 8 HALAMAN PUBLIK: STANDARISASI ISLAMIC EDITORIAL, FIELD FORM INSET-ICON, & ZERO SLOP (VERSI 11.4)
+
+Sebagai kelanjutan penyempurnaan menyeluruh terhadap seluruh antarmuka publik AL-HIKMAH LMS, telah dilakukan standardisasi komprehensif pada 8 rute halaman publik utama beserta perombakan arsitektur formulir input menggunakan prinsip **Islamic Editorial Design System**, keahlian **Impeccable**, serta panduan **Antislop Suite** (`antislop-ui`, `antislop-human`, `antislop-layoutmobile`, `antislop-copywriting`).
+
+### 33.1 Arsitektur Universal Inset-Icon Form Fields
+Sesuai arahan desain, seluruh elemen input formulir di seluruh website distandardisasi menjadi satu kontainer utuh yang elegan:
+1. **Icon di Dalam Field (Inset Icon)**: Ikon indikator ditempatkan di dalam kontainer `.input-group-editorial` (`.field-icon`), bukan di luar atau terpisah sebagai add-on Bootstrap yang kaku.
+2. **Active & Hover Border Menyeluruh**:
+   - Ketika mouse berada di atas elemen (`:hover`), seluruh garis batas kontainer menonjolkan warna hijau zamrud (`var(--primary, #0d7a3e)`) dengan bayangan halus (`box-shadow: 0 2px 8px rgba(13, 122, 62, 0.08)`).
+   - Ketika field dalam keadaan aktif/fokus (`:focus-within`), seluruh border kontainer membungkus rapi dengan ring fokus tegas (`box-shadow: 0 0 0 3px rgba(13, 122, 62, 0.15)`), memastikan kepatuhan aksesibilitas WCAG 2.2 non-text contrast $\ge 3:1$.
+3. **Seamless Embedded Action & Password Toggle**: Tombol intip kata sandi (`.btn-password-toggle`) dan tombol aksi kirim/cari (`.btn-field-action`, `.btn-field-submit`) berada menyatu di dalam batas field tanpa pembatas ganda yang terfragmentasi.
+
+### 33.2 Standardisasi 8 Halaman Publik
+1. **Metode Belajar (`/metode`)**:
+   - Header terpadu `.editorial-page-header` berlatar hangat dengan badge bersudut lengkung.
+   - 3 kartu metode bimbingan (`.why-card`): *Talaqqi & Musyafahah Langsung*, *Metode Bertahap (Tadrij)*, dan *Pendekatan Personal 1 Guru 1 Santri*.
+   - Tabel komparasi metode yang jelas, informatif, dan realistis tanpa klaim berlebihan.
+2. **Roadmap Alur Belajar (`/roadmap`)**:
+   - Tab navigasi linimasa terpisah untuk Jalur Orang Tua dan Jalur Guru/Pendamping.
+   - Linimasa 6 tahapan terstruktur dengan penomoran jelas dan kartu editorial responsif.
+   - Penegasan alur keuangan syar'i: *"Deal Dulu, Baru Bayar"*.
+3. **Galeri Interaktif (`/galeri`)**:
+   - Bilah pencarian terpadu inset-icon dengan tombol filter kategori dinamis.
+   - Lightbox pratinjau media yang ramah sentuhan ponsel dan navigasi keyboard (`Escape`).
+4. **Jadwal Sholat & Imsakiyah (`/jadwal-sholat`)**:
+   - Header editorial terstandarisasi.
+   - Modal pencarian kota interaktif dengan bilah pencarian inset-icon.
+   - Kartu waktu sholat 5 waktu dengan hitung mundur waktu berikutnya dan penanda waktu aktif.
+5. **Pendaftaran Guru (`/bergabung`)**:
+   - Formulir pendaftaran calon guru pembimbing dengan 14 field lengkap (nama, email, no. WA, password, tanggal lahir, jenis kelamin, domisili, pendidikan, institusi, spesialisasi, hafalan juz, pengalaman, sanad, dan unggah berkas).
+   - Seluruh field menggunakan kontainer inset-icon tunggal yang bereaksi aktif border pada hover dan fokus.
+   - Copywriting dakwah yang jujur, amanah, dan terikat hadits riwayat Al-Bukhari No. 5027.
+6. **Pelacak Status Lamaran (`/cek-status-lamaran`)**:
+   - Bilah pencarian status lamaran dengan inset icon WhatsApp dan tombol aksi terintegrasi.
+   - Stepper linimasa progres 5 tahap seleksi terpisah untuk desktop (`.tracker-stepper-desktop`) dan mobile (`.tracker-stepper-mobile`).
+7. **Blog & Artikel Edukasi (`/blog`)**:
+   - Header editorial terstandarisasi dengan badge literasi Qur'ani.
+   - Bilah pencarian artikel di bilah sisi (*sidebar*) menggunakan `.input-group-editorial` dengan icon pencarian inset dan tombol panah aksi terpadu.
+8. **Pusat Bantuan & FAQ (`/faq`)**:
+   - Bilah pencarian live search FAQ instan berbingkai penuh dengan icon inset.
+   - Tab penyaring kategori (Umum, Jadwal, Biaya, Portal).
+   - Perbaikan copywriting realistis: Menghapus batasan usia kaku ("10 hingga 15 tahun") menjadi penjelasan inklusif untuk anak-anak, remaja, dan dewasa.
+
+### 33.3 Verifikasi Mutu & Hasil Pengujian
+- **Audit Antipattern (Impeccable Detect)**: 0 antipattern pada seluruh struktur HTML/CSS baru.
+- **Code Style Formatter**: Lulus 100% Laravel Pint (`vendor/bin/pint --format agent`).
+- **Feature Test Suite**: Seluruh 48 pengujian pada test suite terkait (`LandingPagesTest`, `GalleryFeatureTest`, `RoadmapFaqContactTest`, `RecruitmentFlowTest`, `StatusTrackerDesignTest`, `BlogFeatureTest`, `TrialBookingTest`) lulus 100% Green Pass (214 assertions).
+
+---
+
 **Disahkan oleh:** Tim Manajemen & Pengembang AL-HIKMAH LMS  
 **Status Dokumen:** Living Specification & Single Source of Truth  
-**Tanggal:** 17 September 2026
+**Tanggal:** 19 September 2026
+
 
 

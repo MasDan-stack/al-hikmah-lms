@@ -1,17 +1,17 @@
 @extends('layouts.landing')
 
-@section('title', 'Pendaftaran Guru Pembimbing Al-Qur\'an - AL-HIKMAH LMS')
-@section('meta_description', 'Bergabunglah menjadi guru pembimbing Al-Qur\'an di AL-HIKMAH LMS. Dapatkan fleksibilitas waktu, insentif syar\'i yang transparan, dan ruang dakwah yang berkah.')
+@section('title', 'Pendaftaran Calon Guru Pembimbing Al-Qur\'an - AL-HIKMAH')
+@section('meta_description', 'Formulir pendaftaran calon guru pembimbing Al-Qur\'an AL-HIKMAH. Bergabung bersama kami dengan proses seleksi yang amanah, objektif, dan transparan.')
 
 @section('content')
 <div class="mentor-split-wrapper section-alt" style="padding-top: 110px; padding-bottom: 70px;">
     <div class="container-xl">
-        <!-- Top Breadcrumb & Header Brief -->
+        <!-- Top Header -->
         <div class="text-center mb-4">
             <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill small fw-semibold">
-                <i class="bi bi-mortarboard-fill me-1"></i> Rekrutmen Guru Mitra &amp; Pendamping
+                <i class="bi bi-mortarboard-fill me-1"></i> Rekrutmen Guru &amp; Pendamping
             </span>
-            <h1 class="h2 fw-bold mt-2 mb-1" style="color: var(--text-primary);">Pendaftaran Calon Guru Pembimbing</h1>
+            <h1 class="h2 fw-bold mt-2 mb-1" style="color: var(--text-primary);">Formulir Pendaftaran Guru Pembimbing</h1>
             <p class="text-secondary small mx-auto mb-0" style="max-width: 650px;">
                 Mari berkhidmah menemani santri dan keluarga muslim mempelajari Al-Qur'an dengan bacaan yang mutqin, fasih, dan berakhlak mulia.
             </p>
@@ -20,7 +20,7 @@
         @if(session('error'))
             <div class="alert alert-danger alert-dismissible fade show shadow-sm rounded-3 mb-4" role="alert">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
             </div>
         @endif
 
@@ -32,7 +32,7 @@
                         <li>{{ $err }}</li>
                     @endforeach
                 </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
             </div>
         @endif
 
@@ -42,7 +42,7 @@
             <div class="mentor-form-side">
                 <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom">
                     <div>
-                        <h4 class="fw-bold mb-1" style="color: var(--text-primary);">Formulir Pendaftaran Guru</h4>
+                        <h4 class="fw-bold mb-1" style="color: var(--text-primary);">Formulir Pendaftaran Guru Pembimbing</h4>
                         <span class="text-secondary small">Lengkapi data pribadi dan kualifikasi untuk proses kurasi berkas.</span>
                     </div>
                     <span class="badge bg-success text-white px-3 py-1 rounded-pill small">Langkah 1 dari 2</span>
@@ -60,26 +60,26 @@
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold small" style="color: var(--text-primary);">Nama Lengkap &amp; Gelar <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-person"></i></span>
-                                <input type="text" name="full_name" class="form-control border-start-0" placeholder="Contoh: Ustadz Ahmad Fauzi, S.Pd.I" value="{{ old('full_name') }}" required>
+                            <div class="input-group-editorial">
+                                <span class="field-icon"><i class="bi bi-person"></i></span>
+                                <input type="text" name="full_name" class="form-control" placeholder="Contoh: Ustadz Ahmad Fauzi, S.Pd.I" value="{{ old('full_name') }}" required>
                             </div>
                         </div>
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold small" style="color: var(--text-primary);">Alamat Email Aktif <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
-                                    <input type="email" name="email" class="form-control border-start-0" placeholder="nama@email.com" value="{{ old('email') }}" required autocomplete="email">
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-envelope"></i></span>
+                                    <input type="email" name="email" class="form-control" placeholder="nama@email.com" value="{{ old('email') }}" required autocomplete="email">
                                 </div>
                                 <small class="text-muted" style="font-size: 0.75rem;">Digunakan untuk login ke portal guru.</small>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold small" style="color: var(--text-primary);">Nomor WhatsApp Aktif <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-whatsapp text-success"></i></span>
-                                    <input type="tel" name="phone" class="form-control border-start-0" placeholder="081234567890" value="{{ old('phone') }}" required autocomplete="tel">
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-whatsapp text-success"></i></span>
+                                    <input type="tel" name="phone" class="form-control" placeholder="081234567890" value="{{ old('phone') }}" required autocomplete="tel">
                                 </div>
                                 <small class="text-muted" style="font-size: 0.75rem;">Untuk koordinasi jadwal wawancara.</small>
                             </div>
@@ -88,18 +88,20 @@
                         <div class="row g-3 mb-3 p-3 bg-body-tertiary rounded-3 border">
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold small text-success"><i class="bi bi-key-fill me-1"></i>Kata Sandi Akun <span class="text-danger">*</span></label>
-                                <div class="input-group">
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-lock"></i></span>
                                     <input type="password" name="password" id="inputPwd" class="form-control" placeholder="Minimal 8 karakter" required autocomplete="new-password">
-                                    <button class="btn btn-outline-secondary btn-password-toggle" type="button" aria-label="Tampilkan kata sandi">
+                                    <button class="btn-password-toggle" type="button" aria-label="Tampilkan kata sandi">
                                         <i class="bi bi-eye"></i>
                                     </button>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold small text-success"><i class="bi bi-shield-check me-1"></i>Ulangi Sandi <span class="text-danger">*</span></label>
-                                <div class="input-group">
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-shield-lock"></i></span>
                                     <input type="password" name="password_confirmation" id="inputPwdConf" class="form-control" placeholder="Ulangi kata sandi" required autocomplete="new-password">
-                                    <button class="btn btn-outline-secondary btn-password-toggle" type="button" aria-label="Tampilkan kata sandi">
+                                    <button class="btn-password-toggle" type="button" aria-label="Tampilkan kata sandi">
                                         <i class="bi bi-eye"></i>
                                     </button>
                                 </div>
@@ -109,25 +111,37 @@
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold small" style="color: var(--text-primary);">Tanggal Lahir <span class="text-danger">*</span></label>
-                                <input type="date" name="birth_date" class="form-control" value="{{ old('birth_date') }}" required>
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-calendar-event"></i></span>
+                                    <input type="date" name="birth_date" class="form-control" value="{{ old('birth_date') }}" required>
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold small" style="color: var(--text-primary);">Jenis Kelamin <span class="text-danger">*</span></label>
-                                <select name="gender" class="form-select" required>
-                                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Laki-laki (Ikhwan / Ustadz)</option>
-                                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Perempuan (Akhwat / Ustadzah)</option>
-                                </select>
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-gender-ambiguous"></i></span>
+                                    <select name="gender" class="form-select" required>
+                                        <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Laki-laki (Ikhwan / Ustadz)</option>
+                                        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Perempuan (Akhwat / Ustadzah)</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-7">
                                 <label class="form-label fw-semibold small" style="color: var(--text-primary);">Alamat Domisili <span class="text-danger">*</span></label>
-                                <input type="text" name="address" class="form-control" placeholder="Jalan, RT/RW, Kelurahan, Kecamatan" value="{{ old('address') }}" required>
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-geo-alt"></i></span>
+                                    <input type="text" name="address" class="form-control" placeholder="Jalan, RT/RW, Kelurahan, Kecamatan" value="{{ old('address') }}" required>
+                                </div>
                             </div>
                             <div class="col-md-5">
                                 <label class="form-label fw-semibold small" style="color: var(--text-primary);">Kota / Kabupaten <span class="text-danger">*</span></label>
-                                <input type="text" name="city" class="form-control" placeholder="Contoh: Jakarta Selatan" value="{{ old('city') }}" required>
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-building"></i></span>
+                                    <input type="text" name="city" class="form-control" placeholder="Contoh: Jakarta Selatan" value="{{ old('city') }}" required>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -144,44 +158,65 @@
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold small" style="color: var(--text-primary);">Pendidikan Terakhir <span class="text-danger">*</span></label>
-                                <input type="text" name="education" class="form-control" placeholder="Contoh: S1 Pendidikan Agama Islam / LIPIA" value="{{ old('education') }}" required>
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-mortarboard"></i></span>
+                                    <input type="text" name="education" class="form-control" placeholder="Contoh: S1 Pendidikan Agama Islam / LIPIA" value="{{ old('education') }}" required>
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold small" style="color: var(--text-primary);">Institusi / Ma'had / Kampus <span class="text-danger">*</span></label>
-                                <input type="text" name="institution" class="form-control" placeholder="Contoh: PTIQ Jakarta / UIN / Ma'had Aly" value="{{ old('institution') }}" required>
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-bank"></i></span>
+                                    <input type="text" name="institution" class="form-control" placeholder="Contoh: PTIQ Jakarta / UIN / Ma'had Aly" value="{{ old('institution') }}" required>
+                                </div>
                             </div>
                         </div>
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold small" style="color: var(--text-primary);">Peminatan Spesialisasi Bimbingan <span class="text-danger">*</span></label>
-                                <select name="specialization" class="form-select" required>
-                                    <option value="Tahfidz" {{ old('specialization') == 'Tahfidz' ? 'selected' : '' }}>Tahfidz Al-Qur'an (Hafalan Terarah)</option>
-                                    <option value="Tahsin" {{ old('specialization', 'Tahsin') == 'Tahsin' ? 'selected' : '' }}>Tahsin &amp; Matan Tajwid (Kaidah Bacaan)</option>
-                                    <option value="Iqra" {{ old('specialization') == 'Iqra' ? 'selected' : '' }}>Iqra' &amp; Pra-Tahfidz Anak</option>
-                                </select>
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-stars"></i></span>
+                                    <select name="specialization" class="form-select" required>
+                                        <option value="Tahfidz" {{ old('specialization') == 'Tahfidz' ? 'selected' : '' }}>Tahfidz Al-Qur'an (Hafalan Terarah)</option>
+                                        <option value="Tahsin" {{ old('specialization', 'Tahsin') == 'Tahsin' ? 'selected' : '' }}>Tahsin &amp; Matan Tajwid (Kaidah Bacaan)</option>
+                                        <option value="Iqra" {{ old('specialization') == 'Iqra' ? 'selected' : '' }}>Iqra' &amp; Pra-Tahfidz Anak</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold small" style="color: var(--text-primary);">Jumlah Hafalan Al-Qur'an (Juz) <span class="text-danger">*</span></label>
-                                <input type="number" name="hifz_total_juz" class="form-control" min="0" max="30" value="{{ old('hifz_total_juz', 0) }}" required>
-                                <small class="text-muted" style="font-size: 0.75rem;">Isi 0 jika fokus pada tahsin iqra.</small>
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-book"></i></span>
+                                    <input type="number" name="hifz_total_juz" class="form-control" min="0" max="30" value="{{ old('hifz_total_juz', 0) }}" required>
+                                </div>
+                                <small class="text-muted" style="font-size: 0.75rem;">Isi 0 jika fokus pada bimbingan tahsin iqra.</small>
                             </div>
                         </div>
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold small" style="color: var(--text-primary);">Pengalaman Mengajar (Tahun) <span class="text-danger">*</span></label>
-                                <input type="number" name="experience_years" class="form-control" min="0" max="50" value="{{ old('experience_years', 0) }}" required>
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-briefcase"></i></span>
+                                    <input type="number" name="experience_years" class="form-control" min="0" max="50" value="{{ old('experience_years', 0) }}" required>
+                                </div>
                             </div>
                             <div class="col-md-8">
                                 <label class="form-label fw-semibold small" style="color: var(--text-primary);">Deskripsi Singkat Pengalaman Bimbingan <span class="text-danger">*</span></label>
-                                <textarea name="experience_description" class="form-control" rows="2" placeholder="Sebutkan lembaga, halaqah, atau TPQ tempat pernah mengajar..." required>{{ old('experience_description') }}</textarea>
+                                <div class="input-group-editorial align-items-start">
+                                    <span class="field-icon pt-2"><i class="bi bi-file-earmark-text"></i></span>
+                                    <textarea name="experience_description" class="form-control" rows="2" placeholder="Sebutkan lembaga, halaqah, atau TPQ tempat pernah mengajar..." required>{{ old('experience_description') }}</textarea>
+                                </div>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold small" style="color: var(--text-primary);">Silsilah Sanad Al-Qur'an (Jika Memiliki)</label>
-                            <textarea name="sanad_chain" class="form-control" rows="2" placeholder="Contoh: Sanad Qira'at Hafsh 'an 'Ashim Thariq Asy-Syathibiyyah melalui Syaikh...">{{ old('sanad_chain') }}</textarea>
+                            <div class="input-group-editorial align-items-start">
+                                <span class="field-icon pt-2"><i class="bi bi-diagram-3"></i></span>
+                                <textarea name="sanad_chain" class="form-control" rows="2" placeholder="Contoh: Sanad Qira'at Hafsh 'an 'Ashim Thariq Asy-Syathibiyyah melalui Syaikh...">{{ old('sanad_chain') }}</textarea>
+                            </div>
                             <small class="text-muted" style="font-size: 0.75rem;">Kosongkan jika belum memiliki syahadah sanad resmi muttashil.</small>
                         </div>
                     </div>
@@ -201,7 +236,10 @@
                                     <label class="form-label fw-semibold small text-danger mb-1">
                                         <i class="bi bi-file-earmark-pdf me-1"></i> Curriculum Vitae (CV) <span class="text-danger">*</span>
                                     </label>
-                                    <input type="file" name="cv" class="form-control form-control-sm" accept=".pdf" required>
+                                    <div class="input-group-editorial">
+                                        <span class="field-icon"><i class="bi bi-file-earmark-arrow-up"></i></span>
+                                        <input type="file" name="cv" class="form-control form-control-sm" accept=".pdf" required>
+                                    </div>
                                     <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">Format PDF, maksimal 2MB.</small>
                                 </div>
                             </div>
@@ -210,7 +248,10 @@
                                     <label class="form-label fw-semibold small text-success mb-1">
                                         <i class="bi bi-award me-1"></i> Sertifikat / Syahadah (Opsional)
                                     </label>
-                                    <input type="file" name="certificate" class="form-control form-control-sm" accept=".pdf,.jpg,.jpeg,.png">
+                                    <div class="input-group-editorial">
+                                        <span class="field-icon"><i class="bi bi-patch-check"></i></span>
+                                        <input type="file" name="certificate" class="form-control form-control-sm" accept=".pdf,.jpg,.jpeg,.png">
+                                    </div>
                                     <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">Format PDF/JPG/PNG, maksimal 2MB.</small>
                                 </div>
                             </div>

@@ -1272,6 +1272,10 @@
                                                             </form>
                                                         @endif
 
+                                                        <a href="{{ route('mentor.sessions.confirm-attendance', $session->id) }}" class="btn btn-sm btn-success text-white rounded-pill px-2.5 py-1 d-inline-flex align-items-center gap-1 shadow-xs fw-semibold" title="Input presensi & upload bukti foto di lokasi">
+                                                            <i class="bi bi-camera-fill"></i> Presensi
+                                                        </a>
+
                                                         <a href="{{ route('mentor.progress.create', ['student_id' => $session->student_id, 'session_id' => $session->id]) }}" class="btn btn-sm btn-outline-success rounded-pill">
                                                             <i class="bi bi-check2-circle"></i> Catat Progres
                                                         </a>

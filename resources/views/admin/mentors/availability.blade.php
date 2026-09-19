@@ -425,7 +425,7 @@
                             <select class="form-select" id="selectSlot" name="slot_number" required>
                                 <option value="">-- Pilih Slot --</option>
                                 @foreach($slotMap as $num => $s)
-                                    <option value="{{ $num }}" {{ $num === 5 ? 'selected' : '' }}>
+                                    <option value="{{ $num }}" class="slot-option" data-slot="{{ $num }}">
                                         {{ $num }}️⃣ {{ $s['time'] }} ({{ $s['desc'] }})
                                     </option>
                                 @endforeach
@@ -493,6 +493,42 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectProgram = document.getElementById('selectProgram');
     const hintEl = document.getElementById('mentorSlotHint');
 
+    const mentorAvailabilities = {!! json_encode(collect($matrix)->mapWithKeys(function($data, $mId) use ($days) {
+        $avail = [];
+        foreach($days as $d) {
+            $avail[$d] = array_keys($data['schedule'][$d]['slots']);
+        }
+        return [$mId => $avail];
+    })) !!};
+
+    function updateAvailableSlots() {
+        const day = selectDay ? selectDay.value : '';
+        const mentorId = selectMentor ? selectMentor.value : '';
+        
+        if (!day) return;
+
+        document.querySelectorAll('.slot-option').forEach(opt => {
+            opt.style.display = 'none'; // Sembunyikan semua slot
+        });
+
+        if (mentorId && mentorAvailabilities[mentorId] && mentorAvailabilities[mentorId][day]) {
+            // Tampilkan hanya yang mentor buka pada hari tsb
+            mentorAvailabilities[mentorId][day].forEach(slotNum => {
+                const opt = document.querySelector(`.slot-option[data-slot="${slotNum}"]`);
+                if(opt) opt.style.display = 'block';
+            });
+            // Jika slot terpilih tidak ada di list tersedia, reset
+            if (selectSlot && selectSlot.value !== '' && !mentorAvailabilities[mentorId][day].includes(parseInt(selectSlot.value))) {
+                selectSlot.value = '';
+            }
+        } else {
+            // Jika tidak ada mentor terpilih, tampilkan semua slot lagi
+            document.querySelectorAll('.slot-option').forEach(opt => {
+                opt.style.display = 'block';
+            });
+        }
+    }
+
     // Quick Assign Button Handler
     document.querySelectorAll('.btn-quick-assign').forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -503,7 +539,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (selectStudent) selectStudent.value = studentId;
             if (selectProgram && programId) selectProgram.value = programId;
             if (selectDay && day) selectDay.value = day;
-
+            if (selectSlot) selectSlot.value = ''; // pastikan reset slot
+            if (selectMentor) selectMentor.value = ''; // pastikan reset mentor
+            
+            updateAvailableSlots();
             fetchAvailableMentors();
 
             const modal = new bootstrap.Modal(document.getElementById('assignModal'));
@@ -550,7 +589,10 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(err => console.error(err));
     }
 
-    if (selectDay) selectDay.addEventListener('change', fetchAvailableMentors);
+    if (selectDay) selectDay.addEventListener('change', () => {
+        updateAvailableSlots();
+        fetchAvailableMentors();
+    });
     if (selectSlot) selectSlot.addEventListener('change', fetchAvailableMentors);
     if (selectStudent) {
         selectStudent.addEventListener('change', function () {
@@ -561,8 +603,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (day && selectDay) selectDay.value = day;
             if (programId && selectProgram) selectProgram.value = programId;
 
+            updateAvailableSlots();
             fetchAvailableMentors();
         });
+    }
+    if (selectMentor) {
+        selectMentor.addEventListener('change', updateAvailableSlots);
     }
 });
 </script>

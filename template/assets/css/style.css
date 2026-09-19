@@ -9594,6 +9594,10 @@ table.dataTable thead th.dt-ordering-desc .dt-column-order:after {
     transition: var(--transition);
 }
 
+.trial-input:hover {
+    border-color: var(--primary);
+}
+
 .trial-input:focus {
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(13, 122, 62, 0.2);

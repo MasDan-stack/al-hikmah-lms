@@ -32,15 +32,23 @@
                 </div>
 
                 <div class="mb-3">
+                    <div class="text-muted small fw-bold">PROGRAM BIMBINGAN:</div>
+                    <div class="fs-6 fw-bold text-success">{{ $session->program?->name ?? $session->enrollment?->program?->name ?? 'Bimbingan Privat Al-Qur\'an' }}</div>
+                </div>
+
+                <div class="mb-3">
                     <div class="text-muted small fw-bold">WAKTU & TANGGAL:</div>
                     <div class="fw-bold text-primary">{{ $session->date ? \Carbon\Carbon::parse($session->date)->locale('id')->isoFormat('dddd, D MMMM Y') : '-' }} (Jam {{ date('H:i', strtotime($session->time)) }} WIB)</div>
                 </div>
 
                 <div class="mb-3">
                     <div class="text-muted small fw-bold">METODE BELAJAR:</div>
-                    @if($session->method === 'offline')
+                    @php
+                        $effectiveMethod = $session->method ?: ($session->enrollment?->learning_method ?? 'offline');
+                    @endphp
+                    @if($effectiveMethod === 'offline')
                         <span class="badge bg-success-subtle text-success fs-6 rounded-pill px-3 py-1 border border-success-subtle"><i class="bi bi-house-door me-1"></i> Offline (Home Visit)</span>
-                    @elseif($session->method === 'online')
+                    @elseif($effectiveMethod === 'online')
                         <span class="badge bg-primary-subtle text-primary fs-6 rounded-pill px-3 py-1 border border-primary-subtle"><i class="bi bi-camera-video me-1"></i> Online</span>
                     @else
                         <span class="badge bg-info-subtle text-info fs-6 rounded-pill px-3 py-1 border border-info-subtle"><i class="bi bi-arrow-repeat me-1"></i> Hybrid</span>
@@ -49,7 +57,7 @@
 
                 <div class="mb-3">
                     <div class="text-muted small fw-bold">PEMBIMBING / MENTOR:</div>
-                    <div class="fw-semibold text-dark">{{ $session->mentor?->user?->name ?? 'Ustaz/Ustazah' }}</div>
+                    <div class="fw-semibold text-dark">{{ $session->mentor?->getDisplayName() ?? $session->mentor?->user?->name ?? 'Ustaz/Ustazah' }}</div>
                     <small class="text-secondary">{{ $session->mentor?->specialization ?? 'Guru Al-Qur\'an' }}</small>
                 </div>
 
@@ -57,6 +65,27 @@
                     <div class="text-muted small fw-bold">CATATAN SESI:</div>
                     <div class="p-3 bg-light rounded-3 text-secondary">{{ $session->notes ?? 'Tidak ada catatan tambahan.' }}</div>
                 </div>
+
+                @if($confirmation && $confirmation->proof_image_url)
+                    <div class="mt-4 pt-3 border-top">
+                        <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
+                            <span class="text-muted small fw-bold"><i class="bi bi-camera-fill text-success me-1"></i>FOTO BUKTI DOKUMENTASI DI LOKASI:</span>
+                            <span class="badge bg-success-subtle text-success rounded-pill px-2.5 py-1" style="font-size: 0.72rem;">
+                                Diunggah oleh: {{ $confirmation->confirmed_by === 'mentor' ? 'Guru Pembimbing' : 'Wali Santri' }}
+                            </span>
+                        </div>
+                        <div class="rounded-3 overflow-hidden border shadow-xs bg-light text-center p-1" style="max-height: 320px;">
+                            <a href="{{ $confirmation->proof_image_url }}" target="_blank" title="Klik untuk melihat ukuran penuh">
+                                <img src="{{ $confirmation->proof_image_url }}" alt="Dokumentasi Belajar" class="img-fluid rounded-2 object-fit-contain" style="max-height: 300px;">
+                            </a>
+                        </div>
+                        @if($confirmation->verified_at)
+                            <small class="text-muted mt-1 d-block" style="font-size: 0.75rem;">
+                                <i class="bi bi-clock-history me-1"></i>Dicatat: {{ $confirmation->verified_at->locale('id')->isoFormat('dddd, D MMMM Y - HH:mm') }} WIB
+                            </small>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -69,11 +98,18 @@
                 <p class="text-muted small">Bantu mentor mempersiapkan sesi bimbingan dengan mengonfirmasi kehadiran ananda.</p>
 
                 @if($confirmation)
-                    <div class="alert alert-info rounded-3 mb-3">
-                        <div class="fw-bold mb-1"><i class="bi bi-info-circle me-1"></i>Status Konfirmasi Saat Ini:</div>
-                        <span class="badge bg-success rounded-pill px-3 fs-6">{{ strtoupper($confirmation->status) }}</span>
+                    <div class="alert alert-success rounded-3 mb-3 border-success-subtle">
+                        <div class="fw-bold mb-1 d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-check-circle-fill text-success me-1"></i>Kehadiran Dikonfirmasi:</span>
+                            <span class="badge bg-success rounded-pill px-2.5 py-1 text-uppercase">{{ $confirmation->status }}</span>
+                        </div>
+                        <div class="small text-secondary mt-1">
+                            Oleh: <strong>{{ $confirmation->confirmed_by === 'mentor' ? 'Guru Pembimbing (Presensi Lapangan)' : 'Wali Santri' }}</strong>
+                        </div>
                         @if($confirmation->notes)
-                            <div class="small mt-2 text-dark">Catatan: "{{ $confirmation->notes }}"</div>
+                            <div class="small mt-2 p-2 bg-white rounded-2 border text-dark">
+                                <strong>Catatan:</strong> "{{ $confirmation->notes }}"
+                            </div>
                         @endif
                     </div>
                 @endif

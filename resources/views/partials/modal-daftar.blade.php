@@ -42,28 +42,27 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-secondary small" for="lokasi">Lokasi <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="lokasi" name="lokasi" placeholder="Kota/Kecamatan" required autocomplete="address-level2">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-secondary small" for="programPilihan">Program Pilihan</label>
-                            <select class="form-select" id="programPilihan" name="program_id">
-                                <option value="">Pilih program bimbingan...</option>
-                                @php
-                                    $availableModalPrograms = \App\Models\Program::where('is_active', true)->orderBy('id')->get();
-                                @endphp
-                                @foreach($availableModalPrograms as $prog)
-                                    <option value="{{ $prog->id }}">{{ $prog->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6">
                             <label class="form-label fw-semibold text-secondary small" for="metodeBelajar">Metode Belajar</label>
                             <select class="form-select" id="metodeBelajar" name="metode">
                                 <option value="offline" selected>Offline (Guru Datang ke Rumah)</option>
                                 <option value="online">Online (Zoom / Meet Interaktif)</option>
                                 <option value="hybrid">Hybrid (Kombinasi Online & Offline)</option>
                             </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold text-secondary small" for="lokasi">
+                                Alamat Lengkap Domisili / Lokasi Belajar <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="lokasi" 
+                                   name="lokasi" 
+                                   placeholder="Contoh: Jl. Margonda Raya No. 45, RT 02/RW 05, Kel. Kemiri Muka, Kec. Beji, Kota Depok" 
+                                   required 
+                                   autocomplete="street-address">
+                            <div class="form-text small text-muted" style="font-size: 0.74rem;">
+                                Diperlukan agar tim akademik dapat menentukan kecocokan jarak guru privat untuk bimbingan tatap muka (offline).
+                            </div>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary-custom w-100 py-3 fw-bold mt-4 rounded-3">

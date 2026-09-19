@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EnrollmentStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -45,5 +46,36 @@ class Session extends Model
     public function feedback()
     {
         return $this->hasOne(MentorFeedback::class, 'session_id');
+    }
+
+    /**
+     * Dapatkan enrollment aktif santri yang relevan dengan sesi bimbingan ini.
+     */
+    public function getEnrollmentAttribute(): ?Enrollment
+    {
+        if ($this->relationLoaded('student') && $this->student && $this->student->relationLoaded('enrollments')) {
+            return $this->student->enrollments->firstWhere('mentor_id', $this->mentor_id)
+                ?? $this->student->enrollments->whereIn('status', [EnrollmentStatus::ACTIVE, EnrollmentStatus::CONFIRMED])->first()
+                ?? $this->student->enrollments->first();
+        }
+
+        return Enrollment::where('student_id', $this->student_id)
+            ->where(function ($q) {
+                $q->where('mentor_id', $this->mentor_id)
+                    ->orWhereIn('status', [EnrollmentStatus::ACTIVE->value, EnrollmentStatus::CONFIRMED->value]);
+            })
+            ->latest()
+            ->first() ?? Enrollment::where('student_id', $this->student_id)->latest()->first();
+    }
+
+    /**
+     * Dapatkan objek Program riil yang diikuti santri binaan.
+     */
+    public function getProgramAttribute(): ?Program
+    {
+        return $this->enrollment?->program
+            ?? ($this->relationLoaded('student') && $this->student?->relationLoaded('programs')
+                ? $this->student->programs->first()
+                : $this->student?->programs()->first());
     }
 }

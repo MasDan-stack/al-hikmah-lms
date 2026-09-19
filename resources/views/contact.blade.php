@@ -92,11 +92,14 @@
 <!-- ============================================ -->
 <!-- 1. PAGE HEADER - EDITORIAL MINIMALIST -->
 <!-- ============================================ -->
-<section class="py-5 bg-body-tertiary border-bottom" aria-label="Header Kontak">
-    <div class="container py-4">
+<section class="editorial-page-header text-center" aria-label="Header Kontak">
+    <div class="container py-2">
         <div class="row justify-content-center">
-            <div class="col-lg-9 text-center">
+            <div class="col-lg-9">
                 <div data-reveal>
+                    <div class="section-badge mx-auto mb-3">
+                        <i class="bi bi-chat-heart-fill me-1"></i> Layanan Konsultasi
+                    </div>
                     <h1 class="editorial-title mb-3">Layanan Konsultasi &amp; <span class="text-emerald-deep">Hubungi Kami</span></h1>
                     <p class="editorial-subtitle mx-auto">
                         Sampaikan pertanyaan, kebutuhan jadwal privat, atau konsultasi evaluasi awal ananda langsung kepada konselor pendidikan AL-HIKMAH.
@@ -159,10 +162,13 @@
                             <label for="name" class="form-label small fw-semibold text-secondary mb-1">
                                 Nama Orang Tua / Wali <span class="text-danger">*</span>
                             </label>
-                            <input type="text" name="name" id="name" 
-                                   class="form-control contact-input @error('name') is-invalid @enderror" 
-                                   placeholder="Contoh: Ayah Hendra / Bunda Fatimah" 
-                                   value="{{ old('name', auth()->user()?->name) }}" required>
+                            <div class="input-group-editorial">
+                                <span class="field-icon"><i class="bi bi-person"></i></span>
+                                <input type="text" name="name" id="name" 
+                                       class="form-control @error('name') is-invalid @enderror" 
+                                       placeholder="Contoh: Ayah Hendra / Bunda Fatimah" 
+                                       value="{{ old('name', auth()->user()?->name) }}" required>
+                            </div>
                             @error('name')
                                 <div class="invalid-feedback d-block small mt-1">{{ $message }}</div>
                             @enderror
@@ -173,10 +179,13 @@
                             <label for="email" class="form-label small fw-semibold text-secondary mb-1">
                                 Alamat Email <span class="text-danger">*</span>
                             </label>
-                            <input type="email" name="email" id="email" 
-                                   class="form-control contact-input @error('email') is-invalid @enderror" 
-                                   placeholder="nama@email.com" 
-                                   value="{{ old('email', auth()->user()?->email) }}" required>
+                            <div class="input-group-editorial">
+                                <span class="field-icon"><i class="bi bi-envelope"></i></span>
+                                <input type="email" name="email" id="email" 
+                                       class="form-control @error('email') is-invalid @enderror" 
+                                       placeholder="nama@email.com" 
+                                       value="{{ old('email', auth()->user()?->email) }}" required>
+                            </div>
                             @error('email')
                                 <div class="invalid-feedback d-block small mt-1">{{ $message }}</div>
                             @enderror
@@ -187,10 +196,13 @@
                             <label for="phone" class="form-label small fw-semibold text-secondary mb-1">
                                 Nomor WhatsApp <span class="text-danger">*</span>
                             </label>
-                            <input type="tel" name="phone" id="phone" 
-                                   class="form-control contact-input @error('phone') is-invalid @enderror" 
-                                   placeholder="081234567890" 
-                                   value="{{ old('phone', auth()->user()?->phone) }}" required>
+                            <div class="input-group-editorial">
+                                <span class="field-icon"><i class="bi bi-whatsapp text-success"></i></span>
+                                <input type="tel" name="phone" id="phone" 
+                                       class="form-control @error('phone') is-invalid @enderror" 
+                                       placeholder="081234567890" 
+                                       value="{{ old('phone', auth()->user()?->phone) }}" required>
+                            </div>
                             @error('phone')
                                 <div class="invalid-feedback d-block small mt-1">{{ $message }}</div>
                             @enderror
@@ -201,9 +213,12 @@
                             <label for="address" class="form-label small fw-semibold text-secondary mb-1">
                                 Alamat Lengkap / Kota Domisili <span class="text-danger">*</span>
                             </label>
-                            <textarea name="address" id="address" rows="2" 
-                                      class="form-control contact-textarea @error('address') is-invalid @enderror" 
-                                      placeholder="Contoh: Jl. Sukajadi No. 45, Sukasari, Kota Bandung" required>{{ old('address') }}</textarea>
+                            <div class="input-group-editorial align-items-start">
+                                <span class="field-icon pt-2"><i class="bi bi-geo-alt"></i></span>
+                                <textarea name="address" id="address" rows="2" 
+                                          class="form-control @error('address') is-invalid @enderror" 
+                                          placeholder="Contoh: Jl. Sukajadi No. 45, Sukasari, Kota Bandung" required>{{ old('address') }}</textarea>
+                            </div>
                             @error('address')
                                 <div class="invalid-feedback d-block small mt-1">{{ $message }}</div>
                             @enderror
@@ -214,9 +229,12 @@
                             <label for="message" class="form-label small fw-semibold text-secondary mb-1">
                                 Pesan / Kebutuhan Bimbingan Ananda <span class="text-danger">*</span>
                             </label>
-                            <textarea name="message" id="message" rows="4" 
-                                      class="form-control contact-textarea @error('message') is-invalid @enderror" 
-                                      placeholder="Tuliskan pertanyaan atau kebutuhan bimbingan ananda (misal: ingin jadwal privat santri putri hari Rabu jam 16:00, usia 10 tahun pemula tajwid)..." required>{{ old('message') }}</textarea>
+                            <div class="input-group-editorial align-items-start">
+                                <span class="field-icon pt-2"><i class="bi bi-chat-left-dots"></i></span>
+                                <textarea name="message" id="message" rows="4" 
+                                          class="form-control @error('message') is-invalid @enderror" 
+                                          placeholder="Tuliskan pertanyaan atau kebutuhan bimbingan ananda (misal: ingin jadwal privat santri putri hari Rabu jam 16:00, usia 10 tahun pemula tajwid)..." required>{{ old('message') }}</textarea>
+                            </div>
                             @error('message')
                                 <div class="invalid-feedback d-block small mt-1">{{ $message }}</div>
                             @enderror

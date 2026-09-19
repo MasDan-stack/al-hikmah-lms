@@ -288,6 +288,10 @@ class RegisteredUserController extends Controller
                     ])->with('success', "Pendaftaran akun berhasil! Data ananda {$createdStudent->full_name} telah tersimpan. Silakan tentukan preferensi hari dan jam bimbingan untuk menyelesaikan Langkah 2.");
                 }
 
+                if ($createdStudent) {
+                    return redirect()->route('parent.dashboard')->with('success', "Alhamdulillah, akun Orang Tua dan profil ananda {$createdStudent->full_name} berhasil dibuat! Silakan lanjutkan ke Langkah 2 untuk memilih paket program belajar dan hari bimbingan.");
+                }
+
                 return redirect()->route('parent.dashboard');
             }
 

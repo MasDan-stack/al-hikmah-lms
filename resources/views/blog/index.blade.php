@@ -7,7 +7,7 @@
 <!-- ============================================ -->
 <!-- 1. PAGE HERO HEADER - EDITORIAL MINIMALIST -->
 <!-- ============================================ -->
-<section class="page-hero text-center" aria-label="Header Blog AL-HIKMAH">
+<section class="editorial-page-header text-center" aria-label="Header Blog AL-HIKMAH">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -186,11 +186,12 @@
                         <i class="bi bi-search text-emerald-deep"></i> Cari Artikel
                     </h3>
                     <form action="{{ route('blog.index') }}" method="GET">
-                        <div class="input-group">
-                            <input type="text" name="search" class="form-control border rounded-start-3" placeholder="Cari kata kunci..."
-                                   value="{{ request('search') }}" style="min-height: 44px;" required>
-                            <button class="btn btn-editorial-primary px-3 rounded-end-3" type="submit" aria-label="Cari">
-                                <i class="bi bi-search"></i>
+                        <div class="input-group-editorial">
+                            <span class="field-icon"><i class="bi bi-search"></i></span>
+                            <input type="text" name="search" class="form-control" placeholder="Cari topik atau kata kunci..."
+                                   value="{{ request('search') }}" required>
+                            <button class="btn-field-action" type="submit" aria-label="Cari artikel">
+                                <i class="bi bi-arrow-right"></i>
                             </button>
                         </div>
                     </form>

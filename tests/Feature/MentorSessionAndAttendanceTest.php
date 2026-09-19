@@ -13,6 +13,8 @@ use App\Models\SessionConfirmation;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class MentorSessionAndAttendanceTest extends TestCase
@@ -194,5 +196,83 @@ class MentorSessionAndAttendanceTest extends TestCase
         $response->assertSee('Santri Siap Belajar');
         $response->assertSee('Ahmad Santri');
         $response->assertSee('Mulai Sesi');
+    }
+
+    public function test_mentor_can_view_confirm_attendance_page_via_get(): void
+    {
+        $session = Session::create([
+            'student_id' => $this->student->id,
+            'mentor_id' => $this->mentor->id,
+            'date' => now()->toDateString(),
+            'time' => '16:00:00',
+            'method' => 'offline',
+            'status' => 'scheduled',
+        ]);
+
+        $response = $this->actingAs($this->mentorUser)->get("/mentor/sessions/{$session->id}/confirm-attendance");
+        $response->assertStatus(200);
+        $response->assertSee('Presensi Mandiri Guru');
+        $response->assertSee($this->student->full_name);
+        $response->assertSee('Upload Bukti Foto di Rumah Santri');
+    }
+
+    public function test_mentor_can_submit_confirm_attendance_with_photo_proof(): void
+    {
+        Storage::fake('public');
+
+        $session = Session::create([
+            'student_id' => $this->student->id,
+            'mentor_id' => $this->mentor->id,
+            'date' => now()->toDateString(),
+            'time' => '16:00:00',
+            'method' => 'offline',
+            'status' => 'scheduled',
+        ]);
+
+        $fakePhoto = UploadedFile::fake()->create('bukti_bimbingan.jpg', 500, 'image/jpeg');
+
+        $response = $this->actingAs($this->mentorUser)->post("/mentor/sessions/{$session->id}/confirm-attendance", [
+            'status' => 'hadir',
+            'notes' => 'Sesi belajar di rumah santri lancar',
+            'date' => now()->toDateString(),
+            'time' => '16:00',
+            'proof_image' => $fakePhoto,
+        ]);
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('session_confirmations', [
+            'session_id' => $session->id,
+            'status' => 'hadir',
+            'confirmed_by' => 'mentor',
+            'notes' => 'Sesi belajar di rumah santri lancar',
+        ]);
+
+        $this->assertDatabaseHas('learning_sessions', [
+            'id' => $session->id,
+            'status' => 'completed',
+        ]);
+
+        $confirmation = SessionConfirmation::where('session_id', $session->id)->first();
+        $this->assertNotNull($confirmation->proof_image);
+        Storage::disk('public')->assertExists($confirmation->proof_image);
+    }
+
+    public function test_admin_can_also_view_confirm_attendance_page(): void
+    {
+        $adminUser = User::factory()->admin()->create();
+
+        $session = Session::create([
+            'student_id' => $this->student->id,
+            'mentor_id' => $this->mentor->id,
+            'date' => now()->toDateString(),
+            'time' => '16:00:00',
+            'method' => 'offline',
+            'status' => 'scheduled',
+        ]);
+
+        $response = $this->actingAs($adminUser)->get("/mentor/sessions/{$session->id}/confirm-attendance");
+        $response->assertStatus(200);
+        $response->assertSee('Presensi Mandiri Guru');
     }
 }

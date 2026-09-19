@@ -86,6 +86,31 @@
                 </h6>
             </div>
             <div class="card-body p-0">
+                <div class="px-4 pt-4 pb-2">
+                    <div class="alert alert-info border-0 bg-info-subtle text-info-emphasis d-flex align-items-start gap-3 rounded-4 mb-3">
+                        <i class="bi bi-info-circle-fill fs-4 mt-1"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Panduan Membuka Jam Bimbingan</h6>
+                            <p class="mb-0 small">
+                                Centang jam yang Anda bersedia untuk mengajar. 
+                                Pilih minimal <strong>4 sesi per minggu</strong> untuk profil aktif. 
+                                Waktu yang ditampilkan adalah <strong>WIB (Waktu Indonesia Barat)</strong>.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex flex-wrap gap-2 mb-2">
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill fw-medium" onclick="setDaySlots('monday', true)">
+                            <i class="bi bi-check-all"></i> Buka Semua Senin
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill fw-medium" onclick="setDaySlots('monday', false)">
+                            <i class="bi bi-x"></i> Tutup Senin
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-success rounded-pill fw-medium" onclick="setRegulerSlots()">
+                            <i class="bi bi-sun"></i> Jam Reguler (16:00 - 20:00) Semua Hari
+                        </button>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light text-secondary small text-uppercase">
@@ -426,6 +451,34 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+function setDaySlots(day, check) {
+    document.querySelectorAll(`.slot-cb-${day}`).forEach(el => {
+        const holidayToggle = document.getElementById(`holiday_${day}`);
+        if (!holidayToggle || !holidayToggle.checked) {
+            el.checked = check;
+        }
+    });
+}
+
+function setRegulerSlots() {
+    // 4 = 16:00, 5 = 18:30, 6 = 20:00
+    const regulerSlots = ['4', '5', '6']; 
+    document.querySelectorAll('.slot-cb').forEach(el => el.checked = false);
+    
+    document.querySelectorAll('.slot-cb').forEach(el => {
+        // Cek dulu apakah hari itu libur
+        const dayMatch = el.className.match(/slot-cb-([a-z]+)/);
+        if (dayMatch) {
+            const holidayToggle = document.getElementById(`holiday_${dayMatch[1]}`);
+            if (holidayToggle && holidayToggle.checked) return;
+        }
+        
+        if (regulerSlots.includes(el.value)) {
+            el.checked = true;
+        }
+    });
+}
 </script>
 <style>
 .btn-xs {

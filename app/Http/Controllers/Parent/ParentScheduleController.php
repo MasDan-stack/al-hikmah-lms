@@ -48,8 +48,14 @@ class ParentScheduleController extends Controller
         $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
         $status = $request->query('status', 'all');
 
-        $query = Session::with(['student.user', 'mentor.user', 'feedback'])
-            ->whereIn('student_id', $childIds);
+        $query = Session::with([
+            'student.user',
+            'student.enrollments.program',
+            'student.programs',
+            'mentor.user',
+            'feedback',
+            'confirmation',
+        ])->whereIn('student_id', $childIds);
 
         if ($status !== 'all') {
             $query->where('status', $status);
@@ -65,15 +71,21 @@ class ParentScheduleController extends Controller
         $parent = auth()->user()->parentProfile;
         $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
 
-        $session = Session::with(['student.user', 'mentor.user', 'feedback'])->findOrFail($id);
+        $session = Session::with([
+            'student.user',
+            'student.enrollments.program',
+            'student.programs',
+            'mentor.user',
+            'feedback',
+            'confirmation',
+        ])->findOrFail($id);
 
         if (! in_array($session->student_id, $childIds)) {
             abort(403, 'Akses sesi anak ditolak.');
         }
 
-        $confirmation = SessionConfirmation::where('session_id', $session->id)
-            ->where('parent_id', $parent?->id)
-            ->first();
+        $confirmation = $session->confirmation
+            ?? SessionConfirmation::where('session_id', $session->id)->first();
 
         return view('parent.schedules.show', compact('session', 'confirmation'));
     }

@@ -110,356 +110,234 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- 2. JADWAL SHOLAT BANNER RINGKAS -->
+    <!-- 2. KEKHAWATIRAN ORANG TUA VS PENDEKATAN AL-HIKMAH (ISLAMIC EDITORIAL MINIMALIST) -->
     <!-- ============================================ -->
-    <!-- ============================================ -->
-    <!-- 2. JADWAL SHOLAT BANNER RINGKAS -->
-    <!-- ============================================ -->
-    <section class="py-4"
-        style="background: var(--bg-primary); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);"
-        aria-label="Informasi Jadwal Sholat">
-        <div class="container">
-            <div class="editorial-card p-3 p-md-4 d-flex flex-row align-items-center justify-content-between flex-wrap gap-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="editorial-icon-badge mb-0" style="width: 44px; height: 44px;">
-                        <i class="bi bi-clock-history fs-5"></i>
-                    </div>
-                    <div>
-                        <h6 class="fw-bold mb-1 text-heading">Waktu Ibadah &amp; Arah Kiblat Harian</h6>
-                        <p class="text-secondary small mb-0">Pantau jadwal sholat akurat standar Kemenag RI, hitung mundur azan, dan kompas kiblat real-time.</p>
-                    </div>
-                </div>
-                <a href="{{ route('jadwal-sholat') }}" class="btn-editorial-secondary py-2 px-3">
-                    Buka Jadwal Sholat &amp; Kiblat <i class="bi bi-chevron-right ms-1"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- 3. PILAR KEUNGGULAN (ISLAMIC EDITORIAL) -->
-    <!-- ============================================ -->
-    <section class="section-editorial-spacing" aria-label="Keunggulan AL-HIKMAH">
-        <div class="container">
-            <div class="row g-4 align-items-stretch">
-                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-center">
-                    <div class="pe-lg-3">
-                        <h2 class="editorial-title mb-3 fs-2">Pendampingan yang <span class="text-emerald-deep">Menenangkan</span></h2>
-                        <p class="editorial-subtitle small mb-4">Mendampingi ananda dengan keteladanan akhlak, kesabaran murni, dan kurikulum yang ramah perkembangan anak.</p>
-                        <a href="{{ route('tentang-kami') }}" class="btn-editorial-secondary py-2 px-3">
-                            Pelajari Nilai Kami <i class="bi bi-arrow-right ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="editorial-card">
-                        <div class="editorial-icon-badge">
-                            <i class="bi bi-person-check-fill" aria-hidden="true"></i>
-                        </div>
-                        <h3 class="fw-bold fs-5 mb-2 text-heading">Guru Terkurasi &amp; Ramah</h3>
-                        <p class="text-secondary small mb-0">Pendidik tersertifikasi, berakhlak mulia, dan berpendekatan santun sehingga ananda tidak merasa tertekan saat belajar.</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="editorial-card">
-                        <div class="editorial-icon-badge">
-                            <i class="bi bi-clock-history" aria-hidden="true"></i>
-                        </div>
-                        <h3 class="fw-bold fs-5 mb-2 text-heading">Privat Penuh (90 Menit)</h3>
-                        <p class="text-secondary small mb-0">Satu sesi 90 menit intensif 1 Guru 1 Santri, memberikan waktu cukup untuk talaqqi, perbaikan tajwid, dan nasihat adab.</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="editorial-card">
-                        <div class="editorial-icon-badge">
-                            <i class="bi bi-journal-check" aria-hidden="true"></i>
-                        </div>
-                        <h3 class="fw-bold fs-5 mb-2 text-heading">Rapor Mutaba'ah Terbuka</h3>
-                        <p class="text-secondary small mb-0">Orang tua dapat memantau capaian makhraj, juz atau halaman, serta saran murajaah di rumah secara transparan lewat portal LMS.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- 3.5 KEKHAWATIRAN ORANG TUA VS PENDEKATAN AL-HIKMAH -->
-    <!-- ============================================ -->
-    <!-- ============================================ -->
-    <!-- 3.5 KEKHAWATIRAN ORANG TUA VS PENDEKATAN AL-HIKMAH -->
-    <!-- ============================================ -->
-    <section class="section-editorial-spacing border-top border-bottom"
-        style="background: var(--bg-tertiary);"
+    <section class="section-editorial-spacing section-parent-concerns border-top border-bottom"
         aria-label="Kekhawatiran Orang Tua dan Solusi Al-Hikmah">
-        <div class="container">
+        <div class="container position-relative" style="z-index: 1;">
             <div class="row justify-content-center mb-5 text-center">
                 <div class="col-lg-8" data-reveal>
                     <h2 class="editorial-title fs-2 mb-3">Memahami Kekhawatiran <span class="text-emerald-deep">Orang Tua</span></h2>
-                    <p class="editorial-subtitle mx-auto">Setiap anak memiliki ritme dan keunikan masing-masing. Di AL-HIKMAH, kami mendengarkan apa yang sering membuat orang tua cemas dan menghadirkan bimbingan yang menenangkan.</p>
+                    <p class="editorial-subtitle mx-auto text-secondary" style="max-width: 680px;">
+                        Setiap anak memiliki ritme dan keunikan masing-masing. Di AL-HIKMAH, kami mendengarkan apa yang sering membuat orang tua cemas dan menghadirkan bimbingan yang menenangkan.
+                    </p>
                 </div>
             </div>
 
             <div class="row g-4">
-                <!-- Card 1 -->
-                <div class="col-md-6 col-lg-3" data-reveal>
-                    <div class="editorial-card">
-                        <div class="pb-3 mb-3 border-bottom">
-                            <div class="d-flex align-items-center gap-2 text-danger small fw-bold mb-1">
-                                <i class="bi bi-x-circle-fill"></i> Keresahan Umum
+                <!-- Card 1: Ritme & Suasana Belajar -->
+                <div class="col-lg-6" data-reveal>
+                    <div class="empathy-card">
+                        <div class="empathy-card-top">
+                            <div class="empathy-meta">
+                                <span class="empathy-num">01</span>
+                                <span class="empathy-tag">
+                                    <i class="bi bi-heart-pulse-fill" aria-hidden="true"></i>
+                                    <span>Kekhawatiran Umum</span>
+                                </span>
                             </div>
-                            <p class="small text-secondary mb-0">Anak cepat bosan, mogok, atau merasa tertekan saat diminta mengaji sore hari.</p>
+                            <h3 class="empathy-concern-title">
+                                &ldquo;Anak cepat jenuh, mogok, atau merasa tertekan saat diminta mengaji sore hari.&rdquo;
+                            </h3>
+                            <p class="empathy-concern-context">
+                                Beban akademik sekolah sering menguras tenaga anak. Metode klasikal yang tergesa-gesa atau bernada tinggi rentan memicu trauma belajar dan keengganan membuka mushaf.
+                            </p>
                         </div>
-                        <div>
-                            <div class="d-flex align-items-center gap-2 text-success small fw-bold mb-1">
-                                <i class="bi bi-check-circle-fill"></i> Solusi Al-Hikmah
+
+                        <div class="empathy-solution-panel">
+                            <div class="empathy-solution-badge">
+                                <span class="empathy-solution-icon">
+                                    <i class="bi bi-shield-check" aria-hidden="true"></i>
+                                </span>
+                                <span>Pendekatan Menenangkan Al-Hikmah</span>
                             </div>
-                            <p class="small text-secondary mb-0">Bimbingan 1-on-1 dengan pendekatan talaqqi yang ramah, sabar, penuh apresiasi, dan menghargai ritme belajar ananda.</p>
+                            <h4 class="empathy-solution-lead">Bimbingan Talaqqi 1-on-1 Penuh Kasih &amp; Apresiasi</h4>
+                            <p class="empathy-solution-text">
+                                Pendampingan privat 90 menit tanpa antre. Guru membimbing dengan sabar murni, menghargai suasana hati ananda, dan memotivasi lewat apresiasi tulus agar rasa cinta pada kalamullah bersemi secara alami.
+                            </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 2 -->
-                <div class="col-md-6 col-lg-3" data-reveal data-reveal-delay="100">
-                    <div class="editorial-card">
-                        <div class="pb-3 mb-3 border-bottom">
-                            <div class="d-flex align-items-center gap-2 text-danger small fw-bold mb-1">
-                                <i class="bi bi-x-circle-fill"></i> Keresahan Umum
+                <!-- Card 2: Transparansi untuk Orang Tua Bekerja -->
+                <div class="col-lg-6" data-reveal data-reveal-delay="100">
+                    <div class="empathy-card">
+                        <div class="empathy-card-top">
+                            <div class="empathy-meta">
+                                <span class="empathy-num">02</span>
+                                <span class="empathy-tag">
+                                    <i class="bi bi-heart-pulse-fill" aria-hidden="true"></i>
+                                    <span>Kekhawatiran Umum</span>
+                                </span>
                             </div>
-                            <p class="small text-secondary mb-0">Orang tua sibuk bekerja, tidak tahu perkembangan tajwid dan hafalan anak sudah sampai mana.</p>
+                            <h3 class="empathy-concern-title">
+                                &ldquo;Orang tua sibuk bekerja, sulit memantau apakah tajwid dan hafalan ananda benar-benar berkembang.&rdquo;
+                            </h3>
+                            <p class="empathy-concern-context">
+                                Keterbatasan waktu di rumah kerap menimbulkan rasa bersalah dan ketidakpastian mengenai perkembangan makhraj, capaian juz, serta materi murajaah yang perlu diulang.
+                            </p>
                         </div>
-                        <div>
-                            <div class="d-flex align-items-center gap-2 text-success small fw-bold mb-1">
-                                <i class="bi bi-check-circle-fill"></i> Solusi Al-Hikmah
+
+                        <div class="empathy-solution-panel">
+                            <div class="empathy-solution-badge">
+                                <span class="empathy-solution-icon">
+                                    <i class="bi bi-journal-check" aria-hidden="true"></i>
+                                </span>
+                                <span>Pendekatan Menenangkan Al-Hikmah</span>
                             </div>
-                            <p class="small text-secondary mb-0">Jurnal Mutaba'ah Digital otomatis tercatat setiap sesi 90 menit selesai, bisa dipantau langsung dari ponsel orang tua.</p>
+                            <h4 class="empathy-solution-lead">Jurnal Mutaba'ah Digital Real-Time Pasca Sesi</h4>
+                            <p class="empathy-solution-text">
+                                Setiap sesi selesai, guru menginput capaian makharijul huruf, halaman, ayat, dan evaluasi adab ke portal LMS. Ayah &amp; Bunda dapat memantau rapor mutaba'ah langsung dari smartphone kapan saja.
+                            </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 3 -->
-                <div class="col-md-6 col-lg-3" data-reveal data-reveal-delay="200">
-                    <div class="editorial-card">
-                        <div class="pb-3 mb-3 border-bottom">
-                            <div class="d-flex align-items-center gap-2 text-danger small fw-bold mb-1">
-                                <i class="bi bi-x-circle-fill"></i> Keresahan Umum
+                <!-- Card 3: Kecocokan Karakter Guru -->
+                <div class="col-lg-6" data-reveal data-reveal-delay="200">
+                    <div class="empathy-card">
+                        <div class="empathy-card-top">
+                            <div class="empathy-meta">
+                                <span class="empathy-num">03</span>
+                                <span class="empathy-tag">
+                                    <i class="bi bi-heart-pulse-fill" aria-hidden="true"></i>
+                                    <span>Kekhawatiran Umum</span>
+                                </span>
                             </div>
-                            <p class="small text-secondary mb-0">Khawatir karakter anak tidak cocok dengan cara mengajar ustadz atau ustadzah pembimbing.</p>
+                            <h3 class="empathy-concern-title">
+                                &ldquo;Khawatir karakter anak tidak cocok dengan gaya mengajar ustadz atau ustadzah pembimbing.&rdquo;
+                            </h3>
+                            <p class="empathy-concern-context">
+                                Setiap anak memiliki tipe kepribadian berbeda, ada yang pemalu, sensitif, maupun sangat aktif. Guru yang kurang tepat cara komunikasinya bisa membuat anak menutup diri.
+                            </p>
                         </div>
-                        <div>
-                            <div class="d-flex align-items-center gap-2 text-success small fw-bold mb-1">
-                                <i class="bi bi-check-circle-fill"></i> Solusi Al-Hikmah
+
+                        <div class="empathy-solution-panel">
+                            <div class="empathy-solution-badge">
+                                <span class="empathy-solution-icon">
+                                    <i class="bi bi-person-heart" aria-hidden="true"></i>
+                                </span>
+                                <span>Pendekatan Menenangkan Al-Hikmah</span>
                             </div>
-                            <p class="small text-secondary mb-0">Garansi Kesesuaian Guru 100%. Orang tua leluasa berkonsultasi untuk penyesuaian guru agar ananda nyaman belajar.</p>
+                            <h4 class="empathy-solution-lead">Garansi 100% Kesesuaian Guru &amp; Profiling Personal</h4>
+                            <p class="empathy-solution-text">
+                                Kami memetakan karakter anak dengan profil pedagogis pengajar. Orang tua memiliki hak konsultasi dan pengajuan penggantian guru pendamping kapan pun hingga ananda merasa benar-benar nyaman dan akrab.
+                            </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 4 -->
-                <div class="col-md-6 col-lg-3" data-reveal data-reveal-delay="300">
-                    <div class="editorial-card">
-                        <div class="pb-3 mb-3 border-bottom">
-                            <div class="d-flex align-items-center gap-2 text-danger small fw-bold mb-1">
-                                <i class="bi bi-x-circle-fill"></i> Keresahan Umum
+                <!-- Card 4: Fleksibilitas Jadwal -->
+                <div class="col-lg-6" data-reveal data-reveal-delay="300">
+                    <div class="empathy-card">
+                        <div class="empathy-card-top">
+                            <div class="empathy-meta">
+                                <span class="empathy-num">04</span>
+                                <span class="empathy-tag">
+                                    <i class="bi bi-heart-pulse-fill" aria-hidden="true"></i>
+                                    <span>Kekhawatiran Umum</span>
+                                </span>
                             </div>
-                            <p class="small text-secondary mb-0">Jadwal les anak padat dan sering bentrok dengan kegiatan sekolah atau les akademik.</p>
+                            <h3 class="empathy-concern-title">
+                                &ldquo;Jadwal harian anak sudah sangat padat dan sering bentrok dengan kegiatan sekolah atau les akademik.&rdquo;
+                            </h3>
+                            <p class="empathy-concern-context">
+                                Memaksa anak bepergian di jam macet untuk mengaji sering kali menyita energi keluarga dan memicu kelelahan berlebih pada anak sebelum proses belajar dimulai.
+                            </p>
                         </div>
-                        <div>
-                            <div class="d-flex align-items-center gap-2 text-success small fw-bold mb-1">
-                                <i class="bi bi-check-circle-fill"></i> Solusi Al-Hikmah
+
+                        <div class="empathy-solution-panel">
+                            <div class="empathy-solution-badge">
+                                <span class="empathy-solution-icon">
+                                    <i class="bi bi-house-heart" aria-hidden="true"></i>
+                                </span>
+                                <span>Pendekatan Menenangkan Al-Hikmah</span>
                             </div>
-                            <p class="small text-secondary mb-0">Waktu fleksibel (Pagi, Sore, atau Malam) dengan pilihan bimbingan online interaktif maupun guru datang ke rumah.</p>
+                            <h4 class="empathy-solution-lead">Pilihan Guru Datang ke Rumah (Home Visit) &amp; Waktu Fleksibel</h4>
+                            <p class="empathy-solution-text">
+                                Leluasa memilih slot jadwal (Pagi, Sore, atau Ba'da Maghrib/Isya). Tersedia pilihan guru privat hadir langsung ke rumah (*Offline Home Visit*) maupun kelas *Online Live 1-on-1* interaktif.
+                            </p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Bottom Reassurance Trust Ribbon -->
+            <div class="empathy-trust-ribbon" data-reveal>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="empathy-ribbon-icon">
+                        <i class="bi bi-chat-heart-fill" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <h5 class="empathy-ribbon-title">Setiap keluarga memiliki cerita dan kebutuhan yang unik.</h5>
+                        <p class="empathy-ribbon-desc">Ingin mendiskusikan kondisi khusus ananda langsung bersama tim konselor Al-Hikmah?</p>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ wa_url('Assalamualaikum Admin Al-Hikmah, saya ingin konsultasi mengenai kebutuhan bimbingan Al-Qur\'an untuk ananda.') }}"
+                        target="_blank" rel="noopener"
+                        class="btn-editorial-whatsapp py-2 px-3">
+                        <i class="bi bi-whatsapp me-1" aria-hidden="true"></i> Konsultasi Santun (WhatsApp)
+                    </a>
+                    <a href="{{ route('metode') }}" class="btn-editorial-secondary py-2 px-3">
+                        Pelajari Metode Talaqqi <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ============================================ -->
-    <!-- 4. TENTANG KAMI (ISLAMIC EDITORIAL) -->
+    <!-- 4. SESI EVALUASI & PENEMPATAN LEVEL (15 MENIT • 100% GRATIS) -->
     <!-- ============================================ -->
-    <section class="section-editorial-spacing" aria-label="Tentang AL-HIKMAH">
-        <div class="container">
-            <div class="row align-items-center g-5">
-                <div class="col-md-6" data-reveal>
-                    <div class="editorial-hero-frame">
-                        <img src="{{ asset('assets/img/2.jpg') }}" alt="Suasana belajar Al-Qur'an"
-                            onerror="this.src='{{ asset('assets/img/2.jpg') }}'" class="img-fluid">
-                    </div>
-                </div>
-                <div class="col-md-6" data-reveal data-reveal-delay="150">
-                    <div class="ps-lg-3">
-                        <h2 class="editorial-title fs-2 mb-3">Karena Anak Kita Perlu <span class="text-emerald-deep">Didampingi</span> dengan Penuh Kasih.</h2>
-                        <p class="editorial-subtitle mb-4">Di tengah kesibukan hidup, tidak semua keluarga memiliki waktu untuk mendampingi anak secara intensif. AL-HIKMAH hadir untuk menjadi mitra terpercaya orang tua dalam membimbing generasi Qur'ani.</p>
-
-                        <div class="d-flex flex-column gap-3 mb-4">
-                            <div class="d-flex align-items-start gap-3">
-                                <div class="editorial-icon-badge mb-0" style="width: 38px; height: 38px;">
-                                    <i class="bi bi-check2 fs-5"></i>
-                                </div>
-                                <div>
-                                    <h3 class="fw-bold fs-6 mb-1 text-heading">Belajar dengan Pemahaman &amp; Tajwid</h3>
-                                    <p class="small text-secondary mb-0">Bukan sekadar mengejar target halaman, tetapi memastikan makharijul huruf tepat dan tartil.</p>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-start gap-3">
-                                <div class="editorial-icon-badge mb-0" style="width: 38px; height: 38px;">
-                                    <i class="bi bi-check2 fs-5"></i>
-                                </div>
-                                <div>
-                                    <h3 class="fw-bold fs-6 mb-1 text-heading">Penanaman Adab &amp; Nilai Akhlak</h3>
-                                    <p class="small text-secondary mb-0">Membiasakan doa harian, adab terhadap orang tua, serta kecintaan beribadah sejak dini.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a href="{{ route('tentang-kami') }}" class="btn-editorial-secondary">
-                            Baca Kisah Selengkapnya <i class="bi bi-arrow-right ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- 5. PILAR PEMBELAJARAN (ISLAMIC EDITORIAL) -->
-    <!-- ============================================ -->
-    <section class="py-5 border-top border-bottom" style="background: var(--bg-tertiary);" aria-label="Pilar Pendampingan AL-HIKMAH">
-        <div class="container">
-            <div class="row g-4 text-center">
-                <div class="col-lg-3 col-sm-6" data-reveal>
-                    <div class="editorial-card text-center align-items-center">
-                        <div class="editorial-icon-badge mx-auto">
-                            <i class="bi bi-person-check fs-4"></i>
-                        </div>
-                        <h4 class="fs-6 fw-bold text-heading mb-1">Bimbingan 1-on-1</h4>
-                        <p class="small text-secondary mb-0">Fokus personal sesuai karakter santri</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6" data-reveal data-reveal-delay="100">
-                    <div class="editorial-card text-center align-items-center">
-                        <div class="editorial-icon-badge mx-auto">
-                            <i class="bi bi-journal-bookmark fs-4"></i>
-                        </div>
-                        <h4 class="fs-6 fw-bold text-heading mb-1">Tahsin &amp; Tajwid</h4>
-                        <p class="small text-secondary mb-0">Penekanan makharijul huruf tartil</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6" data-reveal data-reveal-delay="200">
-                    <div class="editorial-card text-center align-items-center">
-                        <div class="editorial-icon-badge mx-auto">
-                            <i class="bi bi-shield-check fs-4"></i>
-                        </div>
-                        <h4 class="fs-6 fw-bold text-heading mb-1">Guru Terkurasi</h4>
-                        <p class="small text-secondary mb-0">Pendidik hafidz dan hafidzah beradab</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6" data-reveal data-reveal-delay="300">
-                    <div class="editorial-card text-center align-items-center">
-                        <div class="editorial-icon-badge mx-auto">
-                            <i class="bi bi-clipboard2-check fs-4"></i>
-                        </div>
-                        <h4 class="fs-6 fw-bold text-heading mb-1">Laporan Mutaba'ah</h4>
-                        <p class="small text-secondary mb-0">Evaluasi sesi terbuka untuk wali santri</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- 5.5 ALUR BELAJAR & PENDAFTARAN -->
-    <!-- ============================================ -->
-    <section class="section-editorial-spacing" aria-label="Alur Pendaftaran dan Belajar">
-        <div class="container">
-            <div class="row justify-content-center mb-5 text-center">
-                <div class="col-lg-8" data-reveal>
-                    <h2 class="editorial-title fs-2 mb-3">Alur Bimbingan <span class="text-emerald-deep">Santri Baru</span></h2>
-                    <p class="editorial-subtitle mx-auto">Tahapan terstruktur dan transparan demi kenyamanan keluarga serta kesiapan belajar ananda.</p>
-                </div>
-            </div>
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-3" data-reveal>
-                    <div class="editorial-card h-100 position-relative">
-                        <div class="fw-bold fs-4 text-emerald-deep mb-2">01</div>
-                        <h3 class="fw-bold fs-5 mb-2 text-heading">Pendaftaran Awal</h3>
-                        <p class="small text-secondary mb-0">Isi data calon santri dan tentukan target serta preferensi belajar yang diinginkan keluarga.</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3" data-reveal data-reveal-delay="100">
-                    <div class="editorial-card h-100 position-relative">
-                        <div class="fw-bold fs-4 text-emerald-deep mb-2">02</div>
-                        <h3 class="fw-bold fs-5 mb-2 text-heading">Penempatan (Placement)</h3>
-                        <p class="small text-secondary mb-0">Asesmen kemampuan bacaan santri secara ramah dan sabar untuk menentukan kurikulum awal yang tepat.</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3" data-reveal data-reveal-delay="200">
-                    <div class="editorial-card h-100 position-relative">
-                        <div class="fw-bold fs-4 text-emerald-deep mb-2">03</div>
-                        <h3 class="fw-bold fs-5 mb-2 text-heading">Jadwal &amp; Bimbingan</h3>
-                        <p class="small text-secondary mb-0">Pilih sesi reguler (Home Visit atau Online) dan mulai bimbingan intensif 90 menit bersama pendidik.</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3" data-reveal data-reveal-delay="300">
-                    <div class="editorial-card h-100 position-relative">
-                        <div class="fw-bold fs-4 text-emerald-deep mb-2">04</div>
-                        <h3 class="fw-bold fs-5 mb-2 text-heading">Laporan Mutaba'ah</h3>
-                        <p class="small text-secondary mb-0">Wali santri dapat memantau catatan tajwid, hafalan, dan adab santri melalui portal pemantauan setiap selesai sesi.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- 5.6 SESI EVALUASI & PENEMPATAN LEVEL (GRATIS) -->
-    <!-- ============================================ -->
-    <section class="py-5" aria-label="Sesi Penempatan Belajar Gratis">
+    <section class="section-editorial-spacing" aria-label="Sesi Penempatan Belajar Gratis">
         <div class="container">
             <div class="editorial-card-featured p-4 p-lg-5" data-reveal>
                 <div class="row align-items-center mb-4 g-4">
                     <div class="col-lg-8">
+                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 small fw-semibold mb-2 d-inline-block">
+                            <i class="bi bi-gift-fill me-1" aria-hidden="true"></i> Evaluasi Awal • 100% Bebas Biaya
+                        </span>
                         <h2 class="editorial-title fs-2 mb-2">
-                            Daftar Akun &amp; <span class="text-emerald-deep">Penempatan Level</span> Gratis
+                            Mulai dari Sesi Penempatan 15 Menit, <span class="text-emerald-deep">Tanpa Biaya &amp; Tanpa Ikatan</span>
                         </h2>
-                        <p class="editorial-subtitle mb-0">
-                            Masih ragu menentukan materi awal yang sesuai untuk ananda? Jadwalkan satu sesi evaluasi santai bersama guru kami untuk mengukur tingkat kemampuan membaca Al-Qur'an secara objektif dan penuh kehangatan.
+                        <p class="editorial-subtitle mb-0 text-secondary" style="max-width: 650px;">
+                            Masih ragu materi awal yang paling tepat untuk ananda? Jadwalkan satu sesi evaluasi santai bersama guru kami untuk memetakan kemampuan membaca Al-Qur'an secara objektif dan penuh kehangatan.
                         </p>
                     </div>
                     <div class="col-lg-4 text-lg-end">
                         <button type="button" class="btn-editorial-primary" data-bs-toggle="modal"
                             data-bs-target="#trialModal">
-                            <i class="bi bi-pencil-square me-1" aria-hidden="true"></i> Daftar Sekarang (Gratis)
+                            <i class="bi bi-pencil-square me-1" aria-hidden="true"></i> Daftar Evaluasi (15 Menit)
                         </button>
                     </div>
                 </div>
 
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <div class="p-3 rounded-3 bg-body border h-100">
-                            <div class="fw-bold fs-5 text-emerald-deep mb-1">Langkah 1</div>
-                            <h3 class="fw-bold text-heading fs-6 mb-2">Kenalan &amp; Suasana Nyaman</h3>
+                        <div class="p-3.5 rounded-3 bg-body border h-100">
+                            <div class="fw-bold fs-5 text-emerald-deep mb-1">01</div>
+                            <h3 class="fw-bold text-heading fs-6 mb-2">Kenalan Santai &amp; Suasana Hangat</h3>
                             <p class="small text-secondary mb-0">
-                                Sapaan hangat dan obrolan ringan untuk mencairkan suasana agar ananda merasa senang dan tidak merasa sedang diuji.
+                                Sapaan ramah dan obrolan ringan agar ananda ceria, nyaman, dan tidak merasa sedang diuji.
                             </p>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="p-3 rounded-3 bg-body border h-100">
-                            <div class="fw-bold fs-5 text-emerald-deep mb-1">Langkah 2</div>
-                            <h3 class="fw-bold text-heading fs-6 mb-2">Simak Tartil &amp; Makhraj</h3>
+                        <div class="p-3.5 rounded-3 bg-body border h-100">
+                            <div class="fw-bold fs-5 text-emerald-deep mb-1">02</div>
+                            <h3 class="fw-bold text-heading fs-6 mb-2">Simak Tartil &amp; Pemetaan Makhraj</h3>
                             <p class="small text-secondary mb-0">
-                                Guru menyimak bacaan ananda secara suportif guna memetakan ketepatan tajwid dan kefasihan huruf.
+                                Guru menyimak bacaan ananda secara suportif guna mengetahui ketepatan makharijul huruf dan tajwid dasarnya.
                             </p>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="p-3 rounded-3 bg-body border h-100">
-                            <div class="fw-bold fs-5 text-emerald-deep mb-1">Langkah 3</div>
-                            <h3 class="fw-bold text-heading fs-6 mb-2">Rekomendasi Level Belajar</h3>
+                        <div class="p-3.5 rounded-3 bg-body border h-100">
+                            <div class="fw-bold fs-5 text-emerald-deep mb-1">03</div>
+                            <h3 class="fw-bold text-heading fs-6 mb-2">Rekomendasi Level Belajar Objektif</h3>
                             <p class="small text-secondary mb-0">
-                                Orang tua menerima saran penempatan jilid Iqra atau level bimbingan yang tepat, murni edukatif tanpa paksaan.
+                                Ayah Bunda menerima saran jilid Iqra atau level program yang paling tepat, murni edukatif tanpa paksaan mendaftar.
                             </p>
                         </div>
                     </div>
@@ -587,33 +465,33 @@
 
                 <div class="col-lg-6 order-1 order-lg-2" data-reveal data-reveal-delay="150">
                     <div class="ps-lg-4">
-                        <h2 class="editorial-title text-start mb-3">Bukan Sekadar Mengaji, <span
-                                class="text-emerald-deep">Tetapi Terukur Setiap Ayatnya</span></h2>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 small fw-semibold mb-2 d-inline-block">
+                            <i class="bi bi-phone-fill me-1" aria-hidden="true"></i> Rapor Digital Wali Santri
+                        </span>
+                        <h2 class="editorial-title text-start mb-3">Setiap Sesi Tercatat Rapi, <span
+                                class="text-emerald-deep">Terpantau Langsung di Ponsel Bunda</span></h2>
                         <p class="editorial-subtitle text-start mb-4">
-                            Dilengkapi Dashboard Digital Pintar: pantau nilai makhraj, ketukan tajwid, target hafalan, dan catatan perkembangan dari ustadz langsung setiap selesai sesi bimbingan. Terukur, transparan, dan menenangkan hati Ayah serta Bunda.
+                            Pantau capaian makhraj, ketukan tajwid, target hafalan, dan catatan ustadz setiap selesai 90 menit bimbingan. Transparan, teratur, dan menenangkan hati orang tua.
                         </p>
 
                         <div class="d-flex flex-column gap-3 mb-4">
                             <div class="d-flex align-items-start gap-3">
                                 <div class="editorial-icon-badge flex-shrink-0" style="width: 42px; height: 42px; font-size: 1.1rem;">
-                                    <i class="bi bi-phone-fill"></i>
+                                    <i class="bi bi-bell-fill"></i>
                                 </div>
                                 <div>
-                                    <h3 class="fw-bold fs-6 text-heading mb-1">Pantau Walau Sedang Sibuk Bekerja</h3>
-                                    <p class="small text-secondary mb-0">Laporan bisa diakses kapan saja dari ponsel orang
-                                        tua, memberikan ketenangan batin bagi keluarga yang beraktivitas di luar rumah.</p>
+                                    <h3 class="fw-bold fs-6 text-heading mb-1">Rapor Masuk Otomatis Pasca Sesi</h3>
+                                    <p class="small text-secondary mb-0">Begitu sesi 90 menit tuntas, ustadz mengunggah catatan evaluasi dan presensi langsung ke ponsel Ayah Bunda.</p>
                                 </div>
                             </div>
 
                             <div class="d-flex align-items-start gap-3">
                                 <div class="editorial-icon-badge flex-shrink-0" style="width: 42px; height: 42px; font-size: 1.1rem;">
-                                    <i class="bi bi-archive-fill"></i>
+                                    <i class="bi bi-journal-bookmark-fill"></i>
                                 </div>
                                 <div>
-                                    <h3 class="fw-bold fs-6 text-heading mb-1">Rekam Jejak Hafalan Tersimpan Rapi</h3>
-                                    <p class="small text-secondary mb-0">Seluruh riwayat surat yang dibaca dan target
-                                        hafalan tersimpan permanen di portal orang tua sebagai kenangan indah tumbuh kembang
-                                        ananda.</p>
+                                    <h3 class="fw-bold fs-6 text-heading mb-1">Rekam Jejak Hafalan Permanen</h3>
+                                    <p class="small text-secondary mb-0">Seluruh riwayat surat, jilid Iqra, dan target mutaba'ah tersimpan rapi sebagai kenangan tumbuh kembang ananda.</p>
                                 </div>
                             </div>
 
@@ -622,9 +500,8 @@
                                     <i class="bi bi-chat-heart-fill"></i>
                                 </div>
                                 <div>
-                                    <h3 class="fw-bold fs-6 text-heading mb-1">Komunikasi Dua Arah yang Hangat</h3>
-                                    <p class="small text-secondary mb-0">Orang tua dapat memberikan masukan atau
-                                        berkonsultasi mengenai tantangan belajar anak langsung bersama ustadz/ustadzah.</p>
+                                    <h3 class="fw-bold fs-6 text-heading mb-1">Catatan Khusus untuk Murajaah Rumah</h3>
+                                    <p class="small text-secondary mb-0">Dapatkan tips santai 5 menit sebelum tidur dari ustadz agar ananda tetap senang mengingat materi yang dipelajari.</p>
                                 </div>
                             </div>
                         </div>
@@ -647,130 +524,130 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- 6. PROGRAM BELAJAR -->
+    <!-- 5. PROGRAM BELAJAR (HOME VISIT & ONLINE) -->
     <!-- ============================================ -->
     <span id="pilihan-program" aria-hidden="true"></span>
     <section id="program" class="py-5 bg-body-tertiary border-top border-bottom" aria-label="Program Belajar">
         <div class="container text-center">
             <div class="row justify-content-center mb-5">
                 <div class="col-lg-8 text-center" data-reveal>
-                    <h2 class="editorial-title mb-2">Kurikulum Bertahap, <span class="text-emerald-deep">Fasilitasi Segala Tingkatan</span></h2>
-                    <p class="editorial-subtitle mx-auto">Dirancang bertahap sesuai usia dan tingkat kemampuan membaca Al-Qur'an, dari pengenalan hijaiyah hingga mutqin hafalan.</p>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 small fw-semibold mb-2 d-inline-block">
+                        <i class="bi bi-mortarboard-fill me-1" aria-hidden="true"></i> Pilihan Program Bimbingan
+                    </span>
+                    <h2 class="editorial-title mb-2">Kurikulum Bertahap, <span class="text-emerald-deep">Sesuai Kesiapan Ananda</span></h2>
+                    <p class="editorial-subtitle mx-auto">Tersedia pilihan Guru Datang ke Rumah (Home Visit Jabodetabek) maupun Kelas Online 1-on-1 Interaktif.</p>
                 </div>
             </div>
 
             <div class="row g-4 text-start">
+                <!-- Program 1: Iqra & Dasar -->
                 <div class="col-md-4" data-reveal>
                     <div class="editorial-card h-100 p-4 d-flex flex-column justify-content-between">
                         <div>
-                            <div class="editorial-icon-badge mb-3"><i class="bi bi-book-half"></i></div>
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="editorial-icon-badge mb-0"><i class="bi bi-book-half"></i></div>
+                                <span class="badge bg-light text-secondary border rounded-pill px-2.5 py-1" style="font-size: 0.72rem;">Usia 4 - 12 Tahun</span>
+                            </div>
                             <h3 class="fw-bold fs-5 text-heading mb-2">Iqra &amp; Al-Qur'an Dasar</h3>
                             <p class="small text-secondary mb-3">
-                                Mengenal huruf hijaiyah, makhraj dasar, harakat, dan menyambung bacaan secara menyenangkan tanpa tekanan bagi ananda.
+                                Mengenal huruf hijaiyah, harakat dasar, dan menyambung ayat dengan metode santai dan apresiatif tanpa tekanan.
                             </p>
+                            <div class="d-flex flex-wrap gap-1.5 mb-3">
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.7rem;">
+                                    <i class="bi bi-house-door-fill me-1"></i> Home Visit
+                                </span>
+                                <span class="badge bg-light text-secondary border rounded-pill" style="font-size: 0.7rem;">
+                                    <i class="bi bi-camera-video-fill me-1"></i> Online 1-on-1
+                                </span>
+                            </div>
                         </div>
                         <div class="pt-3 border-top d-flex align-items-center justify-content-between">
-                            <span class="badge bg-light text-secondary border">Usia 4 - 12 Tahun</span>
-                            <span class="small fw-bold text-emerald-deep">1-on-1 Privat</span>
+                            <span class="small text-muted">Durasi 90 Menit Penuh</span>
+                            <span class="small fw-bold text-emerald-deep">Privat 1-on-1</span>
                         </div>
                     </div>
                 </div>
+
+                <!-- Program 2: Tahsin & Tajwid -->
                 <div class="col-md-4" data-reveal data-reveal-delay="100">
                     <div class="editorial-card h-100 p-4 d-flex flex-column justify-content-between">
                         <div>
-                            <div class="editorial-icon-badge mb-3"><i class="bi bi-mic"></i></div>
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="editorial-icon-badge mb-0"><i class="bi bi-mic"></i></div>
+                                <span class="badge bg-light text-secondary border rounded-pill px-2.5 py-1" style="font-size: 0.72rem;">Anak &amp; Remaja</span>
+                            </div>
                             <h3 class="fw-bold fs-5 text-heading mb-2">Tahsin &amp; Tartil Tajwid</h3>
                             <p class="small text-secondary mb-3">
-                                Memperbaiki kefasihan makhraj, hukum nun mati/tanwin, mad thabi'i, hingga ghunnah agar bacaan tartil sesuai kaidah tajwid.
+                                Memfasihkan makharijul huruf, ketukan mad panjang-pendek, hukum nun mati, dan ghunnah sesuai kaidah qira'ah.
                             </p>
+                            <div class="d-flex flex-wrap gap-1.5 mb-3">
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.7rem;">
+                                    <i class="bi bi-house-door-fill me-1"></i> Home Visit
+                                </span>
+                                <span class="badge bg-light text-secondary border rounded-pill" style="font-size: 0.7rem;">
+                                    <i class="bi bi-camera-video-fill me-1"></i> Online 1-on-1
+                                </span>
+                            </div>
                         </div>
                         <div class="pt-3 border-top d-flex align-items-center justify-content-between">
-                            <span class="badge bg-light text-secondary border">Anak &amp; Remaja</span>
+                            <span class="small text-muted">Durasi 90 Menit Penuh</span>
                             <span class="small fw-bold text-emerald-deep">Standar Qira'ah</span>
                         </div>
                     </div>
                 </div>
+
+                <!-- Program 3: Tahfidz & Muraja'ah -->
                 <div class="col-md-4" data-reveal data-reveal-delay="200">
                     <div class="editorial-card h-100 p-4 d-flex flex-column justify-content-between">
                         <div>
-                            <div class="editorial-icon-badge mb-3"><i class="bi bi-clipboard2-pulse"></i></div>
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="editorial-icon-badge mb-0"><i class="bi bi-clipboard2-pulse"></i></div>
+                                <span class="badge bg-light text-secondary border rounded-pill px-2.5 py-1" style="font-size: 0.72rem;">Juz 30 &amp; Pilihan</span>
+                            </div>
                             <h3 class="fw-bold fs-5 text-heading mb-2">Tahfidz &amp; Muraja'ah Terstruktur</h3>
                             <p class="small text-secondary mb-3">
-                                Bimbingan hafalan Juz 'Amma dan surat pilihan dengan pembagian target harian terukur serta mutaba'ah muraja'ah mutqin.
+                                Menghafal Juz 'Amma dan surat pilihan dengan target harian realistis serta setoran muraja'ah mutqin yang terpantau.
                             </p>
+                            <div class="d-flex flex-wrap gap-1.5 mb-3">
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.7rem;">
+                                    <i class="bi bi-house-door-fill me-1"></i> Home Visit
+                                </span>
+                                <span class="badge bg-light text-secondary border rounded-pill" style="font-size: 0.7rem;">
+                                    <i class="bi bi-camera-video-fill me-1"></i> Online 1-on-1
+                                </span>
+                            </div>
                         </div>
                         <div class="pt-3 border-top d-flex align-items-center justify-content-between">
-                            <span class="badge bg-light text-secondary border">Juz 30 &amp; Pilihan</span>
+                            <span class="small text-muted">Durasi 90 Menit Penuh</span>
                             <span class="small fw-bold text-emerald-deep">Mutqin Terpantau</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="text-center mt-5" data-reveal>
-                <a href="{{ route('program') }}" class="btn-editorial-secondary">
+            <div class="text-center mt-5 d-flex flex-wrap justify-content-center align-items-center gap-3" data-reveal>
+                <a href="{{ route('program') }}" class="btn-editorial-primary">
                     <i class="bi bi-grid-fill me-1"></i> Pelajari Rincian Kurikulum &amp; Jadwal
+                </a>
+                <a href="{{ route('metode') }}" class="btn-editorial-secondary">
+                    <i class="bi bi-geo-alt-fill me-1"></i> Area Layanan Home Visit &amp; Online
                 </a>
             </div>
         </div>
     </section>
 
     <!-- ============================================ -->
-    <!-- 7. FLEKSIBILITAS METODE BELAJAR -->
-    <!-- ============================================ -->
-    <section class="py-5" aria-label="Sistem Belajar Fleksibel">
-        <div class="container">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6 order-lg-1 order-2" data-reveal>
-                    <div class="pe-lg-4">
-                        <h2 class="editorial-title text-start mb-3">Sistem Pembelajaran yang <span
-                                class="text-emerald-deep">Fleksibel &amp; Nyaman</span></h2>
-                        <p class="editorial-subtitle text-start mb-4">Pilih metode pembelajaran yang paling sesuai dengan ritme dan kenyamanan keluarga Anda di rumah maupun secara daring.</p>
-
-                        <div class="row g-3">
-                            <div class="col-sm-6">
-                                <div class="editorial-card p-3 h-100">
-                                    <div class="editorial-icon-badge mb-2"><i class="bi bi-house-door-fill"></i></div>
-                                    <h3 class="fw-bold fs-6 text-heading mb-1">Offline (Home Visit)</h3>
-                                    <p class="small text-secondary mb-0">Guru pembimbing hadir langsung ke kediaman Anda di seluruh area Jabodetabek dengan standar adab yang terjaga.</p>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="editorial-card p-3 h-100">
-                                    <div class="editorial-icon-badge mb-2"><i class="bi bi-camera-video-fill"></i></div>
-                                    <h3 class="fw-bold fs-6 text-heading mb-1">Online Interaktif</h3>
-                                    <p class="small text-secondary mb-0">Sesi tatap muka virtual via Zoom/Google Meet 1-on-1 dengan jadwal fleksibel dari mana saja.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <a href="{{ route('metode') }}" class="btn-editorial-secondary">
-                                <i class="bi bi-info-circle me-1"></i> Pelajari Metode &amp; Protokol Kunjungan
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 order-lg-2 order-1 text-center" data-reveal data-reveal-delay="150">
-                    <div class="editorial-hero-frame">
-                        <img src="{{ asset('assets/img/etrain/advance_feature_img.png') }}"
-                            alt="Sistem Pembelajaran Al-Hikmah" class="img-fluid w-100 rounded-3"
-                            onerror="this.src='{{ asset('assets/img/5.jpg') }}'">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- 8. TESTIMONI KELUARGA -->
+    <!-- 6. TESTIMONI KELUARGA -->
     <!-- ============================================ -->
     <section class="py-5 bg-body-tertiary border-top border-bottom" aria-label="Testimoni Keluarga">
         <div class="container">
             <div class="row justify-content-center mb-5">
                 <div class="col-lg-7 text-center" data-reveal>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 small fw-semibold mb-2 d-inline-block">
+                        <i class="bi bi-star-fill text-warning me-1" aria-hidden="true"></i> Ulasan Nyata
+                    </span>
                     <h2 class="editorial-title mb-2">Cerita Nyata <span class="text-emerald-deep">Wali Santri</span></h2>
-                    <p class="editorial-subtitle mx-auto">Pengalaman nyata para orang tua yang telah mempercayakan bimbingan mengaji bersama AL-HIKMAH.</p>
+                    <p class="editorial-subtitle mx-auto">Kisah para orang tua yang merasakan langsung perkembangan mengaji dan adab buah hatinya.</p>
                 </div>
             </div>
 
@@ -784,8 +661,7 @@
                                     class="bi bi-star-fill"></i>
                             </div>
                             <blockquote class="text-secondary small mb-4" style="line-height: 1.65; font-style: normal;">
-                                "Alhamdulillah anak saya sekarang lebih bersemangat setiap jam mengaji tiba. Pendampingnya
-                                sangat sabar dan mampu membangun chemistry yang menyenangkan."
+                                &ldquo;Alhamdulillah anak saya sekarang lebih bersemangat setiap jam mengaji tiba. Guru pembimbingnya sangat sabar dan mampu membangun suasana belajar yang menyenangkan.&rdquo;
                             </blockquote>
                         </div>
                         <div class="pt-3 border-top">
@@ -804,8 +680,7 @@
                                     class="bi bi-star-fill"></i>
                             </div>
                             <blockquote class="text-secondary small mb-4" style="line-height: 1.65; font-style: normal;">
-                                "Laporan perkembangan di website sangat memudahkan saya memantau hafalan anak meskipun saya
-                                bekerja di kantor. Sangat transparan dan profesional."
+                                &ldquo;Laporan mutaba'ah di website sangat memudahkan saya memantau hafalan anak meskipun saya bekerja di kantor. Sangat transparan dan profesional.&rdquo;
                             </blockquote>
                         </div>
                         <div class="pt-3 border-top">
@@ -824,8 +699,7 @@
                                     class="bi bi-star-fill"></i>
                             </div>
                             <blockquote class="text-secondary small mb-4" style="line-height: 1.65; font-style: normal;">
-                                "Jadwalnya sangat fleksibel, dan gurunya selalu tepat waktu. Metode tahsin yang diajarkan
-                                sangat mudah dipahami oleh anak-anak usia remaja."
+                                &ldquo;Jadwalnya sangat fleksibel dan gurunya selalu tepat waktu. Kaidah tahsin yang diajarkan sangat mudah dipahami oleh anak usia sekolah.&rdquo;
                             </blockquote>
                         </div>
                         <div class="pt-3 border-top">
@@ -839,7 +713,29 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- 9. BLOG & EDUKASI ISLAMI -->
+    <!-- 7. JADWAL SHOLAT & KIBLAT HARIAN (UTILITY) -->
+    <!-- ============================================ -->
+    <section class="py-4 bg-white border-bottom" aria-label="Informasi Jadwal Sholat">
+        <div class="container">
+            <div class="editorial-card p-3 p-md-4 d-flex flex-row align-items-center justify-content-between flex-wrap gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="editorial-icon-badge mb-0" style="width: 44px; height: 44px;">
+                        <i class="bi bi-clock-history fs-5"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1 text-heading">Waktu Ibadah &amp; Arah Kiblat Harian</h6>
+                        <p class="text-secondary small mb-0">Pantau jadwal sholat akurat standar Kemenag RI, hitung mundur azan, dan kompas kiblat real-time.</p>
+                    </div>
+                </div>
+                <a href="{{ route('jadwal-sholat') }}" class="btn-editorial-secondary py-2 px-3">
+                    Buka Jadwal Sholat &amp; Kiblat <i class="bi bi-chevron-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 8. BLOG & EDUKASI ISLAMI -->
     <!-- ============================================ -->
     @php
         $latestArticles =
@@ -932,7 +828,7 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- 10. CTA SECTION -->
+    <!-- 9. RENUNGAN & LANGKAH AWAL (CTA SECTION) -->
     <!-- ============================================ -->
     <section id="kontak" class="cta-section text-center" aria-label="CTA">
         <div class="cta-overlay" aria-hidden="true"></div>

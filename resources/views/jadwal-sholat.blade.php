@@ -5,23 +5,21 @@
 
 @section('content')
     <!-- SUBPAGE HERO / BREADCRUMB -->
-    <section class="breadcrumb_bg page-hero" aria-label="Header Halaman Jadwal Sholat">
+    <section class="editorial-page-header" aria-label="Header Halaman Jadwal Sholat">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-10 text-center" data-reveal>
-                    <div class="section-badge mx-auto mb-2">
+                    <span class="editorial-badge">
                         <i class="bi bi-clock-history" aria-hidden="true"></i> Waktu Ibadah Harian
-                    </div>
-                    <h1 class="hero-title mb-3">
-                        Jadwal Sholat &amp; Kompas Kiblat <span class="text-gradient">Real-Time</span>
-                    </h1>
-                    <p class="hero-subtitle text-secondary mx-auto mb-4" style="max-width: 680px;">
-                        Pantau waktu sholat fardhu secara akurat standar Kementerian Agama RI dengan deteksi lokasi otomatis, hitung mundur menuju azan, dan penunjuk arah kiblat.
+                    </span>
+                    <h1>Jadwal Sholat &amp; Kompas Kiblat Real-Time</h1>
+                    <p>
+                        Pantau waktu sholat fardhu secara akurat standar Kementerian Agama RI dengan deteksi lokasi otomatis, hitung mundur azan, dan penunjuk arah kiblat.
                     </p>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-center mb-0">
-                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Jadwal Sholat &amp; Kiblat</li>
+                    <nav aria-label="breadcrumb" class="mt-3">
+                        <ol class="breadcrumb justify-content-center mb-0 small">
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none text-secondary">Beranda</a></li>
+                            <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Jadwal Sholat &amp; Kiblat</li>
                         </ol>
                     </nav>
                 </div>
@@ -223,10 +221,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <div class="city-search-input-wrap">
-                        <i class="bi bi-search"></i>
-                        <input type="text" id="city-search-input" class="city-search-input"
-                            placeholder="Cari nama kota atau kabupaten di Indonesia..." autocomplete="off">
+                    <div class="input-group-editorial mb-3">
+                        <span class="field-icon"><i class="bi bi-search"></i></span>
+                        <input type="text" id="city-search-input" class="form-control"
+                            placeholder="Cari nama kota atau kabupaten di Indonesia..." autocomplete="off"
+                            aria-label="Cari nama kota atau kabupaten">
                     </div>
 
                     <div class="city-quick-pills">

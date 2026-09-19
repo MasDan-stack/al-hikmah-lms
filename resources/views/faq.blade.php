@@ -7,11 +7,14 @@
 <!-- ============================================ -->
 <!-- 1. PAGE HEADER - EDITORIAL MINIMALIST -->
 <!-- ============================================ -->
-<section class="py-5 bg-body-tertiary border-bottom" aria-label="Header Tanya Jawab">
-    <div class="container py-4">
+<section class="editorial-page-header text-center" aria-label="Header Tanya Jawab">
+    <div class="container py-2">
         <div class="row justify-content-center">
-            <div class="col-lg-9 text-center">
+            <div class="col-lg-9">
                 <div data-reveal>
+                    <div class="section-badge mx-auto mb-3">
+                        <i class="bi bi-question-circle-fill me-1"></i> Bantuan &amp; Tanya Jawab
+                    </div>
                     <h1 class="editorial-title mb-3">Pusat Bantuan &amp; <span class="text-emerald-deep">Tanya Jawab (FAQ)</span></h1>
                     <p class="editorial-subtitle mx-auto">
                         Jawaban lengkap seputar metode bimbingan, fleksibilitas jadwal privat, kualifikasi asatidz, serta transparansi biaya belajar Al-Qur'an.
@@ -20,9 +23,9 @@
                     <!-- Live FAQ Search Bar -->
                     <div class="row justify-content-center mt-4">
                         <div class="col-md-8 col-lg-6">
-                            <div class="input-group shadow-sm rounded-pill overflow-hidden border bg-body">
-                                <span class="input-group-text bg-transparent border-0 ps-3.5 text-muted"><i class="bi bi-search"></i></span>
-                                <input type="text" id="faqSearchInput" class="form-control border-0 py-2.5" placeholder="Ketik kata kunci (jadwal, biaya, guru, offline)..." aria-label="Cari FAQ" style="min-height: 44px;">
+                            <div class="input-group-editorial">
+                                <span class="field-icon"><i class="bi bi-search"></i></span>
+                                <input type="text" id="faqSearchInput" class="form-control" placeholder="Ketik kata kunci (jadwal, biaya, guru, offline)..." aria-label="Cari FAQ">
                             </div>
                         </div>
                     </div>
@@ -72,8 +75,8 @@
                         </h2>
                         <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                             <div class="accordion-body lh-lg text-secondary">
-                                Program utama kami dirancang khusus untuk <strong>anak-anak usia 10 hingga 15 tahun</strong> dengan pendekatan santun, bersahabat, dan bertahap.<br><br>
-                                Selain itu, kami juga menyediakan kelas bimbingan untuk <strong>peserta dewasa</strong> (yang ingin belajar membaca dari nol atau memperbaiki tahsin tajwid) serta <strong>kelas muslimah</strong> dengan asatidz ustadzah wanita.
+                                Program bimbingan kami terbuka untuk <strong>anak-anak, remaja, hingga dewasa</strong> dengan pendekatan bertahap, santun, dan bersahabat.<br><br>
+                                Kurikulum disesuaikan dengan ritme santri sejak tingkat Iqra, Tahsin dasar, hingga Tahfidz hafalan terarah. Kami juga menyediakan kelas bimbingan untuk <strong>peserta dewasa</strong> (yang ingin memperbaiki makhraj dan hukum tajwid) serta <strong>halaqah privat muslimah</strong> dengan asatidzah wanita.
                             </div>
                         </div>
                     </div>

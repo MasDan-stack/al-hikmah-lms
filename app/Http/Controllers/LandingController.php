@@ -137,6 +137,11 @@ class LandingController extends Controller
             abort(403, 'Akses Terbatas: Informasi rincian investasi dan paket belajar hanya dapat diakses oleh Orang Tua / Wali dan Administrator yang telah terdaftar.');
         }
 
+        if (auth()->user()->isParent() && ! auth()->user()->hasChildren()) {
+            return redirect()->route('parent.profile.children')
+                ->with('warning', 'Sebelum memilih program belajar, silakan daftarkan data lengkap anak binaan Anda terlebih dahulu.');
+        }
+
         $programs = Program::where('is_active', true)
             ->orderBy('sort_order')
             ->get();

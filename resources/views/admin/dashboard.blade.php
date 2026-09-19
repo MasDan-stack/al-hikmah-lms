@@ -590,36 +590,102 @@
                         <div class="tab-pane fade show active" id="confirmations-pane" role="tabpanel">
                             @if($recentConfirmations->isEmpty())
                                 <div class="text-center py-4 text-muted small">
-                                    Belum ada riwayat konfirmasi kehadiran anak dari Orang Tua.
+                                    Belum ada riwayat konfirmasi kehadiran sesi bimbingan.
                                 </div>
                             @else
                                 <div class="table-responsive">
                                     <table class="table align-middle table-hover datatable" data-page-length="5">
                                         <thead class="table-light">
                                             <tr>
-                                                <th>Wali Santri</th>
-                                                <th>Santri Binaan</th>
-                                                <th>Status Konfirmasi</th>
-                                                <th>Catatan Orang Tua</th>
+                                                <th>Santri &amp; Sesi</th>
+                                                <th>Guru Pembimbing</th>
+                                                <th>Status Kehadiran</th>
+                                                <th>Pelapor</th>
+                                                <th>Bukti Foto Lokasi</th>
+                                                <th>Catatan</th>
                                                 <th>Waktu Respon</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($recentConfirmations as $conf)
+                                                @php
+                                                    $session = $conf->session;
+                                                    $student = $session?->student;
+                                                    $mentor = $session?->mentor;
+                                                    $activeEnrollment = $student?->enrollments?->first();
+                                                    $progName = $session?->program?->name ?? $activeEnrollment?->program?->name ?? 'Bimbingan Al-Qur\'an';
+                                                @endphp
                                                 <tr>
-                                                    <td class="fw-bold text-dark">{{ $conf->parent?->user?->name ?? 'Wali Santri' }}</td>
-                                                    <td class="text-primary fw-semibold">{{ $conf->session?->student?->user?->name ?? $conf->session?->student?->full_name }}</td>
                                                     <td>
-                                                        @if($conf->status === 'hadir')
-                                                            <span class="badge bg-success-subtle text-success rounded-pill px-3">HADIR</span>
-                                                        @elseif($conf->status === 'izin')
-                                                            <span class="badge bg-warning-subtle text-warning rounded-pill px-3">IZIN</span>
-                                                        @else
-                                                            <span class="badge bg-danger-subtle text-danger rounded-pill px-3">SAKIT</span>
+                                                        <div class="fw-bold text-dark">{{ $student?->getDisplayName() ?? 'Santri' }}</div>
+                                                        <small class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.68rem;">
+                                                            {{ $progName }}
+                                                        </small>
+                                                        @if($session?->date)
+                                                            <div class="text-muted small mt-0.5" style="font-size: 0.72rem;">
+                                                                <i class="bi bi-calendar3 me-1"></i>{{ \Carbon\Carbon::parse($session->date)->locale('id')->isoFormat('D MMM Y') }}
+                                                                ({{ date('H:i', strtotime($session->time)) }} WIB)
+                                                            </div>
                                                         @endif
                                                     </td>
-                                                    <td class="small text-secondary">{{ $conf->notes ?? '-' }}</td>
-                                                    <td class="small text-muted">{{ $conf->created_at->diffForHumans() }}</td>
+                                                    <td>
+                                                        @if($mentor)
+                                                            <a href="{{ route('admin.staff.show', $mentor->id) }}" class="fw-semibold text-primary text-decoration-none small d-inline-flex align-items-center gap-1">
+                                                                <i class="bi bi-person-badge"></i> {{ $mentor->getDisplayName() }}
+                                                            </a>
+                                                            <small class="text-muted d-block" style="font-size: 0.7rem;">{{ $mentor->specialization ?? 'Guru Pembimbing' }}</small>
+                                                        @else
+                                                            <span class="text-muted small">-</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if($conf->status === 'hadir')
+                                                            <span class="badge bg-success text-white rounded-pill px-2.5 py-1">
+                                                                <i class="bi bi-check-circle-fill me-1"></i>HADIR
+                                                            </span>
+                                                        @elseif($conf->status === 'izin')
+                                                            <span class="badge bg-warning text-dark rounded-pill px-2.5 py-1">
+                                                                <i class="bi bi-info-circle-fill me-1"></i>IZIN
+                                                            </span>
+                                                        @elseif($conf->status === 'sakit')
+                                                            <span class="badge bg-danger text-white rounded-pill px-2.5 py-1">
+                                                                <i class="bi bi-heart-pulse-fill me-1"></i>SAKIT
+                                                            </span>
+                                                        @else
+                                                            <span class="badge bg-secondary-subtle text-secondary rounded-pill px-2.5 py-1 text-uppercase">{{ $conf->status }}</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if($conf->confirmed_by === 'mentor')
+                                                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2 py-0.5" style="font-size: 0.7rem;" title="Presensi diinput mandiri oleh guru di lokasi santri">
+                                                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>Input Guru
+                                                            </span>
+                                                        @else
+                                                            <span class="badge bg-light text-secondary border rounded-pill px-2 py-0.5" style="font-size: 0.7rem;" title="Presensi dikonfirmasi oleh wali santri">
+                                                                <i class="bi bi-person-heart me-1 text-primary"></i>Wali Santri
+                                                            </span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if($conf->proof_image_url)
+                                                            <button type="button" 
+                                                                    class="btn btn-sm btn-outline-success rounded-pill px-2 py-0.5 d-inline-flex align-items-center gap-1 shadow-2xs" 
+                                                                    style="font-size: 0.72rem;"
+                                                                    onclick="showAdminProofModal('{{ $conf->proof_image_url }}', '{{ addslashes($student?->getDisplayName() ?? 'Santri') }}', '{{ $session?->date ? \Carbon\Carbon::parse($session->date)->locale('id')->isoFormat('D MMMM Y') : '' }}', '{{ addslashes($mentor?->getDisplayName() ?? 'Guru') }}')">
+                                                                <i class="bi bi-camera-fill text-success"></i> Lihat Foto
+                                                            </button>
+                                                        @else
+                                                            <span class="text-muted small">-</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="small text-secondary" style="max-width: 180px;">
+                                                        @if($conf->notes)
+                                                            <span title="{{ $conf->notes }}">"{{ \Illuminate\Support\Str::limit($conf->notes, 35) }}"</span>
+                                                        @else
+                                                            <span class="text-muted">-</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="small text-muted">{{ $conf->created_at ? $conf->created_at->diffForHumans() : '-' }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -1128,6 +1194,38 @@
             </div>
         </div>
     </div>
+<!-- Modal Preview Bukti Foto Presensi Admin -->
+<div class="modal fade" id="adminProofPhotoModal" tabindex="-1" aria-labelledby="adminProofPhotoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header border-0 bg-success text-white py-3 px-4">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-camera-fill fs-5"></i>
+                    <h5 class="modal-title fw-bold fs-6 mb-0" id="adminProofPhotoModalLabel">Bukti Foto Presensi di Lokasi Santri</h5>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 text-center bg-light">
+                <div class="mb-3 d-flex justify-content-between align-items-center flex-wrap gap-2 text-start bg-white p-3 rounded-3 border">
+                    <div>
+                        <div class="fw-bold text-dark" id="modalAdminStudentName">-</div>
+                        <small class="text-muted" id="modalAdminDate">-</small>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1" id="modalAdminMentorName">-</span>
+                    </div>
+                </div>
+                <div class="rounded-3 overflow-hidden border shadow-xs p-1 bg-white d-inline-block">
+                    <img id="modalAdminProofImg" src="#" alt="Bukti Hadir" class="img-fluid rounded-2 object-fit-contain" style="max-height: 480px;">
+                </div>
+                <div class="mt-3">
+                    <a id="modalAdminProofFullLink" href="#" target="_blank" class="btn btn-sm btn-outline-success rounded-pill px-4">
+                        <i class="bi bi-box-arrow-up-right me-1"></i> Buka Foto Ukuran Asli
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -1140,5 +1238,16 @@
             }
         });
     });
+
+    function showAdminProofModal(imageUrl, studentName, sessionDate, mentorName) {
+        document.getElementById('modalAdminProofImg').src = imageUrl;
+        document.getElementById('modalAdminProofFullLink').href = imageUrl;
+        document.getElementById('modalAdminStudentName').innerText = 'Santri: ' + studentName;
+        document.getElementById('modalAdminDate').innerText = 'Tanggal Sesi: ' + (sessionDate || '-');
+        document.getElementById('modalAdminMentorName').innerText = 'Guru: ' + (mentorName || '-');
+
+        const modal = new bootstrap.Modal(document.getElementById('adminProofPhotoModal'));
+        modal.show();
+    }
 </script>
 @endpush

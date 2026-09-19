@@ -17,10 +17,18 @@
                 <strong>Orang Tua:</strong> {{ $preData['nama'] ?? '-' }} | 
                 <strong>Nama Anak:</strong> {{ $preData['nama_anak'] ?? '-' }}
             </div>
-            <div class="col-6"><strong>Program:</strong> {{ $preData['program'] ?? '-' }}</div>
-            <div class="col-6"><strong>Metode:</strong> {{ $preData['metode'] ?? '-' }}</div>
-            <div class="col-6"><strong>Usia:</strong> {{ $preData['usia'] ?? '-' }}</div>
-            <div class="col-6"><strong>Lokasi:</strong> {{ $preData['lokasi'] ?? '-' }}</div>
+            @if(!empty($preData['program']))
+            <div class="col-6"><strong>Program:</strong> {{ $preData['program'] }}</div>
+            @endif
+            @if(!empty($preData['metode']))
+            <div class="col-6"><strong>Metode:</strong> {{ ucfirst($preData['metode']) }}</div>
+            @endif
+            @if(!empty($preData['usia']))
+            <div class="col-6"><strong>Usia:</strong> {{ $preData['usia'] }}</div>
+            @endif
+            @if(!empty($preData['lokasi']))
+            <div class="col-6"><strong>Lokasi:</strong> {{ $preData['lokasi'] }}</div>
+            @endif
         </div>
     </div>
 @endif

@@ -19,25 +19,32 @@
     <!-- ============================================ -->
     <!-- 1. PAGE HEADER - EDITORIAL MINIMALIST -->
     <!-- ============================================ -->
-    <section class="py-5 bg-body-tertiary border-bottom" aria-label="Header Galeri">
-        <div class="container py-4">
+    <section class="editorial-page-header" aria-label="Header Galeri">
+        <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-9 text-center">
-                    <div data-reveal>
-                        <h1 class="editorial-title mb-3">Dokumentasi &amp; Momen <span class="text-emerald-deep">Belajar Santri</span></h1>
-                        <p class="editorial-subtitle mx-auto">
-                            Menyimpan rekaman perjalanan nyata santri dan asatidz AL-HIKMAH dalam mempelajari dan mencintai Al-Qur'an dengan adab dan ketenangan.
-                        </p>
-                    </div>
+                <div class="col-lg-9 text-center" data-reveal>
+                    <span class="editorial-badge">
+                        <i class="bi bi-images"></i> Dokumentasi KBM
+                    </span>
+                    <h1>Dokumentasi &amp; Momen Belajar Santri</h1>
+                    <p>
+                        Menyimpan rekaman perjalanan nyata santri dan asatidz AL-HIKMAH dalam mempelajari dan mencintai Al-Qur'an dengan adab dan ketenangan.
+                    </p>
+                    <nav aria-label="breadcrumb" class="mt-3">
+                        <ol class="breadcrumb justify-content-center mb-0 small">
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none text-secondary">Beranda</a></li>
+                            <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Galeri Kegiatan</li>
+                        </ol>
+                    </nav>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ============================================ -->
-    <!-- FILTER BAR - PREMIUM -->
+    <!-- FILTER BAR - PREMIUM EDITORIAL -->
     <!-- ============================================ -->
-    <section class="py-4" style="background:var(--bg-secondary);border-bottom:1px solid var(--border-color);">
+    <section class="py-4 bg-body-tertiary border-bottom">
         <div class="container">
             <div class="filter-bar-modern" data-reveal>
                 <!-- Search & Filter Row -->
@@ -53,11 +60,12 @@
                             @if (request('tag'))
                                 <input type="hidden" name="tag" value="{{ request('tag') }}">
                             @endif
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <div class="input-group-editorial shadow-sm">
+                                <span class="field-icon"><i class="bi bi-search"></i></span>
                                 <input type="text" name="q" class="form-control"
-                                    placeholder="Cari judul, lokasi, atau deskripsi..." value="{{ request('q') }}">
-                                <button class="btn btn-primary-custom" type="submit">
+                                    placeholder="Cari judul, lokasi, atau kegiatan..." value="{{ request('q') }}"
+                                    aria-label="Cari dokumentasi galeri">
+                                <button class="btn-field-submit" type="submit" aria-label="Kirim pencarian">
                                     <i class="bi bi-arrow-right"></i>
                                 </button>
                             </div>

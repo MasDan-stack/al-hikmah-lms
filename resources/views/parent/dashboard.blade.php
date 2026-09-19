@@ -663,24 +663,57 @@
                                                     ({{ date('H:i', strtotime($ses->time)) }} WIB)
                                                 </span>
                                                 @if ($ses->method === 'offline')
-                                                    <span
-                                                        class="badge bg-success-subtle text-success rounded-pill px-2 border border-success-subtle">Offline</span>
+                                                    <span class="badge bg-success-subtle text-success rounded-pill px-2 border border-success-subtle">Offline</span>
                                                 @elseif($ses->method === 'online')
-                                                    <span
-                                                        class="badge bg-primary-subtle text-primary rounded-pill px-2 border border-primary-subtle">Online</span>
+                                                    <span class="badge bg-primary-subtle text-primary rounded-pill px-2 border border-primary-subtle">Online</span>
                                                 @else
-                                                    <span
-                                                        class="badge bg-info-subtle text-info rounded-pill px-2 border border-info-subtle">Hybrid</span>
+                                                    <span class="badge bg-info-subtle text-info rounded-pill px-2 border border-info-subtle">Hybrid</span>
                                                 @endif
                                             </div>
                                             <div class="fw-semibold text-dark">
-                                                {{ $ses->student?->user?->name ?? $ses->student?->full_name }}</div>
-                                            <small class="text-muted d-block">Mentor:
-                                                {{ $ses->mentor?->user?->name ?? 'Ustaz/Ustazah' }}</small>
-                                            <div class="mt-2">
+                                                {{ $ses->student?->user?->name ?? $ses->student?->full_name }}
+                                            </div>
+                                            <small class="text-muted d-block">
+                                                Mentor: {{ $ses->mentor?->user?->name ?? 'Ustaz/Ustazah' }}
+                                            </small>
+
+                                            <!-- Status Konfirmasi & Bukti Hadir -->
+                                            <div class="d-flex align-items-center gap-1.5 mt-2 flex-wrap">
+                                                @if($ses->confirmation)
+                                                    @if($ses->confirmation->status === 'hadir')
+                                                        <span class="badge bg-success text-white rounded-pill px-2 py-0.5" style="font-size: 0.72rem;">
+                                                            <i class="bi bi-check-circle-fill me-1"></i> Hadir
+                                                        </span>
+                                                    @elseif($ses->confirmation->status === 'izin')
+                                                        <span class="badge bg-warning text-dark rounded-pill px-2 py-0.5" style="font-size: 0.72rem;">
+                                                            <i class="bi bi-info-circle-fill me-1"></i> Izin
+                                                        </span>
+                                                    @elseif($ses->confirmation->status === 'sakit')
+                                                        <span class="badge bg-danger text-white rounded-pill px-2 py-0.5" style="font-size: 0.72rem;">
+                                                            <i class="bi bi-heart-pulse-fill me-1"></i> Sakit
+                                                        </span>
+                                                    @endif
+
+                                                    <span class="badge bg-light text-secondary border rounded-pill px-2 py-0.5" style="font-size: 0.68rem;">
+                                                        {{ $ses->confirmation->confirmed_by === 'mentor' ? 'Presensi Guru di Lokasi' : 'Konfirmasi Wali' }}
+                                                    </span>
+
+                                                    @if($ses->confirmation->proof_image_url)
+                                                        <a href="{{ $ses->confirmation->proof_image_url }}" target="_blank" class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0.5 text-decoration-none shadow-2xs" title="Lihat foto dokumentasi saat guru di rumah ananda">
+                                                            <i class="bi bi-camera-fill me-1"></i> Foto Bukti
+                                                        </a>
+                                                    @endif
+                                                @else
+                                                    <span class="badge bg-light text-secondary border rounded-pill px-2 py-0.5" style="font-size: 0.68rem;">
+                                                        <i class="bi bi-hourglass-split me-1"></i> Menunggu Presensi
+                                                    </span>
+                                                @endif
+                                            </div>
+
+                                            <div class="mt-2.5">
                                                 <a href="{{ route('parent.schedules.show', $ses->id) }}"
-                                                    class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                                    Detail & Konfirmasi Kehadiran
+                                                    class="btn btn-sm {{ $ses->confirmation ? 'btn-outline-success' : 'btn-outline-primary' }} rounded-pill px-3 shadow-2xs">
+                                                    {{ $ses->confirmation ? 'Lihat Detail & Foto Presensi' : 'Detail & Konfirmasi Kehadiran' }}
                                                 </a>
                                             </div>
                                         </div>

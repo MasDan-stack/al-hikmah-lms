@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const toggleBtn = e.target.closest('.btn-password-toggle');
         if (toggleBtn) {
             e.preventDefault();
-            const group = toggleBtn.closest('.input-group');
+            const group = toggleBtn.closest('.input-group, .input-group-editorial, .form-field-wrap');
             if (group) {
                 const input = group.querySelector('input');
                 const icon = toggleBtn.querySelector('i');
