@@ -25,7 +25,7 @@ class PublicBlogController extends Controller
             });
         }
 
-        $articles = $query->paginate(3)->withQueryString();
+        $articles = $query->paginate(5)->withQueryString();
         $categories = BlogCategory::where('is_active', true)->withCount('publishedArticles')->orderBy('sort_order')->get();
         $tags = BlogTag::withCount('articles')->orderBy('articles_count', 'desc')->take(20)->get();
         $recentArticles = Article::published()->latest('published_at')->take(4)->get();

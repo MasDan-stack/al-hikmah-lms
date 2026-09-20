@@ -79,9 +79,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Navbar Scroll Effect
+    // Navbar Scroll Effect & Height Synchronization
     const navbar = document.getElementById('mainNavbar');
     let scrollTicking = false;
+
+    function syncNavbarHeight() {
+        if (!navbar) return;
+        const h = navbar.offsetHeight;
+        if (h > 0) {
+            document.documentElement.style.setProperty('--navbar-height', h + 'px');
+        }
+    }
 
     function updateNavbar() {
         if (!navbar) return;
@@ -102,6 +110,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
         passive: true
     });
+
+    window.addEventListener('resize', syncNavbarHeight, { passive: true });
+    updateNavbar();
+    syncNavbarHeight();
 
     // Smooth Scrolling for Anchor Links
     document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {

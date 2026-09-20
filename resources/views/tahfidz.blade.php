@@ -5,17 +5,30 @@
 
 @section('content')
     <!-- ============================================ -->
-    <!-- 1. ETRAIN BREADCRUMB HEADER -->
     <!-- ============================================ -->
-    <section class="breadcrumb_bg" aria-label="Header Program Tahfidz">
+    <!-- 1. EDITORIAL SUBPAGE HEADER -->
+    <!-- ============================================ -->
+    <section class="editorial-page-header" aria-label="Header Program Tahfidz">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb_iner_item" data-reveal>
-                        <div class="section-badge mx-auto mb-2"><i class="bi bi-clipboard2-pulse"></i> Program Unggulan</div>
-                        <h2>Program <span class="text-gradient">Tahfidz Al-Qur'an</span></h2>
-                        <p>Menghafal bukan sekadar mengingat, tetapi menjaga dan menghidupkan firman Allah dalam hati.</p>
+            <div class="row justify-content-center">
+                <div class="col-lg-9 text-center" data-reveal>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('program') }}">Program</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Tahfidz Al-Qur'an</li>
+                        </ol>
+                    </nav>
+
+                    <div class="editorial-badge mx-auto">
+                        <i class="bi bi-bookmark-star-fill"></i>
+                        <span>Program Unggulan Tahfidz</span>
                     </div>
+
+                    <h1 class="editorial-title">Program <span class="text-emerald-deep">Tahfidz Al-Qur'an</span></h1>
+                    <p class="editorial-subtitle mx-auto">
+                        Menghafal bukan sekadar mengingat, tetapi menjaga, memahami, dan menghidupkan ayat-ayat suci Al-Qur'an dalam hati santri.
+                    </p>
                 </div>
             </div>
         </div>

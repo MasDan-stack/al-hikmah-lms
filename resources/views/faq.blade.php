@@ -5,28 +5,36 @@
 
 @section('content')
 <!-- ============================================ -->
+<!-- ============================================ -->
 <!-- 1. PAGE HEADER - EDITORIAL MINIMALIST -->
 <!-- ============================================ -->
-<section class="editorial-page-header text-center" aria-label="Header Tanya Jawab">
-    <div class="container py-2">
+<section class="editorial-page-header" aria-label="Header Tanya Jawab">
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-9">
-                <div data-reveal>
-                    <div class="section-badge mx-auto mb-3">
-                        <i class="bi bi-question-circle-fill me-1"></i> Bantuan &amp; Tanya Jawab
-                    </div>
-                    <h1 class="editorial-title mb-3">Pusat Bantuan &amp; <span class="text-emerald-deep">Tanya Jawab (FAQ)</span></h1>
-                    <p class="editorial-subtitle mx-auto">
-                        Jawaban lengkap seputar metode bimbingan, fleksibilitas jadwal privat, kualifikasi asatidz, serta transparansi biaya belajar Al-Qur'an.
-                    </p>
+            <div class="col-lg-9 text-center" data-reveal>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Tanya Jawab (FAQ)</li>
+                    </ol>
+                </nav>
 
-                    <!-- Live FAQ Search Bar -->
-                    <div class="row justify-content-center mt-4">
-                        <div class="col-md-8 col-lg-6">
-                            <div class="input-group-editorial">
-                                <span class="field-icon"><i class="bi bi-search"></i></span>
-                                <input type="text" id="faqSearchInput" class="form-control" placeholder="Ketik kata kunci (jadwal, biaya, guru, offline)..." aria-label="Cari FAQ">
-                            </div>
+                <div class="editorial-badge mx-auto">
+                    <i class="bi bi-question-circle-fill"></i>
+                    <span>Bantuan &amp; Tanya Jawab</span>
+                </div>
+
+                <h1 class="editorial-title">Pusat Bantuan &amp; <span class="text-emerald-deep">Tanya Jawab (FAQ)</span></h1>
+                <p class="editorial-subtitle mx-auto">
+                    Jawaban lengkap seputar metode bimbingan, fleksibilitas jadwal privat, kualifikasi asatidz, serta transparansi biaya belajar Al-Qur'an.
+                </p>
+
+                <!-- Live FAQ Search Bar -->
+                <div class="row justify-content-center mt-4">
+                    <div class="col-md-8 col-lg-7">
+                        <div class="input-group-editorial">
+                            <span class="field-icon"><i class="bi bi-search"></i></span>
+                            <input type="text" id="faqSearchInput" class="form-control" placeholder="Ketik kata kunci (jadwal, biaya, guru, offline)..." aria-label="Cari FAQ">
                         </div>
                     </div>
                 </div>

@@ -23,19 +23,23 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-9 text-center" data-reveal>
-                    <span class="editorial-badge">
-                        <i class="bi bi-images"></i> Dokumentasi KBM
-                    </span>
-                    <h1>Dokumentasi &amp; Momen Belajar Santri</h1>
-                    <p>
-                        Menyimpan rekaman perjalanan nyata santri dan asatidz AL-HIKMAH dalam mempelajari dan mencintai Al-Qur'an dengan adab dan ketenangan.
-                    </p>
-                    <nav aria-label="breadcrumb" class="mt-3">
-                        <ol class="breadcrumb justify-content-center mb-0 small">
-                            <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none text-secondary">Beranda</a></li>
-                            <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Galeri Kegiatan</li>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                            <li class="breadcrumb-item text-muted">Aktivitas</li>
+                            <li class="breadcrumb-item active" aria-current="page">Galeri Kegiatan</li>
                         </ol>
                     </nav>
+
+                    <div class="editorial-badge mx-auto">
+                        <i class="bi bi-images"></i>
+                        <span>Dokumentasi KBM</span>
+                    </div>
+
+                    <h1 class="editorial-title">Dokumentasi &amp; Momen Belajar Santri</h1>
+                    <p class="editorial-subtitle mx-auto">
+                        Menyimpan rekaman perjalanan nyata santri dan asatidz AL-HIKMAH dalam mempelajari dan mencintai Al-Qur'an dengan adab dan ketenangan.
+                    </p>
                 </div>
             </div>
         </div>

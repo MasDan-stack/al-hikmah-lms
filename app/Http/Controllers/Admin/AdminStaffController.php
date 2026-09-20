@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\MarkSalaryPaidRequest;
 use App\Models\FinancialAuditLog;
 use App\Models\Mentor;
 use App\Models\MentorActivityLog;
@@ -41,20 +42,20 @@ class AdminStaffController extends Controller
     /**
      * Tampilkan halaman detail profil lengkap mentor untuk admin
      */
-    public function show(int $id): View
+    public function show(Mentor $mentor): View
     {
-        $mentor = Mentor::with([
+        $mentor->loadMissing([
             'user',
             'students.user',
             'mentorApplication.documents',
             'probationTracking',
-        ])->findOrFail($id);
+        ]);
 
         $cvDoc = $mentor->mentorApplication?->documents
             ->where('document_type', 'cv')->first();
         $certDoc = $mentor->mentorApplication?->documents
             ->where('document_type', 'certificate')->first();
-        $latestSnap = MentorPerformanceSnapshot::where('mentor_id', $id)
+        $latestSnap = MentorPerformanceSnapshot::where('mentor_id', $mentor->id)
             ->latest()->first();
 
         // Ambil riwayat log verifikasi rekening terakhir jika ada
@@ -73,14 +74,13 @@ class AdminStaffController extends Controller
     /**
      * Verifikasi status rekening bank mentor oleh admin
      */
-    public function verifyBank(Request $request, int $id): JsonResponse
+    public function verifyBank(Request $request, Mentor $mentor): JsonResponse
     {
         $request->validate([
             'status' => 'required|in:verified,unverified,needs_clarification',
             'notes' => 'nullable|string|max:500',
         ]);
 
-        $mentor = Mentor::findOrFail($id);
         $status = $request->input('status');
         $notes = $request->input('notes');
 
@@ -125,18 +125,14 @@ class AdminStaffController extends Controller
     /**
      * Tandai status pembayaran honor bulanan mentor (Lunas / Pending) oleh Admin
      */
-    public function markSalaryPaid(Request $request, int $id): JsonResponse
+    public function markSalaryPaid(MarkSalaryPaidRequest $request, Mentor $mentor): JsonResponse
     {
-        $request->validate([
-            'year' => 'required|integer|min:2020|max:2099',
-            'month' => 'required|integer|min:1|max:12',
-            'status' => 'required|in:paid,pending',
-        ]);
+        $this->authorize('markSalaryPaid', $mentor);
 
-        $mentor = Mentor::findOrFail($id);
-        $year = (int) $request->input('year');
-        $month = (int) $request->input('month');
-        $status = $request->input('status');
+        $validated = $request->validated();
+        $year = (int) $validated['year'];
+        $month = (int) $validated['month'];
+        $status = $validated['status'];
 
         app(RevenueAnalyticsService::class)->markMentorSalaryStatus(
             mentorId: $mentor->id,
@@ -165,9 +161,10 @@ class AdminStaffController extends Controller
     /**
      * Cetak lembar slip gaji resmi mentor dari dashboard admin
      */
-    public function printSalarySlip(int $id): View
+    public function printSalarySlip(Mentor $mentor): View
     {
-        $mentor = Mentor::findOrFail($id);
+        $this->authorize('viewSalarySlip', $mentor);
+
         $slipMonth = (int) request('slip_month', now()->month);
         $slipYear = (int) request('slip_year', now()->year);
 

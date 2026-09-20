@@ -157,7 +157,7 @@ test('admin can view mentor salary slip print page', function () {
     $mentor = makeMentorWithUser();
 
     $this->actingAs($admin)
-        ->get(route('admin.staff.salary-slip.print', ['id' => $mentor->id, 'slip_month' => now()->month, 'slip_year' => now()->year]))
+        ->get(route('admin.staff.salary-slip.print', ['mentor' => $mentor->id, 'slip_month' => now()->month, 'slip_year' => now()->year]))
         ->assertOk()
         ->assertViewIs('mentor.salary-slip-print');
 });

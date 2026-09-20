@@ -40,31 +40,38 @@
 
 @section('content')
 <!-- ============================================ -->
-<!-- 1. ETRAIN BREADCRUMB HEADER -->
 <!-- ============================================ -->
-<section class="breadcrumb_bg" aria-label="Header Artikel AL-HIKMAH">
+<!-- 1. EDITORIAL SUBPAGE HEADER -->
+<!-- ============================================ -->
+<section class="editorial-page-header" aria-label="Header Artikel AL-HIKMAH">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="breadcrumb_iner_item" data-reveal>
-                    <div class="section-badge mx-auto mb-2">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center" data-reveal>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('blog.index') }}">Blog</a></li>
                         @if($article->category)
-                            <i class="bi {{ $article->category->icon ?? 'bi-journal-richtext' }}"></i> {{ $article->category->name }}
-                        @else
-                            <i class="bi bi-journal-richtext"></i> Literasi Islami
+                            <li class="breadcrumb-item"><a href="{{ route('blog.category', $article->category->slug) }}">{{ $article->category->name }}</a></li>
                         @endif
-                    </div>
-                    <h2 class="px-lg-5">{{ $article->title }}</h2>
-                    <p>
-                        <a href="{{ route('home') }}" class="text-decoration-none text-muted">Beranda</a>
-                        <span class="mx-2">•</span>
-                        <a href="{{ route('blog.index') }}" class="text-decoration-none text-muted">Blog</a>
-                        @if($article->category)
-                            <span class="mx-2">•</span>
-                            <a href="{{ route('blog.category', $article->category->slug) }}" class="text-decoration-none text-success fw-semibold">{{ $article->category->name }}</a>
-                        @endif
-                    </p>
+                        <li class="breadcrumb-item active" aria-current="page">{{ Str::limit($article->title, 35) }}</li>
+                    </ol>
+                </nav>
+
+                <div class="editorial-badge mx-auto">
+                    @if($article->category)
+                        <i class="bi {{ $article->category->icon ?? 'bi-journal-richtext' }}"></i>
+                        <span>{{ $article->category->name }}</span>
+                    @else
+                        <i class="bi bi-journal-richtext"></i>
+                        <span>Literasi Islami</span>
+                    @endif
                 </div>
+
+                <h1 class="editorial-title px-lg-4">{{ $article->title }}</h1>
+                <p class="editorial-subtitle mx-auto">
+                    Ditulis oleh <span class="fw-semibold text-heading">{{ $article->author_name }}</span> pada {{ $article->published_at ? $article->published_at->translatedFormat('d F Y') : $article->created_at->translatedFormat('d F Y') }} • Waktu baca ~{{ $article->reading_time ?? 3 }} menit
+                </p>
             </div>
         </div>
     </div>

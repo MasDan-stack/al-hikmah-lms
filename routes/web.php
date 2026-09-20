@@ -333,10 +333,10 @@ Route::middleware(['auth', 'role:admin'])
 
         // Staff & HR Workload
         Route::get('/staff', [AdminStaffController::class, 'index'])->name('staff.index');
-        Route::get('/staff/{id}', [AdminStaffController::class, 'show'])->name('staff.show');
-        Route::get('/staff/{id}/salary-slip/print', [AdminStaffController::class, 'printSalarySlip'])->name('staff.salary-slip.print');
-        Route::post('/staff/{id}/verify-bank', [AdminStaffController::class, 'verifyBank'])->name('staff.verify-bank');
-        Route::post('/staff/{id}/mark-salary-paid', [AdminStaffController::class, 'markSalaryPaid'])->name('staff.mark-salary-paid');
+        Route::get('/staff/{mentor}', [AdminStaffController::class, 'show'])->name('staff.show');
+        Route::get('/staff/{mentor}/salary-slip/print', [AdminStaffController::class, 'printSalarySlip'])->name('staff.salary-slip.print');
+        Route::post('/staff/{mentor}/verify-bank', [AdminStaffController::class, 'verifyBank'])->name('staff.verify-bank');
+        Route::post('/staff/{mentor}/mark-salary-paid', [AdminStaffController::class, 'markSalaryPaid'])->name('staff.mark-salary-paid');
 
         // Operational Alerts Center
         Route::get('/alerts', [AdminAlertController::class, 'index'])->name('alerts.index');
@@ -401,7 +401,7 @@ Route::middleware(['auth', 'role:mentor'])
             ->name('sessions.confirm-attendance.submit');
         Route::get('/students', [MentorStudentController::class, 'index'])->name('students.index');
         Route::get('/students/parents', [MentorStudentController::class, 'parents'])->name('students.parents');
-        Route::get('/students/{id}', [MentorStudentController::class, 'show'])->name('students.show');
+        Route::get('/students/{student}', [MentorStudentController::class, 'show'])->name('students.show');
         Route::get('/availability', [AvailabilityController::class, 'index'])->name('availability.index');
         Route::post('/availability', [AvailabilityController::class, 'store'])->name('availability.store');
         Route::post('/availability/update-bulk', [AvailabilityController::class, 'store'])->name('availability.update-bulk');
@@ -488,11 +488,11 @@ Route::middleware(['auth', 'role:parent'])
         // D. Modul Pembayaran
         Route::get('/payments', [ParentPaymentController::class, 'index'])->name('payments.index');
         Route::get('/payments/history', [ParentPaymentController::class, 'history'])->name('payments.history');
-        Route::get('/payments/{id}', [ParentPaymentController::class, 'show'])->name('payments.show');
-        Route::post('/payments/{id}/pay', [ParentPaymentController::class, 'payOnline'])->name('payments.pay');
-        Route::get('/payments/{id}/status', [ParentPaymentController::class, 'checkStatus'])->name('payments.status');
-        Route::post('/payments/{id}/cancel', [ParentPaymentController::class, 'cancelPayment'])->name('payments.cancel');
-        Route::get('/payments/{id}/download', [ParentPaymentController::class, 'downloadInvoice'])->name('payments.download');
+        Route::get('/payments/{payment}', [ParentPaymentController::class, 'show'])->name('payments.show');
+        Route::post('/payments/{payment}/pay', [ParentPaymentController::class, 'payOnline'])->name('payments.pay');
+        Route::get('/payments/{payment}/status', [ParentPaymentController::class, 'checkStatus'])->name('payments.status');
+        Route::post('/payments/{payment}/cancel', [ParentPaymentController::class, 'cancelPayment'])->name('payments.cancel');
+        Route::get('/payments/{payment}/download', [ParentPaymentController::class, 'downloadInvoice'])->name('payments.download');
 
         // F. Modul Profil & Pengaturan
         Route::get('/profile', [ParentProfileController::class, 'edit'])->name('profile.edit');
@@ -519,9 +519,9 @@ Route::middleware(['auth', 'role:parent'])
         Route::middleware(['parent.paid'])->group(function () {
             // Modul Anak & Capaian Belajar
             Route::get('/children', [ParentChildController::class, 'index'])->name('children.index');
-            Route::get('/children/{id}', [ParentChildController::class, 'show'])->name('children.show');
-            Route::get('/children/{id}/report', [ParentChildController::class, 'exportReport'])->name('children.report');
-            Route::post('/children/{id}/reset-password', [ParentChildController::class, 'requestPasswordReset'])->name('children.reset-password');
+            Route::get('/children/{student}', [ParentChildController::class, 'show'])->name('children.show');
+            Route::get('/children/{student}/report', [ParentChildController::class, 'exportReport'])->name('children.report');
+            Route::post('/children/{student}/reset-password', [ParentChildController::class, 'requestPasswordReset'])->name('children.reset-password');
             Route::post('/enroll-tahfidz', [ParentChildController::class, 'enrollTahfidz'])->name('enroll-tahfidz');
 
             // Modul Jadwal Belajar

@@ -7,29 +7,44 @@
 <!-- ============================================ -->
 <!-- 1. PAGE HERO HEADER - EDITORIAL MINIMALIST -->
 <!-- ============================================ -->
-<section class="editorial-page-header text-center" aria-label="Header Blog AL-HIKMAH">
+<section class="editorial-page-header" aria-label="Header Blog AL-HIKMAH">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div data-reveal>
-                    <div class="section-badge mx-auto mb-3">
-                        <i class="bi bi-journal-bookmark-fill me-1"></i> Literasi &amp; Edukasi Qur'ani
-                    </div>
-                    <h1 class="editorial-title mb-3">
+            <div class="col-lg-9 text-center" data-reveal>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
                         @if(isset($category))
-                            Kategori: <span class="text-emerald-deep">{{ $category->name }}</span>
+                            <li class="breadcrumb-item"><a href="{{ route('blog.index') }}">Blog</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ $category->name }}</li>
                         @elseif(isset($tag))
-                            Tagar: <span class="text-emerald-deep">#{{ $tag->name }}</span>
-                        @elseif(request('search'))
-                            Pencarian: <span class="text-emerald-deep">"{{ request('search') }}"</span>
+                            <li class="breadcrumb-item"><a href="{{ route('blog.index') }}">Blog</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">#{{ $tag->name }}</li>
                         @else
-                            Wawasan &amp; Edukasi <span class="text-emerald-deep">Qur'ani</span>
+                            <li class="breadcrumb-item active" aria-current="page">Blog &amp; Literasi</li>
                         @endif
-                    </h1>
-                    <p class="editorial-subtitle mx-auto" style="max-width: 620px;">
-                        Panduan belajar Al-Qur'an, adab dan tips mendampingi ananda mengaji, metode tahsin dan tahfidz, serta wawasan keislaman terpercaya.
-                    </p>
+                    </ol>
+                </nav>
+
+                <div class="editorial-badge mx-auto">
+                    <i class="bi bi-journal-bookmark-fill"></i>
+                    <span>Literasi &amp; Edukasi Qur'ani</span>
                 </div>
+
+                <h1 class="editorial-title">
+                    @if(isset($category))
+                        Kategori: <span class="text-emerald-deep">{{ $category->name }}</span>
+                    @elseif(isset($tag))
+                        Tagar: <span class="text-emerald-deep">#{{ $tag->name }}</span>
+                    @elseif(request('search'))
+                        Pencarian: <span class="text-emerald-deep">"{{ request('search') }}"</span>
+                    @else
+                        Wawasan &amp; Edukasi <span class="text-emerald-deep">Qur'ani</span>
+                    @endif
+                </h1>
+                <p class="editorial-subtitle mx-auto">
+                    Panduan belajar Al-Qur'an, adab dan tips mendampingi ananda mengaji, metode tahsin dan tahfidz, serta wawasan keislaman terpercaya.
+                </p>
             </div>
         </div>
     </div>

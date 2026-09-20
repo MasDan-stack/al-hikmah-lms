@@ -4,23 +4,29 @@
 
 @section('content')
 <!-- Page Header / Hero -->
-<section class="tracker-hero">
+<section class="editorial-page-header" aria-label="Header Pelacakan Status Lamaran">
     <div class="container text-center">
-        <nav aria-label="breadcrumb" class="mb-3">
-            <ol class="breadcrumb justify-content-center mb-0 small">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none text-muted">Beranda</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('bergabung') }}" class="text-decoration-none text-muted">Rekrutmen Guru</a></li>
-                <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Pelacakan Status</li>
-            </ol>
-        </nav>
+        <div class="row justify-content-center">
+            <div class="col-lg-9 text-center" data-reveal>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('bergabung') }}">Rekrutmen Guru</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Pelacakan Status</li>
+                    </ol>
+                </nav>
 
-        <div class="tracker-badge mx-auto mb-3">
-            <i class="bi bi-clock-history"></i>
-            <span>Portal Transparansi Rekrutmen</span>
+                <div class="editorial-badge mx-auto">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Portal Transparansi Rekrutmen</span>
+                </div>
+
+                <h1 class="editorial-title">Pelacak Status Lamaran Guru</h1>
+                <p class="editorial-subtitle mx-auto">
+                    Pantau progres seleksi berkas administrasi, ujian kompetensi, hingga jadwal wawancara secara mandiri dan berkala.
+                </p>
+            </div>
         </div>
-
-        <h1 class="tracker-title">Pelacak Status Lamaran Guru</h1>
-        <p class="tracker-subtitle">Pantau progres seleksi berkas administrasi, ujian kompetensi, hingga jadwal wawancara secara mandiri dan berkala.</p>
     </div>
 </section>
 

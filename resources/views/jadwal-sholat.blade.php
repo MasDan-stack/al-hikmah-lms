@@ -9,19 +9,23 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-10 text-center" data-reveal>
-                    <span class="editorial-badge">
-                        <i class="bi bi-clock-history" aria-hidden="true"></i> Waktu Ibadah Harian
-                    </span>
-                    <h1>Jadwal Sholat &amp; Kompas Kiblat Real-Time</h1>
-                    <p>
-                        Pantau waktu sholat fardhu secara akurat standar Kementerian Agama RI dengan deteksi lokasi otomatis, hitung mundur azan, dan penunjuk arah kiblat.
-                    </p>
-                    <nav aria-label="breadcrumb" class="mt-3">
-                        <ol class="breadcrumb justify-content-center mb-0 small">
-                            <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none text-secondary">Beranda</a></li>
-                            <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Jadwal Sholat &amp; Kiblat</li>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                            <li class="breadcrumb-item text-muted">Fitur Islami</li>
+                            <li class="breadcrumb-item active" aria-current="page">Jadwal Sholat &amp; Kiblat</li>
                         </ol>
                     </nav>
+
+                    <div class="editorial-badge mx-auto">
+                        <i class="bi bi-clock-history" aria-hidden="true"></i>
+                        <span>Waktu Ibadah Harian</span>
+                    </div>
+
+                    <h1 class="editorial-title">Jadwal Sholat &amp; Kompas Kiblat Real-Time</h1>
+                    <p class="editorial-subtitle mx-auto">
+                        Pantau waktu sholat fardhu secara akurat standar Kementerian Agama RI dengan deteksi lokasi otomatis, hitung mundur azan, dan penunjuk arah kiblat.
+                    </p>
                 </div>
             </div>
         </div>

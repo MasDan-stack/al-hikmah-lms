@@ -5,17 +5,29 @@
 
 @section('content')
     <!-- ============================================ -->
-    <!-- 1. ETRAIN BREADCRUMB HEADER -->
     <!-- ============================================ -->
-    <section class="breadcrumb_bg" aria-label="Header Program Belajar">
+    <!-- 1. EDITORIAL SUBPAGE HEADER -->
+    <!-- ============================================ -->
+    <section class="editorial-page-header" aria-label="Header Program Belajar">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb_iner_item" data-reveal>
-                        <div class="section-badge mx-auto mb-2"><i class="bi bi-journal-bookmark"></i> Kurikulum Pilihan</div>
-                        <h2>Program Belajar <span class="text-gradient">AL-HIKMAH</span></h2>
-                        <p>Setiap orang memiliki langkah yang berbeda. Temukan program yang paling sesuai dengan kebutuhan dan target perjalanan belajar Anda.</p>
+            <div class="row justify-content-center">
+                <div class="col-lg-9 text-center" data-reveal>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Program Belajar</li>
+                        </ol>
+                    </nav>
+
+                    <div class="editorial-badge mx-auto">
+                        <i class="bi bi-journal-bookmark-fill"></i>
+                        <span>Kurikulum Pilihan &amp; Terarah</span>
                     </div>
+
+                    <h1 class="editorial-title">Program Belajar <span class="text-emerald-deep">AL-HIKMAH</span></h1>
+                    <p class="editorial-subtitle mx-auto">
+                        Setiap santri memiliki ritme dan langkah yang berbeda. Temukan program yang paling sesuai dengan kebutuhan ananda dan keluarga untuk perjalanan belajar yang tenang dan teratur.
+                    </p>
                 </div>
             </div>
         </div>

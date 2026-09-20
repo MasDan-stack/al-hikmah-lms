@@ -11,19 +11,23 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-9 text-center" data-reveal>
-                    <span class="editorial-badge">
-                        <i class="bi bi-compass-fill"></i> Metode Pembelajaran
-                    </span>
-                    <h1>Cara Kami Mendampingi Santri</h1>
-                    <p>
-                        Pendekatan privat, sabar, dan bertahap untuk kenyamanan belajar santri dan ketenangan keluarga di rumah.
-                    </p>
-                    <nav aria-label="breadcrumb" class="mt-3">
-                        <ol class="breadcrumb justify-content-center mb-0 small">
-                            <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none text-secondary">Beranda</a></li>
-                            <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Metode Belajar</li>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                            <li class="breadcrumb-item text-muted">Program</li>
+                            <li class="breadcrumb-item active" aria-current="page">Metode Belajar</li>
                         </ol>
                     </nav>
+
+                    <div class="editorial-badge mx-auto">
+                        <i class="bi bi-compass-fill"></i>
+                        <span>Metode Pembelajaran</span>
+                    </div>
+
+                    <h1 class="editorial-title">Cara Kami Mendampingi Santri</h1>
+                    <p class="editorial-subtitle mx-auto">
+                        Pendekatan privat, sabar, dan bertahap untuk kenyamanan belajar santri dan ketenangan keluarga di rumah.
+                    </p>
                 </div>
             </div>
         </div>

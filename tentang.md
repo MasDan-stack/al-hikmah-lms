@@ -3,8 +3,8 @@
 > **Dokumen Resmi untuk Manajemen, Pimpinan Lembaga, & Tim Pengembang**  
 > **Nama Sistem:** AL-HIKMAH Learning Management System (LMS)  
 > **Status Aplikasi:** ✅ **100% Selesai, Teruji, & Siap Digunakan (Production Ready)**  
-> **Versi:** 11.3 (Restrukturisasi Beranda Mobile-First & Overhaul Halaman Tentang Kami Antislop Minimalis)  
-> **Tanggal Pembaruan:** 19 September 2026  
+> **Versi:** 11.6 (Standardisasi & Harmonisasi Desain Header Subpage Publik: Sistem Header Editorial Universal, Dynamic Navbar Sync, & Penguatan Arsitektur Antislop)  
+> **Tanggal Pembaruan:** 21 September 2026  
 
 ---
 
@@ -141,6 +141,23 @@
     - [32.3 Prinsip Copywriting Realistis (Tanpa Menipu & Tanpa Menjanjikan)](#323-prinsip-copywriting-realistis-tanpa-menipu--tanpa-menjanjikan)
     - [32.4 Optimalisasi Tata Letak Responsif Mobile & Desktop (Antislop-Layoutmobile)](#324-optimalisasi-tata-letak-responsif-mobile--desktop-antislop-layoutmobile)
     - [32.5 Pengujian Otomatis & Verifikasi Mutu](#325-pengujian-otomatis--verifikasi-mutu)
+33. [🏛️ 33. Overhaul Total 8 Halaman Publik: Standarisasi Islamic Editorial, Field Form Inset-Icon, & Zero Slop (Versi 11.4)](#-33-overhaul-total-8-halaman-publik-standarisasi-islamic-editorial-field-form-inset-icon--zero-slop-versi-114)
+    - [33.1 Arsitektur Universal Inset-Icon Form Fields](#331-arsitektur-universal-inset-icon-form-fields)
+    - [33.2 Standardisasi 8 Halaman Publik](#332-standardisasi-8-halaman-publik)
+    - [33.3 Verifikasi Mutu & Hasil Pengujian](#333-verifikasi-mutu--hasil-pengujian)
+34. [🛡️ 34. Arsitektur Keamanan Bertahan Bertahun-tahun: Standing Rules, Model Policies, Proteksi Anti-IDOR, & Mass Assignment Guard (Versi 11.5)](#-34-arsitektur-keamanan-bertahan-bertahun-tahun-standing-rules-model-policies-proteksi-anti-idor--mass-assignment-guard-versi-115)
+    - [34.1 Siklus Hidup Framework & Standardisasi Kontrak SLA Retainer (Laravel 13 min PHP 8.3)](#341-siklus-hidup-framework--standardisasi-kontrak-sla-retainer-laravel-13-min-php-83)
+    - [34.2 Standing Rules Proyek (.ai/rules) untuk Rekayasa Berkelanjutan](#342-standing-rules-proyek-airules-untuk-rekayasa-berkelanjutan)
+    - [34.3 Implementasi Model Policies Universal (StudentPolicy, MentorPolicy, PaymentPolicy)](#343-implementasi-model-policies-universal-studentpolicy-mentorpolicy-paymentpolicy)
+    - [34.4 Eliminasi Total Kerentanan IDOR (Insecure Direct Object Reference) & Route Model Binding](#344-eliminasi-total-kerentanan-idor-insecure-direct-object-reference--route-model-binding)
+    - [34.5 Proteksi Mass Assignment & FormRequest Terisolasi (EnrollTahfidzRequest, MarkSalaryPaidRequest)](#345-proteksi-mass-assignment--formrequest-terisolasi-enrolltahfidzrequest-marksalarypaidrequest)
+    - [34.6 Verifikasi Otomatis & Penegakan Mutu Pest (100% Green Pass)](#346-verifikasi-otomatis--penegakan-mutu-pest-100-green-pass)
+35. [🏛️ 35. Standardisasi & Harmonisasi Desain Header Subpage Publik: Sistem Header Editorial Universal (Versi 11.6)](#-35-standardisasi--harmonisasi-desain-header-subpage-publik-sistem-header-editorial-universal-versi-116)
+    - [35.1 Analisis Masalah Inkonsistensi Subpage & Ruang Navbar Fixed](#351-analisis-masalah-inkonsistensi-subpage--ruang-navbar-fixed)
+    - [35.2 Desain Sistem Header Editorial Universal (.editorial-page-header)](#352-desain-sistem-header-editorial-universal-editorial-page-header)
+    - [35.3 Sinkronisasi Dinamis Tinggi Navbar JavaScript (--navbar-height)](#353-sinkronisasi-dinamis-tinggi-navbar-javascript---navbar-height)
+    - [35.4 Harmonisasi pada 14 Halaman Publik](#354-harmonisasi-pada-14-halaman-publik)
+    - [35.5 Pengujian Otomatis Pest & Jaminan Anti-Regresi](#355-pengujian-otomatis-pest--jaminan-anti-regresi)
 
 ---
 
@@ -1748,9 +1765,236 @@ Sesuai arahan desain, seluruh elemen input formulir di seluruh website distandar
 
 ---
 
+## 🛡️ 34. ARSITEKTUR KEAMANAN BERTAHAN BERTAHUN-TAHUN: STANDING RULES, MODEL POLICIES, PROTEKSI ANTI-IDOR, & MASS ASSIGNMENT GUARD (VERSI 11.5)
+
+Sebagai platform bimbingan Al-Qur'an dan manajemen operasional lembaga yang ditujukan untuk beroperasi secara stabil dalam jangka panjang (multi-tahun), AL-HIKMAH LMS menetapkan arsitektur keamanan dan tata kelola rekayasa perangkat lunak yang berfokus pada dua pilar krusial: **Siklus Hidup Framework & Standar SLA Kontrak**, serta **Keamanan Multi-Role Berlapis (Row-Level Authorization & Anti-IDOR)**.
+
+```mermaid
+graph TD
+    User["User Request (HTTP)"] --> MW["Middleware: auth & role:X"]
+    MW --> RMB["Route Model Binding (Inject Model)"]
+    RMB --> Policy{"Model Policy Check ($this->authorize)"}
+    Policy -->|"Role: Admin"| Allow["Superadmin Access Granted (Bypass)"]
+    Policy -->|"Parent: parent_id === parentProfile->id"| AllowParent["Akses Data Anak Sendiri Diizinkan"]
+    Policy -->|"Mentor: Active Assigned Student / Own Profile"| AllowMentor["Akses Bimbingan / Slip Gaji Sendiri"]
+    Policy -->|"ID Tidak Cocok / IDOR Attack"| Deny["403 Forbidden (Blocked)"]
+```
+
+### 34.1 Siklus Hidup Framework & Standardisasi Kontrak SLA Retainer (Laravel 13 min PHP 8.3)
+Seringkali sebuah platform LMS gagal bertahan bertahun-tahun bukan karena fiturnya kurang lengkap, melainkan karena ketiadaan perencanaan siklus hidup sistem (*software lifecycle planning*).
+
+1. **Jendela Dukungan Resmi Framework (Laravel Release Cadence)**:
+   - Laravel 13 dirilis pada 17 Maret 2026 dengan syarat minimum runtime **PHP 8.3**.
+   - Standar dukungan resmi Laravel menetapkan:
+     - **Bug Fixes**: Hanya didukung hingga **Q3 2027** (~18 bulan sejak rilis).
+     - **Security Fixes**: Hanya didukung hingga **Q1 2028** (~24 bulan sejak rilis).
+   - Tanpa pembaruan versi mayor secara terencana, aplikasi akan memasuki status *End-of-Life (EOL)* dalam waktu 2 tahun, rentan terhadap eksploitasi celah keamanan baru pada ekosistem PHP maupun dependensi vendor.
+
+2. **Klausul Wajib Kontrak: Biaya Upgrade & Maintenance Retainer**:
+   - Biaya kontrak dengan pihak yayasan/klien **tidak boleh hanya mencakup biaya pembuatan (build cost)**.
+   - Kontrak kerja sama wajib memuat pos anggaran terpisah untuk:
+     - **Maintenance Retainer Bulanan/Tahunan**: Monitoring server, audit log keamanan, rotasi kunci enkripsi, dan patch keamanan minor.
+     - **Framework Upgrade Allocation**: Biaya terjadwal untuk migrasi versi mayor tahunan (misal: transisi ke rilis Laravel berikutnya) beserta pengujian regresi menyeluruh (*regression testing*).
+
+| Fase Siklus Hidup | Estimasi Periode | Fokus Aktivitas | Status Anggaran Kontrak |
+| :--- | :--- | :--- | :--- |
+| **Initial Build & Launch** | Q1–Q3 2026 | Rekayasa fitur, pengujian QA, deployment awal | Biaya Pembuatan (*Build Fee*) |
+| **Active Bug Fix Window** | Sampai Q3 2027 | Pemeliharaan berkala, optimasi kueri, perbaikan minor | SLA Maintenance Bulanan |
+| **Security Patch Window** | Sampai Q1 2028 | Penanganan celah keamanan kritis & review dependensi | SLA Maintenance Bulanan |
+| **Major Framework Upgrade** | Akhir 2027 / Awal 2028 | Migrasi Laravel versi berikutnya & kompatibilitas PHP | Klausul Upgrade Terencana |
+
+---
+
+### 34.2 Standing Rules Proyek (`.ai/rules`) untuk Rekayasa Berkelanjutan
+Untuk mencegah degradasi standar kode akibat pergantian pengembang maupun kontribusi asisten koding AI, proyek menginstitusikan **Project Standing Rules** yang tersimpan permanen di direktori `.ai/rules/`:
+
+1. **`.ai/rules/index.md`**: Master indeks pemetaan berkas proyek ke aturan spesifik yang relevan.
+2. **`.ai/rules/security-authorization.md`**:
+   - **Larangan Keras**: Dilarang mengandalkan middleware peran (`role:admin`, `role:parent`, `role:mentor`) semata untuk melindungi data per-entitas (*record-level authorization*).
+   - **Wajib Model Policy**: Setiap model yang menyimpan data berelasi multi-role (seperti `Student`, `Mentor`, `Payment`, `AttendanceRecord`) wajib memiliki Policy khusus di `app/Policies/`.
+   - **Wajib Route Model Binding**: Parameter URL wajib mem-bind model langsung (misal: `{student}` bukan angka mentah `{id}`) agar instance diinjeksi dan diotorisasi secara deterministik.
+   - **Wajib FormRequest Ketat**: Setiap mutasi data (store/update/delete) dilarang menggunakan `$request->all()`. Wajib menggunakan kelas `FormRequest` khusus dengan validasi terisolasi dan ekstraksi data via `$request->validated()`.
+3. **`.ai/rules/lifecycle-maintenance.md`**: Menetapkan standar siklus hidup dukungan PHP/Laravel dan klausul pemeliharaan kontrak bagi yayasan mitra.
+
+---
+
+### 34.3 Implementasi Model Policies Universal (`StudentPolicy`, `MentorPolicy`, `PaymentPolicy`)
+Tiga Model Policy utama telah diimplementasikan secara komprehensif untuk melindungi integritas dan kerahasiaan data:
+
+#### 1. `StudentPolicy` (`app/Policies/StudentPolicy.php`)
+Melindungi data profil santri, catatan perkembangan tilawah/tahfidz, ekspor laporan belajar, serta permohonan reset kata sandi:
+- **Admin**: Akses penuh ke seluruh data santri.
+- **Wali Santri (Parent)**: Hanya diizinkan melihat dan memanipulasi santri miliknya (`$user->parentProfile->id === $student->parent_id`).
+- **Guru (Mentor)**: Hanya diizinkan melihat data santri yang sedang aktif ditugaskan kepadanya (melalui relasi pivot `mentors` aktif atau `enrollments` aktif). Guru dilarang mengintip profil santri yang dibimbing oleh guru lain.
+- **Santri Sendiri**: Santri hanya dapat mengakses catatan miliknya sendiri (`$user->studentProfile->id === $student->id`).
+
+#### 2. `MentorPolicy` (`app/Policies/MentorPolicy.php`)
+Melindungi data pribadi guru, informasi rekening bank, riwayat kehadiran mengajar, dan pencetakan slip gaji:
+- **`viewSalarySlip`**: Hanya Admin dan Guru bersangkutan (`$user->mentorProfile->id === $mentor->id`) yang dapat melihat rincian honor dan mencetak slip gaji PDF. Guru A diblokir total dari melihat slip gaji Guru B.
+- **`markSalaryPaid`**: Hak eksklusif Admin untuk menandai status pencairan honor mengajar.
+- **`updateProfile` & `verifyBank`**: Guru hanya dapat memperbarui datanya sendiri, sedangkan verifikasi rekening bank hanya dapat disahkan oleh Admin.
+
+#### 3. `PaymentPolicy` (`app/Policies/PaymentPolicy.php`)
+Melindungi riwayat transaksi pembayaran SPP, tagihan program, invoice digital, dan akses checkout pembayaran online:
+- **Admin**: Hak inspeksi seluruh transaksi lembaga.
+- **Wali Santri (Parent)**: Hanya diizinkan melihat invoice, memproses pembayaran online, dan membatalkan tagihan yang terikat pada santri milik keluarganya (`$user->parentProfile->id === $payment->student->parent_id`).
+- Upaya manipulasi ID tagihan lintas keluarga diblokir seketika dengan respon HTTP 403 Forbidden.
+
+---
+
+### 34.4 Eliminasi Total Kerentanan IDOR (Insecure Direct Object Reference) & Route Model Binding
+Celah keamanan yang paling sering timbul pada kode hasil generasi AI (*AI-generated slop*) adalah pengabaian otorisasi per-record, di mana sistem hanya memeriksa apakah user sudah login atau memiliki role tertentu tanpa memvalidasi kepemilikan data.
+
+**Risiko Nyata yang Berhasil Dieliminasi**:
+- Orang tua santri mengganti ID di URL `/parent/children/5` menjadi `/parent/children/6` untuk melihat catatan pribadi anak keluarga lain.
+- Guru mengganti ID pada rute `/mentor/students/12` menjadi `/mentor/students/15` untuk mengintip data santri guru lain.
+- Guru mengunduh slip gaji guru lain via rute `/mentor/dashboard/salary-slip/print/8`.
+
+**Langkah Rekayasa yang Diterapkan**:
+1. **Pemasangan Trait `AuthorizesRequests`**: Ditambahkan pada basis `App\Http\Controllers\Controller` agar seluruh controller mewarisi kapabilitas method `$this->authorize()`.
+2. **Standardisasi Route Model Binding di `routes/web.php`**:
+   - Seluruh parameter URL angka mentah `{id}` digantikan dengan model instan: `{student}`, `{payment}`, `{mentor}`.
+3. **Refactoring Controller Pengendali**:
+   - `Parent\ParentChildController`: Menegakkan `$this->authorize('view', $student)` pada profil, pengunduhan raport belajar (`exportReport`), dan permohonan reset kata sandi (`requestPasswordReset`).
+   - `Mentor\StudentController`: **Menutup celah kritis** di mana sebelumnya menerima parameter integer `$id` tanpa pengecekan relasi bimbingan. Kini menerima `Student $student` dan menegakkan `$this->authorize('view', $student)`.
+   - `Parent\ParentPaymentController`: Menegakkan otorisasi pada rute detail pembayaran, pembayaran online, pengecekan status transaksi, dan pengunduhan invoice PDF.
+   - `Admin\AdminStaffController` & `Mentor\DashboardController`: Menegakkan proteksi slip gaji dan verifikasi rekening bank.
+
+---
+
+### 34.5 Proteksi Mass Assignment & FormRequest Terisolasi
+Untuk mencegah kerentanan manipulasi muatan HTTP (*Mass Assignment Vulnerability*), seluruh mutasi data sensitif menggunakan kelas `FormRequest` terisolasi:
+
+1. **`EnrollTahfidzRequest` (`app/Http/Requests/Parent/EnrollTahfidzRequest.php`)**:
+   - Menghalangi manipulasi input identitas santri saat pendaftaran program baru.
+   - Menguji validitas bahwa santri yang didaftarkan wajib terdaftar di bawah profil orang tua yang sedang login (`Rule::exists('students', 'id')->where('parent_id', ...)`). Orang tua tidak dapat mendaftarkan santri keluarga lain ke program berbayar.
+2. **`MarkSalaryPaidRequest` (`app/Http/Requests/Admin/MarkSalaryPaidRequest.php`)**:
+   - Mengisolasi hak akses perubahan status penggajian guru hanya bagi peran Admin (`$this->user()->role === 'admin'`).
+   - Memvalidasi format tanggal pencairan dan metode pembayaran honor secara ketat.
+3. **Pemberantasan `$request->all()`**:
+   - Seluruh *payload* yang masuk ke dalam model Eloquent diekstraksi secara eksplisit melalui `$request->validated()`, menjamin kolom sensitif internal (`role`, `status`, `is_verified`) tidak dapat disusupi dari form POST/PUT.
+
+---
+
+### 34.6 Verifikasi Otomatis & Penegakan Mutu Pest (100% Green Pass)
+Untuk memastikan arsitektur otorisasi ini berfungsi tanpa cacat dan terlindung dari regresi masa depan, telah ditambahkan pengujian otomatis komprehensif:
+
+1. **Test Suite `tests/Feature/AuthorizationPolicyTest.php`**:
+   - Memverifikasi orang tua dapat mengakses data anaknya sendiri.
+   - Memverifikasi orang tua **diblokir total (403 Forbidden)** ketika mengakses data anak orang lain (Anti-IDOR).
+   - Memverifikasi guru dapat melihat santri yang aktif dibimbingnya.
+   - Memverifikasi guru **diblokir total (403 Forbidden)** ketika mengakses data santri bimbingan guru lain (Anti-IDOR).
+   - Memverifikasi guru dapat melihat slip gaji miliknya sendiri.
+   - Memverifikasi guru **diblokir total (403 Forbidden)** saat mencoba mengakses slip gaji rekan sesama guru (Anti-IDOR).
+   - Memverifikasi orang tua diblokir saat mencoba membuka invoice pembayaran milik orang tua lain.
+2. **Hasil Eksekusi Pengujian**:
+   - `AuthorizationPolicyTest`: 7 skenario pengujian, 21 assertions, **100% Green Pass**.
+   - `MentorSalarySlipTest`: 8 skenario pengujian, 21 assertions, **100% Green Pass**.
+   - Keseluruhan berkas PHP lulus pemeriksaan formatter Laravel Pint (`vendor/bin/pint --dirty --format agent`).
+
+---
+
+## 🏛️ 35. Standardisasi & Harmonisasi Desain Header Subpage Publik: Sistem Header Editorial Universal (Versi 11.6)
+
+### 35.1 Analisis Masalah Inkonsistensi Subpage & Ruang Navbar Fixed
+Sebelum standardisasi ini dilakukan, bagian atas (langsung di bawah *fixed navbar*) pada 11+ halaman publik memiliki ketidakkonsistenan yang mencolok:
+1. **Ketimpangan Ruang Navbar (Navbar Overlap / Floating Gaps)**: Sebagian halaman menggunakan `padding-top: 180px`, sebagian menggunakan `margin-top: 100px`, dan halaman lain masih memakai kelas usang `.breadcrumb_bg` dengan tinggi statis 320px yang menyebabkan judul konten terpotong atau tertutup *fixed navbar* di layar ponsel.
+2. **Hirarki Visual yang Acak-Acakan**: Sebagian halaman menaruh breadcrumb di bawah judul, sebagian di atas, sebagian tanpa breadcrumb sama sekali, dan sebagian memakai badge dengan font kecil tanpa kontras.
+3. **Kompleksitas Class CSS Liar**: Terdapat deklarasi kelas duplikat seperti `.page-hero`, `.tracker-hero`, `.editorial-page-header`, dan `.breadcrumb_bg` dengan aturan `!important` yang saling bertabrakan di `public/assets/css/style.css`.
+4. **Respon Mobile & Dark Mode Buruk**: Di layar kecil (< 576px), judul utama halaman terlalu besar atau teks badge keluar dari layar (overflow).
+
+---
+
+### 35.2 Desain Sistem Header Editorial Universal (`.editorial-page-header`)
+Berdasarkan prinsip **Skill Impeccable** dan seluruh rangkaian pedoman **Antislop Suite** (`antislop-ui`, `antislop-copywriting`, `antislop-human`, `antislop-layoutmobile`, `antislop-code`), seluruh subpage publik distandarisasi menggunakan satu komponen induk yang rapi, elegan, minimalis, dan beraksen islami modern:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  [Fixed Navbar: --navbar-height ~80px-90px]                 │
+├─────────────────────────────────────────────────────────────┤
+│  .editorial-page-header                                     │
+│                                                             │
+│  [1] <nav aria-label="breadcrumb">                          │
+│      Home  /  Program  /  Detail                            │
+│                                                             │
+│  [2] <span class="editorial-badge">                         │
+│      [Icon]  Label Kategori Halaman                         │
+│                                                             │
+│  [3] <h1 class="editorial-title">                           │
+│      Judul Utama Halaman (clamp 1.75rem -> 2.85rem)         │
+│                                                             │
+│  [4] <p class="editorial-subtitle">                         │
+│      Deskripsi Pengantar Realistis & Bernas (max-w: 680px)  │
+│                                                             │
+│  [5] (Opsional) Action Slot: Tabs Filter / Search Form      │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Aturan Anatomi & Token Desain:
+* **Komputasi Padding Dinamis**:
+  ```css
+  padding-top: calc(var(--navbar-height, 84px) + 2rem);
+  padding-bottom: 3.25rem;
+  ```
+  Menjamin konten header tidak akan pernah tertutup oleh fixed navbar berapapun tinggi navbar yang aktif.
+* **Tipografi Responsif (Fluid Clamp)**:
+  `font-size: clamp(1.75rem, 4vw + 0.5rem, 2.75rem)` dengan `letter-spacing: -0.025em`, memberikan tampilan judul editorial yang berwibawa di desktop namun tetap proporsional dan tidak membungkus berlebihan di layar ponsel pintar.
+* **Aksesibilitas Kontras (WCAG AAA)**:
+  Breadcrumb menggunakan warna teks kontras `#475569` (Dark mode: `#94a3b8`) dengan link aktif emerald `#059669` (Dark mode: `#34d399`), memenuhi syarat kontras 4.5:1 untuk keterbacaan optimal.
+* **Badge Pill Standar**:
+  Badge pill `.editorial-badge` menggunakan latar belakang `rgba(5, 150, 105, 0.08)` berbingkai halus `rgba(5, 150, 105, 0.18)` dengan ikon inline FontAwesome yang presisi.
+
+---
+
+### 35.3 Sinkronisasi Dinamis Tinggi Navbar JavaScript (`--navbar-height`)
+Di [`public/assets/js/scripts.js`](file:///c:/xampp/htdocs/al-hikmah-lms/public/assets/js/scripts.js), ditambahkan fungsi otomasi pembacaan ukuran elemen navbar secara real-time:
+```javascript
+function syncNavbarHeight() {
+    var navbar = document.querySelector('.main_menu') || document.querySelector('header');
+    if (navbar) {
+        var h = Math.round(navbar.getBoundingClientRect().height);
+        if (h > 40) {
+            document.documentElement.style.setProperty('--navbar-height', h + 'px');
+        }
+    }
+}
+window.addEventListener('resize', syncNavbarHeight, { passive: true });
+```
+Dengan mekanisme ini, jika tinggi navbar berubah (misalnya saat menu navigasi mobile terbuka atau saat scroll sticky), tata letak header di bawahnya tetap menjaga margin aman tanpa lonjakan layout (zero Cumulative Layout Shift / CLS).
+
+---
+
+### 35.4 Harmonisasi pada 14 Halaman Publik
+Harmonisasi diterapkan penuh dan seragam di 14 halaman publik:
+1. **`/tentang-kami`** ([`tentang-kami.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/tentang-kami.blade.php)): Header editorial beraksen "Profil Lembaga", breadcrumb Beranda / Tentang Kami.
+2. **`/program`** ([`program.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/program.blade.php)): Header editorial "Pilihan Program Belajar", integrasi tab filter kategori di bawah subtitle.
+3. **`/metode`** ([`metode.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/metode.blade.php)): Header editorial "Metodologi Pembelajaran", pendekatan talaqqi & sanad.
+4. **`/tahfidz`** ([`tahfidz.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/tahfidz.blade.php)): Header editorial "Program Tahfidz Intensif", kurikulum mutqin terstruktur.
+5. **`/roadmap`** ([`roadmap.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/roadmap.blade.php)): Header editorial "Peta Jalan Pembelajaran Santri", visualisasi tahapan belajar dari Iqra hingga Syahadah.
+6. **`/galeri`** ([`galeri.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/galeri.blade.php)): Header editorial "Dokumentasi Kegiatan", filter kategori galeri.
+7. **`/jadwal-sholat`** ([`jadwal-sholat.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/jadwal-sholat.blade.php)): Header editorial "Waktu Sholat & Imsakiyah", indikator waktu real-time.
+8. **`/cek-status-lamaran`** ([`status-tracker.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/public/mentor-recruitment/status-tracker.blade.php)): Header editorial "Pantau Status Lamaran Calon Guru", integrasi form pencarian nomor registrasi/NIK.
+9. **`/blog`** ([`blog/index.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/blog/index.blade.php)): Header editorial "Wawasan & Artikel Islami", pencarian dan filter topik.
+10. **`/blog/{slug}`** ([`blog/show.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/blog/show.blade.php)): Header editorial detail artikel dengan breadcrumb navigasi kembali yang intuitif.
+11. **`/faq`** ([`faq.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/faq.blade.php)): Header editorial "Pusat Bantuan & Tanya Jawab", pencarian interaktif FAQ.
+12. **`/kontak`** ([`contact.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/contact.blade.php)): Header editorial "Hubungi Kami", informasi respon cepat dan lokasi.
+13. **`/biaya`** ([`biaya.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/biaya.blade.php)): Header editorial "Transparansi Biaya & Investasi Akhirat", paket bimbingan privat 1-on-1.
+14. **`/bergabung`** ([`bergabung.blade.php`](file:///c:/xampp/htdocs/al-hikmah-lms/resources/views/bergabung.blade.php)): Header editorial "Pendaftaran Calon Guru Pembimbing".
+
+---
+
+### 35.5 Pengujian Otomatis Pest & Jaminan Anti-Regresi
+Untuk memastikan setiap subpage publik selalu memenuhi standar desain editorial ini, ditambahkan pengujian otomatis pada [`tests/Feature/LandingPagesTest.php`](file:///c:/xampp/htdocs/al-hikmah-lms/tests/Feature/LandingPagesTest.php):
+* Menilai ke-13 subpage publik utama merespons **HTTP 200 OK**.
+* Memastikan markup HTML setiap subpage memiliki elemen `.editorial-page-header`, navigasi `.breadcrumb`, dan lencana kategori `.editorial-badge`.
+* Hasil uji: **7 tests passed (76 assertions)** secara konsisten.
+
+---
+
 **Disahkan oleh:** Tim Manajemen & Pengembang AL-HIKMAH LMS  
 **Status Dokumen:** Living Specification & Single Source of Truth  
-**Tanggal:** 19 September 2026
+**Tanggal:** 21 September 2026
+
 
 
 

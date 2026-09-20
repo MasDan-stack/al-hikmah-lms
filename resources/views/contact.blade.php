@@ -92,19 +92,26 @@
 <!-- ============================================ -->
 <!-- 1. PAGE HEADER - EDITORIAL MINIMALIST -->
 <!-- ============================================ -->
-<section class="editorial-page-header text-center" aria-label="Header Kontak">
-    <div class="container py-2">
+<section class="editorial-page-header" aria-label="Header Kontak">
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-9">
-                <div data-reveal>
-                    <div class="section-badge mx-auto mb-3">
-                        <i class="bi bi-chat-heart-fill me-1"></i> Layanan Konsultasi
-                    </div>
-                    <h1 class="editorial-title mb-3">Layanan Konsultasi &amp; <span class="text-emerald-deep">Hubungi Kami</span></h1>
-                    <p class="editorial-subtitle mx-auto">
-                        Sampaikan pertanyaan, kebutuhan jadwal privat, atau konsultasi evaluasi awal ananda langsung kepada konselor pendidikan AL-HIKMAH.
-                    </p>
+            <div class="col-lg-9 text-center" data-reveal>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Hubungi Kami</li>
+                    </ol>
+                </nav>
+
+                <div class="editorial-badge mx-auto">
+                    <i class="bi bi-chat-heart-fill"></i>
+                    <span>Layanan Konsultasi</span>
                 </div>
+
+                <h1 class="editorial-title">Layanan Konsultasi &amp; <span class="text-emerald-deep">Hubungi Kami</span></h1>
+                <p class="editorial-subtitle mx-auto">
+                    Sampaikan pertanyaan, kebutuhan jadwal privat, atau konsultasi evaluasi awal ananda langsung kepada konselor pendidikan AL-HIKMAH.
+                </p>
             </div>
         </div>
     </div>

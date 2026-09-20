@@ -11,19 +11,23 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-9 text-center" data-reveal>
-                    <span class="editorial-badge">
-                        <i class="bi bi-map-fill"></i> Panduan Langkah Awal
-                    </span>
-                    <h1>Peta Perjalanan Belajar</h1>
-                    <p>
-                        Panduan langkah terarah mulai dari eksplorasi program, pencocokan jadwal guru, hingga proses bimbingan belajar berjalan tertib dan lancar.
-                    </p>
-                    <nav aria-label="breadcrumb" class="mt-3">
-                        <ol class="breadcrumb justify-content-center mb-0 small">
-                            <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none text-secondary">Beranda</a></li>
-                            <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Roadmap Belajar</li>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                            <li class="breadcrumb-item text-muted">Panduan</li>
+                            <li class="breadcrumb-item active" aria-current="page">Roadmap Belajar</li>
                         </ol>
                     </nav>
+
+                    <div class="editorial-badge mx-auto">
+                        <i class="bi bi-map-fill"></i>
+                        <span>Panduan Langkah Awal</span>
+                    </div>
+
+                    <h1 class="editorial-title">Peta Perjalanan Belajar</h1>
+                    <p class="editorial-subtitle mx-auto">
+                        Panduan langkah terarah mulai dari eksplorasi program, pencocokan jadwal guru, hingga proses bimbingan belajar berjalan tertib dan lancar.
+                    </p>
                 </div>
             </div>
         </div>
@@ -135,11 +139,53 @@
                                                     <i class="bi bi-book-half me-1"></i> Telusuri Program
                                                 </a>
                                             @break
-                                            @case(2)
-                                                <button type="button" class="btn-editorial-primary w-100 text-center py-2 small" data-bs-toggle="modal" data-bs-target="#trialModal">
-                                                    <i class="bi bi-calendar-plus me-1"></i> Ajukan Penempatan
-                                                </button>
-                                            @break
+                                             @case(2)
+                                                 @auth
+                                                     @if (auth()->user()->isParent())
+                                                         @php
+                                                             $latestEnrollment = isset($parentEnrollments) ? $parentEnrollments->first() : null;
+                                                         @endphp
+
+                                                         @if ($latestEnrollment && $latestEnrollment->isWaitingAdmin())
+                                                             <a href="{{ route('parent.enrollments.show', $latestEnrollment->id) }}"
+                                                                 class="btn btn-sm btn-warning text-dark rounded-pill px-3 fw-bold w-100 text-center py-2">
+                                                                 <i class="bi bi-hourglass-split me-1"></i> Sedang Direview ({{ $latestEnrollment->program?->name }})
+                                                             </a>
+                                                         @elseif ($latestEnrollment && $latestEnrollment->isWaitingParent())
+                                                             <a href="{{ route('parent.enrollments.show', $latestEnrollment->id) }}"
+                                                                 class="btn btn-sm btn-info text-white rounded-pill px-3 fw-bold w-100 text-center py-2">
+                                                                 <i class="bi bi-chat-dots me-1"></i> Konfirmasi Jadwal ({{ $latestEnrollment->program?->name }})
+                                                             </a>
+                                                         @elseif ($latestEnrollment && $latestEnrollment->isConfirmed())
+                                                             <a href="{{ route('parent.enrollments.show', $latestEnrollment->id) }}"
+                                                                 class="btn-editorial-primary w-100 text-center py-2 small">
+                                                                 <i class="bi bi-wallet2 me-1"></i> Siap Bayar: {{ $latestEnrollment->program?->name }}
+                                                             </a>
+                                                         @elseif ($latestEnrollment && $latestEnrollment->isActive())
+                                                             <a href="{{ route('parent.enrollments.show', $latestEnrollment->id) }}"
+                                                                 class="btn-editorial-primary w-100 text-center py-2 small">
+                                                                 <i class="bi bi-award-fill me-1"></i> Program Aktif: {{ $latestEnrollment->program?->name }}
+                                                             </a>
+                                                         @else
+                                                             <a href="{{ route('biaya') }}" class="btn-editorial-primary w-100 text-center py-2 small">
+                                                                 <i class="bi bi-journal-check me-1"></i> Pilih Program
+                                                             </a>
+                                                         @endif
+                                                     @elseif (auth()->user()->isAdmin())
+                                                         <a href="{{ route('biaya') }}" class="btn-editorial-primary w-100 text-center py-2 small">
+                                                             <i class="bi bi-journal-check me-1"></i> Pilih Program (Admin)
+                                                         </a>
+                                                     @else
+                                                         <button type="button" class="btn-editorial-primary w-100 text-center py-2 small" data-bs-toggle="modal" data-bs-target="#daftarModal">
+                                                             <i class="bi bi-calendar-plus me-1"></i> Booking Jadwal
+                                                         </button>
+                                                     @endif
+                                                 @else
+                                                     <button type="button" class="btn-editorial-primary w-100 text-center py-2 small" data-bs-toggle="modal" data-bs-target="#daftarModal">
+                                                         <i class="bi bi-calendar-plus me-1"></i> Booking Jadwal
+                                                     </button>
+                                                 @endauth
+                                             @break
                                             @case(3)
                                                 <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill small w-100 text-center">
                                                     <i class="bi bi-clock-history me-1"></i> Menunggu Konfirmasi Jadwal

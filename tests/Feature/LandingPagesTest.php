@@ -78,3 +78,45 @@ test('dedicated prayer times page renders real-time widget and modals', function
         ->assertSee('id="qiblaModal"', false)
         ->assertSee('btn-detect-gps');
 });
+
+test('all public subpages have consistent editorial page header, breadcrumb, and badge', function () {
+    $routes = [
+        'tentang-kami',
+        'program',
+        'metode',
+        'tahfidz',
+        'roadmap',
+        'galeri',
+        'jadwal-sholat',
+        'mentor.recruitment.status',
+        'blog.index',
+        'faq',
+        'contact',
+        'bergabung',
+    ];
+
+    foreach ($routes as $routeName) {
+        $response = $this->get(route($routeName));
+        $response->assertStatus(200)
+            ->assertSee('editorial-page-header')
+            ->assertSee('breadcrumb')
+            ->assertSee('editorial-badge');
+    }
+
+    $parentUser = User::factory()->parent()->create();
+    $parentProfile = ParentProfile::create(['user_id' => $parentUser->id]);
+    $studentUser = User::factory()->student()->create();
+    Student::create([
+        'user_id' => $studentUser->id,
+        'parent_id' => $parentProfile->id,
+        'full_name' => 'Santri Biaya Test',
+        'age' => 11,
+        'gender' => 'L',
+    ]);
+
+    $this->actingAs($parentUser)->get(route('biaya'))
+        ->assertStatus(200)
+        ->assertSee('editorial-page-header')
+        ->assertSee('breadcrumb')
+        ->assertSee('editorial-badge');
+});

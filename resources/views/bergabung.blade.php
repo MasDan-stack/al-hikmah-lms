@@ -4,18 +4,34 @@
 @section('description', 'Bergabung bersama AL-HIKMAH. Kesempatan menjadi pendamping dalam perjalanan belajar Al-Qur\'an.')
 
 @section('content')
-    <div class="text-center pt-5 pb-2">
-        <div class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill small fw-semibold mb-2">
-            <i class="bi bi-person-workspace me-1"></i> Karir Guru &amp; Mitra Pendamping
+    <section class="editorial-page-header" aria-label="Header Pendaftaran Guru">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-9 text-center" data-reveal>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                            <li class="breadcrumb-item text-muted">Karir &amp; Mitra</li>
+                            <li class="breadcrumb-item active" aria-current="page">Pendaftaran Guru</li>
+                        </ol>
+                    </nav>
+
+                    <div class="editorial-badge mx-auto">
+                        <i class="bi bi-person-workspace"></i>
+                        <span>Karir Guru &amp; Mitra Pendamping</span>
+                    </div>
+
+                    <h1 class="editorial-title">Pendaftaran Calon Guru Pembimbing</h1>
+                    <p class="editorial-subtitle mx-auto">
+                        Bergabunglah bersama keluarga besar AL-HIKMAH dalam membimbing generasi Qur'ani dengan bacaan yang mutqin, fasih, dan berakhlak mulia.
+                    </p>
+                </div>
+            </div>
         </div>
-        <h1 class="h2 fw-bold mb-1" style="color: var(--text-primary);">Pendaftaran Calon Guru Pembimbing</h1>
-        <p class="text-secondary small mx-auto mb-0" style="max-width: 650px;">
-            Bergabunglah bersama keluarga besar AL-HIKMAH dalam membimbing generasi Qur'ani dengan bacaan yang mutqin, fasih, dan berakhlak mulia.
-        </p>
-    </div>
+    </section>
 
     <!-- Formulir Registrasi Pendamping / Guru (Split Layout: Form Kiri, Gambar Kanan) -->
-    <section class="mentor-split-wrapper section-alt" id="formDaftarMentor" aria-label="Formulir Pendaftaran Guru">
+    <section class="mentor-split-wrapper section-alt py-5" id="formDaftarMentor" aria-label="Formulir Pendaftaran Guru">
         <div class="container">
             <div class="mentor-split-card shadow-lg">
                 <!-- Sisi Kiri: Formulir Pendaftaran -->

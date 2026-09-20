@@ -344,7 +344,7 @@
                             </button>
                         @endif
 
-                        <a href="{{ route('admin.staff.salary-slip.print', ['id' => $mentor->id, 'slip_month' => $salarySlip['period_month'] ?? now()->month, 'slip_year' => $salarySlip['period_year'] ?? now()->year]) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-xs fw-semibold">
+                        <a href="{{ route('admin.staff.salary-slip.print', ['mentor' => $mentor->id, 'slip_month' => $salarySlip['period_month'] ?? now()->month, 'slip_year' => $salarySlip['period_year'] ?? now()->year]) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-xs fw-semibold">
                             <i class="bi bi-printer-fill me-1"></i>Cetak Slip Resmi
                         </a>
                     </div>
@@ -543,7 +543,7 @@
                     </div>
                     <h6 class="fw-bold text-heading mb-1">Tidak Ada Jadwal Sesi Mengajar</h6>
                     <p class="text-body-secondary small mb-3">Tidak ditemukan riwayat sesi bimbingan untuk guru ini pada periode {{ $salarySlip['period_label'] ?? '-' }}.</p>
-                    <a href="{{ route('admin.staff.show', ['id' => $mentor->id, 'slip_month' => now()->month, 'slip_year' => now()->year]) }}#tableStaffSessions" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                    <a href="{{ route('admin.staff.show', ['mentor' => $mentor->id, 'slip_month' => now()->month, 'slip_year' => now()->year]) }}#tableStaffSessions" class="btn btn-sm btn-outline-primary rounded-pill px-3">
                         Lihat Periode Bulan Ini ({{ now()->locale('id')->translatedFormat('F Y') }})
                     </a>
                 </div>

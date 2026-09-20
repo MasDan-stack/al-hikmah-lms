@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Parent;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Parent\EnrollTahfidzRequest;
 use App\Models\PasswordResetLog;
 use App\Models\Program;
 use App\Models\Progress;
@@ -33,14 +34,11 @@ class ParentChildController extends Controller
         return view('parent.children.index', compact('children'));
     }
 
-    public function show(int $id): View
+    public function show(Student $student): View
     {
-        $parent = auth()->user()->parentProfile;
-        $child = Student::with(['user', 'mentors.user', 'earnedBadges', 'juzProgress'])->findOrFail($id);
+        $this->authorize('view', $student);
 
-        if (! $parent || $child->parent_id !== $parent->id) {
-            abort(403, 'Akses data anak ditolak.');
-        }
+        $child = $student->loadMissing(['user', 'mentors.user', 'earnedBadges', 'juzProgress']);
 
         $progresses = Progress::with(['mentor.user', 'session'])
             ->where('student_id', $child->id)
@@ -73,14 +71,11 @@ class ParentChildController extends Controller
         ));
     }
 
-    public function exportReport(int $id)
+    public function exportReport(Student $student)
     {
-        $parent = auth()->user()->parentProfile;
-        $child = Student::with(['user', 'mentors.user'])->findOrFail($id);
+        $this->authorize('exportReport', $student);
 
-        if (! $parent || $child->parent_id !== $parent->id) {
-            abort(403, 'Akses data anak ditolak.');
-        }
+        $child = $student->loadMissing(['user', 'mentors.user']);
 
         $progresses = Progress::with(['mentor.user'])
             ->where('student_id', $child->id)
@@ -93,17 +88,9 @@ class ParentChildController extends Controller
         return view('parent.children.report', compact('child', 'progresses', 'avgTajwid', 'avgFluent'));
     }
 
-    public function enrollTahfidz(Request $request): RedirectResponse
+    public function enrollTahfidz(EnrollTahfidzRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'student_id' => 'required|string',
-            'new_nama_anak' => 'required_if:student_id,new|nullable|string|max:255',
-            'new_usia' => 'nullable|integer|min:3|max:80',
-            'new_gender' => 'nullable|string|in:L,P',
-            'target_tahfidz' => 'required|string|max:100',
-            'level_tahfidz' => 'nullable|string|max:100',
-            'metode' => 'nullable|string|max:100',
-        ]);
+        $validated = $request->validated();
 
         $parent = auth()->user()->parentProfile;
         if (! $parent) {
@@ -141,14 +128,11 @@ class ParentChildController extends Controller
     /**
      * Fitur Reset & Kirim Password Akun Santri oleh Orang Tua
      */
-    public function requestPasswordReset(Request $request, int $id): RedirectResponse
+    public function requestPasswordReset(Request $request, Student $student): RedirectResponse
     {
-        $parent = auth()->user()->parentProfile;
-        $child = Student::with('user')->findOrFail($id);
+        $this->authorize('resetPassword', $student);
 
-        if (! $parent || $child->parent_id !== $parent->id) {
-            abort(403, 'Akses reset password ditolak.');
-        }
+        $child = $student->loadMissing('user');
 
         $newPassword = $this->studentAccountService->generatePassword(8);
         $child->user->update([

@@ -29,12 +29,14 @@ class StudentController extends Controller
         return view('mentor.students.index', compact('students'));
     }
 
-    public function show(int $id): View
+    public function show(Student $student): View
     {
-        $mentor = auth()->user()->mentor;
-        $student = Student::with(['user', 'parent.user'])->findOrFail($id);
+        $this->authorize('view', $student);
 
-        $progresses = Progress::where('student_id', $id)
+        $mentor = auth()->user()->mentor;
+        $student->loadMissing(['user', 'parent.user']);
+
+        $progresses = Progress::where('student_id', $student->id)
             ->where('mentor_id', $mentor?->id)
             ->orderBy('created_at', 'desc')
             ->get();

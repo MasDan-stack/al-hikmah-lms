@@ -6,16 +6,26 @@
 @section('content')
 
     {{-- 1. PAGE HEADER --}}
-    <section class="editorial-page-header bg-body-tertiary border-bottom" aria-label="Header Biaya Belajar">
+    <section class="editorial-page-header" aria-label="Header Biaya Belajar">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-9 text-center">
-                    <div data-reveal>
-                        <h1 class="editorial-title mb-3">Paket Bimbingan <span class="text-emerald-deep">Privat Al-Qur'an</span></h1>
-                        <p class="editorial-subtitle mx-auto">
-                            Setiap pertemuan berlangsung selama 90 menit penuh, mempertemukan satu guru dengan satu santri secara tenang. Ananda mendapatkan bimbingan tartil yang runtut, disimak dengan sabar, dan dipantau melalui catatan perkembangan harian.
-                        </p>
+                <div class="col-lg-9 text-center" data-reveal>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Paket Bimbingan &amp; Biaya</li>
+                        </ol>
+                    </nav>
+
+                    <div class="editorial-badge mx-auto">
+                        <i class="bi bi-tag-fill"></i>
+                        <span>Biaya Transparan &amp; Akad Jelas</span>
                     </div>
+
+                    <h1 class="editorial-title">Paket Bimbingan <span class="text-emerald-deep">Privat Al-Qur'an</span></h1>
+                    <p class="editorial-subtitle mx-auto">
+                        Setiap pertemuan berlangsung selama 90 menit penuh, mempertemukan satu guru dengan satu santri secara tenang. Ananda mendapatkan bimbingan tartil yang runtut, disimak dengan sabar, dan dipantau melalui catatan perkembangan harian.
+                    </p>
                 </div>
             </div>
         </div>

@@ -61,16 +61,11 @@ class ParentPaymentController extends Controller
         return view('parent.payments.history', compact('paidPayments'));
     }
 
-    public function show(int $id): View
+    public function show(Payment $payment): View
     {
-        $parent = auth()->user()->parentProfile;
-        $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
+        $this->authorize('view', $payment);
 
-        $payment = Payment::with(['student.user', 'student.parent.user', 'program', 'enrollment.mentor.user'])->findOrFail($id);
-
-        if (! in_array($payment->student_id, $childIds)) {
-            abort(403, 'Akses tagihan ditolak.');
-        }
+        $payment->loadMissing(['student.user', 'student.parent.user', 'program', 'enrollment.mentor.user']);
 
         // Active Real-time Sync ke Pakasir jika masih pending
         if ($payment->status === 'pending' && ! empty($payment->pakasir_order_id)) {
@@ -84,15 +79,11 @@ class ParentPaymentController extends Controller
     /**
      * Memproses / Menginisialisasi pembayaran online via Pakasir
      */
-    public function payOnline(Request $request, int $id): RedirectResponse
+    public function payOnline(Request $request, Payment $payment): RedirectResponse
     {
-        $parent = auth()->user()->parentProfile;
-        $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
+        $this->authorize('pay', $payment);
 
-        $payment = Payment::with(['enrollment', 'student.user', 'program'])->findOrFail($id);
-        if (! in_array($payment->student_id, $childIds)) {
-            abort(403, 'Akses tagihan ditolak.');
-        }
+        $payment->loadMissing(['enrollment', 'student.user', 'program']);
 
         if ($payment->status === 'paid') {
             return redirect()->route('parent.payments.show', $payment->id)
@@ -115,16 +106,11 @@ class ParentPaymentController extends Controller
     /**
      * Polling status pembayaran (AJAX Real-time endpoint)
      */
-    public function checkStatus(int $id): JsonResponse
+    public function checkStatus(Payment $payment): JsonResponse
     {
-        $parent = auth()->user()->parentProfile;
-        $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
+        $this->authorize('view', $payment);
 
-        $payment = Payment::with(['student.parent.user', 'enrollment'])->findOrFail($id);
-
-        if (! in_array($payment->student_id, $childIds)) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
+        $payment->loadMissing(['student.parent.user', 'enrollment']);
 
         // Active Real-time Sync ke Pakasir jika masih pending
         if ($payment->status === 'pending' && ! empty($payment->pakasir_order_id)) {
@@ -193,16 +179,9 @@ class ParentPaymentController extends Controller
     /**
      * Membatalkan transaksi aktif agar orang tua dapat mengganti metode pembayaran
      */
-    public function cancelPayment(int $id): RedirectResponse
+    public function cancelPayment(Payment $payment): RedirectResponse
     {
-        $parent = auth()->user()->parentProfile;
-        $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
-
-        $payment = Payment::findOrFail($id);
-
-        if (! in_array($payment->student_id, $childIds)) {
-            abort(403, 'Akses ditolak.');
-        }
+        $this->authorize('pay', $payment);
 
         if ($payment->status === 'paid') {
             return redirect()->route('parent.payments.show', $payment->id)
@@ -215,16 +194,12 @@ class ParentPaymentController extends Controller
             ->with('info', 'Metode pembayaran telah direset. Silakan pilih kembali metode yang diinginkan.');
     }
 
-    public function downloadInvoice(int $id)
+    public function downloadInvoice(Payment $payment)
     {
+        $this->authorize('view', $payment);
+
         $parent = auth()->user()->parentProfile;
-        $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
-
-        $payment = Payment::with(['student.user', 'program'])->findOrFail($id);
-
-        if (! in_array($payment->student_id, $childIds)) {
-            abort(403, 'Akses invoice ditolak.');
-        }
+        $payment->loadMissing(['student.user', 'program']);
 
         if ($payment->status !== 'paid') {
             return redirect()->route('parent.payments.show', $payment->id)

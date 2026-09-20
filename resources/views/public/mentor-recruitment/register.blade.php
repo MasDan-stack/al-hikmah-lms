@@ -4,18 +4,35 @@
 @section('meta_description', 'Formulir pendaftaran calon guru pembimbing Al-Qur\'an AL-HIKMAH. Bergabung bersama kami dengan proses seleksi yang amanah, objektif, dan transparan.')
 
 @section('content')
-<div class="mentor-split-wrapper section-alt" style="padding-top: 110px; padding-bottom: 70px;">
-    <div class="container-xl">
-        <!-- Top Header -->
-        <div class="text-center mb-4">
-            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill small fw-semibold">
-                <i class="bi bi-mortarboard-fill me-1"></i> Rekrutmen Guru &amp; Pendamping
-            </span>
-            <h1 class="h2 fw-bold mt-2 mb-1" style="color: var(--text-primary);">Formulir Pendaftaran Guru Pembimbing</h1>
-            <p class="text-secondary small mx-auto mb-0" style="max-width: 650px;">
-                Mari berkhidmah menemani santri dan keluarga muslim mempelajari Al-Qur'an dengan bacaan yang mutqin, fasih, dan berakhlak mulia.
-            </p>
+<!-- Editorial Subpage Header -->
+<section class="editorial-page-header" aria-label="Header Pendaftaran Guru">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-9 text-center" data-reveal>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                        <li class="breadcrumb-item text-muted">Karir &amp; Mitra</li>
+                        <li class="breadcrumb-item active" aria-current="page">Pendaftaran Guru</li>
+                    </ol>
+                </nav>
+
+                <div class="editorial-badge mx-auto">
+                    <i class="bi bi-mortarboard-fill"></i>
+                    <span>Rekrutmen Guru &amp; Pendamping</span>
+                </div>
+
+                <h1 class="editorial-title">Pendaftaran Calon Guru Pembimbing</h1>
+                <p class="editorial-subtitle mx-auto">
+                    Mari berkhidmah menemani santri dan keluarga muslim mempelajari Al-Qur'an dengan bacaan yang mutqin, fasih, dan berakhlak mulia.
+                </p>
+            </div>
         </div>
+    </div>
+</section>
+
+<div class="mentor-split-wrapper section-alt py-5">
+    <div class="container-xl">
 
         @if(session('error'))
             <div class="alert alert-danger alert-dismissible fade show shadow-sm rounded-3 mb-4" role="alert">

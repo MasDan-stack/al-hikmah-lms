@@ -7,29 +7,27 @@
     <!-- ============================================ -->
     <!-- 1. BREADCRUMB / HERO SECTION -->
     <!-- ============================================ -->
-    <section class="breadcrumb_bg page-hero editorial-page-header text-center" aria-label="Header Profil Lembaga">
+    <section class="editorial-page-header page-hero" aria-label="Header Profil Lembaga">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="breadcrumb_iner_item" data-reveal>
-                        <nav aria-label="breadcrumb" class="mb-3">
-                            <ol class="breadcrumb justify-content-center mb-0 small">
-                                <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none text-muted">Beranda</a></li>
-                                <li class="breadcrumb-item text-muted">Profil Lembaga</li>
-                                <li class="breadcrumb-item active text-success fw-medium" aria-current="page">Tentang Kami</li>
-                            </ol>
-                        </nav>
+                <div class="col-lg-10 text-center" data-reveal>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                            <li class="breadcrumb-item text-muted">Profil Lembaga</li>
+                            <li class="breadcrumb-item active" aria-current="page">Tentang Kami</li>
+                        </ol>
+                    </nav>
 
-                        <div class="d-inline-flex align-items-center gap-1.5 badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 small fw-semibold mb-3">
-                            <i class="bi bi-compass me-1"></i>
-                            <span>Profil &amp; Amanah Lembaga</span>
-                        </div>
-
-                        <h1 class="editorial-title display-6 mb-3">Mendampingi Buah Hati Belajar Al-Qur'an dengan Adab dan Tartil</h1>
-                        <p class="editorial-subtitle mx-auto text-secondary" style="max-width: 720px;">
-                            Lembaga bimbingan Al-Qur'an privat untuk anak dan remaja bersama <span class="fw-bold text-emerald-deep">AL-HIKMAH</span>, memadukan ketepatan kaidah tajwid, pembiasaan akhlak Islami, serta transparansi mutaba'ah bagi orang tua.
-                        </p>
+                    <div class="editorial-badge mx-auto">
+                        <i class="bi bi-compass"></i>
+                        <span>Profil &amp; Amanah Lembaga</span>
                     </div>
+
+                    <h1 class="editorial-title">Mendampingi Buah Hati Belajar Al-Qur'an dengan Adab dan Tartil</h1>
+                    <p class="editorial-subtitle mx-auto">
+                        Lembaga bimbingan Al-Qur'an privat untuk anak dan remaja bersama <span class="fw-bold text-emerald-deep">AL-HIKMAH</span>, memadukan ketepatan kaidah tajwid, pembiasaan akhlak Islami, serta transparansi mutaba'ah bagi orang tua.
+                    </p>
                 </div>
             </div>
         </div>

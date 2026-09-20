@@ -234,14 +234,13 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
         $mentor = $user->mentor;
-        $mentorId = $mentor?->id;
+        abort_if(! $mentor, 403, 'Akses profil mentor ditolak.');
+        $this->authorize('viewSalarySlip', $mentor);
 
         $slipMonth = (int) request('slip_month', now()->month);
         $slipYear = (int) request('slip_year', now()->year);
 
-        $salarySlip = $mentorId
-            ? app(RevenueAnalyticsService::class)->getMentorSalarySlipData($mentorId, $slipMonth, $slipYear)
-            : null;
+        $salarySlip = app(RevenueAnalyticsService::class)->getMentorSalarySlipData($mentor->id, $slipMonth, $slipYear);
 
         return view('mentor.salary-slip-print', compact('salarySlip', 'mentor'));
     }
