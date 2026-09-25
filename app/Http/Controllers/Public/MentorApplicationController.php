@@ -1,0 +1,133 @@
+<?php
+
+namespace App\Http\Controllers\Public;
+
+use App\Http\Controllers\Controller;
+use App\Models\MentorApplication;
+use App\Services\MentorRecruitmentService;
+use Illuminate\Http\Request;
+
+class MentorApplicationController extends Controller
+{
+    public function __construct(
+        protected MentorRecruitmentService $recruitmentService
+    ) {}
+
+    public function create()
+    {
+        return view('public.mentor-recruitment.register');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:150',
+            'nik' => 'nullable|string|max:20',
+            'email' => 'required|email|max:150|unique:mentor_applications,email',
+            'password' => 'required|string|min:8|confirmed',
+            'phone' => 'required|string|max:25',
+            'birth_date' => 'required|date',
+            'gender' => 'required|in:male,female',
+            'address' => 'required|string',
+            'city' => 'required|string|max:100',
+            'emergency_contact_name' => 'nullable|string|max:150',
+            'emergency_phone' => 'nullable|string|max:25',
+            'emergency_relation' => 'nullable|string|max:50',
+            'education' => 'required|string|max:100',
+            'institution' => 'required|string|max:150',
+            'experience_years' => 'required|integer|min:0',
+            'experience_description' => 'required|string',
+            'specialization' => 'required|string|max:50',
+            'sanad_chain' => 'nullable|string',
+            'hifz_total_juz' => 'required|integer|min:0|max:30',
+            'cv' => 'required|file|mimes:pdf|max:2048',
+            'id_card' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:3072',
+            'photo' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
+            'certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        ]);
+
+        $appData = collect($validated)->except(['cv', 'certificate', 'id_card', 'photo', 'password_confirmation'])->toArray();
+        $application = $this->recruitmentService->submitApplication($appData);
+
+        if ($request->hasFile('cv')) {
+            $path = $request->file('cv')->store("private/mentor_applications/{$application->id}");
+            $application->documents()->create([
+                'document_type' => 'cv',
+                'file_path' => $path,
+                'file_name' => strip_tags(basename($request->file('cv')->getClientOriginalName())),
+                'file_size' => $request->file('cv')->getSize() / 1024,
+                'mime_type' => $request->file('cv')->getMimeType(),
+            ]);
+        }
+
+        if ($request->hasFile('id_card')) {
+            $path = $request->file('id_card')->store("private/mentor_applications/{$application->id}");
+            $application->documents()->create([
+                'document_type' => 'id_card',
+                'file_path' => $path,
+                'file_name' => strip_tags(basename($request->file('id_card')->getClientOriginalName())),
+                'file_size' => $request->file('id_card')->getSize() / 1024,
+                'mime_type' => $request->file('id_card')->getMimeType(),
+            ]);
+        }
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store("private/mentor_applications/{$application->id}");
+            $application->documents()->create([
+                'document_type' => 'photo',
+                'file_path' => $path,
+                'file_name' => strip_tags(basename($request->file('photo')->getClientOriginalName())),
+                'file_size' => $request->file('photo')->getSize() / 1024,
+                'mime_type' => $request->file('photo')->getMimeType(),
+            ]);
+        }
+
+        if ($request->hasFile('certificate')) {
+            $path = $request->file('certificate')->store("private/mentor_applications/{$application->id}");
+            $application->documents()->create([
+                'document_type' => 'certificate',
+                'file_path' => $path,
+                'file_name' => strip_tags(basename($request->file('certificate')->getClientOriginalName())),
+                'file_size' => $request->file('certificate')->getSize() / 1024,
+                'mime_type' => $request->file('certificate')->getMimeType(),
+            ]);
+        }
+
+        return redirect()->route('mentor.dashboard')->with('success', 'Alhamdulillah! Pendaftaran berhasil dikirim. Akun portal calon guru Anda telah aktif. Nomor Registrasi: '.$application->application_code);
+    }
+
+    public function status()
+    {
+        return view('public.mentor-recruitment.status-tracker');
+    }
+
+    public function checkStatus(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|string',
+        ]);
+
+        $query = trim($request->phone);
+        $cleanDigits = preg_replace('/[^0-9]/', '', $query);
+        $phoneVariations = array_filter([$query, $cleanDigits]);
+
+        if (! empty($cleanDigits)) {
+            if (str_starts_with($cleanDigits, '62')) {
+                $phoneVariations[] = '0'.substr($cleanDigits, 2);
+            } elseif (str_starts_with($cleanDigits, '0')) {
+                $phoneVariations[] = '62'.substr($cleanDigits, 1);
+            }
+        }
+
+        $application = MentorApplication::query()
+            ->where('application_code', strtoupper($query))
+            ->orWhereIn('phone', array_unique($phoneVariations))
+            ->first();
+
+        if (! $application) {
+            return back()->withInput()->with('error', 'Data pelamar tidak ditemukan. Pastikan nomor WhatsApp atau Kode Registrasi sudah sesuai dengan yang didaftarkan.');
+        }
+
+        return view('public.mentor-recruitment.status-tracker', compact('application'));
+    }
+}

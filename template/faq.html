@@ -38,7 +38,9 @@
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.1.1/index.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
 
@@ -130,21 +132,29 @@
                     <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle dark mode"><i
                             class="bi bi-moon-fill" id="themeIcon"></i></button>
                     <a href="#" class="btn btn-daftar" data-bs-toggle="modal" data-bs-target="#daftarModal"><i
-                            class="bi bi-pencil-square me-1"></i> Mulai Perjalanan</a>
+                            class="bi bi-calendar2-check-fill me-1"></i> Daftar Gratis</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <section class="page-header section-padding"
-        style="padding-top:120px;background:linear-gradient(170deg,var(--bg-primary)0%,var(--primary-lighter)100%)">
-        <div class="container text-center">
-            <div class="section-badge mx-auto" data-reveal><i class="bi bi-question-circle"></i> FAQ</div>
-            <h1 class="section-title" data-reveal>Sebelum Memulai<br><span class="text-gradient">Perjalanan</span></h1>
-            <p class="section-description mx-auto" data-reveal>Kami memahami bahwa setiap keluarga memiliki pertanyaan
-                dan kebutuhan yang berbeda. Silakan temukan beberapa jawaban yang mungkin membantu Anda.</p>
+    <!-- ============================================ -->
+    <!-- 1. ETRAIN BREADCRUMB HEADER -->
+    <!-- ============================================ -->
+    <section class="breadcrumb_bg" aria-label="Header FAQ Pertanyaan Umum">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb_iner_item" data-reveal>
+                        <div class="section-badge mx-auto mb-2"><i class="bi bi-question-circle"></i> Tanya Jawab</div>
+                        <h2>Pertanyaan yang Sering <span class="text-gradient">Ditanyakan</span></h2>
+                        <p>Kami memahami setiap keluarga memiliki pertimbangan khusus. Temukan jawaban lengkap seputar sistem belajar, jadwal, dan pendampingan di sini.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
+
 
     <section class="section-padding" aria-label="FAQ">
         <div class="container">
@@ -214,6 +224,37 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- CTA SECTION -->
+    <!-- ============================================ -->
+    <section id="kontak" class="cta-section text-center" aria-label="CTA">
+        <div class="cta-overlay" aria-hidden="true"></div>
+        <div class="container">
+            <div class="cta-content" data-reveal>
+                <div class="cta-icon mx-auto"><i class="bi bi-book"></i></div>
+                <h2 class="editorial-title text-white mb-3">
+                    Mulai Belajar Al-Qur'an Bersama Guru Bersanad
+                </h2>
+                <p class="editorial-subtitle text-white mx-auto mb-4" style="max-width: 620px; color: rgba(255, 255, 255, 0.92) !important;">
+                    Bimbingan privat 1-on-1 dengan jadwal fleksibel dan pemantauan mutaba'ah berkala. Coba sesi penempatan 15 menit tanpa biaya untuk mengukur level bacaan ananda.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <button type="button" class="btn-editorial-primary btn-lg" data-bs-toggle="modal" data-bs-target="#daftarModal">
+                        <i class="bi bi-calendar2-check-fill me-2"></i> Coba Sesi Uji Coba Gratis
+                    </button>
+                    <a href="program.html" class="btn-editorial-secondary btn-lg">
+                        <i class="bi bi-grid-fill me-2"></i> Lihat Pilihan Program
+                    </a>
+                    <a href="https://wa.me/6285786689008?text=Assalamualaikum,%20saya%20ingin%20menanyakan%20bimbingan%20mengaji%20AL-HIKMAH%20untuk%20ananda."
+                        class="btn-editorial-secondary btn-lg" target="_blank" rel="noopener"
+                        aria-label="Konsultasi program belajar AL-HIKMAH via WhatsApp">
+                        <i class="bi bi-whatsapp me-2"></i> Tanya via WhatsApp
+                    </a>
                 </div>
             </div>
         </div>

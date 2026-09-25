@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers\Parent;
 
+use App\Enums\EnrollmentStatus;
+use App\Enums\NotificationType;
 use App\Http\Controllers\Controller;
+use App\Models\Enrollment;
+use App\Models\Mentor;
 use App\Models\Session;
 use App\Models\SessionConfirmation;
+use App\Services\NotificationService;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,6 +22,16 @@ class ParentScheduleController extends Controller
         $parent = auth()->user()->parentProfile;
         $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
 
+        $activeEnrollments = count($childIds) > 0
+            ? Enrollment::with(['student.user', 'mentor.user', 'program'])
+                ->whereIn('student_id', $childIds)
+                ->whereIn('status', [
+                    EnrollmentStatus::CONFIRMED->value,
+                    EnrollmentStatus::ACTIVE->value,
+                ])
+                ->get()
+            : collect();
+
         $sessions = count($childIds) > 0
             ? Session::with(['student.user', 'mentor.user'])
                 ->whereIn('student_id', $childIds)
@@ -24,7 +40,7 @@ class ParentScheduleController extends Controller
                 ->get()
             : collect();
 
-        return view('parent.schedules.index', compact('sessions'));
+        return view('parent.schedules.index', compact('sessions', 'activeEnrollments'));
     }
 
     public function list(Request $request): View
@@ -33,14 +49,20 @@ class ParentScheduleController extends Controller
         $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
         $status = $request->query('status', 'all');
 
-        $query = Session::with(['student.user', 'mentor.user'])
-            ->whereIn('student_id', $childIds);
+        $query = Session::with([
+            'student.user',
+            'student.enrollments.program',
+            'student.programs',
+            'mentor.user',
+            'feedback',
+            'confirmation',
+        ])->whereIn('student_id', $childIds);
 
         if ($status !== 'all') {
             $query->where('status', $status);
         }
 
-        $sessions = $query->orderBy('date', 'desc')->paginate(10);
+        $sessions = $query->orderBy('date', 'desc')->get();
 
         return view('parent.schedules.list', compact('sessions', 'status'));
     }
@@ -50,15 +72,21 @@ class ParentScheduleController extends Controller
         $parent = auth()->user()->parentProfile;
         $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
 
-        $session = Session::with(['student.user', 'mentor.user'])->findOrFail($id);
+        $session = Session::with([
+            'student.user',
+            'student.enrollments.program',
+            'student.programs',
+            'mentor.user',
+            'feedback',
+            'confirmation',
+        ])->findOrFail($id);
 
         if (! in_array($session->student_id, $childIds)) {
             abort(403, 'Akses sesi anak ditolak.');
         }
 
-        $confirmation = SessionConfirmation::where('session_id', $session->id)
-            ->where('parent_id', $parent?->id)
-            ->first();
+        $confirmation = $session->confirmation
+            ?? SessionConfirmation::where('session_id', $session->id)->first();
 
         return view('parent.schedules.show', compact('session', 'confirmation'));
     }
@@ -73,22 +101,71 @@ class ParentScheduleController extends Controller
         $parent = auth()->user()->parentProfile;
         $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
 
-        $session = Session::findOrFail($id);
+        $session = Session::with(['student.user', 'mentor.user', 'student.programs'])->findOrFail($id);
         if (! in_array($session->student_id, $childIds)) {
             abort(403, 'Akses sesi anak ditolak.');
+        }
+
+        // Pastikan session memiliki mentor_id jika sebelumnya null agar otomatis masuk ke slip gaji mentor
+        if (! $session->mentor_id) {
+            $assignedMentorId = DB::table('mentor_student')
+                ->where('student_id', $session->student_id)
+                ->where('is_active', true)
+                ->value('mentor_id')
+                ?? $session->student?->enrollments()->whereNotNull('mentor_id')->latest()->value('mentor_id')
+                ?? Mentor::first()?->id;
+
+            if ($assignedMentorId) {
+                $session->mentor_id = $assignedMentorId;
+                $session->save();
+            }
+        }
+
+        if (! $session->date) {
+            $session->date = now();
+            $session->save();
         }
 
         SessionConfirmation::updateOrCreate(
             [
                 'session_id' => $session->id,
-                'parent_id' => $parent->id,
             ],
             [
+                'parent_id' => $parent->id,
                 'status' => $request->status,
                 'notes' => $request->notes,
+                'confirmed_by' => 'parent',
+                'verified_at' => now(),
             ]
         );
 
-        return redirect()->back()->with('success', 'Konfirmasi kehadiran berhasil dikirim!');
+        // Update status sesi belajar agar tersinkronisasi ke dashboard & slip gaji mentor
+        if (in_array($request->status, ['hadir', 'terlambat'])) {
+            $session->update(['status' => 'completed']);
+        } elseif (in_array($request->status, ['izin', 'sakit'])) {
+            $session->update(['status' => 'cancelled']);
+        }
+
+        // Refresh mentor relation jika baru saja diasosiasikan
+        $session->load('mentor.user');
+
+        // Notifikasi ke Mentor Pembimbing via NotificationService
+        if ($session->mentor?->user_id) {
+            $studentName = $session->student?->getDisplayName() ?? 'Santri';
+            $statusLabel = ucfirst($request->status);
+            $sessionDate = Carbon::parse($session->date)->locale('id')->isoFormat('dddd, D MMMM Y');
+
+            NotificationService::send(
+                $session->mentor->user_id,
+                "Konfirmasi Kehadiran: {$studentName} ({$statusLabel})",
+                "Wali santri {$studentName} mengonfirmasi status kehadiran '{$statusLabel}' untuk sesi {$sessionDate}.".($request->notes ? " Catatan: {$request->notes}" : '').' Guru wajib mengunggah bukti foto dokumentasi sesi bimbingan di menu Sesi Belajar.',
+                $request->status === 'hadir' ? NotificationType::SUCCESS : NotificationType::WARNING,
+                route('mentor.sessions.index'),
+                'attendance',
+                true
+            );
+        }
+
+        return redirect()->back()->with('success', 'Konfirmasi kehadiran berhasil dikirim ke Ustadz/Ustadzah!');
     }
 }

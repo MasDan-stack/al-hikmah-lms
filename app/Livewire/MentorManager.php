@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Mentor;
+use App\Models\MentorAvailability;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -20,11 +21,15 @@ class MentorManager extends Component
 
     public string $activeFilter = '';
 
+    public string $genderFilter = '';
+
     public ?int $mentorId = null;
 
     public ?int $user_id = null;
 
     public string $full_name = '';
+
+    public string $gender = 'L';
 
     public ?string $specialization = '';
 
@@ -58,6 +63,11 @@ class MentorManager extends Component
         $this->resetPage();
     }
 
+    public function updatedGenderFilter(): void
+    {
+        $this->resetPage();
+    }
+
     public function openCreateModal(): void
     {
         $this->resetForm();
@@ -70,6 +80,7 @@ class MentorManager extends Component
         $this->mentorId = $mentor->id;
         $this->user_id = $mentor->user_id;
         $this->full_name = $mentor->full_name;
+        $this->gender = $mentor->gender ?? 'L';
         $this->specialization = $mentor->specialization;
         $this->bio = $mentor->bio;
         $this->rating = (float) $mentor->rating;
@@ -98,6 +109,7 @@ class MentorManager extends Component
             // Editing existing mentor
             $this->validate([
                 'full_name' => 'required|string|max:255',
+                'gender' => 'required|in:L,P',
                 'specialization' => 'nullable|string|max:255',
                 'bio' => 'nullable|string',
                 'rating' => 'required|numeric|min:0|max:5',
@@ -107,6 +119,7 @@ class MentorManager extends Component
             $mentor = Mentor::findOrFail($this->mentorId);
             $mentor->update([
                 'full_name' => $this->full_name,
+                'gender' => $this->gender,
                 'specialization' => $this->specialization,
                 'bio' => $this->bio,
                 'rating' => $this->rating,
@@ -126,6 +139,7 @@ class MentorManager extends Component
             if ($this->create_new_user) {
                 $this->validate([
                     'full_name' => 'required|string|max:255',
+                    'gender' => 'required|in:L,P',
                     'user_email' => 'required|email|unique:users,email',
                     'user_password' => 'required|string|min:6',
                     'user_phone' => 'nullable|string|max:30',
@@ -148,6 +162,7 @@ class MentorManager extends Component
                 $this->validate([
                     'user_id' => ['required', 'exists:users,id', Rule::unique('mentors', 'user_id')],
                     'full_name' => 'required|string|max:255',
+                    'gender' => 'required|in:L,P',
                     'specialization' => 'nullable|string|max:255',
                     'bio' => 'nullable|string',
                     'rating' => 'required|numeric|min:0|max:5',
@@ -159,14 +174,33 @@ class MentorManager extends Component
                 User::where('id', $userId)->update(['role_id' => $mentorRoleId]);
             }
 
-            Mentor::create([
+            $mentor = Mentor::create([
                 'user_id' => $userId,
                 'full_name' => $this->full_name,
+                'gender' => $this->gender,
                 'specialization' => $this->specialization,
                 'bio' => $this->bio,
                 'rating' => $this->rating,
                 'is_active' => $this->is_active,
             ]);
+
+            // Inisialisasi otomatis ketersediaan jadwal 7 hari agar langsung siap dimatchmaking
+            foreach (MentorAvailability::DAYS_ORDER as $day) {
+                MentorAvailability::firstOrCreate(
+                    [
+                        'mentor_id' => $mentor->id,
+                        'day' => $day,
+                    ],
+                    [
+                        'start_time' => '16:00:00',
+                        'end_time' => '20:00:00',
+                        'slot_numbers' => [0, 1, 2, 3, 4, 5, 6],
+                        'max_students' => $mentor->default_max_students_per_day ?? 5,
+                        'is_available' => true,
+                        'is_holiday' => false,
+                    ]
+                );
+            }
 
             session()->flash('message', 'Pendamping baru berhasil ditambahkan.');
         }
@@ -205,6 +239,7 @@ class MentorManager extends Component
         $this->mentorId = null;
         $this->user_id = null;
         $this->full_name = '';
+        $this->gender = 'L';
         $this->specialization = '';
         $this->bio = '';
         $this->rating = 5.0;
@@ -232,6 +267,10 @@ class MentorManager extends Component
 
         if ($this->activeFilter !== '') {
             $query->where('is_active', (bool) $this->activeFilter);
+        }
+
+        if ($this->genderFilter !== '') {
+            $query->where('gender', $this->genderFilter);
         }
 
         $mentors = $query->latest()->paginate(10);

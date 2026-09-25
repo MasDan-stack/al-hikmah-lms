@@ -98,9 +98,10 @@ test('can create, update, and delete mentor via Livewire', function () {
     $this->actingAs($admin);
 
     Livewire::test(MentorManager::class)
-        ->set('full_name', 'Ustadz Ahmad')
+        ->set('full_name', 'Ustazah Fatimah')
+        ->set('gender', 'P')
         ->set('create_new_user', true)
-        ->set('user_email', 'ahmad@alhikmah.id')
+        ->set('user_email', 'fatimah@alhikmah.id')
         ->set('user_password', 'password123')
         ->set('specialization', 'Tahsin & Tajwid')
         ->set('rating', 4.8)
@@ -109,19 +110,26 @@ test('can create, update, and delete mentor via Livewire', function () {
         ->assertHasNoErrors();
 
     $this->assertDatabaseHas('mentors', [
-        'full_name' => 'Ustadz Ahmad',
+        'full_name' => 'Ustazah Fatimah',
+        'gender' => 'P',
         'specialization' => 'Tahsin & Tajwid',
     ]);
 
-    $mentor = Mentor::where('full_name', 'Ustadz Ahmad')->first();
+    $mentor = Mentor::where('full_name', 'Ustazah Fatimah')->first();
+
+    // Assert 7-day availabilities automatically initialized
+    expect($mentor->availabilities()->count())->toBe(7);
 
     Livewire::test(MentorManager::class)
         ->call('openEditModal', $mentor->id)
+        ->set('gender', 'L')
         ->set('specialization', 'Tahfidz & Tajwid')
-        ->call('saveMentor');
+        ->call('saveMentor')
+        ->assertHasNoErrors();
 
     $this->assertDatabaseHas('mentors', [
         'id' => $mentor->id,
+        'gender' => 'L',
         'specialization' => 'Tahfidz & Tajwid',
     ]);
 

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Parent;
 
 use App\Http\Controllers\Controller;
+use App\Models\MentorInterventionTicket;
 use App\Models\Message;
 use App\Models\Payment;
 use App\Models\Progress;
 use App\Models\Session;
+use App\Models\TrialBooking;
+use App\Services\RevenueAnalyticsService;
 use Illuminate\View\View;
 
 class ParentDashboardController extends Controller
@@ -15,7 +18,9 @@ class ParentDashboardController extends Controller
     {
         $user = auth()->user();
         $parent = $user->parentProfile;
-        $parentAddress = $parent?->address;
+        $hasPaidProgram = $user->hasActivePaidProgram();
+        $hasPendingEnrollment = $user->hasPendingInvoiceOrEnrollment();
+        $latestEnrollment = $user->getLatestEnrollment();
 
         $children = $parent
             ? $parent->students()->with(['user', 'mentors.user'])->get()
@@ -23,17 +28,17 @@ class ParentDashboardController extends Controller
 
         $childIds = $children->pluck('id')->toArray();
 
-        // 1. Statistics Cards
+        // 1. Data Statistik (Hanya dihitung jika akun sudah lunas, hemat resource)
         $totalChildrenCount = $children->count();
 
-        $monthSessionsCount = count($childIds) > 0
+        $monthSessionsCount = ($hasPaidProgram && count($childIds) > 0)
             ? Session::whereIn('student_id', $childIds)
                 ->whereMonth('date', now()->month)
                 ->whereYear('date', now()->year)
                 ->count()
             : 0;
 
-        $avgTajwidScore = count($childIds) > 0
+        $avgTajwidScore = ($hasPaidProgram && count($childIds) > 0)
             ? round(Progress::whereIn('student_id', $childIds)->avg('nilai_tajwid') ?? 0, 1)
             : 0;
 
@@ -43,8 +48,8 @@ class ParentDashboardController extends Controller
                 ->count()
             : 0;
 
-        // 2. Latest Children Progress
-        $recentProgresses = count($childIds) > 0
+        // 2. Progres Anak Terbaru
+        $recentProgresses = ($hasPaidProgram && count($childIds) > 0)
             ? Progress::with(['student.user', 'mentor.user'])
                 ->whereIn('student_id', $childIds)
                 ->latest()
@@ -52,9 +57,9 @@ class ParentDashboardController extends Controller
                 ->get()
             : collect();
 
-        // 3. Upcoming Sessions (Next 7 days)
-        $upcomingSessions = count($childIds) > 0
-            ? Session::with(['student.user', 'mentor.user'])
+        // 3. Jadwal Bimbingan Mendatang (7 Hari Ke Depan)
+        $upcomingSessions = ($hasPaidProgram && count($childIds) > 0)
+            ? Session::with(['student.user', 'mentor.user', 'confirmation', 'student.enrollments.program'])
                 ->whereIn('student_id', $childIds)
                 ->whereDate('date', '>=', today())
                 ->whereDate('date', '<=', today()->addDays(7))
@@ -63,22 +68,75 @@ class ParentDashboardController extends Controller
                 ->get()
             : collect();
 
-        // 4. Notifications & Unread Messages
+        // 4. Pesan Masuk
         $unreadMessagesCount = Message::where('receiver_id', $user->id)
             ->where('is_read', false)
             ->count();
+
+        // 5. Pending Feedback Sessions
+        $pendingFeedbackSessions = ($hasPaidProgram && count($childIds) > 0)
+            ? Session::with(['student.user', 'mentor.user'])
+                ->whereIn('student_id', $childIds)
+                ->where('status', 'completed')
+                ->whereDoesntHave('feedback')
+                ->latest('date')
+                ->take(3)
+                ->get()
+            : collect();
+
+        // 6. Active Intervention Tickets (Transparansi Tindak Lanjut Akademik)
+        $activeInterventionTickets = count($childIds) > 0
+            ? MentorInterventionTicket::with(['mentor.user', 'student.user'])
+                ->where(function ($q) use ($user, $childIds) {
+                    $q->where('parent_id', $user->id)
+                        ->orWhereIn('student_id', $childIds);
+                })
+                ->whereIn('status', ['open', 'in_progress', 'resolved'])
+                ->latest()
+                ->take(3)
+                ->get()
+            : collect();
+
+        // 7. Berkah Infaq & Transparansi Sesi (Alokasi 10% Kas Yayasan untuk Dakwah)
+        $parentBlessing = app(RevenueAnalyticsService::class)->getParentSessionBlessingSummary($childIds);
+
+        // 8. Sesi Uji Coba Gratis 15 Menit (Placement Test Ananda)
+        $parentPhone = $parent?->emergency_phone ?? $user->phone;
+        $cleanPhone = preg_replace('/[^0-9]/', '', (string) $parentPhone);
+        if (str_starts_with($cleanPhone, '0')) {
+            $cleanPhone = '62'.substr($cleanPhone, 1);
+        }
+
+        $parentTrialBookings = TrialBooking::with(['program', 'assignedMentor.user'])
+            ->where(function ($q) use ($user, $cleanPhone) {
+                $q->where('user_id', $user->id);
+                if (! empty($cleanPhone)) {
+                    $q->orWhere('whatsapp', $cleanPhone)
+                        ->orWhere('whatsapp', 'like', "%{$cleanPhone}%");
+                }
+            })
+            ->latest()
+            ->take(5)
+            ->get();
 
         return view('parent.dashboard', compact(
             'user',
             'parent',
             'children',
+            'hasPaidProgram',
+            'hasPendingEnrollment',
+            'latestEnrollment',
             'totalChildrenCount',
             'monthSessionsCount',
             'avgTajwidScore',
             'pendingPaymentsCount',
             'recentProgresses',
             'upcomingSessions',
-            'unreadMessagesCount'
+            'unreadMessagesCount',
+            'pendingFeedbackSessions',
+            'activeInterventionTickets',
+            'parentBlessing',
+            'parentTrialBookings'
         ));
     }
 }

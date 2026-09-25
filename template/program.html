@@ -38,7 +38,9 @@
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.1.1/index.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
 
@@ -130,31 +132,43 @@
                     <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle dark mode"><i
                             class="bi bi-moon-fill" id="themeIcon"></i></button>
                     <a href="#" class="btn btn-daftar" data-bs-toggle="modal" data-bs-target="#daftarModal"><i
-                            class="bi bi-pencil-square me-1"></i> Mulai Perjalanan</a>
+                            class="bi bi-calendar2-check-fill me-1"></i> Daftar Gratis</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <section class="page-header section-padding"
-        style="padding-top:120px;background:linear-gradient(170deg,var(--bg-primary)0%,var(--primary-lighter)100%)">
-        <div class="container text-center">
-            <div class="section-badge mx-auto" data-reveal><i class="bi bi-journal-bookmark"></i> Program</div>
-            <h1 class="section-title" data-reveal>Program <span class="text-gradient">Belajar</span></h1>
-            <p class="section-description mx-auto" data-reveal>Setiap orang memiliki langkah yang berbeda. Temukan
-                program yang sesuai dengan perjalanan belajar Anda.</p>
+    <!-- ============================================ -->
+    <!-- 1. ETRAIN BREADCRUMB HEADER -->
+    <!-- ============================================ -->
+    <section class="breadcrumb_bg" aria-label="Header Program Belajar">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb_iner_item" data-reveal>
+                        <div class="section-badge mx-auto mb-2"><i class="bi bi-journal-bookmark"></i> Kurikulum Pilihan</div>
+                        <h2>Program Belajar <span class="text-gradient">AL-HIKMAH</span></h2>
+                        <p>Setiap orang memiliki langkah yang berbeda. Temukan program yang paling sesuai dengan kebutuhan dan target perjalanan belajar Anda.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="section-padding" aria-label="Program Anak">
+    <!-- ============================================ -->
+    <!-- 2. PROGRAM UTAMA ANAK (10-15 TAHUN) -->
+    <!-- ============================================ -->
+    <section class="py-5" aria-label="Program Anak">
         <div class="container">
-            <div class="program-section-title"><i class="bi bi-emoji-smile"></i> Program Anak (10–15 tahun) — Utama
+            <div class="program-section-title" data-reveal>
+                <i class="bi bi-emoji-smile"></i> Program Anak (10–15 tahun) — Utama
             </div>
+
             <div class="row g-4 mt-1">
                 <div class="col-md-6" data-reveal>
                     <div class="program-card">
                         <div class="program-icon"><i class="bi bi-book-half"></i></div>
-                        <h4>Iqra & Dasar Al-Qur'an</h4>
+                        <h4>Iqra &amp; Dasar Al-Qur'an</h4>
                         <p>Memulai perjalanan mengenal huruf hijaiyah dan membaca Al-Qur'an secara bertahap.</p>
                     </div>
                 </div>
@@ -162,54 +176,56 @@
                     <div class="program-card">
                         <div class="program-icon"><i class="bi bi-mic"></i></div>
                         <h4>Tahsin Dasar</h4>
-                        <p>Membantu memperbaiki bacaan agar lebih baik dan sesuai dengan kaidah tajwid.</p>
+                        <p>Membantu memperbaiki bacaan agar lebih baik dan sesuai dengan kaidah tajwid yang benar.</p>
                     </div>
                 </div>
                 <div class="col-md-6" data-reveal data-reveal-delay="200">
                     <div class="program-card">
                         <div class="program-icon"><i class="bi bi-emoji-laughing"></i></div>
-                        <h4>Adab & Doa Harian</h4>
-                        <p>Mengenalkan nilai-nilai adab Islami dan doa yang dapat diamalkan dalam kehidupan sehari-hari.
-                        </p>
+                        <h4>Adab &amp; Doa Harian</h4>
+                        <p>Mengenalkan nilai-nilai adab Islami dan doa yang dapat diamalkan dalam kehidupan sehari-hari.</p>
                     </div>
                 </div>
                 <div class="col-md-6" data-reveal data-reveal-delay="300">
                     <div class="program-card">
                         <div class="program-icon"><i class="bi bi-clipboard2-pulse"></i></div>
                         <h4>Tahfidz Al-Qur'an</h4>
-                        <p>Mendampingi anak dalam menghafal Al-Qur'an secara bertahap dengan murajaah dan pembiasaan.
-                        </p>
+                        <p>Mendampingi anak dalam menghafal Al-Qur'an secara bertahap dengan murajaah dan pembiasaan.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="section-padding section-alt" aria-label="Program Tambahan">
+    <!-- ============================================ -->
+    <!-- 3. PROGRAM TAMBAHAN (DEWASA & MUSLIMAH) -->
+    <!-- ============================================ -->
+    <section class="py-5 bg-white" aria-label="Program Tambahan">
         <div class="container">
-            <div class="program-section-title"><i class="bi bi-person-badge"></i> Program Tambahan (Dewasa & Muslimah)
+            <div class="program-section-title" data-reveal>
+                <i class="bi bi-person-badge"></i> Program Tambahan (Dewasa &amp; Muslimah)
             </div>
+
             <div class="row g-4 mt-1">
                 <div class="col-md-6" data-reveal>
                     <div class="program-card">
                         <div class="program-icon"><i class="bi bi-book"></i></div>
                         <h4>Belajar dari Nol (Dewasa)</h4>
-                        <p>Tidak pernah terlambat untuk memulai. Program untuk siapa saja yang ingin belajar dari dasar.
-                        </p>
+                        <p>Tidak pernah terlambat untuk memulai. Program untuk siapa saja yang ingin belajar dari dasar.</p>
                     </div>
                 </div>
                 <div class="col-md-6" data-reveal data-reveal-delay="100">
                     <div class="program-card">
                         <div class="program-icon"><i class="bi bi-mic"></i></div>
                         <h4>Tahsin Dewasa</h4>
-                        <p>Pendampingan untuk memperbaiki makhraj, tajwid, dan kualitas bacaan.</p>
+                        <p>Pendampingan untuk memperbaiki makhraj, tajwid, dan kualitas bacaan secara intensif.</p>
                     </div>
                 </div>
                 <div class="col-md-6" data-reveal data-reveal-delay="200">
                     <div class="program-card">
                         <div class="program-icon"><i class="bi bi-people"></i></div>
                         <h4>Kelas Muslimah</h4>
-                        <p>Ruang belajar yang nyaman bagi muslimah bersama pendamping wanita.</p>
+                        <p>Ruang belajar yang nyaman bagi muslimah bersama pendamping wanita berpengalaman.</p>
                     </div>
                 </div>
                 <div class="col-md-6" data-reveal data-reveal-delay="300">
@@ -223,9 +239,15 @@
         </div>
     </section>
 
-    <section class="section-padding" aria-label="Bahasa Arab">
+    <!-- ============================================ -->
+    <!-- 4. PROGRAM BAHASA ARAB -->
+    <!-- ============================================ -->
+    <section class="py-5" aria-label="Bahasa Arab">
         <div class="container">
-            <div class="program-section-title"><i class="bi bi-translate"></i> Program Bahasa Arab</div>
+            <div class="program-section-title" data-reveal>
+                <i class="bi bi-translate"></i> Program Bahasa Arab
+            </div>
+
             <div class="row g-4 mt-1">
                 <div class="col-md-6" data-reveal>
                     <div class="program-card arabic-featured">
@@ -237,9 +259,40 @@
                 <div class="col-md-6" data-reveal data-reveal-delay="100">
                     <div class="program-card arabic-featured">
                         <div class="program-icon"><i class="bi bi-book"></i></div>
-                        <h4>Nahwu & Sharaf</h4>
+                        <h4>Nahwu &amp; Sharaf</h4>
                         <p>Mempelajari dasar-dasar tata bahasa Arab sebagai bekal memahami teks keislaman.</p>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- CTA SECTION -->
+    <!-- ============================================ -->
+    <section id="kontak" class="cta-section text-center" aria-label="CTA">
+        <div class="cta-overlay" aria-hidden="true"></div>
+        <div class="container">
+            <div class="cta-content" data-reveal>
+                <div class="cta-icon mx-auto"><i class="bi bi-book"></i></div>
+                <h2 class="editorial-title text-white mb-3">
+                    Mulai Belajar Al-Qur'an Bersama Guru Bersanad
+                </h2>
+                <p class="editorial-subtitle text-white mx-auto mb-4" style="max-width: 620px; color: rgba(255, 255, 255, 0.92) !important;">
+                    Bimbingan privat 1-on-1 dengan jadwal fleksibel dan pemantauan mutaba'ah berkala. Coba sesi penempatan 15 menit tanpa biaya untuk mengukur level bacaan ananda.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <button type="button" class="btn-editorial-primary btn-lg" data-bs-toggle="modal" data-bs-target="#daftarModal">
+                        <i class="bi bi-calendar2-check-fill me-2"></i> Coba Sesi Uji Coba Gratis
+                    </button>
+                    <a href="biaya.html" class="btn-editorial-secondary btn-lg">
+                        <i class="bi bi-tag-fill me-2"></i> Lihat Informasi Biaya
+                    </a>
+                    <a href="https://wa.me/6285786689008?text=Assalamualaikum,%20saya%20ingin%20menanyakan%20bimbingan%20mengaji%20AL-HIKMAH%20untuk%20ananda."
+                        class="btn-editorial-secondary btn-lg" target="_blank" rel="noopener"
+                        aria-label="Konsultasi program belajar AL-HIKMAH via WhatsApp">
+                        <i class="bi bi-whatsapp me-2"></i> Tanya via WhatsApp
+                    </a>
                 </div>
             </div>
         </div>

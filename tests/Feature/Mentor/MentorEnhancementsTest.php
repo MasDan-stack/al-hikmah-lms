@@ -104,3 +104,56 @@ test('mentor can export performance report', function () {
     $response->assertSee('Laporan Kinerja Mentor');
     $response->assertSee('TOTAL SESI');
 });
+
+test('mentor can store single progress with integer adab', function () {
+    $mentorUser = User::where('email', 'ustadz.ahmad@alhikmah.com')->first();
+    $student = Student::first();
+
+    $payload = [
+        'student_id' => $student->id,
+        'kategori' => 'Tahfidz',
+        'surah_start' => 'Al-Mulk',
+        'ayat_start' => '1',
+        'ayat_end' => '10',
+        'juz' => 29,
+        'nilai_tajwid' => 90,
+        'nilai_fluent' => 92,
+        'nilai_adab' => 100,
+        'catatan_evaluasi' => 'Hafalan lancar dan tartil.',
+    ];
+
+    $response = $this->actingAs($mentorUser)->post('/mentor/progress', $payload);
+
+    $response->assertRedirect(route('mentor.dashboard'));
+    $response->assertSessionHas('success');
+
+    $progress = Progress::where('surah_start', 'Al-Mulk')->where('student_id', $student->id)->latest()->first();
+    expect($progress)->not->toBeNull();
+    expect($progress->nilai_adab)->toBe(100);
+});
+
+test('mentor can store single progress with string adab fallback', function () {
+    $mentorUser = User::where('email', 'ustadz.ahmad@alhikmah.com')->first();
+    $student = Student::first();
+
+    $payload = [
+        'student_id' => $student->id,
+        'kategori' => 'Tahfidz',
+        'surah_start' => 'Al-Qalam',
+        'ayat_start' => '1',
+        'ayat_end' => '15',
+        'juz' => 29,
+        'nilai_tajwid' => 88,
+        'nilai_fluent' => 90,
+        'nilai_adab' => 'Sangat Baik',
+    ];
+
+    $response = $this->actingAs($mentorUser)->post('/mentor/progress', $payload);
+
+    $response->assertRedirect(route('mentor.dashboard'));
+    $response->assertSessionHas('success');
+
+    $progress = Progress::where('surah_start', 'Al-Qalam')->where('student_id', $student->id)->latest()->first();
+    expect($progress)->not->toBeNull();
+    expect($progress->nilai_adab)->toBe(95);
+});

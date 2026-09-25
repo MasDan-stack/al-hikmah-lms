@@ -38,7 +38,9 @@
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.1.1/index.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
 
@@ -130,64 +132,113 @@
                     <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle dark mode"><i
                             class="bi bi-moon-fill" id="themeIcon"></i></button>
                     <a href="#" class="btn btn-daftar" data-bs-toggle="modal" data-bs-target="#daftarModal"><i
-                            class="bi bi-pencil-square me-1"></i> Mulai Perjalanan</a>
+                            class="bi bi-calendar2-check-fill me-1"></i> Daftar Gratis</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <section class="page-header section-padding"
-        style="padding-top:120px;background:linear-gradient(170deg,var(--bg-primary)0%,var(--primary-lighter)100%)">
-        <div class="container text-center">
-            <div class="section-badge mx-auto" data-reveal><i class="bi bi-clipboard2-pulse"></i> Program Unggulan</div>
-            <h1 class="section-title" data-reveal>Program <span class="text-gradient">Tahfidz Al-Qur'an</span></h1>
-            <p class="section-description mx-auto" data-reveal>Menghafal bukan sekadar mengingat, tetapi menjaga.</p>
-        </div>
-    </section>
-
-    <section class="section-padding" aria-label="Tahfidz">
+    <!-- ============================================ -->
+    <!-- 1. ETRAIN BREADCRUMB HEADER -->
+    <!-- ============================================ -->
+    <section class="breadcrumb_bg" aria-label="Header Tahfidz">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 mb-5 mb-lg-0" data-reveal><img src="assets/img/62.jpg" alt="Program Tahfidz"
-                        class="tahfidz-image" loading="lazy"
-                        onerror="this.src='https://placehold.co/600x500/0d7a3e/white?text=Tahfidz'"></div>
-                <div class="col-lg-6" data-reveal data-reveal-delay="200">
-                    <h2 class="section-title">Menghafal Bukan Sekadar <span class="text-gradient">Mengingat</span>,
-                        Tetapi Menjaga</h2>
-                    <p class="section-description" style="max-width:100%">Menghafal Al-Qur'an adalah perjalanan yang
-                        membutuhkan kesabaran, doa, dan istiqamah. Kami mendampingi dengan setoran rutin, murajaah, dan
-                        target yang disesuaikan.</p>
-                    <div class="tahfidz-features mt-4">
-                        <div class="tahfidz-item"><i class="bi bi-check-circle-fill"></i> <span>Setoran hafalan secara
-                                rutin</span></div>
-                        <div class="tahfidz-item"><i class="bi bi-check-circle-fill"></i> <span>Murajaah untuk menjaga
-                                hafalan</span></div>
-                        <div class="tahfidz-item"><i class="bi bi-check-circle-fill"></i> <span>Target yang disesuaikan
-                                kemampuan</span></div>
-                        <div class="tahfidz-item"><i class="bi bi-check-circle-fill"></i> <span>Pendampingan
-                                bertahap</span></div>
-                        <div class="tahfidz-item"><i class="bi bi-check-circle-fill"></i> <span>Evaluasi perkembangan
-                                berkala</span></div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb_iner_item" data-reveal>
+                        <div class="section-badge mx-auto mb-2"><i class="bi bi-clipboard2-pulse"></i> Program Khusus</div>
+                        <h2>Program <span class="text-gradient">Tahfidz Al-Qur'an</span></h2>
+                        <p>Menghafal bukan sekadar mengingat huruf per huruf, tetapi menjaga kemurnian dan menghidupkan maknanya di dalam hati.</p>
                     </div>
-                    <p style="font-style:italic;color:var(--text-muted);margin-top:20px">Semoga ayat yang dihafal
-                        menjadi cahaya dalam kehidupan.</p>
-                    <div class="mt-4"><a href="#" class="btn btn-primary-custom" data-bs-toggle="modal"
-                            data-bs-target="#daftarModal">Daftar Program Tahfidz <i
-                                class="bi bi-arrow-right ms-2"></i></a><a href="biaya.html"
-                            class="btn btn-outline-custom ms-2">Informasi Pendampingan</a></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="cta-section text-center" aria-label="CTA">
+    <!-- ============================================ -->
+    <!-- 2. TAHFIDZ OVERVIEW (ETRAIN LEARNING PART) -->
+    <!-- ============================================ -->
+    <section class="learning_part" aria-label="Tahfidz Overview">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0" data-reveal>
+                    <div class="learning_img">
+                        <img src="assets/img/62.jpg" alt="Program Tahfidz"
+                             onerror="this.src='assets/img/etrain/learning_img.png'">
+                    </div>
+                </div>
+                <div class="col-lg-6" data-reveal data-reveal-delay="150">
+                    <div class="ps-lg-4">
+                        <div class="section-badge mb-2"><i class="bi bi-award"></i> Pendampingan Khusus</div>
+                        <h2 class="section-title text-start mb-3">
+                            Menghafal Bukan Sekadar <span class="text-gradient">Mengingat</span>, Tetapi Menjaga
+                        </h2>
+                        <p class="text-secondary mb-4">
+                            Menghafal Al-Qur'an adalah perjalanan seumur hidup yang membutuhkan kesabaran, doa, dan istiqamah. Kami mendampingi para santri dengan setoran rutin, pembiasaan murajaah, dan target personal yang disesuaikan dengan kapasitas tiap anak.
+                        </p>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-sm-6">
+                                <div class="p-3 bg-white rounded-3 shadow-sm border-start border-3 border-success">
+                                    <h6 class="fw-bold mb-1"><i class="bi bi-check-circle-fill text-success me-1"></i> Setoran Rutin</h6>
+                                    <p class="small text-muted mb-0">Bimbingan harian/mingguan terpantau.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="p-3 bg-white rounded-3 shadow-sm border-start border-3 border-success">
+                                    <h6 class="fw-bold mb-1"><i class="bi bi-arrow-repeat text-success me-1"></i> Murajaah Kuat</h6>
+                                    <p class="small text-muted mb-0">Menjaga hafalan lama tetap mutqin.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="p-3 bg-white rounded-3 shadow-sm border-start border-3 border-success">
+                                    <h6 class="fw-bold mb-1"><i class="bi bi-bullseye text-success me-1"></i> Target Fleksibel</h6>
+                                    <p class="small text-muted mb-0">Disesuaikan kesiapan dan usia santri.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="p-3 bg-white rounded-3 shadow-sm border-start border-3 border-success">
+                                    <h6 class="fw-bold mb-1"><i class="bi bi-file-earmark-text text-success me-1"></i> Rapor Berkala</h6>
+                                    <p class="small text-muted mb-0">Evaluasi perkembangan untuk orang tua.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-3">
+                            <a href="#" class="btn_1" data-bs-toggle="modal" data-bs-target="#daftarModal">
+                                <i class="bi bi-pencil-square"></i> Daftar Program Tahfidz
+                            </a>
+                            <a href="biaya.html" class="btn_2">
+                                <i class="bi bi-info-circle"></i> Info Pendampingan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 3. CTA TAHFIDZ -->
+    <!-- ============================================ -->
+    <section id="kontak" class="cta-section text-center" aria-label="CTA Tahfidz">
         <div class="cta-overlay" aria-hidden="true"></div>
         <div class="container">
             <div class="cta-content" data-reveal>
-                <h2 class="cta-title">Mulai Perjalanan <span class="text-gradient-light">Menghafal Al-Qur'an</span></h2>
-                <p class="cta-subtitle">Dari satu ayat, satu halaman, satu juz — setiap langkah adalah kebaikan.</p><a
-                    href="https://wa.me/6285786689008" class="btn btn-outline-light-custom btn-lg" target="_blank"><i
-                        class="bi bi-whatsapp me-2"></i>Konsultasi Program Tahfidz</a>
+                <div class="cta-icon mx-auto"><i class="bi bi-bookmark-star-fill"></i></div>
+                <h2 class="editorial-title text-white mb-3">Mulai Perjalanan <span style="color: #6ee7b7;">Menghafal Al-Qur'an</span></h2>
+                <p class="editorial-subtitle text-white mx-auto mb-4" style="max-width: 620px; color: rgba(255, 255, 255, 0.92) !important;">
+                    Dari satu ayat, satu halaman, hingga satu juz, bimbingan intensif dan mutaba'ah harian menemani santri menjaga hafalan tetap mutqin.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <button type="button" class="btn-editorial-primary btn-lg" data-bs-toggle="modal" data-bs-target="#daftarModal">
+                        <i class="bi bi-calendar2-check-fill me-2"></i> Daftar Gratis Program Tahfidz
+                    </button>
+                    <a href="https://wa.me/6285786689008?text=Assalamualaikum,%20saya%20tertarik%20konsultasi%20Program%20Tahfidz%20AL-HIKMAH"
+                       class="btn-editorial-secondary btn-lg" target="_blank" rel="noopener">
+                        <i class="bi bi-whatsapp me-2"></i> Konsultasi via WhatsApp
+                    </a>
+                </div>
             </div>
         </div>
     </section>

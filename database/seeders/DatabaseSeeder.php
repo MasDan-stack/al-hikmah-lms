@@ -14,13 +14,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SettingSeeder::class,
             RoleSeeder::class,
-            ProgramSeeder::class,
             UserSeeder::class,
-            LearningSessionSeeder::class,
-            ProgressSeeder::class,
-            PaymentSeeder::class,
+            ProgramSeeder::class,
+            GalleryCategorySeeder::class,
             GallerySeeder::class,
-            NotificationSeeder::class,
+            BlogCategorySeeder::class,
+            BlogTagSeeder::class,
+            ArticleSeeder::class,
         ]);
     }
 }

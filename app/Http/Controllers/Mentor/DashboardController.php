@@ -2,10 +2,18 @@
 
 namespace App\Http\Controllers\Mentor;
 
+use App\Enums\EnrollmentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\MentorActivityLog;
+use App\Models\MentorApplication;
+use App\Models\MentorInterventionTicket;
+use App\Models\MentorProbationTracking;
 use App\Models\Progress;
 use App\Models\Session;
+use App\Models\Student;
+use App\Models\TrialBooking;
+use App\Services\DecisionSupport\AhpRankingService;
+use App\Services\RevenueAnalyticsService;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -14,44 +22,82 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
         $mentor = $user->mentor;
-
         $mentorId = $mentor ? $mentor->id : null;
 
+        // Data Lamaran Rekrutmen Calon Guru (Jika Masih dalam Masa Seleksi)
+        $mentorApplication = MentorApplication::with(['testSessions', 'documents'])
+            ->where('user_id', $user->id)
+            ->orWhere('email', $user->email)
+            ->latest()
+            ->first();
+
+        $isRecruitmentMode = false;
+        if ($mentorApplication && $mentorApplication->status !== 'approved') {
+            $isRecruitmentMode = true;
+        } elseif ($mentor && ! $mentor->is_active && $mentor->status !== 'probation' && $mentor->status !== 'active') {
+            $isRecruitmentMode = true;
+        }
+
+        $activeTestSession = $mentorApplication
+            ? $mentorApplication->testSessions->whereIn('status', ['in_progress', 'scheduled'])->first()
+            : null;
+
+        $completedTestSessions = $mentorApplication
+            ? $mentorApplication->testSessions->where('status', 'completed')->all()
+            : [];
+
+        // Students (Deduplicated - Active Paid Only)
+        $students = ($mentorId && ! $isRecruitmentMode)
+            ? Student::where(function ($q) use ($mentor) {
+                $q->whereHas('mentors', fn ($m) => $m->where('mentors.id', $mentor->id)->where('mentor_student.is_active', true))
+                    ->orWhereHas('enrollments', fn ($e) => $e->where('mentor_id', $mentor->id)->where('status', EnrollmentStatus::ACTIVE->value));
+            })->with(['user', 'parent.user', 'programs'])->get()
+            : collect();
+
         // Statistics
-        $todaySessionsCount = $mentorId
+        $todaySessionsCount = ($mentorId && ! $isRecruitmentMode)
             ? Session::where('mentor_id', $mentorId)->whereDate('date', today())->count()
             : 0;
 
-        $activeStudentsCount = $mentorId
-            ? $mentor->students()->count()
-            : 0;
+        $activeStudentsCount = $students->count();
 
-        $upcomingSessionsCount = $mentorId
+        $upcomingSessionsCount = ($mentorId && ! $isRecruitmentMode)
             ? Session::where('mentor_id', $mentorId)
                 ->whereDate('date', '>', today())
                 ->whereDate('date', '<=', today()->addDays(7))
                 ->count()
             : 0;
 
-        $avgTajwid = $mentorId
+        $avgTajwid = ($mentorId && ! $isRecruitmentMode)
             ? round(Progress::where('mentor_id', $mentorId)->avg('nilai_tajwid') ?? 0, 1)
             : 0;
 
-        // Today's schedule
-        $todaySessions = $mentorId
-            ? Session::with(['student.user'])
+        // Today's schedule with confirmation
+        $todaySessions = ($mentorId && ! $isRecruitmentMode)
+            ? Session::with([
+                'student.user',
+                'student.parent.user',
+                'student.programs',
+                'confirmation',
+                'student.enrollments' => function ($q) {
+                    $q->where('status', EnrollmentStatus::ACTIVE->value)->with('program');
+                },
+            ])
                 ->where('mentor_id', $mentorId)
                 ->whereDate('date', today())
                 ->orderBy('time', 'asc')
                 ->get()
             : collect();
 
-        // Students & recent progress
-        $students = $mentorId
-            ? $mentor->students()->with(['user'])->get()
-            : collect();
+        $attendedTodaySessions = $todaySessions->filter(function ($s) {
+            return $s->confirmation && $s->confirmation->status === 'hadir';
+        });
 
-        $recentProgress = $mentorId
+        $absentTodaySessions = $todaySessions->filter(function ($s) {
+            return $s->confirmation && in_array($s->confirmation->status, ['izin', 'sakit']);
+        });
+
+        $recentProgress = ($mentorId && ! $isRecruitmentMode)
             ? Progress::with(['student.user'])
                 ->where('mentor_id', $mentorId)
                 ->latest()
@@ -69,7 +115,7 @@ class DashboardController extends Controller
             $monthLabel = $monthDate->translatedFormat('M Y');
             $chartLabels[] = $monthLabel;
 
-            if ($mentorId) {
+            if ($mentorId && ! $isRecruitmentMode) {
                 $monthProgress = Progress::where('mentor_id', $mentorId)
                     ->whereYear('created_at', $monthDate->year)
                     ->whereMonth('created_at', $monthDate->month);
@@ -84,7 +130,7 @@ class DashboardController extends Controller
 
         // ⚠️ Alert: Santri dengan Nilai Tajwid / Fluent Terendah (< 70 atau terkecil)
         $lowProgressStudents = collect();
-        if ($mentorId && $students->isNotEmpty()) {
+        if ($mentorId && ! $isRecruitmentMode && $students->isNotEmpty()) {
             $lowProgressStudents = $students->map(function ($student) use ($mentorId) {
                 $avg = Progress::where('mentor_id', $mentorId)
                     ->where('student_id', $student->id)
@@ -105,20 +151,86 @@ class DashboardController extends Controller
                 ->take(5)
                 ->get()
             : collect();
+        // Probation Tracking
+        $probationTracking = ($mentorId && $mentor->status === 'probation')
+            ? MentorProbationTracking::where('mentor_id', $mentorId)->where('status', 'active')->first()
+            : null;
+
+        // Catatan Pembinaan Mutu / Intervensi Koordinator
+        $activeIntervention = $mentorId
+            ? MentorInterventionTicket::where('mentor_id', $mentorId)
+                ->whereIn('status', ['open', 'in_progress'])
+                ->latest()
+                ->first()
+            : null;
+
+        // Skor AHP Pribadi & Evaluasi Mutu (Poin D)
+        $ahpPerformance = ($mentorId && ! $isRecruitmentMode)
+            ? app(AhpRankingService::class)->getMentorAhpSummary($mentor)
+            : null;
+
+        // 💰 Hak Honorarium Mengajar Guru (Transparansi Rp 100rb/sesi selesai, privasi margin terjaga)
+        $honorariumSummary = ($mentorId && ! $isRecruitmentMode)
+            ? app(RevenueAnalyticsService::class)->getMentorHonorariumSummary($mentorId)
+            : null;
+
+        // 🧾 Slip Gaji Bulanan (Bagian A & B, status verifikasi admin)
+        $slipMonth = (int) request('slip_month', now()->month);
+        $slipYear = (int) request('slip_year', now()->year);
+        $salarySlip = ($mentorId && ! $isRecruitmentMode)
+            ? app(RevenueAnalyticsService::class)->getMentorSalarySlipData($mentorId, $slipMonth, $slipYear)
+            : null;
+
+        // 🎁 Sesi Uji Coba & Placement Test (15 Menit) yang Ditugaskan
+        $assignedTrialBookings = ($mentorId && ! $isRecruitmentMode)
+            ? TrialBooking::with(['program', 'user'])
+                ->where('assigned_mentor_id', $mentorId)
+                ->whereIn('status', ['scheduled', 'contacted', 'pending', 'completed'])
+                ->latest()
+                ->take(5)
+                ->get()
+            : collect();
+
+        // 📸 Jumlah sesi yang butuh upload bukti foto mengajar oleh guru
+        $missingProofSessionsCount = ($mentorId && ! $isRecruitmentMode)
+            ? Session::where('mentor_id', $mentorId)
+                ->where(function ($q) {
+                    $q->where('status', 'completed')
+                        ->orWhereHas('confirmation', fn ($cq) => $cq->whereIn('status', ['hadir', 'terlambat']));
+                })
+                ->where(function ($q) {
+                    $q->whereDoesntHave('confirmation')
+                        ->orWhereHas('confirmation', fn ($cq) => $cq->whereNull('proof_image'));
+                })
+                ->count()
+            : 0;
 
         return view('mentor.dashboard', compact(
+            'isRecruitmentMode',
+            'mentorApplication',
+            'activeTestSession',
+            'completedTestSessions',
             'todaySessionsCount',
             'activeStudentsCount',
             'upcomingSessionsCount',
             'avgTajwid',
             'todaySessions',
+            'attendedTodaySessions',
+            'absentTodaySessions',
             'students',
             'recentProgress',
             'chartLabels',
             'chartProgressCounts',
             'chartAvgTajwid',
             'lowProgressStudents',
-            'recentActivities'
+            'recentActivities',
+            'probationTracking',
+            'activeIntervention',
+            'ahpPerformance',
+            'honorariumSummary',
+            'salarySlip',
+            'assignedTrialBookings',
+            'missingProofSessionsCount'
         ));
     }
 
@@ -131,5 +243,20 @@ class DashboardController extends Controller
             : collect();
 
         return view('mentor.profile', compact('user', 'mentor', 'recentActivities'));
+    }
+
+    public function printSalarySlip(): View
+    {
+        $user = auth()->user();
+        $mentor = $user->mentor;
+        abort_if(! $mentor, 403, 'Akses profil mentor ditolak.');
+        $this->authorize('viewSalarySlip', $mentor);
+
+        $slipMonth = (int) request('slip_month', now()->month);
+        $slipYear = (int) request('slip_year', now()->year);
+
+        $salarySlip = app(RevenueAnalyticsService::class)->getMentorSalarySlipData($mentor->id, $slipMonth, $slipYear);
+
+        return view('mentor.salary-slip-print', compact('salarySlip', 'mentor'));
     }
 }

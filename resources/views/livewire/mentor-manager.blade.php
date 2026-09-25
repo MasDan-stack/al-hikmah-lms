@@ -21,7 +21,7 @@
 
             <!-- Filters -->
             <div class="row g-3 mb-4">
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-5">
                     <div class="input-group">
                         <span class="input-group-text bg-transparent border-end-0 text-muted" style="border-color: var(--border-color);">
                             <i class="bi bi-search"></i>
@@ -34,6 +34,13 @@
                         <option value="">Semua Status Aktif</option>
                         <option value="1">Aktif</option>
                         <option value="0">Non-Aktif</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-3">
+                    <select wire:model.live="genderFilter" class="form-select" style="border-color: var(--border-color); background: transparent; color: var(--text-primary);">
+                        <option value="">Semua Gender</option>
+                        <option value="L">Ustadz (Laki-laki)</option>
+                        <option value="P">Ustazah (Perempuan)</option>
                     </select>
                 </div>
             </div>
@@ -56,11 +63,18 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <div class="avatar-circle bg-success-subtle text-success fw-bold d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px;">
+                                        <div class="avatar-circle {{ $mentor->gender === 'P' ? 'bg-danger-subtle text-danger' : 'bg-success-subtle text-success' }} fw-bold d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px;">
                                             {{ strtoupper(substr($mentor->full_name, 0, 2)) }}
                                         </div>
                                         <div>
-                                            <div class="fw-semibold text-dark">{{ $mentor->full_name }}</div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <a href="{{ route('admin.staff.show', $mentor->id) }}" class="fw-semibold text-dark text-decoration-none hover-primary" title="Lihat Profil Lengkap, CV, Sanad & Rekening Bank">
+                                                    {{ $mentor->full_name }} <i class="bi bi-box-arrow-up-right text-muted ms-0.5" style="font-size: 0.68rem;"></i>
+                                                </a>
+                                                <span class="badge {{ $mentor->gender === 'P' ? 'bg-danger-subtle text-danger border border-danger-subtle' : 'bg-info-subtle text-info border border-info-subtle' }} rounded-pill px-2 py-0.5" style="font-size: 0.72rem;">
+                                                    {{ $mentor->gender === 'P' ? 'Ustazah (P)' : 'Ustadz (L)' }}
+                                                </span>
+                                            </div>
                                             <div class="small text-muted">{{ $mentor->bio ? Str::limit($mentor->bio, 35) : 'Belum ada bio' }}</div>
                                         </div>
                                     </div>
@@ -86,7 +100,10 @@
                                         {{ $mentor->is_active ? 'Aktif' : 'Non-Aktif' }}
                                     </button>
                                 </td>
-                                <td class="text-end">
+                                <td class="text-end text-nowrap">
+                                    <a href="{{ route('admin.staff.show', $mentor->id) }}" class="btn btn-sm btn-outline-info me-1 rounded-3" title="Detail Akun, CV, Sanad & Rekening Bank">
+                                        <i class="bi bi-person-lines-fill me-1"></i> Detail Akun
+                                    </a>
                                     <button wire:click="openEditModal({{ $mentor->id }})" class="btn btn-sm btn-outline-primary me-1 rounded-3">
                                         <i class="bi bi-pencil-square"></i> Edit
                                     </button>
@@ -172,24 +189,35 @@
                                     @error('full_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="col-6">
-                                    <label class="form-label fw-medium small">No. WhatsApp / Telepon</label>
-                                    <input type="text" wire:model="user_phone" class="form-control @error('user_phone') is-invalid @enderror" placeholder="08123456789">
-                                    @error('user_phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                    <label class="form-label fw-medium small">Jenis Kelamin (Syariat) <span class="text-danger">*</span></label>
+                                    <select wire:model="gender" class="form-select @error('gender') is-invalid @enderror">
+                                        <option value="L">Laki-laki (Ustadz)</option>
+                                        <option value="P">Perempuan (Ustazah)</option>
+                                    </select>
+                                    @error('gender') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                             </div>
 
                             <div class="row g-3 mb-3">
                                 <div class="col-6">
+                                    <label class="form-label fw-medium small">No. WhatsApp / Telepon</label>
+                                    <input type="text" wire:model="user_phone" class="form-control @error('user_phone') is-invalid @enderror" placeholder="08123456789">
+                                    @error('user_phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                </div>
+                                <div class="col-6">
                                     <label class="form-label fw-medium small">Spesialisasi Mengajar</label>
                                     <input type="text" wire:model="specialization" class="form-control @error('specialization') is-invalid @enderror" placeholder="Tahsin, Tahfidz 30 Juz, Tajwid">
                                     @error('specialization') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
-                                <div class="col-3">
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-6">
                                     <label class="form-label fw-medium small">Rating (0 - 5)</label>
                                     <input type="number" step="0.1" min="0" max="5" wire:model="rating" class="form-control @error('rating') is-invalid @enderror">
                                     @error('rating') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
-                                <div class="col-3">
+                                <div class="col-6">
                                     <label class="form-label fw-medium small">Status Aktif</label>
                                     <select wire:model="is_active" class="form-select @error('is_active') is-invalid @enderror">
                                         <option value="1">Aktif</option>

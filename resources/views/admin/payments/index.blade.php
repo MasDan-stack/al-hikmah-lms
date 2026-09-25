@@ -79,7 +79,7 @@
             </div>
         @else
             <div class="table-responsive">
-                <table class="table align-middle table-hover">
+                <table class="table align-middle table-hover datatable" id="tableAdminPayments" data-export="true">
                     <thead class="table-light">
                         <tr>
                             <th>No. Invoice</th>
@@ -89,7 +89,7 @@
                             <th>Nominal Tagihan</th>
                             <th>Jatuh Tempo</th>
                             <th>Status</th>
-                            <th>Aksi</th>
+                            <th class="no-sort">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -124,50 +124,6 @@
                                             </button>
                                         </form>
                                     </div>
-
-                                    <!-- 📝 MODAL EDIT TAGIHAN -->
-                                    <div class="modal fade" id="editPaymentModal{{ $p->id }}" tabindex="-1" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content rounded-4 border-0 shadow">
-                                                <div class="modal-header border-bottom">
-                                                    <h5 class="modal-title fw-bold">Edit Tagihan #{{ $p->invoice_number }}</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <form action="{{ route('admin.payments.update', $p->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <div class="modal-body">
-                                                        <div class="mb-3">
-                                                            <label class="form-label fw-semibold">Santri</label>
-                                                            <input type="text" class="form-control bg-light" value="{{ $p->student?->user?->name ?? $p->student?->full_name }}" readonly>
-                                                        </div>
-
-                                                        <div class="mb-3">
-                                                            <label class="form-label fw-semibold">Nominal SPP (Rp) *</label>
-                                                            <input type="number" name="amount" class="form-control" value="{{ old('amount', $p->amount) }}" min="1000" step="1000" required>
-                                                        </div>
-
-                                                        <div class="mb-3">
-                                                            <label class="form-label fw-semibold">Tanggal Jatuh Tempo *</label>
-                                                            <input type="date" name="due_date" class="form-control" value="{{ old('due_date', $p->due_date ? $p->due_date->format('Y-m-d') : date('Y-m-d')) }}" required>
-                                                        </div>
-
-                                                        <div class="mb-3">
-                                                            <label class="form-label fw-semibold">Status Pembayaran *</label>
-                                                            <select name="status" class="form-select" required>
-                                                                <option value="pending" {{ $p->status === 'pending' ? 'selected' : '' }}>Pending (Belum Dibayar)</option>
-                                                                <option value="paid" {{ $p->status === 'paid' ? 'selected' : '' }}>Paid (Lunas)</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer border-top">
-                                                        <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Batal</button>
-                                                        <button type="submit" class="btn btn-warning rounded-pill fw-bold px-4">Simpan Perubahan</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -175,9 +131,46 @@
                 </table>
             </div>
 
-            <div class="mt-3">
-                {{ $allPayments->links() }}
-            </div>
+            <!-- Modals Edit Tagihan (ditempatkan di luar tabel untuk performa DataTables maksimal) -->
+            @foreach($allPayments as $p)
+                <div class="modal fade" id="editPaymentModal{{ $p->id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content rounded-4 border-0 shadow">
+                            <div class="modal-header border-bottom">
+                                <h5 class="modal-title fw-bold">Edit Tagihan #{{ $p->invoice_number }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="{{ route('admin.payments.update', $p->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Nominal Tagihan (Rp) *</label>
+                                        <input type="number" name="amount" class="form-control" value="{{ old('amount', $p->amount) }}" required min="1000" step="1000">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Tanggal Jatuh Tempo *</label>
+                                        <input type="date" name="due_date" class="form-control" value="{{ old('due_date', $p->due_date ? $p->due_date->format('Y-m-d') : date('Y-m-d')) }}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Status Pembayaran *</label>
+                                        <select name="status" class="form-select" required>
+                                            <option value="pending" {{ $p->status === 'pending' ? 'selected' : '' }}>Pending (Belum Dibayar)</option>
+                                            <option value="paid" {{ $p->status === 'paid' ? 'selected' : '' }}>Paid (Lunas)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-top">
+                                    <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-warning rounded-pill fw-bold px-4">Simpan Perubahan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         @endif
     </div>
 </div>

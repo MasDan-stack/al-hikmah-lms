@@ -3,7 +3,18 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+    Options -Indexes
+
     RewriteEngine On
+
+    # Block access to hidden files/folders (dotfiles like .env, .git) except .well-known
+    RewriteRule "(^|/)\.(?!well-known)" - [F,L]
+
+    # Block access to sensitive file extensions (sql, log, env, yml, yaml, sh)
+    <FilesMatch "\.(env|sql|log|sh|yml|yaml|git|lock)$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
