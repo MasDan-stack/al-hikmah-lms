@@ -56,7 +56,7 @@ class MentorRecruitmentService
 
             // 2. Buat Data Lamaran Calon Guru
             $applicationData = collect($data)
-                ->except(['password', 'password_confirmation', 'cv', 'certificate', 'documents'])
+                ->except(['password', 'password_confirmation', 'cv', 'certificate', 'id_card', 'photo', 'documents'])
                 ->toArray();
 
             $application = MentorApplication::create(array_merge($applicationData, [

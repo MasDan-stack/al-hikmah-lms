@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\EnrollmentStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Session extends Model
 {
@@ -49,6 +50,21 @@ class Session extends Model
     }
 
     /**
+     * Relasi ke Program melalui Enrollment santri binaan
+     */
+    public function program()
+    {
+        return $this->hasOneThrough(
+            Program::class,
+            Enrollment::class,
+            'student_id',
+            'id',
+            'student_id',
+            'program_id'
+        );
+    }
+
+    /**
      * Dapatkan enrollment aktif santri yang relevan dengan sesi bimbingan ini.
      */
     public function getEnrollmentAttribute(): ?Enrollment
@@ -73,9 +89,26 @@ class Session extends Model
      */
     public function getProgramAttribute(): ?Program
     {
-        return $this->enrollment?->program
-            ?? ($this->relationLoaded('student') && $this->student?->relationLoaded('programs')
-                ? $this->student->programs->first()
-                : $this->student?->programs()->first());
+        if ($this->enrollment?->program) {
+            return $this->enrollment->program;
+        }
+
+        if ($this->student_id && $this->mentor_id) {
+            $pivot = DB::table('mentor_student')
+                ->where('student_id', $this->student_id)
+                ->where('mentor_id', $this->mentor_id)
+                ->whereNotNull('program_id')
+                ->first();
+            if ($pivot && $pivot->program_id) {
+                $prog = Program::find($pivot->program_id);
+                if ($prog) {
+                    return $prog;
+                }
+            }
+        }
+
+        return $this->relationLoaded('student') && $this->student?->relationLoaded('programs')
+            ? $this->student->programs->first()
+            : $this->student?->programs()->first();
     }
 }

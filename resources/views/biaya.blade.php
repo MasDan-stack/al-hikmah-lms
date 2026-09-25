@@ -110,8 +110,8 @@
                                         <span class="badge badge-warning-contrast fw-bold px-3 py-1.5 rounded-pill small">
                                             <i class="bi bi-shield-check me-1"></i> CUKUP 1X DIAWAL
                                         </span>
-                                        <span class="badge bg-white bg-opacity-20 text-white rounded-pill px-2.5 py-1 small fw-semibold">
-                                            Santri Baru
+                                        <span class="badge bg-white text-emerald-deep fw-bold rounded-pill px-3 py-1.5 shadow-sm border border-light-subtle" style="color: #064e3b !important; background-color: #ffffff !important; font-size: 0.8rem; letter-spacing: 0.3px;">
+                                            <i class="bi bi-person-check-fill me-1 text-success"></i> Santri Baru
                                         </span>
                                     </div>
 
@@ -249,7 +249,7 @@
     {{-- 3. PAKET UTAMA --}}
     {{-- Asymmetric layout: Featured card spans 2 columns (col-lg-6), standard cards span col-lg-3 --}}
     <section id="paket-utama" class="py-5 bg-body-tertiary border-top border-bottom" aria-label="Paket Bimbingan">
-        <div class="container">
+        <div class="container-xl">
 
             <div class="row align-items-end mb-5" data-reveal>
                 <div class="col-lg-7">
@@ -286,24 +286,28 @@
                     @php
                         $parentEnrollment = isset($parentEnrollments) ? $parentEnrollments->firstWhere('program_id', $program->id) : null;
                         $isFeatured = $program->is_popular;
+                        $cleanLevel = str_replace(['Paling Diminati (', ')'], '', $program->level);
+                        if (trim($cleanLevel) === '8 Sesi/Bulan') {
+                            $cleanLevel = '8 Sesi / Bulan';
+                        }
                     @endphp
 
-                    <div class="col-md-6 col-lg-3"
+                    <div class="col-12 col-md-6 col-xl-3"
                          data-reveal data-reveal-delay="{{ ($index % 4) * 80 }}">
 
                         <div class="{{ $isFeatured ? 'editorial-card-featured' : 'editorial-card' }} p-4 h-100 d-flex flex-column justify-content-between {{ $parentEnrollment ? 'border-success' : '' }}">
 
                             <div>
-                                <div class="d-flex align-items-center justify-content-between gap-2 mb-3" style="min-height: 28px;">
-                                    <span class="badge badge-program-level rounded-pill px-2.5 py-1">
-                                        {{ $program->level }}
+                                <div class="d-flex align-items-center justify-content-between gap-2 mb-3" style="min-height: 32px;">
+                                    <span class="badge badge-program-level rounded-pill px-2.5 py-1 text-truncate" style="max-width: 130px;" title="{{ $cleanLevel }}">
+                                        {{ $cleanLevel }}
                                     </span>
                                     @if($parentEnrollment)
-                                        <span class="badge bg-success text-white rounded-pill px-2.5 py-1">
+                                        <span class="badge bg-success text-white rounded-pill px-2.5 py-1 flex-shrink-0">
                                             <i class="bi bi-check-circle-fill me-1" aria-hidden="true"></i> Terdaftar
                                         </span>
                                     @elseif($isFeatured)
-                                        <span class="badge bg-emerald-deep text-white rounded-pill px-2.5 py-1">
+                                        <span class="badge bg-emerald-deep text-white rounded-pill px-2.5 py-1 flex-shrink-0 shadow-xs" style="white-space: nowrap; font-size: 0.76rem; letter-spacing: 0.2px;">
                                             <i class="bi bi-star-fill text-warning me-1" aria-hidden="true"></i> Paling Diminati
                                         </span>
                                     @endif

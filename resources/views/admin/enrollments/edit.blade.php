@@ -325,7 +325,12 @@
                                             <i class="bi bi-exclamation-triangle-fill text-warning fs-5 flex-shrink-0"></i>
                                             <div>
                                                 <strong>Seluruh mentor tidak tersedia / bentrok jadwal</strong> pada hari <strong>{{ $enrollment->requested_days_label }}</strong> jam <strong>{{ $enrollment->requested_time_label }}</strong>.
-                                                <div class="mt-1">Silakan gunakan <strong>OPSI B</strong> di samping untuk mengajukan penawaran jadwal alternatif kepada orang tua santri.</div>
+                                                <div class="mt-1">Silakan gunakan <strong>OPSI B</strong> di samping untuk mengajukan penawaran jadwal alternatif kepada orang tua santri, atau cek ketersediaan seluruh pengajar:</div>
+                                                <div class="mt-2">
+                                                    <a href="{{ route('admin.mentors.availability') }}" target="_blank" class="btn btn-sm btn-outline-dark fw-bold rounded-pill text-decoration-none">
+                                                        <i class="bi bi-calendar3-range-fill me-1 text-primary"></i> Buka Matriks Ketersediaan Guru <i class="bi bi-box-arrow-up-right ms-1 small"></i>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     @endif

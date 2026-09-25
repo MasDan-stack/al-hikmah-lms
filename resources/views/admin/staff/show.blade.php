@@ -520,19 +520,28 @@
         <div class="card-header bg-transparent border-0 pt-4 px-4 pb-2 d-flex flex-wrap justify-content-between align-items-center gap-2">
             <div>
                 <h5 class="fw-bold text-heading mb-1">
-                    <i class="bi bi-calendar-check-fill text-primary me-2"></i>Rincian Sesi Mengajar & Presensi Lapangan Guru
+                    <i class="bi bi-calendar-check-fill text-primary me-2"></i>A. Rincian Sesi Mengajar &amp; Presensi Lapangan Guru
                 </h5>
                 <p class="text-body-secondary small mb-0">
                     Daftar seluruh jadwal sesi mengajar periode <strong>{{ $salarySlip['period_label'] ?? '-' }}</strong> beserta status presensi, konfirmasi wali, dan bukti foto lokasi dari guru.
                 </p>
             </div>
-            <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-2">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1.5">
                     Total: {{ count($salarySlip['sessions_a'] ?? []) }} Sesi
                 </span>
-                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2">
-                    Kehadiran Valid: {{ $salarySlip['summary']['total_valid_attendance'] ?? 0 }} Sesi
+                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5">
+                    Kehadiran Valid: {{ $salarySlip['total_valid_attendance'] ?? 0 }} Sesi
                 </span>
+                @if(($salarySlip['total_proof_missing'] ?? 0) > 0)
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1.5" title="Sesi hadir yang belum diunggah bukti foto oleh guru">
+                        <i class="bi bi-camera-fill me-1"></i>{{ $salarySlip['total_proof_missing'] }} Belum Ada Bukti
+                    </span>
+                @else
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5">
+                        <i class="bi bi-check2-all me-1"></i>Bukti Foto Lengkap
+                    </span>
+                @endif
             </div>
         </div>
         <div class="card-body px-4 pb-4 pt-2">
@@ -604,7 +613,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="d-flex align-items-center gap-1">
+                                        <div class="d-flex align-items-center gap-1 flex-wrap">
                                             @if($sess['confirmed_by'] === 'mentor')
                                                 <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill" title="Presensi diinput langsung oleh guru">
                                                     <i class="bi bi-person-badge me-1"></i>Input Guru
@@ -619,11 +628,17 @@
 
                                             @if($sess['proof_image_url'])
                                                 <button type="button" 
-                                                    class="btn btn-xs btn-outline-primary rounded-pill px-2 py-0.5 shadow-xs" 
+                                                    class="btn btn-xs btn-outline-success rounded-pill px-2 py-0.5 shadow-xs fw-semibold" 
                                                     onclick="showProofPhoto('{{ $sess['proof_image_url'] }}', '{{ addslashes($sess['student_name']) }}', '{{ $sess['date'] }} {{ $sess['time'] }} WIB', '{{ addslashes($sess['notes'] ?? '-') }}')"
                                                     title="Lihat Foto Bukti Lokasi">
-                                                    <i class="bi bi-image me-1"></i>Foto
+                                                    <i class="bi bi-camera-fill me-1"></i>Foto Bukti
                                                 </button>
+                                            @else
+                                                @if($sess['is_valid_attendance'])
+                                                    <span class="badge bg-danger text-white rounded-pill" style="font-size: 0.68rem;" title="Guru belum mengunggah foto bukti mengajar untuk sesi ini">
+                                                        <i class="bi bi-exclamation-triangle-fill me-1"></i>Belum Upload Bukti
+                                                    </span>
+                                                @endif
                                             @endif
                                         </div>
                                         @if($sess['notes'])
@@ -653,7 +668,7 @@
                         </tbody>
                         <tfoot class="table-light">
                             <tr class="fw-bold">
-                                <td colspan="7" class="text-end text-heading">Total Akumulasi Honor Mengajar Periode Ini:</td>
+                                <td colspan="7" class="text-end text-heading">Subtotal Honor Bagian A (Rincian Sesi):</td>
                                 <td class="text-end text-success fs-6">
                                     Rp {{ number_format($salarySlip['total_honor'] ?? 0, 0, ',', '.') }}
                                 </td>
@@ -662,6 +677,118 @@
                     </table>
                 </div>
             @endif
+        </div>
+    </div>
+
+    <!-- 5. 📊 BAGIAN B: Rincian Kehadiran & Honor Persantri -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden" id="sectionBagianB">
+        <div class="card-header bg-white border-bottom border-light-subtle pt-4 px-4 pb-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 fw-bold">
+                        B. Rincian Kehadiran &amp; Honor Persantri
+                    </span>
+                    <span class="badge bg-light text-secondary border rounded-pill px-2.5 py-0.5 font-monospace">
+                        Periode: {{ $salarySlip['period_label'] ?? '-' }}
+                    </span>
+                </div>
+                <p class="text-body-secondary small mb-0">
+                    Rekapitulasi total sesi, kehadiran valid santri, kelengkapan upload bukti mengajar guru, dan nominal honor mengajar per anak.
+                </p>
+            </div>
+            <div>
+                <span class="badge bg-success text-white rounded-pill px-3 py-1.5 fw-semibold shadow-xs">
+                    Rp 100.000 / Kehadiran Valid
+                </span>
+            </div>
+        </div>
+
+        <div class="card-body px-4 pb-4 pt-3">
+            @if(empty($salarySlip['students_b']) || count($salarySlip['students_b']) === 0)
+                <div class="text-center py-4">
+                    <i class="bi bi-people text-muted opacity-50 fs-2 d-block mb-2"></i>
+                    <p class="text-body-secondary small mb-0">Belum ada data kehadiran santri binaan pada periode {{ $salarySlip['period_label'] ?? '-' }}.</p>
+                </div>
+            @else
+                <div class="table-responsive mb-3">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center" style="width: 5%;">No</th>
+                                <th>Nama Santri Binaan</th>
+                                <th>Paket / Program</th>
+                                <th class="text-center">Total Sesi</th>
+                                <th class="text-center">Kehadiran Valid</th>
+                                <th class="text-center">Bukti Foto Guru</th>
+                                <th class="text-end pe-3">Subtotal Honor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($salarySlip['students_b'] as $i => $st)
+                                <tr>
+                                    <td class="text-center text-body-secondary">{{ $i + 1 }}</td>
+                                    <td>
+                                        <div class="fw-bold text-heading">{{ $st['student_name'] }}</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border rounded-pill">{{ $st['program_name'] }}</span>
+                                    </td>
+                                    <td class="text-center text-body-secondary">{{ $st['total_sessions'] }} sesi</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 fw-bold">
+                                            {{ $st['valid_attendance'] }} kali hadir
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        @if(($st['proof_missing_count'] ?? 0) > 0)
+                                            <span class="badge bg-danger text-white rounded-pill px-2.5 py-1" title="Terdapat {{ $st['proof_missing_count'] }} sesi hadir yang belum diunggah bukti fotonya oleh guru">
+                                                <i class="bi bi-exclamation-circle-fill me-1"></i>{{ $st['proof_missing_count'] }} Sesi (Belum Ada Bukti Foto)
+                                            </span>
+                                        @else
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1">
+                                                <i class="bi bi-check-circle-fill me-1"></i>Lengkap
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="text-end pe-3 fw-bold text-success">
+                                        Rp {{ number_format($st['subtotal'], 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot class="table-light">
+                            <tr class="fw-semibold">
+                                <td colspan="4" class="text-end text-heading">TOTAL KEHADIRAN VALID SANTRI:</td>
+                                <td class="text-center">
+                                    <span class="badge bg-primary text-white rounded-pill px-3 py-1 fw-bold">
+                                        {{ $salarySlip['total_valid_attendance'] ?? 0 }} Kali Hadir
+                                    </span>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="fw-bold">
+                                <td colspan="6" class="text-end text-heading fs-6">TOTAL HONORARIUM MENGAJAR GURU (BAGIAN B):</td>
+                                <td class="text-end pe-3 text-success fs-5">
+                                    Rp {{ number_format($salarySlip['total_honor'] ?? 0, 0, ',', '.') }}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            @endif
+
+            <!-- Catatan Wajib Warna Merah / Peringatan Bukti Mengajar -->
+            <div class="rounded-3 p-3 small" style="background: #fef2f2; border: 1px solid #f87171;">
+                <div class="d-flex align-items-start gap-2.5">
+                    <i class="bi bi-exclamation-triangle-fill text-danger fs-5 flex-shrink-0 mt-0.5"></i>
+                    <div style="color: #991b1b; line-height: 1.5;">
+                        <strong class="d-block mb-1">Ketentuan Wajib Bukti Pengajaran Guru &amp; Pencairan Honor Admin:</strong>
+                        Honorarium dihitung otomatis dari kehadiran valid (tiap anak yang berstatus Hadir atau Terlambat pada satu pertemuan dihitung 1 kehadiran = Rp 100.000). 
+                        <strong>Pihak Guru / Ustadz wajib mengunggah bukti foto pelaksanaan mengajar di lokasi rumah santri</strong> pada setiap sesi di halaman Sesi Mengajar. Sesi yang belum disertai bukti foto harus ditindaklanjuti guru sebelum status honorarium ditandai Lunas oleh Admin.
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

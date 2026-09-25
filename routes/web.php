@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\MentorAvailabilityController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\PredictiveAnalyticsController;
+use App\Http\Controllers\Admin\RealityCheckController;
 use App\Http\Controllers\Admin\RecruitmentApiController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -33,6 +34,7 @@ use App\Http\Controllers\Api\AnalyticsApiController;
 use App\Http\Controllers\Api\PakasirWebhookController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\HealthCheckController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Mentor\AvailabilityController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
@@ -72,6 +74,11 @@ use App\Models\Program;
 use App\Models\Student;
 use Illuminate\Support\Facades\Route;
 
+// Health Check Endpoint
+Route::get('/health', HealthCheckController::class)
+    ->middleware('throttle:30,1')
+    ->name('health');
+
 // Halaman Home
 Route::get('/', function () {
     $latestArticles = Article::published()
@@ -108,7 +115,9 @@ Route::post('/tahfidz/pre-register', [RegisteredUserController::class, 'preRegis
 Route::get('/biaya', [LandingController::class, 'biaya'])->name('biaya');
 
 // Halaman Jadwal Sholat & Kompas Kiblat Real-Time Terdedikasi
-Route::get('/jadwal-sholat', [LandingController::class, 'jadwalSholat'])->name('jadwal-sholat');
+Route::get('/jadwal-sholat', [LandingController::class, 'jadwalSholat'])
+    ->middleware('track.feature:prayer_schedule,Halaman Jadwal Sholat')
+    ->name('jadwal-sholat');
 
 // Pre-Register Khusus Program
 Route::post('/program/pre-register', [RegisteredUserController::class, 'preRegisterProgram'])->name('program.pre-register');
@@ -119,11 +128,15 @@ Route::post('/uji-coba-gratis', [TrialBookingController::class, 'store'])
     ->name('trial.store');
 
 // Halaman Bergabung (Pendaftaran Pendamping / Guru Al-Qur'an) - V8.3
-Route::get('/bergabung', [MentorApplicationController::class, 'create'])->name('bergabung');
+Route::get('/bergabung', [MentorApplicationController::class, 'create'])
+    ->middleware('track.feature:mentor_apply,Portal Pelamar Guru')
+    ->name('bergabung');
 Route::post('/bergabung', [MentorApplicationController::class, 'store'])
     ->middleware('throttle:mentor_apply')
     ->name('mentor.recruitment.store');
-Route::get('/cek-status-lamaran', [MentorApplicationController::class, 'status'])->name('mentor.recruitment.status');
+Route::get('/cek-status-lamaran', [MentorApplicationController::class, 'status'])
+    ->middleware('track.feature:recruitment_status,Cek Status Lamaran Publik')
+    ->name('mentor.recruitment.status');
 Route::post('/cek-status-lamaran', [MentorApplicationController::class, 'checkStatus'])
     ->middleware('throttle:status_tracker')
     ->name('mentor.recruitment.check-status');
@@ -152,7 +165,9 @@ Route::post('/galeri/{id}/view', [LandingController::class, 'incrementView'])->n
 Route::get('/sitemap.xml', [PublicBlogController::class, 'sitemap'])->name('sitemap');
 
 Route::prefix('blog')->name('blog.')->group(function () {
-    Route::get('/', [PublicBlogController::class, 'index'])->name('index');
+    Route::get('/', [PublicBlogController::class, 'index'])
+        ->middleware('track.feature:blog_portal,Portal Artikel Blog')
+        ->name('index');
     Route::get('/kategori/{slug}', [PublicBlogController::class, 'category'])->name('category');
     Route::get('/tag/{slug}', [PublicBlogController::class, 'tag'])->name('tag');
     Route::get('/{slug}', [PublicBlogController::class, 'show'])->name('show');
@@ -168,6 +183,10 @@ Route::middleware(['auth', 'role:admin'])
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
+
+        // Reality Check Dashboard
+        Route::get('/reality-check', [RealityCheckController::class, 'index'])->name('reality-check.index');
+        Route::get('/reality-check/export', [RealityCheckController::class, 'exportCsv'])->name('reality-check.export');
 
         Route::get('/programs', function () {
             return view('admin.programs.index');

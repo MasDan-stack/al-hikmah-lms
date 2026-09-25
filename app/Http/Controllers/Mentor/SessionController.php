@@ -78,11 +78,23 @@ class SessionController extends Controller
             },
         ]);
 
-        if (! $isAdmin) {
-            $query->where('mentor_id', $mentor?->id);
+        if (! $isAdmin && $mentor) {
+            $query->where(function ($q) use ($mentor) {
+                $q->where('mentor_id', $mentor->id)
+                    ->orWhere(function ($sub) use ($mentor) {
+                        $sub->whereNull('mentor_id')
+                            ->whereHas('student.mentors', fn ($m) => $m->where('mentors.id', $mentor->id));
+                    });
+            });
         }
 
         $session = $query->findOrFail($id);
+
+        if (! $session->mentor_id && $mentor) {
+            $session->update(['mentor_id' => $mentor->id]);
+            $session->refresh();
+        }
+
         $confirmation = $session->confirmation
             ?? SessionConfirmation::where('session_id', $session->id)->first();
 
@@ -107,10 +119,21 @@ class SessionController extends Controller
         $mentor = $user->mentor;
 
         $query = Session::with(['student.parent.user', 'student.user', 'mentor.user']);
-        if (! $isAdmin) {
-            $query->where('mentor_id', $mentor?->id);
+        if (! $isAdmin && $mentor) {
+            $query->where(function ($q) use ($mentor) {
+                $q->where('mentor_id', $mentor->id)
+                    ->orWhere(function ($sub) use ($mentor) {
+                        $sub->whereNull('mentor_id')
+                            ->whereHas('student.mentors', fn ($m) => $m->where('mentors.id', $mentor->id));
+                    });
+            });
         }
         $session = $query->findOrFail($id);
+
+        if (! $session->mentor_id && $mentor) {
+            $session->update(['mentor_id' => $mentor->id]);
+            $session->refresh();
+        }
 
         $proofPath = null;
         if ($request->hasFile('proof_image')) {
@@ -137,7 +160,7 @@ class SessionController extends Controller
         if ($request->filled('time')) {
             $sessionUpdates['time'] = $request->time;
         }
-        if ($request->status === 'hadir') {
+        if (in_array($request->status, ['hadir', 'terlambat'])) {
             $sessionUpdates['status'] = 'completed';
         } elseif (in_array($request->status, ['izin', 'sakit'])) {
             $sessionUpdates['status'] = 'cancelled';

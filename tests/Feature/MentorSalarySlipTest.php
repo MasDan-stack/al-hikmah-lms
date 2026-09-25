@@ -1,13 +1,18 @@
 <?php
 
+use App\Enums\EnrollmentStatus;
+use App\Models\Enrollment;
 use App\Models\Mentor;
 use App\Models\ParentProfile;
+use App\Models\Payment;
+use App\Models\Program;
 use App\Models\Session;
 use App\Models\SessionConfirmation;
 use App\Models\Student;
 use App\Models\User;
 use App\Services\RevenueAnalyticsService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 
 uses(RefreshDatabase::class);
 
@@ -172,4 +177,212 @@ test('admin staff show view contains salary slip data', function () {
 
     $response->assertSee('Slip Gaji &amp; Pelunasan Honor', false);
     $response->assertSee('Total Honor Mengajar', false);
+});
+
+test('honorarium summary synchronizes correctly when attendance is marked', function () {
+    $mentor = makeMentorWithUser();
+    [$student, $parent] = createStudentAndParent();
+
+    $program = Program::create([
+        'name' => 'Paket Bimbingan Mumtaz Test',
+        'category' => 'anak',
+        'duration_weeks' => 8,
+        'price' => 1200000,
+        'is_active' => true,
+    ]);
+
+    DB::table('mentor_student')->insert([
+        'mentor_id' => $mentor->id,
+        'student_id' => $student->id,
+        'program_id' => $program->id,
+        'day_assigned' => 'monday',
+        'is_active' => true,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    $service = app(RevenueAnalyticsService::class);
+
+    $initialSummary = $service->getMentorHonorariumSummary($mentor->id);
+    expect($initialSummary['this_month_sessions'])->toBe(0);
+    expect($initialSummary['total_completed_sessions'])->toBe(0);
+    expect($initialSummary['upcoming_sessions'])->toBe(8);
+
+    createSessionWithConfirmation($mentor, $student, $parent, 'hadir');
+
+    $afterHadirSummary = $service->getMentorHonorariumSummary($mentor->id);
+    expect($afterHadirSummary['this_month_sessions'])->toBe(1);
+    expect($afterHadirSummary['total_completed_sessions'])->toBe(1);
+    expect($afterHadirSummary['upcoming_sessions'])->toBe(7);
+    expect($afterHadirSummary['this_month_honor'])->toBe(100000);
+
+    $slip = $service->getMentorSalarySlipData($mentor->id, now()->month, now()->year);
+    expect($slip['total_valid_attendance'])->toBe(1);
+    expect($slip['total_honor'])->toBe(100000);
+    expect($slip['students_b'][0]['program_name'])->toBe('Paket Bimbingan Mumtaz Test');
+});
+
+test('parent attendance confirmation updates session status to completed and syncs with mentor summary', function () {
+    $mentor = makeMentorWithUser();
+    [$student, $parent] = createStudentAndParent();
+
+    // Satisfy parent.paid middleware
+    Payment::create([
+        'student_id' => $student->id,
+        'amount' => 150000,
+        'status' => 'paid',
+        'invoice_number' => 'INV-TEST-001',
+        'payment_date' => now(),
+    ]);
+
+    $session = Session::create([
+        'mentor_id' => $mentor->id,
+        'student_id' => $student->id,
+        'date' => now()->format('Y-m-d'),
+        'time' => '16:00:00',
+        'method' => 'online',
+        'status' => 'pending',
+    ]);
+
+    $this->actingAs($parent->user)
+        ->post(route('parent.schedules.confirm', $session->id), [
+            'status' => 'hadir',
+            'notes' => 'Ananda hadir tepat waktu',
+        ])
+        ->assertRedirect();
+
+    $session->refresh();
+    expect($session->status)->toBe('completed');
+
+    $service = app(RevenueAnalyticsService::class);
+    $summary = $service->getMentorHonorariumSummary($mentor->id);
+    expect($summary['this_month_sessions'])->toBe(1);
+    expect($summary['total_completed_sessions'])->toBe(1);
+});
+
+test('parent dashboard loads upcoming sessions with relations without undefined relationship program error', function () {
+    $mentor = makeMentorWithUser();
+    [$student, $parent] = createStudentAndParent();
+
+    $program = Program::create([
+        'name' => 'Tahsin Dasar Test',
+        'category' => 'anak',
+        'duration_weeks' => 12,
+        'price' => 600000,
+        'is_active' => true,
+    ]);
+
+    $enrollment = Enrollment::create([
+        'student_id' => $student->id,
+        'mentor_id' => $mentor->id,
+        'program_id' => $program->id,
+        'status' => EnrollmentStatus::ACTIVE,
+        'learning_method' => 'online',
+        'program_price' => 600000,
+    ]);
+
+    Payment::create([
+        'student_id' => $student->id,
+        'program_id' => $program->id,
+        'enrollment_id' => $enrollment->id,
+        'amount' => 600000,
+        'status' => 'paid',
+        'invoice_number' => 'INV-TEST-SYNC',
+    ]);
+
+    Session::create([
+        'student_id' => $student->id,
+        'mentor_id' => $mentor->id,
+        'date' => today()->addDays(3)->format('Y-m-d'),
+        'time' => '16:00:00',
+        'method' => 'online',
+        'status' => 'pending',
+    ]);
+
+    $response = $this->actingAs($parent->user)->get(route('parent.dashboard'));
+    $response->assertOk();
+    $response->assertSee($student->user->name);
+});
+
+test('parent attendance confirmation appears in admin staff show Section B with proof warning', function () {
+    $admin = User::factory()->admin()->create();
+    $mentor = makeMentorWithUser();
+    [$student, $parent] = createStudentAndParent();
+
+    // Session confirmed as hadir by parent without mentor photo proof yet
+    $session = Session::create([
+        'mentor_id' => $mentor->id,
+        'student_id' => $student->id,
+        'date' => now()->format('Y-m-d'),
+        'time' => '16:00:00',
+        'method' => 'offline',
+        'status' => 'completed',
+    ]);
+
+    SessionConfirmation::create([
+        'session_id' => $session->id,
+        'parent_id' => $parent->id,
+        'status' => 'hadir',
+        'confirmed_by' => 'parent',
+        'notes' => 'Hadir tepat waktu',
+        'proof_image' => null,
+    ]);
+
+    $response = $this->actingAs($admin)->get(route('admin.staff.show', $mentor->id));
+    $response->assertOk();
+    $response->assertSee('B. Rincian Kehadiran &amp; Honor Persantri', false);
+    $response->assertSee($student->full_name);
+    $response->assertSee('Belum Ada Bukti Foto');
+    $response->assertSee('Rp 100.000');
+});
+
+test('mentor dashboard displays red alert banner when sessions lack proof', function () {
+    $mentor = makeMentorWithUser();
+    [$student, $parent] = createStudentAndParent();
+
+    Session::create([
+        'mentor_id' => $mentor->id,
+        'student_id' => $student->id,
+        'date' => now()->format('Y-m-d'),
+        'time' => '16:00:00',
+        'method' => 'offline',
+        'status' => 'completed',
+    ]);
+
+    $response = $this->actingAs($mentor->user)->get(route('mentor.dashboard'));
+    $response->assertOk();
+    $response->assertSee('Peringatan: 1 Sesi Belum Dilengkapi Foto Bukti Pengajaran!');
+    $response->assertSee('Upload Bukti Sekarang');
+});
+
+test('mentor can store progress successfully via mentor progress store route', function () {
+    $mentor = makeMentorWithUser();
+    [$student, $parent] = createStudentAndParent();
+
+    $response = $this->actingAs($mentor->user)->post(route('mentor.progress.store'), [
+        'student_id' => $student->id,
+        'kategori' => 'Tahfidz',
+        'surah_start' => 'Al-Mulk',
+        'ayat_start' => '1',
+        'ayat_end' => '10',
+        'nilai_tajwid' => '85',
+        'nilai_kelancaran' => '90',
+        'nilai_makhraj' => '88',
+        'catatan' => 'Bacaan sangat lancar dan tartil',
+        'is_mutqin' => '1',
+    ]);
+
+    $response->assertRedirect(route('mentor.progress.create', ['student_id' => $student->id]));
+
+    $this->assertDatabaseHas('progress', [
+        'student_id' => $student->id,
+        'mentor_id' => $mentor->id,
+        'kategori' => 'Tahfidz',
+        'surah_start' => 'Al-Mulk',
+        'ayat_start' => 1,
+        'ayat_end' => 10,
+        'nilai_tajwid' => 85,
+        'nilai_fluent' => 90,
+        'is_mutqin_test' => 1,
+    ]);
 });

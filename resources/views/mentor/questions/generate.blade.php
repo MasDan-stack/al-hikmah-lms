@@ -438,13 +438,6 @@ document.addEventListener('DOMContentLoaded', function() {
             { icon: "🛑", label: "Waqaf & Ibtida'", topic: "Kaidah Waqaf Lazim, Tam, Kafi, Hasan, Qabih, dan Tata Cara Ibtida'" },
             { icon: "📜", label: "Bacaan Gharib", topic: "Kaidah Bacaan Gharib Riwayat Hafsh (Saktah, Imalah, Isymam, Tashil, Naql)" }
         ],
-        "Kelas Muslimah": [
-            { icon: "🌸", label: "Fiqih Nisa Thaharah", topic: "Hukum Fiqih Thaharah Wanita: Membedakan Darah Haid, Nifas, dan Istihadhah serta Konsekuensi Ibadah" },
-            { icon: "🧕", label: "Kisah Shahabiyah", topic: "Keteladanan Shahabiyah Mulia (Khadijah, Aisyah, Fathimah, Asma binti Abi Bakr)" },
-            { icon: "🏡", label: "Keluarga Sakinah", topic: "Tadabbur Ayat-ayat Pembinaan Keluarga Sakinah (Q.S. An-Nisa & An-Nur)" },
-            { icon: "🛡️", label: "Adab & Hijab Syar'i", topic: "Kaidah Menjaga Kehormatan, Adab Pergaulan, dan Hijab Sesuai Tuntunan Syari'at" },
-            { icon: "🤲", label: "Doa & Dzikir Muslimah", topic: "Dzikir Harian, Doa Perlindungan Keluarga, dan Amalan Wanita Saat Berhalangan Shalat" }
-        ],
         "Tahfidz Dewasa": [
             { icon: "👑", label: "Surah Al-Mulk", topic: "Sambung Ayat dan Tadabbur Makna Surah Al-Mulk (Ayat 1-30)" },
             { icon: "📖", label: "Surah Pilihan (Yasin & Kahfi)", topic: "Hafalan dan Pemahaman Surah Yasin, Al-Kahfi, serta As-Sajdah" },

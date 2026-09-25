@@ -21,6 +21,48 @@
         </div>
     @endif
 
+    <!-- 🔴 PEMBERITAHUAN WAJIB UPLOAD BUKTI FOTO (CATATAN MERAH SLIP GAJI) -->
+    @php
+        $missingProofCount = $sessions->filter(function($sess) {
+            $isCompletedOrHadir = $sess->status === 'completed' || ($sess->confirmation && in_array($sess->confirmation->status, ['hadir', 'terlambat']));
+            $hasNoProof = !($sess->confirmation && !empty($sess->confirmation->proof_image));
+            return $isCompletedOrHadir && $hasNoProof;
+        })->count();
+    @endphp
+    <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden" style="background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);">
+        <div class="card-body p-4 text-white">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="rounded-circle bg-white text-danger p-2.5 d-flex align-items-center justify-content-center flex-shrink-0 shadow-xs" style="width: 44px; height: 44px;">
+                        <i class="bi bi-camera-fill fs-5"></i>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                            <h6 class="fw-bold mb-0 text-white fs-6">Kewajiban Upload Bukti Foto Mengajar</h6>
+                            @if($missingProofCount > 0)
+                                <span class="badge bg-white text-danger fw-bold rounded-pill px-2.5 py-1 shadow-xs" style="font-size: 0.72rem;">
+                                    {{ $missingProofCount }} Sesi Belum Ada Bukti
+                                </span>
+                            @else
+                                <span class="badge bg-white text-success fw-bold rounded-pill px-2.5 py-1 shadow-xs" style="font-size: 0.72rem;">
+                                    Semua Sesi Telah Berbukti Foto
+                                </span>
+                            @endif
+                        </div>
+                        <p class="mb-0 text-white-50 small" style="max-width: 820px; line-height: 1.5;">
+                            Setiap sesi bimbingan yang telah dihadiri santri <strong>wajib dilengkapi bukti foto dokumentasi mengajar</strong> di rumah murid. Kehadiran tanpa bukti foto tidak dapat divalidasi dan tidak akan masuk ke <strong>Slip Gaji / Honorarium Guru (Bagian B. Rincian Kehadiran &amp; Honor Persantri)</strong> di sistem Admin.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge bg-white text-danger fw-bold rounded-pill px-3 py-2 shadow-xs">
+                        <i class="bi bi-cash-stack me-1"></i> Rp 100.000 / Kehadiran Valid
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- KPI Summary Cards -->
     <div class="row g-3 mb-4">
         <div class="col-sm-6 col-xl-3">
@@ -215,6 +257,12 @@
                                                     <a href="{{ $session->confirmation->proof_image_url }}" target="_blank" class="badge bg-light text-primary border rounded-pill text-decoration-none px-2 py-0.5 d-inline-flex align-items-center gap-1" title="Buka foto dokumentasi pengajaran">
                                                         <i class="bi bi-camera-fill text-success"></i> Foto Bukti
                                                     </a>
+                                                @else
+                                                    @if($session->confirmation->status === 'hadir' || $session->status === 'completed')
+                                                        <span class="badge bg-danger text-white rounded-pill px-2.5 py-1 d-inline-flex align-items-center gap-1 shadow-xs" title="Wajib upload foto dokumentasi agar honor mengajar masuk ke Slip Gaji Admin">
+                                                            <i class="bi bi-exclamation-triangle-fill"></i> Wajib Upload Bukti
+                                                        </span>
+                                                    @endif
                                                 @endif
 
                                                 @if($session->confirmation->notes)
@@ -246,11 +294,22 @@
                                     </td>
                                     <td class="text-end pe-4 text-nowrap">
                                         <div class="d-flex align-items-center justify-content-end gap-1.5 flex-wrap">
-                                            <a href="{{ route('mentor.sessions.confirm-attendance', $session->id) }}" 
-                                               class="btn btn-sm btn-success text-white rounded-pill px-2.5 py-1 shadow-xs fw-semibold d-inline-flex align-items-center gap-1" 
-                                               title="Input presensi mandiri & upload bukti foto di lokasi santri">
-                                                <i class="bi bi-camera-fill"></i> Presensi
-                                            </a>
+                                            @php
+                                                $needsProof = ($session->status === 'completed' || optional($session->confirmation)->status === 'hadir') && !optional($session->confirmation)->proof_image;
+                                            @endphp
+                                            @if($needsProof)
+                                                <a href="{{ route('mentor.sessions.confirm-attendance', $session->id) }}" 
+                                                   class="btn btn-sm btn-danger text-white rounded-pill px-3 py-1 shadow-sm fw-bold d-inline-flex align-items-center gap-1.5" 
+                                                   title="Wajib upload foto dokumentasi agar honor mengajar masuk ke Slip Gaji!">
+                                                    <i class="bi bi-camera-fill"></i> Upload Bukti Foto
+                                                </a>
+                                            @else
+                                                <a href="{{ route('mentor.sessions.confirm-attendance', $session->id) }}" 
+                                                   class="btn btn-sm btn-success text-white rounded-pill px-2.5 py-1 shadow-xs fw-semibold d-inline-flex align-items-center gap-1" 
+                                                   title="Input presensi mandiri & upload bukti foto di lokasi santri">
+                                                    <i class="bi bi-camera-fill"></i> Presensi
+                                                </a>
+                                            @endif
 
                                             <form action="{{ route('mentor.sessions.update-status', $session->id) }}" method="POST" class="d-inline">
                                                 @csrf

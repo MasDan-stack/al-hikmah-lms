@@ -320,7 +320,7 @@
                         </div>
                         <h2 class="editorial-title fs-4 mb-2">Pilihan Program Bimbingan</h2>
                         <p class="editorial-subtitle text-muted mb-4 small">
-                            Tersedia program Privat Anak, Tahsin Dewasa, Muslimah, Tahfidz Mutqin, serta Bahasa Arab Dasar.
+                            Tersedia program Privat Anak, Tahsin Dewasa, Tahfidz Mutqin, serta Bahasa Arab Dasar.
                         </p>
                         <div>
                             <a href="{{ route('program') }}" class="btn-editorial-primary px-4">

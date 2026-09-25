@@ -191,6 +191,20 @@ class DashboardController extends Controller
                 ->get()
             : collect();
 
+        // 📸 Jumlah sesi yang butuh upload bukti foto mengajar oleh guru
+        $missingProofSessionsCount = ($mentorId && ! $isRecruitmentMode)
+            ? Session::where('mentor_id', $mentorId)
+                ->where(function ($q) {
+                    $q->where('status', 'completed')
+                        ->orWhereHas('confirmation', fn ($cq) => $cq->whereIn('status', ['hadir', 'terlambat']));
+                })
+                ->where(function ($q) {
+                    $q->whereDoesntHave('confirmation')
+                        ->orWhereHas('confirmation', fn ($cq) => $cq->whereNull('proof_image'));
+                })
+                ->count()
+            : 0;
+
         return view('mentor.dashboard', compact(
             'isRecruitmentMode',
             'mentorApplication',
@@ -215,7 +229,8 @@ class DashboardController extends Controller
             'ahpPerformance',
             'honorariumSummary',
             'salarySlip',
-            'assignedTrialBookings'
+            'assignedTrialBookings',
+            'missingProofSessionsCount'
         ));
     }
 

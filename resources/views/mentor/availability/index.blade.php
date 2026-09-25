@@ -87,27 +87,43 @@
             </div>
             <div class="card-body p-0">
                 <div class="px-4 pt-4 pb-2">
-                    <div class="alert alert-info border-0 bg-info-subtle text-info-emphasis d-flex align-items-start gap-3 rounded-4 mb-3">
-                        <i class="bi bi-info-circle-fill fs-4 mt-1"></i>
-                        <div>
-                            <h6 class="fw-bold mb-1">Panduan Membuka Jam Bimbingan</h6>
-                            <p class="mb-0 small">
-                                Centang jam yang Anda bersedia untuk mengajar. 
-                                Pilih minimal <strong>4 sesi per minggu</strong> untuk profil aktif. 
-                                Waktu yang ditampilkan adalah <strong>WIB (Waktu Indonesia Barat)</strong>.
-                            </p>
+                    <!-- Banner Panduan Kognitif Pembukaan Slot -->
+                    <div class="card border-0 shadow-sm rounded-4 mb-4 bg-primary bg-opacity-10 border-start border-4 border-primary">
+                        <div class="card-body p-3.5">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="rounded-circle p-2 bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
+                                    <i class="bi bi-info-circle-fill fs-5"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-1">Panduan Membuka Jam Bimbingan Guru (Slot 0 - 6)</h6>
+                                    <p class="text-secondary small mb-2" style="line-height: 1.5;">
+                                        Sistem Al-Hikmah menggunakan sistem <strong>Centang Slot untuk Membuka Jadwal</strong>. Centang kotak pada jam-jam di mana Anda <strong>bersedia menerima santri baru</strong>. Pilih minimal <strong>4 sesi per minggu</strong> untuk profil aktif.
+                                    </p>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <span class="badge bg-success text-white px-2.5 py-1 small fw-semibold">
+                                            <i class="bi bi-check-square me-1"></i> Kotak Dicentang: Anda BUKA dan SIAP Mengajar
+                                        </span>
+                                        <span class="badge bg-secondary-subtle text-dark border px-2.5 py-1 small fw-semibold">
+                                            <i class="bi bi-square me-1"></i> Kotak Kosong: Anda TUTUP / Sedang Istirahat Pribadi
+                                        </span>
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1 small fw-semibold">
+                                            <i class="bi bi-calendar-x me-1"></i> Switch Hari Libur: Seluruh jam di hari tersebut non-aktif
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="d-flex flex-wrap gap-2 mb-2">
-                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill fw-medium" onclick="setDaySlots('monday', true)">
-                            <i class="bi bi-check-all"></i> Buka Semua Senin
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <button type="button" class="btn btn-sm btn-outline-success rounded-pill fw-medium" onclick="setAllDaysSlots([0, 1, 2, 3, 4, 5, 6])">
+                            <i class="bi bi-check-all"></i> Buka Semua Jam (0 s/d 6) Seluruh Hari
                         </button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill fw-medium" onclick="setDaySlots('monday', false)">
-                            <i class="bi bi-x"></i> Tutup Senin
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill fw-medium" onclick="setRegulerSlots()">
+                            <i class="bi bi-sun"></i> Jam Reguler (Slot 1, 2, 4, 5) Semua Hari
                         </button>
-                        <button type="button" class="btn btn-sm btn-outline-success rounded-pill fw-medium" onclick="setRegulerSlots()">
-                            <i class="bi bi-sun"></i> Jam Reguler (16:00 - 20:00) Semua Hari
+                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill fw-medium" onclick="setAllDaysSlots([])">
+                            <i class="bi bi-x-circle"></i> Tutup / Kosongkan Semua Jam
                         </button>
                     </div>
                 </div>
@@ -456,28 +472,25 @@ function setDaySlots(day, check) {
     document.querySelectorAll(`.slot-cb-${day}`).forEach(el => {
         const holidayToggle = document.getElementById(`holiday_${day}`);
         if (!holidayToggle || !holidayToggle.checked) {
-            el.checked = check;
+            if (Array.isArray(check)) {
+                el.checked = check.includes(parseInt(el.value));
+            } else {
+                el.checked = !!check;
+            }
         }
     });
 }
 
-function setRegulerSlots() {
-    // 4 = 16:00, 5 = 18:30, 6 = 20:00
-    const regulerSlots = ['4', '5', '6']; 
-    document.querySelectorAll('.slot-cb').forEach(el => el.checked = false);
-    
-    document.querySelectorAll('.slot-cb').forEach(el => {
-        // Cek dulu apakah hari itu libur
-        const dayMatch = el.className.match(/slot-cb-([a-z]+)/);
-        if (dayMatch) {
-            const holidayToggle = document.getElementById(`holiday_${dayMatch[1]}`);
-            if (holidayToggle && holidayToggle.checked) return;
-        }
-        
-        if (regulerSlots.includes(el.value)) {
-            el.checked = true;
-        }
+function setAllDaysSlots(slotsArray) {
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    days.forEach(day => {
+        setDaySlots(day, slotsArray);
     });
+}
+
+function setRegulerSlots() {
+    // Slot 1 (08:00), Slot 2 (10:00), Slot 4 (16:00), Slot 5 (18:30)
+    setAllDaysSlots([1, 2, 4, 5]);
 }
 </script>
 <style>

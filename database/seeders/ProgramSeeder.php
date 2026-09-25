@@ -90,18 +90,6 @@ class ProgramSeeder extends Seeder
                 'sort_order' => 6,
             ],
             [
-                'name' => 'Kelas Muslimah',
-                'category' => 'dewasa',
-                'icon' => 'bi-people',
-                'description' => 'Ruang belajar yang nyaman bagi muslimah bersama ustadzah bersanad dan berpengalaman.',
-                'duration_weeks' => 12,
-                'price' => 600000,
-                'level' => 'Muslimah',
-                'is_popular' => false,
-                'is_active' => true,
-                'sort_order' => 7,
-            ],
-            [
                 'name' => 'Tahsin Dewasa',
                 'category' => 'dewasa',
                 'icon' => 'bi-mic',
@@ -111,7 +99,7 @@ class ProgramSeeder extends Seeder
                 'level' => 'Dewasa',
                 'is_popular' => false,
                 'is_active' => true,
-                'sort_order' => 8,
+                'sort_order' => 7,
             ],
             [
                 'name' => 'Bahasa Arab Dasar',
@@ -123,7 +111,7 @@ class ProgramSeeder extends Seeder
                 'level' => 'Bahasa Arab',
                 'is_popular' => false,
                 'is_active' => true,
-                'sort_order' => 9,
+                'sort_order' => 8,
             ],
             [
                 'name' => 'Nahwu & Sharaf',
@@ -135,7 +123,7 @@ class ProgramSeeder extends Seeder
                 'level' => 'Bahasa Arab',
                 'is_popular' => false,
                 'is_active' => true,
-                'sort_order' => 10,
+                'sort_order' => 9,
             ],
         ];
 

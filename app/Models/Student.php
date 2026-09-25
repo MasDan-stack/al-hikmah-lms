@@ -65,6 +65,11 @@ class Student extends Model
             ->withTimestamps();
     }
 
+    public function mentorAssignments(): BelongsToMany
+    {
+        return $this->mentors();
+    }
+
     public function programs(): BelongsToMany
     {
         return $this->belongsToMany(Program::class, 'student_program')

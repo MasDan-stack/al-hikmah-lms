@@ -6,6 +6,7 @@ use App\Enums\EnrollmentStatus;
 use App\Enums\NotificationType;
 use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
+use App\Models\Mentor;
 use App\Models\Session;
 use App\Models\SessionConfirmation;
 use App\Services\NotificationService;
@@ -100,21 +101,53 @@ class ParentScheduleController extends Controller
         $parent = auth()->user()->parentProfile;
         $childIds = $parent ? $parent->students()->pluck('id')->toArray() : [];
 
-        $session = Session::with(['student.user', 'mentor.user'])->findOrFail($id);
+        $session = Session::with(['student.user', 'mentor.user', 'student.programs'])->findOrFail($id);
         if (! in_array($session->student_id, $childIds)) {
             abort(403, 'Akses sesi anak ditolak.');
+        }
+
+        // Pastikan session memiliki mentor_id jika sebelumnya null agar otomatis masuk ke slip gaji mentor
+        if (! $session->mentor_id) {
+            $assignedMentorId = DB::table('mentor_student')
+                ->where('student_id', $session->student_id)
+                ->where('is_active', true)
+                ->value('mentor_id')
+                ?? $session->student?->enrollments()->whereNotNull('mentor_id')->latest()->value('mentor_id')
+                ?? Mentor::first()?->id;
+
+            if ($assignedMentorId) {
+                $session->mentor_id = $assignedMentorId;
+                $session->save();
+            }
+        }
+
+        if (! $session->date) {
+            $session->date = now();
+            $session->save();
         }
 
         SessionConfirmation::updateOrCreate(
             [
                 'session_id' => $session->id,
-                'parent_id' => $parent->id,
             ],
             [
+                'parent_id' => $parent->id,
                 'status' => $request->status,
                 'notes' => $request->notes,
+                'confirmed_by' => 'parent',
+                'verified_at' => now(),
             ]
         );
+
+        // Update status sesi belajar agar tersinkronisasi ke dashboard & slip gaji mentor
+        if (in_array($request->status, ['hadir', 'terlambat'])) {
+            $session->update(['status' => 'completed']);
+        } elseif (in_array($request->status, ['izin', 'sakit'])) {
+            $session->update(['status' => 'cancelled']);
+        }
+
+        // Refresh mentor relation jika baru saja diasosiasikan
+        $session->load('mentor.user');
 
         // Notifikasi ke Mentor Pembimbing via NotificationService
         if ($session->mentor?->user_id) {
@@ -125,9 +158,9 @@ class ParentScheduleController extends Controller
             NotificationService::send(
                 $session->mentor->user_id,
                 "Konfirmasi Kehadiran: {$studentName} ({$statusLabel})",
-                "Wali santri {$studentName} mengonfirmasi status kehadiran '{$statusLabel}' untuk sesi {$sessionDate}.".($request->notes ? " Catatan: {$request->notes}" : ''),
+                "Wali santri {$studentName} mengonfirmasi status kehadiran '{$statusLabel}' untuk sesi {$sessionDate}.".($request->notes ? " Catatan: {$request->notes}" : '').' Guru wajib mengunggah bukti foto dokumentasi sesi bimbingan di menu Sesi Belajar.',
                 $request->status === 'hadir' ? NotificationType::SUCCESS : NotificationType::WARNING,
-                route('mentor.dashboard'),
+                route('mentor.sessions.index'),
                 'attendance',
                 true
             );

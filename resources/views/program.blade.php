@@ -1,7 +1,7 @@
 @extends('layouts.landing')
 
 @section('title', 'Program Belajar | AL-HIKMAH')
-@section('description', 'Program belajar AL-HIKMAH meliputi Iqra, Tahsin, Tahfidz, Adab & Doa, Bahasa Arab, dan Kelas Muslimah untuk anak dan dewasa.')
+@section('description', 'Program belajar AL-HIKMAH meliputi Iqra, Tahsin, Tahfidz, Adab & Doa, dan Bahasa Arab untuk anak dan dewasa.')
 
 @section('content')
     <!-- ============================================ -->
@@ -61,12 +61,12 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- 3. PROGRAM TAMBAHAN (DEWASA & MUSLIMAH) -->
+    <!-- 3. PROGRAM TAMBAHAN (DEWASA) -->
     <!-- ============================================ -->
     <section class="py-5 bg-white" aria-label="Program Tambahan">
         <div class="container">
             <div class="program-section-title" data-reveal>
-                <i class="bi bi-person-badge"></i> Program Tambahan (Dewasa &amp; Muslimah)
+                <i class="bi bi-person-badge"></i> Program Tambahan (Dewasa)
             </div>
 
             <div class="row g-4 mt-1">

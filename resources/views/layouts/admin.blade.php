@@ -449,10 +449,15 @@
                     class="admin-nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="bi bi-speedometer2"></i> Dashboard Utama
                 </a>
+                <a href="{{ route('admin.reality-check.index') }}"
+                    class="admin-nav-item {{ request()->routeIs('admin.reality-check.*') ? 'active' : '' }}">
+                    <i class="bi bi-clipboard2-pulse-fill text-success"></i> Reality Check Dashboard
+                </a>
                 <a href="{{ route('admin.alerts.index') }}"
                     class="admin-nav-item {{ request()->routeIs('admin.alerts.*') ? 'active' : '' }}">
                     <i class="bi bi-bell-fill text-warning"></i> Pusat Peringatan
                 </a>
+
 
                 <div class="admin-nav-section-title mt-2"><i class="bi bi-bar-chart-fill me-1"></i> Analisis & Keuangan</div>
                 <a href="{{ route('admin.analytics.predictive.index') }}"
@@ -684,6 +689,12 @@
                                     <i class="bi bi-speedometer2"></i> Dashboard Admin
                                 </a>
                             </li>
+                            <li>
+                                <a class="dropdown-item dropdown-item-premium" href="{{ route('admin.reality-check.index') }}">
+                                    <i class="bi bi-clipboard2-pulse-fill text-success"></i> Reality Check Dashboard
+                                </a>
+                            </li>
+
                             <li>
                                 <a class="dropdown-item dropdown-item-premium" href="{{ route('admin.profile.edit') }}">
                                     <i class="bi bi-person-gear"></i> Pengaturan Profil

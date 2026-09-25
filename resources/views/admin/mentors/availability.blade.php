@@ -118,6 +118,10 @@
                             $enr = $st->enrollments->first();
                             $reqDays = $enr?->requested_days ? implode(', ', array_map(fn($d) => \App\Models\MentorAvailability::DAYS[$d] ?? $d, $enr->requested_days)) : 'Fleksibel';
                             $reqTime = $enr?->requested_time ? substr($enr->requested_time, 0, 5) . ' WIB' : 'Fleksibel';
+                            $preferredDayKey = $enr?->requested_days[0] ?? 'monday';
+                            $preferredTimeRaw = $enr?->requested_time ? substr($enr->requested_time, 0, 5) : '10:00';
+                            $preferredSlotNum = $enr?->requested_time ? \App\Models\MentorAvailability::getSlotNumberFromTime($enr->requested_time) : 2;
+                            $requestSummary = "Permohonan: " . $reqDays . " jam " . $reqTime;
                         @endphp
                         <div class="col-md-4 col-sm-6">
                             <div class="card border-0 rounded-4 p-3 bg-white shadow-sm h-100 d-flex flex-column justify-content-between">
@@ -134,8 +138,12 @@
                                 <button type="button" class="btn btn-sm btn-outline-success rounded-pill w-100 fw-semibold btn-quick-assign" 
                                     data-student-id="{{ $st->id }}"
                                     data-student-name="{{ $st->getDisplayName() }}"
-                                    data-program-id="{{ $enr?->program_id }}"
-                                    data-preferred-day="{{ $enr?->requested_days[0] ?? 'monday' }}">
+                                    data-program-id="{{ $enr?->program_id ?? '' }}"
+                                    data-preferred-day="{{ $preferredDayKey }}"
+                                    data-preferred-slot="{{ $preferredSlotNum }}"
+                                    data-preferred-time="{{ $preferredTimeRaw }}"
+                                    data-requested-days="{{ $reqDays }}"
+                                    data-notes="{{ $requestSummary }}">
                                     <i class="bi bi-person-check-fill me-1"></i>Alokasikan Santri Ini
                                 </button>
                             </div>
@@ -461,7 +469,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold small text-secondary">Catatan Sesi</label>
-                            <input type="text" class="form-control" name="notes" placeholder="Misal: Bimbingan via Zoom">
+                            <input type="text" class="form-control" id="sessionNotes" name="notes" placeholder="Misal: Bimbingan via Zoom atau Offline">
                         </div>
                     </div>
                 </div>
@@ -535,18 +543,47 @@ document.addEventListener('DOMContentLoaded', function () {
             const studentId = this.getAttribute('data-student-id');
             const programId = this.getAttribute('data-program-id');
             const day = this.getAttribute('data-preferred-day');
+            const slot = this.getAttribute('data-preferred-slot');
+            const notes = this.getAttribute('data-notes');
 
-            if (selectStudent) selectStudent.value = studentId;
-            if (selectProgram && programId) selectProgram.value = programId;
-            if (selectDay && day) selectDay.value = day;
-            if (selectSlot) selectSlot.value = ''; // pastikan reset slot
-            if (selectMentor) selectMentor.value = ''; // pastikan reset mentor
+            // 1. Set Nilai Dropdown Santri
+            if (selectStudent && studentId) {
+                selectStudent.value = studentId;
+            }
+
+            // 2. Set Nilai Dropdown Hari
+            if (selectDay && day) {
+                selectDay.value = day;
+            }
+
+            // 3. Set Nilai Dropdown Slot Jam
+            if (selectSlot && slot !== null && slot !== '') {
+                selectSlot.value = slot;
+            }
+
+            // 4. Set Nilai Dropdown Program
+            if (selectProgram && programId) {
+                selectProgram.value = programId;
+            }
+
+            // 5. Set Catatan Sesi
+            const notesInput = document.getElementById('sessionNotes');
+            if (notesInput && notes) {
+                notesInput.value = notes;
+            }
+
+            // 6. Reset Mentor & Update Slots
+            if (selectMentor) {
+                selectMentor.value = '';
+            }
             
             updateAvailableSlots();
             fetchAvailableMentors();
 
-            const modal = new bootstrap.Modal(document.getElementById('assignModal'));
-            modal.show();
+            // 7. Buka Modal via Instance Bootstrap yang Stabil
+            const assignModalEl = document.getElementById('assignModal');
+            const modalInstance = bootstrap.Modal.getOrCreateInstance(assignModalEl);
+            modalInstance.show();
         });
     });
 

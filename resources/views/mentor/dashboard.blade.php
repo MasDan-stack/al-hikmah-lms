@@ -19,6 +19,31 @@
         </div>
     @endif
 
+    <!-- 🚨 PERINGATAN WAJIB UPLOAD BUKTI FOTO MENGAJAR (CATATAN WARNA MERAH) -->
+    @if(isset($missingProofSessionsCount) && $missingProofSessionsCount > 0)
+        <div class="alert alert-danger border-0 rounded-4 p-4 mb-4 shadow-sm d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+            <div class="d-flex align-items-start gap-3">
+                <div class="rounded-circle bg-danger text-white p-2 d-flex align-items-center justify-content-center flex-shrink-0 shadow-xs" style="width: 44px; height: 44px;">
+                    <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+                </div>
+                <div>
+                    <h6 class="fw-bold text-danger mb-1 fs-6">
+                        Peringatan: {{ $missingProofSessionsCount }} Sesi Belum Dilengkapi Foto Bukti Pengajaran!
+                    </h6>
+                    <p class="mb-0 text-danger-emphasis small" style="line-height: 1.5; max-width: 820px;">
+                        Pihak Guru / Mentor <strong>wajib memberikan upload bukti foto dokumentasi bimbingan di rumah santri</strong>. Tanpa upload bukti foto pada menu Sesi Mengajar, status kehadiran tidak akan terverifikasi otomatis ke <strong>Bagian B (Rincian Kehadiran &amp; Honor Persantri) Slip Gaji Admin</strong>.
+                    </p>
+                </div>
+            </div>
+            <div class="flex-shrink-0">
+                <a href="{{ route('mentor.sessions.index') }}" class="btn btn-danger text-white rounded-pill px-4 py-2 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-camera-fill"></i>
+                    <span>Upload Bukti Sekarang</span>
+                </a>
+            </div>
+        </div>
+    @endif
+
     @if($isRecruitmentMode && $mentorApplication)
         <!-- ======================================================== -->
         <!-- 🌟 VIEW KHUSUS CALON GURU DALAM PROSES REKRUTMEN (SELEKSI) -->
@@ -264,6 +289,41 @@
         <!-- ======================================================== -->
         <!-- 🌟 VIEW UTAMA GURU AKTIF & MASA PERCOBAAN (PROBATION) -->
         <!-- ======================================================== -->
+
+        <!-- 🔴 CATATAN WARNA MERAH WAJIB UPLOAD BUKTI MENGAJAR (INTEGRASI SLIP GAJI) -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
+            <div class="card-body p-4 text-white">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="rounded-circle bg-white text-danger p-3 d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 48px; height: 48px;">
+                            <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                                <h5 class="fw-bold mb-0 text-white">Pemberitahuan Wajib: Unggah Bukti Foto Mengajar!</h5>
+                                @if(($missingProofSessionsCount ?? 0) > 0)
+                                    <span class="badge bg-white text-danger fw-bold rounded-pill px-3 py-1 shadow-xs">
+                                        <i class="bi bi-camera-fill me-1"></i>{{ $missingProofSessionsCount }} Sesi Belum Ada Bukti Foto
+                                    </span>
+                                @else
+                                    <span class="badge bg-white text-success fw-bold rounded-pill px-3 py-1 shadow-xs">
+                                        <i class="bi bi-shield-check me-1"></i>Bukti Foto Sesi Terverifikasi
+                                    </span>
+                                @endif
+                            </div>
+                            <p class="mb-0 text-white-50 small" style="max-width: 820px; line-height: 1.55;">
+                                Pihak Guru / Ustadz <strong>wajib mengunggah bukti foto pelaksanaan mengajar di lokasi rumah santri</strong> pada setiap sesi di menu <a href="{{ route('mentor.sessions.index') }}" class="text-white text-decoration-underline fw-bold">Jadwal Sesi Belajar</a>. Bukti ini merupakan syarat mutlak agar kehadiran santri terverifikasi valid dan otomatis masuk ke <strong>Slip Gaji / Honorarium Mengajar Guru (Bagian B. Rincian Kehadiran &amp; Honor Persantri)</strong>.
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="{{ route('mentor.sessions.index') }}" class="btn btn-light text-danger fw-bold rounded-pill px-4 py-2.5 shadow-sm d-inline-flex align-items-center gap-2">
+                            <i class="bi bi-camera-fill"></i> Upload Bukti di Sesi Belajar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         @if(isset($probationTracking))
             <!-- 🌟 PROBATION PROGRESS TRACKER WIDGET (PRD US 2.2) -->
@@ -994,10 +1054,16 @@
                         </div>
                     </div>
 
-                    {{-- Catatan Wajib --}}
-                    <div class="rounded-3 px-4 py-3 small" style="background: rgba(234, 179, 8, 0.06); border: 1px solid rgba(234, 179, 8, 0.25);">
-                        <i class="bi bi-info-circle-fill text-warning me-2"></i>
-                        <span style="color: #78350f;">honor dihitung dari Daftar hadir: tiap anak yang hadir atau terlambat pada satu pertemuan dihitung satu kehadiran, slip ini belum menandakan pembayaran. Status berubah setelah admin menandai lunas</span>
+                    {{-- Catatan Wajib Warna Merah (Ketentuan Upload Bukti & Honorarium) --}}
+                    <div class="rounded-3 p-3.5 small mb-2" style="background: #fef2f2; border: 1.5px solid #f87171;">
+                        <div class="d-flex align-items-start gap-2.5">
+                            <i class="bi bi-exclamation-octagon-fill text-danger fs-5 flex-shrink-0 mt-0.5"></i>
+                            <div style="color: #991b1b; line-height: 1.5;">
+                                <strong class="d-block mb-1">Catatan Wajib: Ketentuan Bukti Foto &amp; Perhitungan Honor Guru:</strong>
+                                Honor mengajar dihitung otomatis dari <strong>Daftar Hadir Santri</strong>: tiap santri yang berstatus Hadir atau Terlambat pada satu pertemuan dihitung 1 kehadiran valid (Rp 100.000). 
+                                <strong>Pihak Guru / Mentor wajib mengunggah bukti foto pelaksanaan mengajar di lokasi rumah santri</strong> di menu <a href="{{ route('mentor.sessions.index') }}" class="text-danger fw-bold text-decoration-underline">Jadwal &amp; Sesi</a>. Slip ini mencatat hak honorarium Anda dan status akan berubah menjadi <strong>Lunas</strong> setelah diverifikasi dan ditandai lunas oleh Admin.
+                            </div>
+                        </div>
                     </div>
                 @endif
             </div>

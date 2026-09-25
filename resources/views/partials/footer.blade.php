@@ -48,7 +48,7 @@
                     <li><a href="{{ route('program') }}">Tahsin</a></li>
                     <li><a href="{{ route('tahfidz') }}">Tahfidz</a></li>
                     <li><a href="{{ route('program') }}">Adab & Doa Harian</a></li>
-                    <li><a href="{{ route('program') }}">Kelas Muslimah</a></li>
+                    <li><a href="{{ route('program') }}">Tahsin Dewasa</a></li>
                     @guest
                         <li><a href="{{ route('bergabung') }}">Pendaftaran Guru</a></li>
                         <li><a href="{{ route('mentor.recruitment.status') }}">Cek Status Lamaran</a></li>

@@ -150,12 +150,26 @@
                             <span class="badge rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">3</span>
                             <h5 class="fw-bold text-heading mb-0">Preferensi Hari Bimbingan <span class="text-danger">*</span></h5>
                         </div>
-                        <p class="text-muted small mb-3">Pilih hari-hari yang Anda inginkan (bisa memilih lebih dari 1 hari).</p>
+
+                        <div class="alert alert-success-subtle border border-success-subtle rounded-3 py-2 px-3 mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-2 small text-success-emphasis">
+                                <i class="bi bi-info-circle-fill text-success fs-5"></i>
+                                <span>Paket <strong>{{ $program->name }}</strong> dijadwalkan <strong>{{ $maxDays }} pertemuan bimbingan per pekan</strong>. Silakan pilih maksimal <strong>{{ $maxDays }} hari</strong>.</span>
+                            </div>
+                            <span id="selectedDaysCounter" class="badge bg-white text-success border border-success-subtle fw-bold px-3 py-1.5 rounded-pill shadow-xs">
+                                Terpilih: 0 / {{ $maxDays }} Hari
+                            </span>
+                        </div>
+
+                        <div id="dayLimitAlert" class="alert alert-warning border border-warning-subtle rounded-3 py-2 px-3 mb-3 d-none small">
+                            <i class="bi bi-exclamation-triangle-fill me-1 text-warning"></i>
+                            <strong>Batas maksimal tercapai!</strong> Paket ini hanya dapat memilih maksimal <strong>{{ $maxDays }} hari</strong> bimbingan. Hapus centang salah satu hari jika ingin memilih hari lainnya.
+                        </div>
 
                         <div class="row g-2">
                             @foreach($availableDays as $val => $dayLabel)
                                 <div class="col-6 col-md-3 col-lg">
-                                    <input type="checkbox" class="btn-check" name="requested_days[]" value="{{ $val }}" id="day_{{ $val }}" {{ is_array(old('requested_days')) && in_array($val, old('requested_days')) ? 'checked' : '' }}>
+                                    <input type="checkbox" class="btn-check day-checkbox" name="requested_days[]" value="{{ $val }}" id="day_{{ $val }}" {{ is_array(old('requested_days')) && in_array($val, old('requested_days')) ? 'checked' : '' }}>
                                     <label class="day-chip-label" for="day_{{ $val }}">
                                         <i class="bi bi-calendar-event me-1"></i> {{ $dayLabel }}
                                     </label>
@@ -248,4 +262,74 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const maxDays = {{ $maxDays }};
+    const checkboxes = document.querySelectorAll('.day-checkbox');
+    const counter = document.getElementById('selectedDaysCounter');
+    const alertBox = document.getElementById('dayLimitAlert');
+
+    function updateDaySelection(e) {
+        let checkedBoxes = Array.from(checkboxes).filter(cb => cb.checked);
+        let checkedCount = checkedBoxes.length;
+
+        if (e && e.target && e.target.checked && checkedCount > maxDays) {
+            e.target.checked = false;
+            checkedBoxes = Array.from(checkboxes).filter(cb => cb.checked);
+            checkedCount = checkedBoxes.length;
+
+            if (alertBox) {
+                alertBox.classList.remove('d-none');
+                alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                setTimeout(() => {
+                    alertBox.classList.add('d-none');
+                }, 5000);
+            }
+        }
+
+        if (counter) {
+            counter.textContent = `Terpilih: ${checkedCount} / ${maxDays} Hari`;
+            if (checkedCount >= maxDays) {
+                counter.className = 'badge bg-success text-white border border-success fw-bold px-3 py-1.5 rounded-pill shadow-xs';
+            } else {
+                counter.className = 'badge bg-white text-success border border-success-subtle fw-bold px-3 py-1.5 rounded-pill shadow-xs';
+            }
+        }
+
+        checkboxes.forEach(cb => {
+            const label = document.querySelector(`label[for="${cb.id}"]`);
+            if (!cb.checked) {
+                if (checkedCount >= maxDays) {
+                    cb.disabled = true;
+                    if (label) {
+                        label.style.opacity = '0.45';
+                        label.style.cursor = 'not-allowed';
+                        label.title = `Maksimal pilihan ${maxDays} hari telah tercapai`;
+                    }
+                } else {
+                    cb.disabled = false;
+                    if (label) {
+                        label.style.opacity = '1';
+                        label.style.cursor = 'pointer';
+                        label.removeAttribute('title');
+                    }
+                }
+            } else {
+                cb.disabled = false;
+                if (label) {
+                    label.style.opacity = '1';
+                    label.style.cursor = 'pointer';
+                }
+            }
+        });
+    }
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', updateDaySelection);
+    });
+
+    updateDaySelection();
+});
+</script>
 @endsection

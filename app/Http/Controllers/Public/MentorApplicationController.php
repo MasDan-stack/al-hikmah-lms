@@ -22,6 +22,7 @@ class MentorApplicationController extends Controller
     {
         $validated = $request->validate([
             'full_name' => 'required|string|max:150',
+            'nik' => 'nullable|string|max:20',
             'email' => 'required|email|max:150|unique:mentor_applications,email',
             'password' => 'required|string|min:8|confirmed',
             'phone' => 'required|string|max:25',
@@ -29,6 +30,9 @@ class MentorApplicationController extends Controller
             'gender' => 'required|in:male,female',
             'address' => 'required|string',
             'city' => 'required|string|max:100',
+            'emergency_contact_name' => 'nullable|string|max:150',
+            'emergency_phone' => 'nullable|string|max:25',
+            'emergency_relation' => 'nullable|string|max:50',
             'education' => 'required|string|max:100',
             'institution' => 'required|string|max:150',
             'experience_years' => 'required|integer|min:0',
@@ -37,10 +41,12 @@ class MentorApplicationController extends Controller
             'sanad_chain' => 'nullable|string',
             'hifz_total_juz' => 'required|integer|min:0|max:30',
             'cv' => 'required|file|mimes:pdf|max:2048',
+            'id_card' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:3072',
+            'photo' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
             'certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        $appData = collect($validated)->except(['cv', 'certificate', 'password_confirmation'])->toArray();
+        $appData = collect($validated)->except(['cv', 'certificate', 'id_card', 'photo', 'password_confirmation'])->toArray();
         $application = $this->recruitmentService->submitApplication($appData);
 
         if ($request->hasFile('cv')) {
@@ -51,6 +57,28 @@ class MentorApplicationController extends Controller
                 'file_name' => strip_tags(basename($request->file('cv')->getClientOriginalName())),
                 'file_size' => $request->file('cv')->getSize() / 1024,
                 'mime_type' => $request->file('cv')->getMimeType(),
+            ]);
+        }
+
+        if ($request->hasFile('id_card')) {
+            $path = $request->file('id_card')->store("private/mentor_applications/{$application->id}");
+            $application->documents()->create([
+                'document_type' => 'id_card',
+                'file_path' => $path,
+                'file_name' => strip_tags(basename($request->file('id_card')->getClientOriginalName())),
+                'file_size' => $request->file('id_card')->getSize() / 1024,
+                'mime_type' => $request->file('id_card')->getMimeType(),
+            ]);
+        }
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store("private/mentor_applications/{$application->id}");
+            $application->documents()->create([
+                'document_type' => 'photo',
+                'file_path' => $path,
+                'file_name' => strip_tags(basename($request->file('photo')->getClientOriginalName())),
+                'file_size' => $request->file('photo')->getSize() / 1024,
+                'mime_type' => $request->file('photo')->getMimeType(),
             ]);
         }
 

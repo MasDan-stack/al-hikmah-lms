@@ -24,6 +24,7 @@ class AdminRevenueController extends Controller
         $endDate = $request->filled('end_date') ? Carbon::parse($request->end_date) : null;
 
         $metrics = $this->revenueService->getSummaryMetrics($startDate, $endDate);
+        $revenueSharing = $this->revenueService->getRevenueSharingSummary($startDate, $endDate);
         $programBreakdown = $this->revenueService->getProgramBreakdown();
         $statusDistribution = $this->revenueService->getPaymentStatusDistribution();
         $auditLogs = $this->revenueService->getRecentFinancialAuditLogs(8);
@@ -31,6 +32,7 @@ class AdminRevenueController extends Controller
 
         return view('admin.revenue.index', compact(
             'metrics',
+            'revenueSharing',
             'programBreakdown',
             'statusDistribution',
             'auditLogs',

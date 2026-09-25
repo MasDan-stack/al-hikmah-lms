@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Mentor;
 use App\Enums\EnrollmentStatus;
 use App\Enums\NotificationType;
 use App\Http\Controllers\Controller;
+use App\Models\Mentor;
 use App\Models\MentorActivityLog;
 use App\Models\Progress;
 use App\Models\Session;
@@ -20,22 +21,48 @@ class ProgressController extends Controller
     public function create(Request $request): View
     {
         $mentor = auth()->user()->mentor;
-        $students = $mentor
-            ? Student::where(function ($q) use ($mentor) {
+        $selectedStudentId = $request->query('student_id');
+        $selectedSessionId = $request->query('session_id');
+
+        if ($mentor) {
+            $students = Student::where(function ($q) use ($mentor) {
                 $q->whereHas('mentors', fn ($m) => $m->where('mentors.id', $mentor->id))
                     ->orWhereHas('enrollments', fn ($e) => $e->where('mentor_id', $mentor->id)->whereIn('status', [
                         EnrollmentStatus::CONFIRMED->value,
                         EnrollmentStatus::ACTIVE->value,
-                    ]));
-            })->with(['user', 'parent.user', 'programs'])->get()
-            : collect();
+                    ]))
+                    ->orWhereHas('sessions', fn ($s) => $s->where('mentor_id', $mentor->id));
+            })->with(['user', 'parent.user', 'programs'])->get();
 
-        $selectedStudentId = $request->query('student_id');
-        $selectedSessionId = $request->query('session_id');
+            $sessions = Session::where('mentor_id', $mentor->id)
+                ->with(['student.user'])
+                ->orderBy('date', 'desc')
+                ->get();
+        } else {
+            // Jika diakses oleh Admin / Super-Admin
+            $students = Student::with(['user', 'parent.user', 'programs'])->get();
+            $sessions = Session::with(['student.user'])
+                ->orderBy('date', 'desc')
+                ->take(30)
+                ->get();
+        }
 
-        $sessions = $mentor
-            ? Session::where('mentor_id', $mentor->id)->orderBy('date', 'desc')->get()
-            : collect();
+        // Pastikan santri dari query parameter (?student_id=X) selalu tersedia dan terpilih
+        if ($selectedStudentId && ! $students->contains('id', (int) $selectedStudentId)) {
+            $extraStudent = Student::with(['user', 'parent.user', 'programs'])->find($selectedStudentId);
+            if ($extraStudent) {
+                $students->push($extraStudent);
+            }
+        }
+
+        // Jika ada santri terpilih, prioritaskan sesi santri tersebut
+        if ($selectedStudentId) {
+            $studentSessions = Session::where('student_id', $selectedStudentId)
+                ->with(['student.user'])
+                ->orderBy('date', 'desc')
+                ->get();
+            $sessions = $sessions->merge($studentSessions)->unique('id')->values();
+        }
 
         return view('mentor.progress.create', compact('students', 'sessions', 'selectedStudentId', 'selectedSessionId'));
     }
@@ -46,6 +73,18 @@ class ProgressController extends Controller
             $request->merge([
                 'nilai_adab' => $this->sanitizeAdabValue($request->input('nilai_adab')),
             ]);
+        }
+
+        if ($request->filled('nilai_kelancaran') && ! $request->has('nilai_fluent')) {
+            $request->merge(['nilai_fluent' => (int) $request->input('nilai_kelancaran')]);
+        }
+
+        if ($request->has('is_mutqin') && ! $request->has('is_mutqin_test')) {
+            $request->merge(['is_mutqin_test' => $request->boolean('is_mutqin')]);
+        }
+
+        if ($request->filled('catatan') && ! $request->has('catatan_evaluasi')) {
+            $request->merge(['catatan_evaluasi' => $request->input('catatan')]);
         }
 
         $validated = $request->validate([
@@ -77,25 +116,47 @@ class ProgressController extends Controller
         ]);
 
         $mentor = auth()->user()->mentor;
-        $validated['mentor_id'] = $mentor?->id;
+        $mentorId = $mentor?->id;
+
+        // Jika user bukan mentor (misal Admin/Super Admin testing form), tentukan mentor dari santri atau mentor default
+        if (! $mentorId) {
+            $student = Student::with(['mentors', 'enrollments'])->find($validated['student_id']);
+            $mentorId = $student?->mentors()->first()?->id
+                ?? $student?->enrollments()->whereNotNull('mentor_id')->latest()->value('mentor_id')
+                ?? Mentor::first()?->id;
+        }
+
+        // Sanitasi tipe data numerik integer agar aman ke MySQL
+        $validated['mentor_id'] = $mentorId;
+        $validated['surah_end'] = ! empty($validated['surah_end']) ? $validated['surah_end'] : ($validated['surah_start'] ?? null);
+        $validated['ayat_start'] = (! empty($validated['ayat_start']) && is_numeric($validated['ayat_start'])) ? (int) $validated['ayat_start'] : null;
+        $validated['ayat_end'] = (! empty($validated['ayat_end']) && is_numeric($validated['ayat_end'])) ? (int) $validated['ayat_end'] : null;
+        $validated['juz'] = (! empty($validated['juz']) && is_numeric($validated['juz'])) ? (int) $validated['juz'] : null;
+        $validated['nilai_fluent'] = $validated['nilai_fluent'] ?? 85;
+        $validated['nilai_tajwid'] = $validated['nilai_tajwid'] ?? 85;
+        $validated['nilai_adab'] = $validated['nilai_adab'] ?? 85;
         $validated['is_mutqin_test'] = $request->boolean('is_mutqin_test');
+
         if ($validated['is_mutqin_test'] && ! empty($validated['juz'])) {
             $validated['juz_number'] = (int) $validated['juz'];
         }
 
-        $progress = Progress::create($validated);
+        DB::transaction(function () use ($validated) {
+            Progress::create($validated);
 
-        if (! empty($validated['session_id'])) {
-            Session::where('id', $validated['session_id'])->update(['status' => 'completed']);
-        }
+            if (! empty($validated['session_id'])) {
+                Session::where('id', $validated['session_id'])->update(['status' => 'completed']);
+            }
+        });
 
         // Notifikasi ke Orang Tua Santri via NotificationService
         $student = Student::with('parent.user')->find($validated['student_id']);
         if ($student?->parent?->user_id) {
+            $mentorName = $mentor?->getDisplayName() ?? 'Guru Pembimbing';
             NotificationService::send(
                 $student->parent->user_id,
                 'Laporan Progres Belajar Santri',
-                "Pendamping {$mentor?->getDisplayName()} telah menambahkan catatan progres {$validated['kategori']} untuk ananda {$student->getDisplayName()}.",
+                "Pendamping {$mentorName} telah menambahkan catatan progres {$validated['kategori']} untuk ananda {$student->getDisplayName()}.",
                 NotificationType::SUCCESS,
                 route('parent.dashboard'),
                 'progress',
@@ -103,15 +164,17 @@ class ProgressController extends Controller
             );
         }
 
-        MentorActivityLog::log(
-            $mentor?->id,
-            'catat_progres',
-            'Mencatat progres santri ID #'.$validated['student_id'].' ('.$validated['kategori'].')'
-        );
+        if ($mentorId) {
+            MentorActivityLog::log(
+                $mentorId,
+                'catat_progres',
+                'Mencatat progres santri ID #'.$validated['student_id'].' ('.$validated['kategori'].')'
+            );
+        }
 
         return redirect()
-            ->route('mentor.dashboard')
-            ->with('success', 'Catatan progres hafalan/bacaan santri berhasil disimpan!');
+            ->route('mentor.progress.create', ['student_id' => $validated['student_id']])
+            ->with('success', 'Catatan progres hafalan/bacaan santri berhasil disimpan ke database!');
     }
 
     public function createBulk(): View

@@ -75,11 +75,21 @@
                             <h6 class="fw-bold mb-0" style="color: var(--text-primary);">Informasi Pribadi &amp; Akun Login</h6>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold small" style="color: var(--text-primary);">Nama Lengkap &amp; Gelar <span class="text-danger">*</span></label>
-                            <div class="input-group-editorial">
-                                <span class="field-icon"><i class="bi bi-person"></i></span>
-                                <input type="text" name="full_name" class="form-control" placeholder="Contoh: Ustadz Ahmad Fauzi, S.Pd.I" value="{{ old('full_name') }}" required>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-7">
+                                <label class="form-label fw-semibold small" style="color: var(--text-primary);">Nama Lengkap &amp; Gelar <span class="text-danger">*</span></label>
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-person"></i></span>
+                                    <input type="text" name="full_name" class="form-control" placeholder="Contoh: Ustadz Ahmad Fauzi, S.Pd.I" value="{{ old('full_name') }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label fw-semibold small" style="color: var(--text-primary);">Nomor NIK KTP (16 Digit) <span class="text-danger">*</span></label>
+                                <div class="input-group-editorial">
+                                    <span class="field-icon"><i class="bi bi-person-vcard text-primary"></i></span>
+                                    <input type="text" name="nik" class="form-control" placeholder="Contoh: 3171xxxxxxxxxxxx" maxlength="20" value="{{ old('nik') }}" required>
+                                </div>
+                                <small class="text-muted" style="font-size: 0.72rem;">Verifikasi identitas resmi guru.</small>
                             </div>
                         </div>
 
@@ -160,6 +170,34 @@
                                     <input type="text" name="city" class="form-control" placeholder="Contoh: Jakarta Selatan" value="{{ old('city') }}" required>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Sub-section: Kontak Darurat Keluarga (Mencegah Ghosting & Kehilangan Kontak) -->
+                        <div class="p-3 rounded-3 border" style="background: rgba(13, 122, 62, 0.04); border-color: rgba(13, 122, 62, 0.2) !important;">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-shield-check text-success"></i>
+                                    <span class="fw-semibold small" style="color: var(--text-primary);">Kontak Darurat Keluarga / Kerabat Terdekat</span>
+                                </div>
+                                <span class="badge bg-success-subtle text-success small" style="font-size: 0.7rem;">Keamanan Lembaga</span>
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-md-5">
+                                    <label class="form-label small text-muted mb-1" style="font-size: 0.75rem;">Nama Lengkap Kerabat <span class="text-danger">*</span></label>
+                                    <input type="text" name="emergency_contact_name" class="form-control form-control-sm" placeholder="Contoh: Bpk. Ahmad (Ayah)" value="{{ old('emergency_contact_name') }}" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small text-muted mb-1" style="font-size: 0.75rem;">Hubungan <span class="text-danger">*</span></label>
+                                    <input type="text" name="emergency_relation" class="form-control form-control-sm" placeholder="Ayah / Ibu / Pasangan" value="{{ old('emergency_relation') }}" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small text-muted mb-1" style="font-size: 0.75rem;">No. WhatsApp Kerabat <span class="text-danger">*</span></label>
+                                    <input type="tel" name="emergency_phone" class="form-control form-control-sm" placeholder="08xxxxxxxxxx" value="{{ old('emergency_phone') }}" required>
+                                </div>
+                            </div>
+                            <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">
+                                * Hubungi jika ustadz/ustazah mengalami musibah atau tidak bisa dihubungi saat jadwal sesi bimbingan.
+                            </small>
                         </div>
                     </div>
 
@@ -249,7 +287,34 @@
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                                <div class="border rounded-3 p-3 bg-body-tertiary">
+                                <div class="border rounded-3 p-3 bg-body-tertiary h-100">
+                                    <label class="form-label fw-semibold small text-primary mb-1">
+                                        <i class="bi bi-person-vcard me-1"></i> Foto Kartu Identitas (KTP) <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group-editorial">
+                                        <span class="field-icon"><i class="bi bi-camera"></i></span>
+                                        <input type="file" name="id_card" class="form-control form-control-sm" accept=".pdf,.jpg,.jpeg,.png" required>
+                                    </div>
+                                    <small class="text-muted d-block mt-1" style="font-size: 0.73rem;">Format JPG/PNG/PDF, foto jelas &amp; tidak buram, maks 3MB.</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="border rounded-3 p-3 bg-body-tertiary h-100">
+                                    <label class="form-label fw-semibold small text-success mb-1">
+                                        <i class="bi bi-person-badge me-1"></i> Pas Foto Resmi Terbaru <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group-editorial">
+                                        <span class="field-icon"><i class="bi bi-image"></i></span>
+                                        <input type="file" name="photo" class="form-control form-control-sm" accept=".jpg,.jpeg,.png" required>
+                                    </div>
+                                    <small class="text-muted d-block mt-1" style="font-size: 0.73rem;">Format JPG/PNG, pakaian rapi/syar'i, latar polos, maks 2MB.</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <div class="border rounded-3 p-3 bg-body-tertiary h-100">
                                     <label class="form-label fw-semibold small text-danger mb-1">
                                         <i class="bi bi-file-earmark-pdf me-1"></i> Curriculum Vitae (CV) <span class="text-danger">*</span>
                                     </label>
@@ -261,8 +326,8 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="border rounded-3 p-3 bg-body-tertiary">
-                                    <label class="form-label fw-semibold small text-success mb-1">
+                                <div class="border rounded-3 p-3 bg-body-tertiary h-100">
+                                    <label class="form-label fw-semibold small text-secondary mb-1">
                                         <i class="bi bi-award me-1"></i> Sertifikat / Syahadah (Opsional)
                                     </label>
                                     <div class="input-group-editorial">

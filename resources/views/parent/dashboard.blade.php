@@ -350,28 +350,28 @@
         @else
             <!-- STATE 3: AKTIF (Sudah Lunas) -->
             <!-- Alert Khusus: Konfirmasi Kehadiran Belajar Santri -->
-            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden" style="background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);">
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden" style="background: linear-gradient(135deg, #064e3b 0%, #022c22 100%); border: 1px solid rgba(16, 185, 129, 0.25) !important;">
                 <div class="card-body p-4 text-white">
                     <div class="d-flex align-items-start gap-3 flex-column flex-md-row justify-content-between">
                         <div class="d-flex align-items-start gap-3">
-                            <div class="rounded-circle bg-white text-primary p-3 d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 50px; height: 50px;">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 52px; height: 52px; background: rgba(255, 255, 255, 0.12); color: #34d399; border: 1px solid rgba(255, 255, 255, 0.2);">
                                 <i class="bi bi-calendar-check-fill fs-4"></i>
                             </div>
                             <div>
-                                <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                                    <h5 class="fw-bold mb-0 text-white">Pengingat Penting: Konfirmasi Kehadiran Belajar Ananda</h5>
-                                    <span class="badge bg-warning text-dark rounded-pill px-3 py-1 small fw-semibold">
+                                <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                                    <h5 class="fw-bold mb-0 text-white" style="letter-spacing: -0.2px;">Pengingat Penting: Konfirmasi Kehadiran Belajar Ananda</h5>
+                                    <span class="badge rounded-pill px-3 py-1 small fw-bold" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">
                                         <i class="bi bi-bell-fill me-1"></i> Wajib Setiap Sesi
                                     </span>
                                 </div>
-                                <p class="mb-0 text-white-50 small" style="max-width: 780px; line-height: 1.5;">
-                                    Bismillah Ayah/Bunda, demi kelancaran bimbingan Al-Qur'an dan kedisiplinan belajar ananda, mohon pastikan untuk selalu melakukan <strong>Konfirmasi Kehadiran (Hadir / Izin / Sakit)</strong> pada setiap sesi bimbingan terjadwal. Konfirmasi Anda sangat membantu ustadz/ustazah dalam mempersiapkan materi serta mencatat riwayat presensi ananda.
+                                <p class="mb-0 small" style="max-width: 820px; line-height: 1.6; color: rgba(255, 255, 255, 0.94); font-size: 0.9rem;">
+                                    Bismillah Ayah/Bunda, demi kelancaran bimbingan Al-Qur'an dan kedisiplinan belajar ananda, mohon pastikan untuk selalu melakukan <strong style="color: #fef08a;">Konfirmasi Kehadiran (Hadir / Izin / Sakit)</strong> pada setiap sesi bimbingan terjadwal. Konfirmasi Anda sangat membantu ustadz/ustazah dalam mempersiapkan materi serta mencatat riwayat presensi ananda.
                                 </p>
                             </div>
                         </div>
-                        <div class="mt-2 mt-md-0 flex-shrink-0 align-self-md-center">
-                            <a href="{{ route('parent.schedules.index') }}" class="btn btn-light text-primary fw-bold rounded-pill px-4 py-2 shadow-sm d-inline-flex align-items-center gap-2">
-                                <i class="bi bi-calendar3"></i>
+                        <div class="mt-3 mt-md-0 flex-shrink-0 align-self-md-center">
+                            <a href="{{ route('parent.schedules.index') }}" class="btn btn-light fw-bold rounded-pill px-4 py-2.5 shadow-sm d-inline-flex align-items-center gap-2" style="color: #064e3b !important; background-color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.8);">
+                                <i class="bi bi-calendar3 text-success"></i>
                                 <span>Konfirmasi Sekarang</span>
                             </a>
                         </div>

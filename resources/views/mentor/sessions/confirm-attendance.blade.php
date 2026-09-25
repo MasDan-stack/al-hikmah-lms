@@ -266,6 +266,18 @@
                     </p>
                 </div>
 
+                <div class="alert alert-danger border-0 rounded-4 p-3 mb-4 d-flex align-items-start gap-3 shadow-xs">
+                    <div class="rounded-circle bg-danger text-white p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 36px; height: 36px;">
+                        <i class="bi bi-camera-fill fs-6"></i>
+                    </div>
+                    <div>
+                        <strong class="d-block text-danger fw-bold fs-6">Wajib Unggah Bukti Foto Pengajaran</strong>
+                        <p class="mb-0 text-danger-emphasis small" style="line-height: 1.45;">
+                            Agar kehadiran santri diverifikasi valid dan hak honorarium mengajar Rp 100.000 masuk ke <strong>Bagian B (Rincian Kehadiran & Honor Persantri) Slip Gaji Admin</strong>, Ustadz/Ustadzah wajib mengunggah foto dokumentasi bimbingan di rumah santri.
+                        </p>
+                    </div>
+                </div>
+
                 <form action="{{ route('mentor.sessions.confirm-attendance.submit', $session->id) }}" 
                       method="POST" 
                       enctype="multipart/form-data" 

@@ -33,8 +33,10 @@
                 <div class="card-body">
                     <table class="table table-sm table-striped">
                         <tr><th width="30%">Nama Lengkap</th><td><strong>{{ $application->full_name }}</strong> ({{ $application->gender == 'male' ? 'Laki-laki' : 'Perempuan' }})</td></tr>
+                        <tr><th>NIK / No. KTP</th><td><span class="badge bg-light text-dark font-monospace border fs-6">{{ $application->nik ?: 'Belum diisi' }}</span></td></tr>
                         <tr><th>Email</th><td>{{ $application->email }}</td></tr>
-                        <tr><th>WhatsApp</th><td><a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $application->phone) }}" target="_blank" class="text-success"><i class="bi bi-whatsapp me-1"></i>{{ $application->phone }}</a></td></tr>
+                        <tr><th>WhatsApp Utama</th><td><a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $application->phone) }}" target="_blank" class="text-success"><i class="bi bi-whatsapp me-1"></i>{{ $application->phone }}</a></td></tr>
+                        <tr><th>Kontak Darurat Keluarga</th><td><strong>{{ $application->emergency_contact_name ?: '-' }}</strong> ({{ $application->emergency_relation ?: '-' }}) @if($application->emergency_phone) — <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $application->emergency_phone) }}" target="_blank" class="text-success"><i class="bi bi-whatsapp me-1"></i>{{ $application->emergency_phone }}</a>@endif</td></tr>
                         <tr><th>TTL & Domisili</th><td>{{ $application->city ?? '-' }}, {{ $application->birth_date ? Carbon\Carbon::parse($application->birth_date)->format('d/m/Y') : '-' }} ({{ $application->address ?? '-' }})</td></tr>
                         <tr><th>Pendidikan Terakhir</th><td>{{ $application->education }} - {{ $application->institution }}</td></tr>
                         <tr><th>Spesialisasi Target</th><td><span class="badge bg-primary">{{ $application->specialization }}</span></td></tr>
@@ -44,16 +46,34 @@
                         <tr><th>Deskripsi Pengalaman</th><td><small class="text-muted">{{ $application->experience_description }}</small></td></tr>
                     </table>
 
-                    <h6 class="mt-4 font-weight-bold text-gray-800"><i class="bi bi-folder2-open me-2 text-primary"></i>Berkas Lampiran Persyaratan</h6>
+                    <h6 class="mt-4 font-weight-bold text-gray-800"><i class="bi bi-folder2-open me-2 text-primary"></i>Berkas Lampiran Persyaratan & Identitas (KYC)</h6>
                     <div class="row mt-2">
                         @forelse($application->documents as $doc)
                             <div class="col-md-6 mb-3">
                                 <div class="card border p-3 h-100 bg-light shadow-sm">
                                     <div class="d-flex align-items-center justify-content-between mb-2">
                                         <div class="d-flex align-items-center gap-2">
-                                            <i class="bi {{ $doc->document_type == 'cv' ? 'bi-file-earmark-pdf-fill text-danger fs-3' : 'bi-file-earmark-image-fill text-info fs-3' }}"></i>
+                                            @if($doc->document_type == 'cv')
+                                                <i class="bi bi-file-earmark-pdf-fill text-danger fs-3"></i>
+                                            @elseif($doc->document_type == 'id_card')
+                                                <i class="bi bi-person-vcard-fill text-primary fs-3"></i>
+                                            @elseif($doc->document_type == 'photo')
+                                                <i class="bi bi-person-badge-fill text-success fs-3"></i>
+                                            @else
+                                                <i class="bi bi-file-earmark-image-fill text-info fs-3"></i>
+                                            @endif
                                             <div>
-                                                <span class="badge {{ $doc->document_type == 'cv' ? 'bg-danger-subtle text-danger' : 'bg-info-subtle text-info' }} text-uppercase fw-bold">{{ $doc->document_type }}</span>
+                                                <span class="badge @if($doc->document_type == 'cv') bg-danger-subtle text-danger @elseif($doc->document_type == 'id_card') bg-primary-subtle text-primary @elseif($doc->document_type == 'photo') bg-success-subtle text-success @else bg-info-subtle text-info @endif text-uppercase fw-bold">
+                                                    @if($doc->document_type == 'id_card')
+                                                        KTP ASLI
+                                                    @elseif($doc->document_type == 'photo')
+                                                        PAS FOTO RESMI
+                                                    @elseif($doc->document_type == 'cv')
+                                                        CV
+                                                    @else
+                                                        {{ $doc->document_type }}
+                                                    @endif
+                                                </span>
                                                 <div class="text-truncate small fw-semibold text-dark mt-1" style="max-width: 180px;" title="{{ $doc->file_name }}">{{ $doc->file_name }}</div>
                                             </div>
                                         </div>

@@ -59,7 +59,7 @@ class ParentDashboardController extends Controller
 
         // 3. Jadwal Bimbingan Mendatang (7 Hari Ke Depan)
         $upcomingSessions = ($hasPaidProgram && count($childIds) > 0)
-            ? Session::with(['student.user', 'mentor.user', 'confirmation', 'program'])
+            ? Session::with(['student.user', 'mentor.user', 'confirmation', 'student.enrollments.program'])
                 ->whereIn('student_id', $childIds)
                 ->whereDate('date', '>=', today())
                 ->whereDate('date', '<=', today()->addDays(7))

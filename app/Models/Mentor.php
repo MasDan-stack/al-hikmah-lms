@@ -98,6 +98,11 @@ class Mentor extends Model
         return $this->hasMany(MentorActivityLog::class);
     }
 
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(Session::class);
+    }
+
     public function application(): BelongsTo
     {
         return $this->belongsTo(MentorApplication::class, 'application_id');

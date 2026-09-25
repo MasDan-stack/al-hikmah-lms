@@ -55,7 +55,16 @@ class EnrollmentController extends Controller
 
         $availableDays = Enrollment::DAYS;
 
-        return view('parent.enrollments.create', compact('program', 'children', 'availableDays'));
+        $durationWeeks = (int) ($program->duration_weeks ?? 0);
+        $maxDays = match (true) {
+            $durationWeeks === 4 || str_contains($program->name, 'Tunas Istiqomah') => 1,
+            $durationWeeks === 8 || str_contains($program->name, 'Mumtaz') => 2,
+            $durationWeeks === 12 || str_contains($program->name, 'Itqan') => 3,
+            $durationWeeks > 12 => min(5, (int) ceil($durationWeeks / 4)),
+            default => 7,
+        };
+
+        return view('parent.enrollments.create', compact('program', 'children', 'availableDays', 'maxDays'));
     }
 
     /**
@@ -68,11 +77,21 @@ class EnrollmentController extends Controller
             return redirect()->route('parent.dashboard')->with('error', 'Profil orang tua tidak ditemukan.');
         }
 
+        $program = Program::findOrFail($request->input('program_id'));
+        $durationWeeks = (int) ($program->duration_weeks ?? 0);
+        $maxDays = match (true) {
+            $durationWeeks === 4 || str_contains($program->name, 'Tunas Istiqomah') => 1,
+            $durationWeeks === 8 || str_contains($program->name, 'Mumtaz') => 2,
+            $durationWeeks === 12 || str_contains($program->name, 'Itqan') => 3,
+            $durationWeeks > 12 => min(5, (int) ceil($durationWeeks / 4)),
+            default => 7,
+        };
+
         $validated = $request->validate([
             'student_id' => ['required', 'exists:students,id'],
             'program_id' => ['required', 'exists:programs,id'],
             'learning_method' => ['nullable', 'in:offline,online,hybrid'],
-            'requested_days' => ['required', 'array', 'min:1'],
+            'requested_days' => ['required', 'array', 'min:1', "max:{$maxDays}"],
             'requested_days.*' => ['in:monday,tuesday,wednesday,thursday,friday,saturday,sunday'],
             'requested_time' => ['nullable', 'date_format:H:i'],
             'parent_notes' => ['nullable', 'string', 'max:500'],
@@ -80,6 +99,10 @@ class EnrollmentController extends Controller
             'auditory_score' => ['required', 'integer', 'min:1', 'max:5'],
             'kinesthetic_score' => ['required', 'integer', 'min:1', 'max:5'],
             'patience_need' => ['required', 'integer', 'min:1', 'max:5'],
+        ], [
+            'requested_days.max' => "Paket {$program->name} dijadwalkan {$maxDays} pertemuan per pekan. Anda hanya dapat memilih maksimal {$maxDays} hari bimbingan.",
+            'requested_days.min' => 'Silakan pilih minimal 1 hari bimbingan.',
+            'requested_days.required' => 'Preferensi hari bimbingan wajib dipilih.',
         ]);
 
         // Verifikasi kepemilikan data anak
